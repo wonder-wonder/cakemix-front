@@ -1,5 +1,124 @@
 module.exports = {
   sample: `
+  \`\`\`plantuml
+@startuml
+
+package WonderSenseLib-Filter {
+  component WSFilter <<abstruct>>
+  component WSFilterResult <<abstruct>>
+
+  component WSFKFilter
+  component WSFKFilterResult
+
+  package "Native-FKF" {
+    component NativeFKF <<lib>>
+  }
+}
+
+
+package WonderSenseLib-Correction {
+  component WSCorrection_lib <<lib>>
+
+  package "Native-Correction" {
+    component NativeCorrection <<lib>>
+  }
+}
+
+
+package WonderSenseKit {
+  component WSController
+  component WSBLE
+  component WSFKF
+  component WSCorrection
+  component WSBLEData
+
+  component WSDataStream
+
+  package BLE {
+    component WSBLEScanner
+    component WSBLEGatt
+    component WSBLEProfile
+
+    component WSBLEDeviceInfo
+    component WSBLEConfigure
+
+    package "Native-Parser" {
+      component NativeParser
+    }
+  }
+}
+
+WSFKFilter -|> WSFilter
+WSFKFilter *-- NativeFKF
+WSFKFilterResult "n" - "1" WSFKFilter
+WSFKFilterResult ..|> WSFilterResult
+
+WSCorrection_lib *-- NativeCorrection
+WSCorrection *-- WSCorrection_lib
+
+WSFKF *-- WSFKFilter
+WSBLEGatt ..> WSBLEProfile
+WSBLE *-- WSBLEScanner
+WSBLE *-- WSBLEGatt
+WSBLE *-- NativeParser
+WSBLE "1" *-- "1" WSBLEDeviceInfo
+WSBLE "1" *-- "1" WSBLEConfigure
+WSBLE "1" -- "*" WSBLEData
+WSBLE "1" -- "1" WSDataStream
+
+WSController o-- WSBLE
+
+User "1" -- "1" WSController
+
+User "1" -- "1..n" WSBLE
+User -- WSFKF
+User -- WSDataStream
+User -- WSCorrection
+
+@enduml
+\`\`\`
+
+\`\`\`mermaid
+graph TD
+	A[Christmas] -->|Get money| B(Go shopping)
+	B --> C{Let me think}
+	C -->|One| D[Laptop]
+	C -->|Two| E[iPhone]
+	C -->|Three| F[fa:fa-car Car]
+\`\`\`
+
+\`\`\`flowchart
+st=>start: Start:>http://www.google.com[blank]
+e=>end:>http://www.google.com
+op1=>operation: My Operation
+sub1=>subroutine: My Subroutine
+cond=>condition: Yes
+or No?:>http://www.google.com
+io=>inputoutput: catch something...
+para=>parallel: parallel tasks
+
+st->op1->cond
+cond(yes)->io->e
+cond(no)->para
+para(path1, bottom)->sub1(right)->op1
+para(path2, top)->op1
+\`\`\`
+
+\`\`\`abc
+X: 1
+T: Cooley's
+M: 4/4
+L: 1/8
+R: reel
+K: Emin
+|:D2|EB{c}BA B2 EB|~B2 AB dBAG|FDAD BDAD|FDAD dAFD|
+EBBA B2 EB|B2 AB defg|afe^c dBAF|DEFD E2:|
+L: 1/8
+M: 2/2
+|:gf|eB B2 efge|eB B2 gedB|A2 FA DAFA|A2 FA defg|
+eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|
+\`\`\`
+
   ## Test of Checkbox
 
 [ ] unchecked

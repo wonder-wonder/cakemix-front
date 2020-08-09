@@ -1,5 +1,7 @@
 <template>
-  <div :ref="`previewer`" class="previewer" />
+  <div>
+    <div :ref="`previewer`" class="preview-container" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -28,8 +30,10 @@ export default class Preview extends Vue {
 </script>
 
 <style lang="scss">
-.previewer {
+.preview-container {
   height: 100%;
   width: 100%;
 }
 </style>
+
+<style lang="css" src="abcjs/abcjs-midi.css"></style>

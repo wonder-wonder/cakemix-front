@@ -1,33 +1,25 @@
-import 'abcjs/abcjs-midi.css'
-import 'font-awesome/css/font-awesome.min.css'
 const plantumlPlugin = require('plantuml-encoder')
-const abcPlugin = require('abcjs')
-const abcMidiPlugin = require('abcjs/midi')
+const abcPlugin = require('abcjs/midi')
 const flowchartPlugin = require('flowchart.js')
 const mermaidPlugin = require('mermaid')
 
 mermaidPlugin.initialize({ startOnLoad: false })
 
 const mermaid = (el: HTMLElement) => {
-  if (!el.firstChild?.firstChild) {
-    return
-  }
-  const tDom = el.firstChild?.firstChild as HTMLElement
+  const tDom = el.firstChild as HTMLElement
   try {
     tDom.removeAttribute('data-processed')
     mermaidPlugin.init(undefined, tDom)
   } catch (error) {
-    tDom.innerHTML = `${error}`
+    el.innerHTML = `${error}`
   }
 }
 
 const flowchart = (el: HTMLElement) => {
-  if (!el.firstChild?.firstChild) {
-    return
-  }
-  const tDom = el.firstChild.firstChild as HTMLElement
+  const tDom = el.firstChild as HTMLElement
   try {
-    const chart = flowchartPlugin.parse(tDom.innerHTML.replace(/&gt;/g, '>'))
+    const fc = tDom.innerHTML.replace(/&gt;/g, '>').replace(/&lt;/g, '<')
+    const chart = flowchartPlugin.parse(fc)
     tDom.innerHTML = ''
     chart.drawSVG(tDom, require('@/scripts/markdown/flowchart.config'))
   } catch (error) {
@@ -36,17 +28,15 @@ const flowchart = (el: HTMLElement) => {
 }
 
 const plantuml = (el: HTMLElement) => {
-  if (!el.firstChild?.firstChild) {
-    return
-  }
-  const tDom = el.firstChild.firstChild as HTMLElement
+  const tDom = el.firstChild as HTMLElement
   try {
-    const encoded = plantumlPlugin.encode(tDom.innerHTML.replace(/&gt;/g, '>'))
+    const pu = tDom.innerHTML.replace(/&gt;/g, '>').replace(/&lt;/g, '<')
+    const encoded = plantumlPlugin.encode(pu)
     tDom.innerHTML = ''
     const svgObject = document.createElement('object') as HTMLObjectElement
     svgObject.setAttribute(
       'data',
-      'http://www.plantuml.com/plantuml/img/' + encoded
+      'http://www.plantuml.com/plantuml/svg/' + encoded
     )
     tDom.appendChild(svgObject)
   } catch (error) {
@@ -55,10 +45,7 @@ const plantuml = (el: HTMLElement) => {
 }
 
 const abc = (el: HTMLElement) => {
-  if (!el.firstChild?.firstChild) {
-    return
-  }
-  const tDom = el.firstChild.firstChild as HTMLElement
+  const tDom = el.firstChild as HTMLElement
   const script = tDom.innerHTML
   try {
     abcPlugin.renderAbc(tDom, script, {
@@ -77,10 +64,10 @@ const abc = (el: HTMLElement) => {
     } else {
       midiDom = document.createElement('div') as HTMLDivElement
       midiDom.setAttribute('class', 'abcjs-midi-container')
-      el.firstChild.appendChild(midiDom)
+      tDom.appendChild(midiDom)
     }
 
-    abcMidiPlugin.renderMidi(midiDom, script, {
+    abcPlugin.renderMidi(midiDom, script, {
       generateDownload: true,
     })
   } catch (error) {
@@ -94,26 +81,19 @@ const update = (base: HTMLElement) => {
   if (!base.firstChild?.hasChildNodes) {
     return
   }
-  const tDom = base.firstChild as HTMLElement
-  const domList: Array<HTMLElement> = Array.prototype.slice.call(tDom.children)
+  const domList: Array<HTMLElement> = Array.prototype.slice
+    .call((base.firstChild as HTMLElement).children)
+    .filter((iEl: HTMLElement) => iEl.tagName === 'PRE')
+
   for (const el of domList) {
+    try {
+      if ((el.firstChild?.firstChild as HTMLElement).tagName === 'svg') {
+        return
+      }
+    } catch (e) {
+      return
+    }
     const r = el.firstChild as HTMLElement
-    if (
-      !el.tagName ||
-      !r.className ||
-      typeof (r.firstChild?.firstChild as HTMLElement) === 'undefined' ||
-      !(r.firstChild?.firstChild as HTMLElement).tagName
-    ) {
-      return
-    }
-    if (
-      !(
-        el.tagName === 'PRE' &&
-        (r.firstChild?.firstChild as HTMLElement).tagName === 'svg'
-      )
-    ) {
-      return
-    }
 
     switch (r.className) {
       // Update Mermaid
@@ -121,7 +101,7 @@ const update = (base: HTMLElement) => {
         mermaid(el)
         break
       // Update flowchart
-      case 'language-flow':
+      case 'language-flowchart':
         flowchart(el)
         break
       // Update plantuml
@@ -146,7 +126,7 @@ const preRender = (markdownIt: any, code: string, lang: string) => {
     case 'mermaid':
       return `<div class="mermaid">${markdownIt.utils.escapeHtml(code)}</div>`
     // Update flowchart
-    case 'flow':
+    case 'flowchart':
       return `<div class="flow-chart">${markdownIt.utils
         .escapeHtml(code)
         .replace(/&gt;/g, '>')}</div>`

@@ -34,6 +34,11 @@ export default {
         href:
           'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css',
       },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
+      },
     ],
   },
   /*
