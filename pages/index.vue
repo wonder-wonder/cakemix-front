@@ -6,14 +6,4 @@
   </section>
 </template>
 
-<script>
-// import Editor from "@/components/atoms/Editor"
-
-export default {
-  name: 'Index',
-
-  components: {
-    // Editor
-  },
-}
-</script>
+<script lang="ts"></script>

@@ -1,9 +1,9 @@
-import markdownIt from 'markdown-it'
-import container from 'markdown-it-container'
+const markdownIt = require('markdown-it')
+const container = require('markdown-it-container')
 // Plugins
-const plugins = require('./plugins').default
+const plugins = require('./plugins.ts').default
 
-const highlight = (code, lang) => {
+const highlight = (code: string, lang: string) => {
   if (!lang || /no(-?)highlight|plain|text/.test(lang)) {
     return
   }

@@ -11,23 +11,22 @@
   </div>
 </template>
 
-<script>
-import Editor from '@/components/atoms/document/Editor'
-import Preview from '@/components/atoms/document/Preview'
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import Editor from '@/components/atoms/document/Editor.vue'
+import Preview from '@/components/atoms/document/Preview.vue'
 
-export default {
+@Component({
   components: {
     Editor,
     Preview,
   },
-  data() {
-    return {
-      markdown: String,
-    }
-  },
+})
+export default class Viewer extends Vue {
+  markdown: string = ''
   mounted() {
-    this.markdown = require('@/scripts/markdown/samplemd').sample
-  },
+    this.markdown = require('@/scripts/markdown/samplemd.ts').sample
+  }
 }
 </script>
 

@@ -2,14 +2,7 @@
   <div class="editor-header" />
 </template>
 
-<script>
-export default {
-  data() {
-    return {}
-  },
-  computed: {},
-}
-</script>
+<script lang="ts"></script>
 
 <style lang="scss">
 .editor-header {

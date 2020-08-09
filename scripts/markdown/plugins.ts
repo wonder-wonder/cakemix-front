@@ -1,15 +1,18 @@
-import mermaidPlugin from 'mermaid'
-import flowchartPlugin from 'flowchart.js'
-import plantumlPlugin from 'plantuml-encoder'
-import abcPlugin from 'abcjs'
-import abcMidiPlugin from 'abcjs/midi'
 import 'abcjs/abcjs-midi.css'
 import 'font-awesome/css/font-awesome.min.css'
+const plantumlPlugin = require('plantuml-encoder')
+const abcPlugin = require('abcjs')
+const abcMidiPlugin = require('abcjs/midi')
+const flowchartPlugin = require('flowchart.js')
+const mermaidPlugin = require('mermaid')
 
 mermaidPlugin.initialize({ startOnLoad: false })
 
-const mermaid = el => {
-  const tDom = el.firstChild.firstChild
+const mermaid = (el: HTMLElement) => {
+  if (!el.firstChild?.firstChild) {
+    return
+  }
+  const tDom = el.firstChild?.firstChild as HTMLElement
   try {
     tDom.removeAttribute('data-processed')
     mermaidPlugin.init(undefined, tDom)
@@ -18,8 +21,11 @@ const mermaid = el => {
   }
 }
 
-const flowchart = el => {
-  const tDom = el.firstChild.firstChild
+const flowchart = (el: HTMLElement) => {
+  if (!el.firstChild?.firstChild) {
+    return
+  }
+  const tDom = el.firstChild.firstChild as HTMLElement
   try {
     const chart = flowchartPlugin.parse(tDom.innerHTML.replace(/&gt;/g, '>'))
     tDom.innerHTML = ''
@@ -29,36 +35,47 @@ const flowchart = el => {
   }
 }
 
-const plantuml = el => {
-  const tDom = el.firstChild.firstChild
+const plantuml = (el: HTMLElement) => {
+  if (!el.firstChild?.firstChild) {
+    return
+  }
+  const tDom = el.firstChild.firstChild as HTMLElement
   try {
     const encoded = plantumlPlugin.encode(tDom.innerHTML.replace(/&gt;/g, '>'))
     tDom.innerHTML = ''
-    const svgObject = document
-      .createElement('object')
-      .setAttribute('data', 'http://www.plantuml.com/plantuml/img/' + encoded)
+    const svgObject = document.createElement('object') as HTMLObjectElement
+    svgObject.setAttribute(
+      'data',
+      'http://www.plantuml.com/plantuml/img/' + encoded
+    )
     tDom.appendChild(svgObject)
   } catch (error) {
     tDom.innerHTML = `${error}`
   }
 }
 
-const abc = el => {
-  const tDom = el.firstChild.firstChild
+const abc = (el: HTMLElement) => {
+  if (!el.firstChild?.firstChild) {
+    return
+  }
+  const tDom = el.firstChild.firstChild as HTMLElement
   const script = tDom.innerHTML
   try {
     abcPlugin.renderAbc(tDom, script, {
       responsive: 'resize',
     })
 
-    let midiDom = Array.from(el.firstChild.children).filter(
-      innerEl => innerEl.className === 'abcjs-midi-container'
-    )
+    const midiDomList: Array<HTMLElement> = Array.prototype.slice
+      .call(tDom.children)
+      .filter(
+        (innerEl: HTMLElement) => innerEl.className === 'abcjs-midi-container'
+      )
 
-    if (midiDom.length > 0) {
-      midiDom = midiDom[0]
+    let midiDom: HTMLElement
+    if (midiDomList.length > 0) {
+      midiDom = midiDomList[0]
     } else {
-      midiDom = document.createElement('div')
+      midiDom = document.createElement('div') as HTMLDivElement
       midiDom.setAttribute('class', 'abcjs-midi-container')
       el.firstChild.appendChild(midiDom)
     }
@@ -73,11 +90,19 @@ const abc = el => {
 
 // Update
 
-const update = base => {
-  for (const el of Array.from(base.firstChild.children)) {
-    const r = el.firstChild
-
-    if (!(el.tagName !== 'PRE' && r.firstChild.firstChild.tagName !== 'svg')) {
+const update = (base: HTMLElement) => {
+  if (!base.firstChild?.hasChildNodes) {
+    return
+  }
+  const tDom = base.firstChild as HTMLElement
+  const domList: Array<HTMLElement> = Array.prototype.slice.call(tDom.children)
+  for (const el of domList) {
+    const r = el.firstChild as HTMLElement
+    if (typeof (r.firstChild?.firstChild as HTMLElement) === 'undefined') {
+      return
+    }
+    const tag = (r.firstChild?.firstChild as HTMLElement).tagName
+    if (!(el.tagName !== 'PRE' && tag !== 'svg')) {
       return
     }
 
@@ -106,7 +131,7 @@ const update = base => {
 
 // preUpdate
 
-const preRender = (markdownIt, code, lang) => {
+const preRender = (markdownIt: any, code: string, lang: string) => {
   switch (lang) {
     // Update Mermaid
     case 'mermaid':

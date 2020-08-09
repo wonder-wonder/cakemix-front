@@ -1,20 +1,25 @@
 <template>
   <div>
-    <Header />
-    <Viewer />
+    <EditorHeader />
+    <EditorView />
   </div>
 </template>
 
-<script>
-import Header from '@/components/organisms/document/Header'
-import Viewer from '@/components/molecules/document/Viewer'
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import EditorHeader from '@/components/organisms/document/EditorHeader.vue'
+import EditorView from '@/components/molecules/document/EditorView.vue'
 
-export default {
-  name: 'Document',
-
+@Component({
   components: {
-    Header,
-    Viewer,
+    EditorHeader,
+    EditorView,
   },
+})
+export default class document extends Vue {
+  markdown: string = ''
+  mounted() {
+    this.markdown = require('@/scripts/markdown/samplemd.ts').sample
+  }
 }
 </script>

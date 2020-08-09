@@ -1,8 +1,8 @@
-import CodeMirror from 'codemirror'
+const CodeMirror = require('codemirror')
 // import utils from "./utils";
 
-export const newEditor = editor => {
-  const cMirror = new CodeMirror.fromTextArea(editor, {
+export const newEditor = (taDom: HTMLTextAreaElement) => {
+  const cMirror = new CodeMirror.fromTextArea(taDom, {
     mode: 'markdown',
     lineNumbers: true,
     lineWrapping: true,
@@ -30,14 +30,14 @@ export const newEditor = editor => {
     'Ctrl-S'() {
       return false
     },
-    'Cmd-Q': cm => {
+    'Cmd-Q': (cm: any) => {
       cm.foldCode(cm.getCursor())
     },
-    'Ctrl-Q': cm => {
+    'Ctrl-Q': (cm: any) => {
       cm.foldCode(cm.getCursor())
     },
     // Enter: cm => utils.newlineAndIndentContinueMarkdownList(cm),
-    Tab: cm => {
+    Tab: (cm: any) => {
       const tab = '\t'
       const spaces = Array(parseInt(cm.getOption('indentUnit')) + 1).join(' ')
       const cursor = cm.getCursor()
@@ -72,7 +72,7 @@ export const newEditor = editor => {
     'Cmd-Right': 'goLineRight',
     Home: 'goLineLeftSmart',
     End: 'goLineRight',
-    'Ctrl-C'(cm) {
+    'Ctrl-C'(cm: any) {
       if (cm.getOption('keyMap').substr(0, 3) === 'vim') {
         document.execCommand('copy')
       } else {

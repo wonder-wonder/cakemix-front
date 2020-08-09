@@ -8,26 +8,24 @@
   </div>
 </template>
 
-<script>
-import editor from '@/scripts/editor/editor'
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import editor from '@/scripts/editor/editor.ts'
 
-export default {
-  data() {
-    return {
-      cMirror: null,
-    }
-  },
+@Component
+export default class Editor extends Vue {
+  cMirror: any
+
   mounted() {
-    const editorDom = this.$refs.editor
+    const editorDom = this.$refs.editor as HTMLTextAreaElement
     this.cMirror = editor.newEditor(editorDom)
-    this.cMirror.on('change', ev => {
+    this.cMirror.on('change', (ev: any) => {
       this.$emit('input', ev.getValue())
     })
-    this.cMirror.on('drop', (data, ev) => {
-      editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
-    })
-  },
-  methods: {},
+    // this.cMirror.on('drop', (data: any, ev: any) => {
+    //   editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
+    // })
+  }
 }
 </script>
 

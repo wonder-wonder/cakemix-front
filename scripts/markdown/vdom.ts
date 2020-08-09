@@ -7,8 +7,8 @@ const diff = require('virtual-dom/diff')
 const patch = require('virtual-dom/patch')
 const vdomToHtml = require('virtual-dom/create-element')
 // Plugins
-const markdownIt = require('./markdown-it').default
-const plugins = require('./plugins').default
+const markdownIt = require('./markdown-it.ts').default
+const plugins = require('./plugins.ts').default
 
 /*
 dTree: DOM Tree
