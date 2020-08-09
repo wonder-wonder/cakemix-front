@@ -2,7 +2,12 @@
   <div class="editor-header" />
 </template>
 
-<script lang="ts"></script>
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+
+@Component
+export default class EditorHeader extends Vue {}
+</script>
 
 <style lang="scss">
 .editor-header {

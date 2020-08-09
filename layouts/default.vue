@@ -10,3 +10,5 @@ import { Component, Vue } from 'nuxt-property-decorator'
 @Component
 export default class Default extends Vue {}
 </script>
+
+<style lang="scss" src="../styles/foundation.scss"></style>

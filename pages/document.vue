@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import EditorHeader from '@/components/organisms/document/EditorHeader.vue'
 import EditorView from '@/components/molecules/document/EditorView.vue'
+import EditorHeader from '@/components/organisms/document/EditorHeader.vue'
 
 @Component({
   components: {
@@ -16,7 +16,7 @@ import EditorView from '@/components/molecules/document/EditorView.vue'
     EditorView,
   },
 })
-export default class document extends Vue {
+export default class Document extends Vue {
   markdown: string = ''
   mounted() {
     this.markdown = require('@/scripts/markdown/samplemd.ts').sample

@@ -98,11 +98,20 @@ const update = (base: HTMLElement) => {
   const domList: Array<HTMLElement> = Array.prototype.slice.call(tDom.children)
   for (const el of domList) {
     const r = el.firstChild as HTMLElement
-    if (typeof (r.firstChild?.firstChild as HTMLElement) === 'undefined') {
+    if (
+      !el.tagName ||
+      !r.className ||
+      typeof (r.firstChild?.firstChild as HTMLElement) === 'undefined' ||
+      !(r.firstChild?.firstChild as HTMLElement).tagName
+    ) {
       return
     }
-    const tag = (r.firstChild?.firstChild as HTMLElement).tagName
-    if (!(el.tagName !== 'PRE' && tag !== 'svg')) {
+    if (
+      !(
+        el.tagName === 'PRE' &&
+        (r.firstChild?.firstChild as HTMLElement).tagName === 'svg'
+      )
+    ) {
       return
     }
 
