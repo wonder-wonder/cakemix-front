@@ -1,20 +1,24 @@
 <template>
-  <div>
+  <div class="editor-container">
     <textarea
       :ref="`editor`"
       :placeholder="'Text or Markdown'"
       @input="$emit('input', $event.target.value)"
+      v-text="pMarkdown"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import editor from '@/scripts/editor/editor.ts'
 
 @Component
-export default class Editor extends Vue {
+export default class DocEditor extends Vue {
   cMirror: any
+
+  @Prop({ default: '' })
+  pMarkdown!: string
 
   mounted() {
     const editorDom = this.$refs.editor as HTMLTextAreaElement
@@ -30,6 +34,10 @@ export default class Editor extends Vue {
 </script>
 
 <style lang="scss">
+.editor-container {
+  overflow: scroll;
+}
+
 .CodeMirror {
   font-family: 'Source Code Pro', Consolas, monaco, monospace;
   font-size: 14px;

@@ -9,7 +9,6 @@ export const newEditor = (taDom: HTMLTextAreaElement) => {
     tabSize: 2,
     smartIndent: true,
     dragDrop: true,
-    allowDropFileTypes: ['image/'],
     autocapitalize: true,
     styleActiveLine: true,
     showCursorWhenSelecting: true,
@@ -21,6 +20,7 @@ export const newEditor = (taDom: HTMLTextAreaElement) => {
     },
     autoCloseTags: true,
     flattenSpans: true,
+    cursorScrollMargin: 20,
   })
 
   cMirror.setOption('extraKeys', {

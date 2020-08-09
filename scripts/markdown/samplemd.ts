@@ -1,6 +1,6 @@
 module.exports = {
-  sample: `
-  \`\`\`plantuml
+  sample: `###### tags: \`example\`
+\`\`\`plantuml
 @startuml
 
 package WonderSenseLib-Filter {
@@ -15,7 +15,6 @@ package WonderSenseLib-Filter {
   }
 }
 
-
 package WonderSenseLib-Correction {
   component WSCorrection_lib <<lib>>
 
@@ -23,7 +22,6 @@ package WonderSenseLib-Correction {
     component NativeCorrection <<lib>>
   }
 }
-
 
 package WonderSenseKit {
   component WSController

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div :ref="`previewer`" class="preview-container" />
+  <div class="preview-container">
+    <div :ref="`previewer`" class="previewer" />
   </div>
 </template>
 
@@ -9,18 +9,18 @@ import { Component, Prop, Watch, Vue } from 'nuxt-property-decorator'
 import vdom from '@/scripts/markdown/vdom.ts'
 
 @Component
-export default class Preview extends Vue {
+export default class DocPreview extends Vue {
   baseDom: HTMLElement | null = null
 
   @Prop({ default: '' })
-  markdown!: string
+  pMarkdown!: string
 
-  @Watch('markdown')
-  textChanged(nText: string) {
+  @Watch('pMarkdown')
+  onChangedText(text: string) {
     if (!this.baseDom) {
       return
     }
-    vdom.update(this.baseDom, nText)
+    vdom.update(this.baseDom, text)
   }
 
   mounted() {
@@ -31,8 +31,22 @@ export default class Preview extends Vue {
 
 <style lang="scss">
 .preview-container {
-  height: 100%;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: scroll;
+
+  .previewer {
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
+    padding: 10px;
+  }
+
+  .previewer::after {
+    display: block;
+    height: 32px;
+    content: '';
+  }
 }
 </style>
 
