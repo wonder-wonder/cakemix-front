@@ -1,7 +1,7 @@
 <template>
   <div>
-    <header />
-    <viewer />
+    <Header />
+    <Viewer />
   </div>
 </template>
 

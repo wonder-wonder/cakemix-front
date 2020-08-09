@@ -1,5 +1,5 @@
 <template>
-  <div class="header" />
+  <div class="editor-header" />
 </template>
 
 <script>
@@ -12,7 +12,8 @@ export default {
 </script>
 
 <style lang="scss">
-.header {
+.editor-header {
+  position: relative;
   height: 50px;
   width: 100vw;
   background-color: grey;

@@ -1,14 +1,13 @@
 <template>
   <div class="viewer-container">
-    <editor
+    <Editor
       @input="
         text => {
           markdown = text
-          console.log('###### ' + text)
         }
       "
     />
-    <preview :markdown="markdown" />
+    <Preview :markdown="markdown" />
   </div>
 </template>
 
@@ -25,6 +24,9 @@ export default {
     return {
       markdown: String,
     }
+  },
+  mounted() {
+    this.markdown = require('@/scripts/markdown/samplemd').sample
   },
 }
 </script>

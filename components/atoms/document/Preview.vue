@@ -1,26 +1,35 @@
 <template>
-  <div :ref="`previewer`" />
+  <div :ref="`previewer`" class="previewer" />
 </template>
 
-<script>
-import editor from '@/scripts/editor/editor'
+<script lang="ts">
+import { Component, Prop, Watch, Vue } from 'nuxt-property-decorator'
 import vdom from '@/scripts/markdown/vdom'
 
-export default {
-  props: {
-    markdown: String,
-  },
-  data() {
-    return {
-      baseDom: this.$refs.previewer,
+@Component
+export default class Preview extends Vue {
+  baseDom: object | null = null
+
+  @Prop({ default: '' })
+  markdown!: string
+
+  @Watch('markdown')
+  textChanged(nText: string) {
+    if (typeof this.baseDom === 'undefined') {
+      return
     }
-  },
-  computed: {
-    compile: () => {
-      this.vdom.update(baseDom, markdown)
-    },
-  },
+    vdom.update(this.baseDom, nText)
+  }
+
+  mounted() {
+    this.baseDom = this.$refs.previewer
+  }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.previewer {
+  height: 100%;
+  width: 100%;
+}
+</style>

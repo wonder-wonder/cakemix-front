@@ -1,7 +1,7 @@
 import markdownIt from 'markdown-it'
 import container from 'markdown-it-container'
 // Plugins
-const plugins = require('./plugins')
+const plugins = require('./plugins').default
 
 const highlight = (code, lang) => {
   if (!lang || /no(-?)highlight|plain|text/.test(lang)) {
