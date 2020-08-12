@@ -12,10 +12,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import editor from '@/scripts/editor/editor.ts'
+const ot = require('@/scripts/editor/ot/ot.js')
+const socket = require('@/scripts/editor/ot/websocket.js')
 
 @Component
 export default class DocEditor extends Vue {
   cMirror: any
+  otClient: any
 
   @Prop({ default: '' })
   pMarkdown!: string
@@ -29,6 +32,57 @@ export default class DocEditor extends Vue {
     // this.cMirror.on('drop', (data: any, ev: any) => {
     //   editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
     // })
+
+    // const socket = new WebSocket('ws://localhost:3001/ws')
+    const cMirror = this.cMirror
+
+    // socket.on('doc', function (data) {
+    //   cMirror.setValue(data.str)
+
+    //   const socketAdapter = new ot.SocketIOAdapter(socket)
+    //   const cMirrorAdapter = new ot.CodeMirrorAdapter(cMirror)
+    //   const client = new ot.EditorClient(
+    //     data.revision,
+    //     data.clients,
+    //     socketAdapter,
+    //     cMirrorAdapter
+    //   )
+    // })
+
+    const url = 'ws://localhost:3001/ws'
+    const conn = new socket.SocketConnection(url)
+    let otClient
+
+    conn.on('open', function () {})
+
+    conn.on('close', function () {})
+
+    conn.on('registered', function (clientId: any) {
+      cMirror.setOption('readOnly', false)
+      console.log(clientId)
+    })
+
+    conn.on('join', function (data: any) {
+      console.log(data)
+    })
+
+    conn.on('quit', function (data: any) {
+      console.log(data)
+    })
+
+    conn.on('doc', function (data: any) {
+      cMirror.setValue(data.document)
+      const serverAdapter = new socket.SocketConnectionAdapter(conn)
+      const editorAdapter = new ot.CodeMirrorAdapter(cMirror)
+      otClient = new ot.EditorClient(
+        data.revision,
+        data.clients,
+        serverAdapter,
+        editorAdapter
+      )
+    })
+
+    this.otClient = otClient
   }
 }
 </script>
