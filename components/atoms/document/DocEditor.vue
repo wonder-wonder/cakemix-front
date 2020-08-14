@@ -33,22 +33,7 @@ export default class DocEditor extends Vue {
     //   editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
     // })
 
-    // const socket = new WebSocket('ws://localhost:3001/ws')
     const cMirror = this.cMirror
-
-    // socket.on('doc', function (data) {
-    //   cMirror.setValue(data.str)
-
-    //   const socketAdapter = new ot.SocketIOAdapter(socket)
-    //   const cMirrorAdapter = new ot.CodeMirrorAdapter(cMirror)
-    //   const client = new ot.EditorClient(
-    //     data.revision,
-    //     data.clients,
-    //     socketAdapter,
-    //     cMirrorAdapter
-    //   )
-    // })
-
     const url = 'ws://localhost:3001/ws'
     const conn = new socket.SocketConnection(url)
     let otClient
