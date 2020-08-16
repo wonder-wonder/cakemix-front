@@ -21,7 +21,6 @@ socket.SocketConnection = (function () {
 
     ws.onmessage = function (evt) {
       const m = JSON.parse(evt.data)
-
       if (m && m.e) {
         self.emit(m.e, m.d, evt)
       }
@@ -82,6 +81,7 @@ socket.SocketConnectionAdapter = (function () {
     operation,
     selection
   ) {
+    console.log([revision, operation, selection])
     this.conn.send('op', [revision, operation, selection])
   }
 

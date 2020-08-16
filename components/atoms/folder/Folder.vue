@@ -1,36 +1,33 @@
 <template>
-  <div :key="uuid" class="folder-box">
+  <div class="folder-box">
     <div class="icon-box">
       <i class="fa fa-folder fa-fw" />
     </div>
     <div class="title-box">
-      <span v-text="title" />
+      <span v-text="folderModel.title" />
     </div>
     <div class="desc1-box">
-      <span v-text="detail" />
+      <span v-text="folderModel.detail" />
     </div>
     <div class="desc2-box">
-      <span v-text="date" />
+      <span v-text="folderModel.date" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { v4 as uuidv4 } from 'uuid'
 
 @Component
 export default class Folder extends Vue {
-  uuid: string = uuidv4()
-
-  @Prop({ default: 'Sample Folder' })
-  title!: string
-
-  @Prop({ default: '2 folders 5 documents' })
-  detail!: string
-
-  @Prop({ default: '2020/08/14 22:32:51 -JST' })
-  date!: string
+  @Prop({
+    default: {
+      title: 'Sample Folder',
+      detail: '2 folders 5 documents',
+      date: '2020/08/14 22:32:51 -JST',
+    },
+  })
+  folderModel!: any
 }
 </script>
 
@@ -40,15 +37,14 @@ export default class Folder extends Vue {
   width: 344px;
   grid-template-rows: 32px 20px 24px;
   grid-template-columns: 64px 280px;
-  border: solid 1px rgb(180, 180, 180);
+  border: solid 1px white;
   border-radius: 5px;
-  color: rgb(50, 50, 50);
-  background-color: white;
+  color: white;
+  background-color: black;
   transition: all 100ms;
 
   &:hover {
-    color: white;
-    background-color: grey;
+    background-color: rgb(100, 100, 100);
   }
 
   .icon-box {

@@ -1,36 +1,33 @@
 <template>
   <div class="folder-container">
-    <ListContainer>
-      <Folder v-for="(item, index) in 5" :key="index" />
-    </ListContainer>
-    <ListContainer>
-      <Document v-for="(item, index) in 5" :key="index" />
-    </ListContainer>
+    <FolderListContainer />
+    <DocListContainer />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Folder from '@/components/atoms/folder/Folder.vue'
-import Document from '@/components/atoms/folder/Document.vue'
-import ListContainer from '@/components/molecules/folder/ListContainer.vue'
+import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
+import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 
 @Component({
   components: {
-    Folder,
-    Document,
-    ListContainer,
+    FolderListContainer,
+    DocListContainer,
   },
 })
 export default class FolderList extends Vue {}
 </script>
 
 <style lang="scss">
+html {
+  background-color: rgb(32, 32, 32);
+}
 .folder-container {
   display: flex;
   flex-flow: column wrap;
-  height: 500px;
+  height: 100vh;
   width: 100vw;
-  padding: 0 16px;
+  background-color: rgb(32, 32, 32);
 }
 </style>

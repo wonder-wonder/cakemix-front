@@ -34,7 +34,8 @@ export default class DocEditor extends Vue {
     // })
 
     const cMirror = this.cMirror
-    const url = 'ws://localhost:3001/ws'
+    const url = 'ws://localhost:8081/v1/ws'
+    // const url = 'ws://localhost:3001/ws'
     const conn = new socket.SocketConnection(url)
     let otClient
 
