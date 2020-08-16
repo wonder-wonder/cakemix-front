@@ -81,7 +81,6 @@ socket.SocketConnectionAdapter = (function () {
     operation,
     selection
   ) {
-    console.log([revision, operation, selection])
     this.conn.send('op', [revision, operation, selection])
   }
 
