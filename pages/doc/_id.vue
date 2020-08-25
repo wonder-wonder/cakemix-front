@@ -41,6 +41,9 @@ export default class Document extends Vue {
 </script>
 
 <style lang="scss">
+html {
+  background-color: white;
+}
 .document-container {
   height: 100vh;
 

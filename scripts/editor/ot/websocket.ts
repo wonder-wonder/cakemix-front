@@ -1,7 +1,12 @@
+// Not complete
+
 const EventEmitter = require('events')
 
 class SocketConnection extends EventEmitter {
-  constructor(_url) {
+  url: string
+  ws: WebSocket | null
+
+  constructor(private _url: string) {
     super()
 
     this.url = _url
@@ -28,7 +33,9 @@ class SocketConnection extends EventEmitter {
     this.ws.close()
   }
 
-  send(eventName, data) {
+  send(eventName: string, data: any) {
+    console.log(data)
+
     if (this.ws === null) {
       return
     }
@@ -37,58 +44,65 @@ class SocketConnection extends EventEmitter {
 }
 
 class SocketConnectionAdapter {
-  constructor(_conn) {
+  conn: any
+  callbacks: any | null
+
+  constructor(private _conn: any) {
     this.conn = _conn
     this.callbacks = null
 
-    this.conn.on('quit', clientId => {
-      this.trigger('client_left', clientId)
+    this.conn.on('quit', (clientId: string) => {
+      this.trigger(['client_left', clientId])
     })
 
-    this.conn.on('join', data => {
+    this.conn.on('join', (data: { [key: string]: any }) => {
+      console.log(data)
+
       const clientId = data.client_id
       const name = data.username
-      this.trigger('set_name', clientId, name)
+      this.trigger(['set_name', clientId, name])
     })
 
     this.conn.on('ok', () => {
       this.trigger(['ack'])
     })
 
-    this.conn.on('op', data => {
+    this.conn.on('op', (data: Array<any>) => {
       const clientId = data[0]
       const operation = data[1]
       const selection = data[2]
-      this.trigger('operation', operation)
-      this.trigger('selection', clientId, selection)
+      this.trigger(['operation', operation])
+      this.trigger(['selection', clientId, selection])
     })
 
-    this.conn.on('sel', data => {
+    this.conn.on('sel', (data: Array<any>) => {
       const clientId = data[0]
       const selection = data[1]
-      this.trigger('selection', clientId, selection)
+      this.trigger(['selection', clientId, selection])
     })
 
     this.conn.on('reconnect', () => {
-      this.trigger('reconnect')
+      this.trigger(['reconnect'])
     })
   }
 
-  sendOperation(rev, op, sel) {
-    this.conn.send('op', [rev, op, sel])
+  sendOperation(rev: any, op: any, sel: any) {
+    this.conn.send(['op', rev, op, sel])
   }
 
-  sendSelection(sel) {
-    this.conn.send('sel', sel)
+  sendSelection(sel: any) {
+    this.conn.send(['sel', sel])
   }
 
-  registerCallbacks(cb) {
+  registerCallbacks(cb: Function) {
     this.callbacks = cb
   }
 
-  trigger(event) {
-    const args = Array.prototype.slice.call(arguments, 1)
-    const action = this.callbacks && this.callbacks[event]
+  trigger(event: Array<any>) {
+    console.log(event)
+
+    const args = event.slice(1)
+    const action = this.callbacks && this.callbacks[event[0]]
     if (action) {
       action.apply(this, args)
     }
