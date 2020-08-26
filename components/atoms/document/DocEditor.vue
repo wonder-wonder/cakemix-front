@@ -1,7 +1,7 @@
 <template>
   <div class="editor-container">
     <textarea
-      :ref="`editor`"
+      :ref="`cmeditor`"
       :placeholder="'Text or Markdown'"
       @input="$emit('input', $event.target.value)"
       v-text="pMarkdown"
@@ -10,65 +10,92 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import editor from '@/scripts/editor/editor.ts'
+import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
+const editor = require('@/scripts/editor/editor.ts')
 const ot = require('@/scripts/editor/ot/ot.js')
 const socket = require('@/scripts/editor/ot/websocket.js')
 
 @Component
 export default class DocEditor extends Vue {
-  cMirror: any
-  otClient: any
+  websocket: any = null
+  cMirror: any = null
+  serverAdapter: any = null
+  editorAdapter: any = null
+  otClient: any = null
 
   @Prop({ default: '' })
   pMarkdown!: string
 
   mounted() {
-    const editorDom = this.$refs.editor as HTMLTextAreaElement
-    this.cMirror = editor.newEditor(editorDom)
-    this.cMirror.on('change', (ev: any) => {
-      this.$emit('input', ev.getValue())
-    })
-    // this.cMirror.on('drop', (data: any, ev: any) => {
-    //   editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
-    // })
+    this.cMirror = editor.newEditor(this.$refs.cmeditor)
 
-    const cMirror = this.cMirror
+    this.cMirror.on('change', this.changeEvent)
+    // cMirror.on('drop', this.dropEvent)
+
     const url = 'ws://localhost:8081/v1/ws'
+    // const url = 'ws://localhost:3001/ws'
+    this.websocket = new socket.SocketConnection(url)
+    this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
+    this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
+    this.websocket.on('registered', this.registeredEvent)
+    this.websocket.on('join', this.joinEvent)
+    this.websocket.on('quit', this.quitEvent)
+    this.websocket.on('doc', this.docEvent)
+  }
 
-    const conn = new socket.SocketConnection(url)
-    let otClient
+  beforeDestroy() {
+    this.websocket.off('registered', this.registeredEvent)
+    this.websocket.off('join', this.joinEvent)
+    this.websocket.off('quit', this.quitEvent)
+    this.websocket.off('doc', this.docEvent)
+    this.cMirror = null
+    this.serverAdapter = null
+    this.editorAdapter = null
+    this.otClient = null
+  }
 
-    conn.on('open', function () {})
+  destroyed() {
+    this.websocket.close()
+    this.websocket = null
+  }
 
-    conn.on('close', function () {})
+  //
+  // CodeMirror Event
+  //
 
-    conn.on('registered', function (clientId: any) {
-      cMirror.setOption('readOnly', false)
-      console.log(clientId)
-    })
+  changeEvent(ev: any) {
+    this.$emit('input', ev.getValue())
+  }
 
-    conn.on('join', function (data: any) {
-      console.log(data)
-    })
+  dropEvent(data: any, ev: any) {
+    // editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
+  }
 
-    conn.on('quit', function (data: any) {
-      console.log(data)
-    })
+  //
+  // EventEmitter Event
+  //
 
-    conn.on('doc', function (data: any) {
-      cMirror.setValue(data.document)
-      const serverAdapter = new socket.SocketConnectionAdapter(conn)
-      const editorAdapter = new ot.CodeMirrorAdapter(cMirror)
-      otClient = new ot.EditorClient(
-        data.revision,
-        data.clients,
-        serverAdapter,
-        editorAdapter
-      )
-    })
+  registeredEvent(clientId: any) {
+    this.cMirror.setOption('readOnly', false)
+    console.log(clientId)
+  }
 
-    this.otClient = otClient
+  joinEvent(data: any) {
+    console.log(data)
+  }
+
+  quitEvent(data: any) {
+    console.log(data)
+  }
+
+  docEvent(data: any) {
+    this.cMirror.setValue(data.document)
+    this.otClient = new ot.EditorClient(
+      data.revision,
+      data.clients,
+      this.serverAdapter,
+      this.editorAdapter
+    )
   }
 }
 </script>
