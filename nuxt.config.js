@@ -27,6 +27,9 @@ export default {
         content: process.env.npm_package_description || '',
       },
     ],
+    bodyAttrs: {
+      class: 'body',
+    },
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {

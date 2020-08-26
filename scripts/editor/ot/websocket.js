@@ -21,7 +21,6 @@ socket.SocketConnection = (function () {
 
     ws.onmessage = function (evt) {
       const m = JSON.parse(evt.data)
-
       if (m && m.e) {
         self.emit(m.e, m.d, evt)
       }
