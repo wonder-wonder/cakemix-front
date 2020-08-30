@@ -1,7 +1,7 @@
 <template>
   <div class="index-container">
     <div class="image-box">
-      <img src="@/assets/icon.png" alt="cakemix_icon" />
+      <img src="@/assets/icon.png" alt="cakemix_icon" >
     </div>
     <div class="description">
       <div class="service-name" v-text="'Cakemix'" />
@@ -9,7 +9,7 @@
       <span v-text="'Real-time edit with multiple users'" />
       <span v-text="'Open source'" />
     </div>
-    <b-button rounded @click="request" v-text="'Login'" />
+    <b-button rounded @click="gotoLogin" v-text="'Login'" />
   </div>
 </template>
 
@@ -18,7 +18,9 @@ import Vue from 'vue'
 
 export default Vue.extend({
   methods: {
-    request() {},
+    gotoLogin() {
+      this.$router.push({ path: `/login` })
+    },
   },
 })
 </script>
