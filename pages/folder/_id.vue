@@ -1,22 +1,24 @@
 <template>
   <div class="folder-container">
+    <NavHeader />
     <FolderListContainer />
     <DocListContainer />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
+import NavHeader from '@/components/organisms/header/NavHeader.vue'
 
-@Component({
+export default Vue.extend({
   components: {
+    NavHeader,
     FolderListContainer,
     DocListContainer,
   },
 })
-export default class FolderList extends Vue {}
 </script>
 
 <style lang="scss">
