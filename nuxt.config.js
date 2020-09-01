@@ -42,6 +42,10 @@ export default {
         href:
           'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
       },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css?family=Righteous',
+      },
     ],
   },
   /*
