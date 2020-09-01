@@ -5,7 +5,7 @@
     :message="isValid ? message[0] : message[1]"
   >
     <b-input
-      :type="labelName.toLowerCase() === 'password' ? 'password' : 'text'"
+      :type="isPassword ? 'password' : 'text'"
       :password-reveal="isPassword"
       @input="$emit('text', $event)"
     />
