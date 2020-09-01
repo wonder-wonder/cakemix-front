@@ -110,6 +110,7 @@ export default class DocEditor extends Vue {
   font-size: 14px;
   width: 100%;
   height: 100%;
+  background-color: #444;
 }
 
 .CodeMirror[lang^='ja'] {

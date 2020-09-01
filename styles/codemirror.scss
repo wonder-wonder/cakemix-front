@@ -5,9 +5,9 @@
  * @license MIT
  */
  
-.CodeMirror {
+ .CodeMirror {
   height: 100%;
-  color: #000;
+  color: whitesmoke;
   text-align: left;
 }
 
@@ -22,25 +22,24 @@
   background-color: #fff;
 }
 .CodeMirror-gutters {
-  border-right: 1px solid #ddd;
-  background-color: #f7f7f7;
+  background-color: black;
   white-space: nowrap;
 }
 .CodeMirror-linenumber {
-  padding: 0 3px 0 5px;
-  min-width: 20px;
+  padding: 0 10px 0 5px;
+  min-width: 36px;
   text-align: right;
-  color: #999;
+  color: whitesmoke;
   white-space: nowrap;
 }
 .CodeMirror-guttermarker {
   color: #000;
 }
 .CodeMirror-guttermarker-subtle {
-  color: #999;
+  color: whitesmoke;
 }
 .CodeMirror-cursor {
-  border-left: 1px solid #000;
+  border-left: 1px solid white;
   border-right: none;
   width: 0;
 }
@@ -155,7 +154,7 @@
   color: #00c;
 }
 .cm-s-default .cm-hr {
-  color: #999;
+  color: whitesmoke;
 }
 .cm-s-default .cm-link {
   color: #00c;
@@ -371,7 +370,6 @@ span.CodeMirror-selectedtext {
 }
 .CodeMirror {
   height: auto;
-  border: 1px solid #ddd;
   font: inherit;
   font-size: 15px;
   z-index: 0;

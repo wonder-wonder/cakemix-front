@@ -31,7 +31,7 @@ export default class DocHeader extends Vue {}
   position: relative;
   width: 100vw;
   padding: 0 16px;
-  background-color: grey;
+  background-color: black;
 
   .home-icon-box {
     margin-right: 16px;
