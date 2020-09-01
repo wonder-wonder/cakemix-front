@@ -1,5 +1,6 @@
 <template>
   <div class="signup-container">
+    <NavHeader />
     <SignupBox class="signup-box" />
   </div>
 </template>
@@ -7,9 +8,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import SignupBox from '@/components/organisms/singup/SignupBox.vue'
+import NavHeader from '@/components/organisms/header/NavHeader.vue'
 
 export default Vue.extend({
   components: {
+    NavHeader,
     SignupBox,
   },
 })
