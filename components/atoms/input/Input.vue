@@ -1,7 +1,7 @@
 <template>
   <b-field :label="labelName">
     <b-input
-      :type="labelName.toLowerCase() === 'password' ? 'password' : 'text'"
+      :type="isPassword ? 'password' : 'text'"
       :password-reveal="isPassword"
       @input="$emit('text', $event)"
     />

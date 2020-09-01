@@ -1,3 +1,4 @@
+
 <template>
   <div class="editor-container">
     <textarea
@@ -110,7 +111,7 @@ export default class DocEditor extends Vue {
   font-size: 14px;
   width: 100%;
   height: 100%;
-  background-color: #444;
+  background-color: rgb(32, 32, 32);
 }
 
 .CodeMirror[lang^='ja'] {
