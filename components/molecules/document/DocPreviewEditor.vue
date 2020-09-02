@@ -37,6 +37,7 @@ export default class DocView extends Vue {
 .viewer-container {
   display: grid;
   height: 100%;
+  background-color: white;
 }
 
 .split {

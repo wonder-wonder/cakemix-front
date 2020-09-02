@@ -1,5 +1,6 @@
 <template>
   <div class="editor-header">
+    <HomeIcon class="home-icon-box" />
     <DocSwitch />
     <DocSwitchButton
       :icon-type="'question'"
@@ -30,6 +31,10 @@ export default class DocHeader extends Vue {}
   position: relative;
   width: 100vw;
   padding: 0 16px;
-  background-color: grey;
+  background-color: black;
+
+  .home-icon-box {
+    margin-right: 16px;
+  }
 }
 </style>
