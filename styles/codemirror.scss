@@ -334,13 +334,13 @@ div.CodeMirror-dragcursors {
   visibility: visible;
 }
 .CodeMirror-selected {
-  background: #d9d9d9;
+  background: #555555;
 }
 .CodeMirror-focused .CodeMirror-selected,
 .CodeMirror-line::selection,
 .CodeMirror-line > span::selection,
 .CodeMirror-line > span > span::selection {
-  background: #d7d4f0;
+  background: #666666;
 }
 .CodeMirror-crosshair {
   cursor: crosshair;
@@ -348,7 +348,7 @@ div.CodeMirror-dragcursors {
 .CodeMirror-line::-moz-selection,
 .CodeMirror-line > span::-moz-selection,
 .CodeMirror-line > span > span::-moz-selection {
-  background: #d7d4f0;
+  background: #666666;
 }
 .cm-searching {
   background: #ffa;
@@ -402,7 +402,7 @@ span.CodeMirror-selectedtext {
   color: #183691;
 }
 .CodeMirror .CodeMirror-selected {
-  background: #d9d9d9;
+  background: #555555;
 }
 .CodeMirror .CodeMirror-code .cm-header-1 {
   font-size: 200%;
