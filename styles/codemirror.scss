@@ -1,18 +1,11 @@
-/**
- * simplemde v1.11.2
- * Copyright Next Step Webs, Inc.
- * @link https://github.com/NextStepWebs/simplemde-markdown-editor
- * @license MIT
- */
- 
- .CodeMirror {
+.CodeMirror {
   height: 100%;
   color: whitesmoke;
   text-align: left;
 }
 
 .CodeMirror-lines {
-  padding: 4px 0;
+  padding: 4px 0 calc(100vh - 104px) 0;
 }
 .CodeMirror pre {
   padding: 0 4px;
@@ -110,59 +103,73 @@
 .cm-strikethrough {
   text-decoration: line-through;
 }
-.cm-s-default .cm-keyword {
-  color: #708;
+.cm-s-default .cm-comment {
+  color: #626a73;
 }
 .cm-s-default .cm-atom {
-  color: #219;
+  color: #ae81ff;
 }
 .cm-s-default .cm-number {
-  color: #164;
+  color: #e6b450;
 }
-.cm-s-default .cm-def {
-  color: #00f;
+.cm-s-default .cm-comment.cm-attribute {
+  color: #ffb454;
 }
-.cm-s-default .cm-variable-2 {
-  color: #05a;
+.cm-s-default .cm-comment.cm-def {
+  color: rgba(57, 186, 230, 80);
 }
-.cm-s-default .cm-variable-3 {
-  color: #085;
+.cm-s-default .cm-comment.cm-tag {
+  color: #39bae6;
 }
-.cm-s-default .cm-comment {
-  color: #a50;
+.cm-s-default .cm-comment.cm-type {
+  color: #5998a6;
 }
-.cm-s-default .cm-string {
-  color: #a11;
+
+.cm-s-default .cm-property,
+.cm-s-default .cm-attribute {
+  color: #ffb454;
 }
-.cm-s-default .cm-string-2 {
-  color: #f50;
-}
-.cm-s-default .cm-meta,
-.cm-s-default .cm-qualifier {
-  color: #555;
+.cm-s-default .cm-keyword {
+  color: #ff8f40;
 }
 .cm-s-default .cm-builtin {
-  color: #30a;
+  color: #e6b450;
+}
+.cm-s-default .cm-string {
+  color: #c2d94c;
+}
+
+.cm-s-default .cm-variable {
+  color: #b3b1ad;
+}
+.cm-s-default .cm-variable-2 {
+  color: #39bae6;
+}
+.cm-s-default .cm-variable-3 {
+  color: #f07178;
+}
+.cm-s-default .cm-type {
+  color: #ff8f40;
+}
+.cm-s-default .cm-def {
+  color: #ffee99;
 }
 .cm-s-default .cm-bracket {
-  color: #997;
+  color: #f8f8f2;
 }
 .cm-s-default .cm-tag {
-  color: #170;
+  color: rgba(57, 186, 230, 80);
 }
-.cm-s-default .cm-attribute {
-  color: #00c;
-}
-.cm-s-default .cm-hr {
-  color: whitesmoke;
+.cm-s-default .cm-header {
+  color: #c2d94c;
 }
 .cm-s-default .cm-link {
-  color: #00c;
+  color: #39bae6;
 }
-.cm-invalidchar,
 .cm-s-default .cm-error {
-  color: red;
+  color: #ff3333;
 }
+
 .CodeMirror-composing {
   border-bottom: 2px solid;
 }
@@ -363,7 +370,7 @@ div.CodeMirror-dragcursors {
   }
 }
 .cm-tab-wrap-hack:after {
-  content: "";
+  content: '';
 }
 span.CodeMirror-selectedtext {
   background: 0 0;

@@ -5,28 +5,37 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 import vdom from '@/scripts/markdown/vdom.ts'
 
-@Component
-export default class DocPreview extends Vue {
-  baseDom: HTMLElement | null = null
+export type DataType = {
+  baseDom: HTMLElement | null
+}
 
-  @Prop({ default: '' })
-  pMarkdown!: string
-
-  @Watch('pMarkdown')
-  onChangedText(text: string) {
-    if (!this.baseDom) {
-      return
+export default Vue.extend({
+  props: {
+    pMarkdown: {
+      type: String,
+      default: '',
+    },
+  },
+  data(): DataType {
+    return {
+      baseDom: null,
     }
-    vdom.update(this.baseDom, text)
-  }
-
+  },
+  watch: {
+    pMarkdown(text: string) {
+      if (!this.baseDom) {
+        return
+      }
+      vdom.update(this.baseDom, text)
+    },
+  },
   mounted() {
     this.baseDom = this.$refs.previewer as HTMLElement
-  }
-}
+  },
+})
 </script>
 
 <style lang="scss">
@@ -50,4 +59,5 @@ export default class DocPreview extends Vue {
 }
 </style>
 
+<style lang="css" src="katex/dist/katex.min.css"></style>
 <style lang="css" src="abcjs/abcjs-midi.css"></style>

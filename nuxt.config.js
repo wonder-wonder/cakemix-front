@@ -35,16 +35,16 @@ export default {
       {
         rel: 'stylesheet',
         href:
-          'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css',
-      },
-      {
-        rel: 'stylesheet',
-        href:
           'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
       },
       {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css?family=Righteous',
+      },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css',
       },
     ],
   },

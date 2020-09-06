@@ -1,4 +1,3 @@
-
 <template>
   <div class="editor-container">
     <textarea
@@ -11,28 +10,39 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
+import Vue from 'vue'
 const editor = require('@/scripts/editor/editor.ts')
 const ot = require('@/scripts/editor/ot/ot.js')
 const socket = require('@/scripts/editor/ot/websocket.js')
 
-@Component
-export default class DocEditor extends Vue {
-  websocket: any = null
-  cMirror: any = null
-  serverAdapter: any = null
-  editorAdapter: any = null
-  otClient: any = null
+export type DataType = {
+  websocket: any
+  cMirror: any
+  serverAdapter: any
+  editorAdapter: any
+  otClient: any
+}
 
-  @Prop({ default: '' })
-  pMarkdown!: string
-
+export default Vue.extend({
+  props: {
+    pMarkdown: {
+      type: String,
+      default: '',
+    },
+  },
+  data(): DataType {
+    return {
+      websocket: null,
+      cMirror: null,
+      serverAdapter: null,
+      editorAdapter: null,
+      otClient: null,
+    }
+  },
   mounted() {
     this.cMirror = editor.newEditor(this.$refs.cmeditor)
-
     this.cMirror.on('change', this.changeEvent)
     // cMirror.on('drop', this.dropEvent)
-
     const url = 'ws://localhost:8081/v1/ws'
     // const url = 'ws://localhost:3001/ws'
     this.websocket = new socket.SocketConnection(url)
@@ -42,8 +52,7 @@ export default class DocEditor extends Vue {
     this.websocket.on('join', this.joinEvent)
     this.websocket.on('quit', this.quitEvent)
     this.websocket.on('doc', this.docEvent)
-  }
-
+  },
   beforeDestroy() {
     this.websocket.off('registered', this.registeredEvent)
     this.websocket.off('join', this.joinEvent)
@@ -53,52 +62,45 @@ export default class DocEditor extends Vue {
     this.serverAdapter = null
     this.editorAdapter = null
     this.otClient = null
-  }
-
+  },
   destroyed() {
     this.websocket.close()
     this.websocket = null
-  }
-
-  //
-  // CodeMirror Event
-  //
-
-  changeEvent(ev: any) {
-    this.$emit('input', ev.getValue())
-  }
-
-  dropEvent(data: any, ev: any) {
-    // editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
-  }
-
-  //
-  // EventEmitter Event
-  //
-
-  registeredEvent(clientId: any) {
-    this.cMirror.setOption('readOnly', false)
-    console.log(clientId)
-  }
-
-  joinEvent(data: any) {
-    console.log(data)
-  }
-
-  quitEvent(data: any) {
-    console.log(data)
-  }
-
-  docEvent(data: any) {
-    this.cMirror.setValue(data.document)
-    this.otClient = new ot.EditorClient(
-      data.revision,
-      data.clients,
-      this.serverAdapter,
-      this.editorAdapter
-    )
-  }
-}
+  },
+  methods: {
+    //
+    // CodeMirror Event
+    //
+    changeEvent(ev: any) {
+      this.$emit('input', ev.getValue())
+    },
+    dropEvent(data: any, ev: any) {
+      // editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
+    },
+    //
+    // EventEmitter Event
+    //
+    registeredEvent(clientId: any) {
+      this.cMirror.setOption('readOnly', false)
+      console.log(clientId)
+    },
+    joinEvent(data: any) {
+      console.log(data)
+    },
+    quitEvent(data: any) {
+      console.log(data)
+    },
+    docEvent(data: any) {
+      this.cMirror.setValue(data.document)
+      this.otClient = new ot.EditorClient(
+        data.revision,
+        data.clients,
+        this.serverAdapter,
+        this.editorAdapter
+      )
+    },
+  },
+})
 </script>
 
 <style lang="scss">
@@ -108,7 +110,7 @@ export default class DocEditor extends Vue {
 
 .CodeMirror {
   font-family: 'Source Code Pro', Consolas, monaco, monospace;
-  font-size: 14px;
+  font-size: 16px;
   width: 100%;
   height: 100%;
   background-color: rgb(32, 32, 32);
