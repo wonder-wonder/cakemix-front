@@ -1,4 +1,4 @@
-const CodeMirror = require('@/scripts/editor/CodeMirror.js')
+const CodeMirror = require('@/scripts/editor/codemirror.js')
 // const CodeMirror = require('codemirror')
 // import utils from "./utils";
 

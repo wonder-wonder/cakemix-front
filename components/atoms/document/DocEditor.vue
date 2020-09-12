@@ -12,6 +12,7 @@
 <script lang="ts">
 import Vue from 'vue'
 const editor = require('@/scripts/editor/editor.ts')
+const ss = require('@/scripts/editor/scrollsyncer.ts')
 const ot = require('@/scripts/editor/ot/ot.js')
 const socket = require('@/scripts/editor/ot/websocket.js')
 
@@ -29,6 +30,10 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    currentPos: {
+      type: Number,
+      default: 0,
+    },
   },
   data(): DataType {
     return {
@@ -39,9 +44,18 @@ export default Vue.extend({
       otClient: null,
     }
   },
+  watch: {
+    currentPos(pos: number) {
+      this.cMirror.scrollIntoView(
+        Math.min(pos, this.cMirror.lineCount() - 1),
+        0
+      )
+    },
+  },
   mounted() {
     this.cMirror = editor.newEditor(this.$refs.cmeditor)
     this.cMirror.on('change', this.changeEvent)
+    this.cMirror.on('scroll', this.scrollEvent)
     // cMirror.on('drop', this.dropEvent)
     const url = 'ws://localhost:8081/v1/ws'
     // const url = 'ws://localhost:3001/ws'
@@ -73,6 +87,13 @@ export default Vue.extend({
     //
     changeEvent(ev: any) {
       this.$emit('input', ev.getValue())
+      const checkPoint = ss.analyzeMarkdown(ev.getValue())
+      this.$emit('update', checkPoint)
+    },
+    scrollEvent(ev: any) {
+      const scrollInfo = ev.getScrollInfo()
+      const lineNumber = ev.lineAtHeight(scrollInfo.top, 'local')
+      this.$emit('updatepos', lineNumber + 1)
     },
     dropEvent(data: any, ev: any) {
       // editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
