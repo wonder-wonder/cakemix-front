@@ -44,6 +44,9 @@ export default Vue.extend({
       el.scrollTop = height
     },
   },
+  created() {
+    vdom.init()
+  },
   mounted() {
     this.baseDom = this.$refs.previewer as HTMLElement
     // this.scrollDom = this.$refs.previewerc as HTMLElement
@@ -54,7 +57,11 @@ export default Vue.extend({
       if (!this.baseDom) {
         return
       }
-      const checkPoint = ss.analyzeDom(this.baseDom.firstChild)
+      const el = this.baseDom.firstChild
+      if (!el) {
+        return
+      }
+      const checkPoint = ss.analyzeDom(el)
       this.$emit('update', checkPoint)
     },
     // scrolled() {
