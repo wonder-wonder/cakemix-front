@@ -26,8 +26,6 @@ parser.use(require('markdown-it-imsize'))
 parser.use(require('markdown-it-sub'))
 parser.use(require('markdown-it-ins'))
 parser.use(require('markdown-it-mark'))
-parser.use(require('markdown-it-footnote'))
-parser.use(require('markdown-it-deflist'))
 parser.use(require('markdown-it-abbr'))
 parser.use(require('markdown-it-video'))
 parser.use(require('markdown-it-pdf'), {

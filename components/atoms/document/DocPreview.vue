@@ -1,32 +1,70 @@
 <template>
-  <div class="preview-container">
+  <div :ref="`previewerc`" class="preview-container">
     <div :ref="`previewer`" class="previewer" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 import vdom from '@/scripts/markdown/vdom.ts'
+const ss = require('@/scripts/editor/scrollsyncer.ts')
 
-@Component
-export default class DocPreview extends Vue {
-  baseDom: HTMLElement | null = null
+export type DataType = {
+  baseDom: HTMLElement | null
+  scrollDom: HTMLElement | null
+}
 
-  @Prop({ default: '' })
-  pMarkdown!: string
-
-  @Watch('pMarkdown')
-  onChangedText(text: string) {
-    if (!this.baseDom) {
-      return
+export default Vue.extend({
+  props: {
+    pMarkdown: {
+      type: String,
+      default: '',
+    },
+    currentPos: {
+      type: Number,
+      default: 0,
+    },
+  },
+  data(): DataType {
+    return {
+      baseDom: null,
+      scrollDom: null,
     }
-    vdom.update(this.baseDom, text)
-  }
-
+  },
+  watch: {
+    pMarkdown(text: string) {
+      if (!this.baseDom) {
+        return
+      }
+      vdom.update(this.baseDom, text)
+      this.updatePoint()
+    },
+    currentPos(height: number) {
+      const el: HTMLElement = this.$refs.previewerc as HTMLElement
+      el.scrollTop = height
+    },
+  },
   mounted() {
     this.baseDom = this.$refs.previewer as HTMLElement
-  }
-}
+    // this.scrollDom = this.$refs.previewerc as HTMLElement
+    // this.scrollDom.addEventListener('scroll', this.scrolled)
+  },
+  methods: {
+    updatePoint() {
+      if (!this.baseDom) {
+        return
+      }
+      const checkPoint = ss.analyzeDom(this.baseDom.firstChild)
+      this.$emit('update', checkPoint)
+    },
+    // scrolled() {
+    //   if (!this.scrollDom) {
+    //     return
+    //   }
+    //   this.$emit('updatepos', this.scrollDom.scrollTop)
+    // },
+  },
+})
 </script>
 
 <style lang="scss">
@@ -35,11 +73,15 @@ export default class DocPreview extends Vue {
   justify-content: center;
   overflow: scroll;
 
+  .invisible {
+    display: none;
+  }
+
   .previewer {
     width: 100%;
     max-width: 800px;
     height: 100%;
-    padding: 10px;
+    padding: 16px;
   }
 
   .previewer::after {
@@ -50,4 +92,5 @@ export default class DocPreview extends Vue {
 }
 </style>
 
+<style lang="css" src="katex/dist/katex.min.css"></style>
 <style lang="css" src="abcjs/abcjs-midi.css"></style>
