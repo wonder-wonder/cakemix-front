@@ -4,31 +4,28 @@
       <i class="fa fa-folder fa-fw" />
     </div>
     <div class="title-box">
-      <span v-text="folderModel.title" />
+      <span v-text="folder.title" />
     </div>
     <div class="desc1-box">
-      <span v-text="folderModel.detail" />
+      <span v-text="folder.detail" />
     </div>
     <div class="desc2-box">
-      <span v-text="folderModel.date" />
+      <span v-text="folder.date" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 
-@Component
-export default class Folder extends Vue {
-  @Prop({
-    default: {
-      title: 'Sample Folder',
-      detail: '2 folders 5 documents',
-      date: '2020/08/14 22:32:51 -JST',
+export default Vue.extend({
+  props: {
+    folder: {
+      type: Object,
+      default: null,
     },
-  })
-  folderModel!: any
-}
+  },
+})
 </script>
 
 <style lang="scss">

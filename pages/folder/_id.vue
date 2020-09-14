@@ -1,8 +1,8 @@
 <template>
   <div class="folder-container">
     <NavHeader />
-    <FolderListContainer />
-    <DocListContainer />
+    <FolderListContainer :models="folders" />
+    <DocListContainer :models="docs" />
   </div>
 </template>
 
@@ -12,11 +12,22 @@ import FolderListContainer from '@/components/molecules/folder/FolderListContain
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 
+export type DataType = {
+  folders: Array<Object>
+  docs: Array<Object>
+}
+
 export default Vue.extend({
   components: {
     NavHeader,
     FolderListContainer,
     DocListContainer,
+  },
+  data(): DataType {
+    return {
+      folders: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      docs: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+    }
   },
 })
 </script>
@@ -28,7 +39,6 @@ html {
 .folder-container {
   display: flex;
   flex-flow: column wrap;
-  height: 100vh;
   width: 100vw;
   background-color: rgb(32, 32, 32);
 }

@@ -23,14 +23,14 @@ html {
   background-color: rgb(32, 32, 32);
 }
 .signup-container {
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
 
   .signup-box {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
     max-width: 320px;
     width: 100vw;
     border-radius: 8px;

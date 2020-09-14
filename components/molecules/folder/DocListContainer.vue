@@ -5,7 +5,7 @@
       <Document
         v-for="(model, index) in models"
         :key="`D${index}${uuid}`"
-        :document-model="model"
+        :doc="model"
         @click.native="goToDoc(model.id)"
       />
     </div>
@@ -13,27 +13,35 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import Document from '@/components/atoms/folder/Document.vue'
 
-@Component({
+export type DataType = {
+  uuid: String
+}
+
+export default Vue.extend({
   components: {
     Document,
   },
+  props: {
+    models: {
+      type: Array,
+      default: null,
+    },
+  },
+  data(): DataType {
+    return {
+      uuid: uuidv4(),
+    }
+  },
+  methods: {
+    goToDoc(documentId: string) {
+      this.$router.push({ path: `/doc/${documentId}` })
+    },
+  },
 })
-export default class FolderListContainer extends Vue {
-  uuid: string = uuidv4()
-
-  @Prop({
-    default: [{}],
-  })
-  models!: [{}]
-
-  goToDoc(documentId: string) {
-    this.$router.push({ path: `/doc/${documentId}` })
-  }
-}
 </script>
 
 <style lang="scss">

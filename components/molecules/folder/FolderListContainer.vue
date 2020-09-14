@@ -5,7 +5,7 @@
       <Folder
         v-for="(model, index) in models"
         :key="`F${index}${uuid}`"
-        :folder-model="model"
+        :folder="model"
         @click.native="goToFolder(model.id)"
       />
     </div>
@@ -13,25 +13,35 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import Folder from '@/components/atoms/folder/Folder.vue'
 
-@Component({
+export type DataType = {
+  uuid: String
+}
+
+export default Vue.extend({
   components: {
     Folder,
   },
+  props: {
+    models: {
+      type: Array,
+      default: null,
+    },
+  },
+  data(): DataType {
+    return {
+      uuid: uuidv4(),
+    }
+  },
+  methods: {
+    goToFolder(folderId: string) {
+      this.$router.push({ path: `/folder/${folderId}` })
+    },
+  },
 })
-export default class FolderListContainer extends Vue {
-  uuid: string = uuidv4()
-
-  @Prop({ default: [{}] })
-  models!: [{}]
-
-  goToFolder(folderId: string) {
-    this.$router.push({ path: `/folder/${folderId}` })
-  }
-}
 </script>
 
 <style lang="scss">
