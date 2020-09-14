@@ -23,16 +23,16 @@ html {
   background-color: rgb(32, 32, 32);
 }
 .login-container {
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
   width: 100vw;
 
   .login-box {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
     max-width: 320px;
-    width: 100vw;
+    width: 100%;
     border-radius: 8px;
   }
 }

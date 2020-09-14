@@ -4,31 +4,28 @@
       <i class="fa fa-file fa-fw" />
     </div>
     <div class="title-box">
-      <span v-text="documentModel.title" />
+      <span v-text="doc.title" />
     </div>
     <div class="desc1-box">
-      <span v-text="documentModel.author" />
+      <span v-text="doc.author" />
     </div>
     <div class="desc2-box">
-      <span v-text="documentModel.date" />
+      <span v-text="doc.date" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 
-@Component
-export default class Folder extends Vue {
-  @Prop({
-    default: {
-      title: 'Sample Document',
-      author: '0eta0',
-      date: '2020/08/14 22:32:51 -JST',
+export default Vue.extend({
+  props: {
+    doc: {
+      type: Object,
+      default: null,
     },
-  })
-  documentModel!: any
-}
+  },
+})
 </script>
 
 <style lang="scss">

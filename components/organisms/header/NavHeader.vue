@@ -26,7 +26,7 @@ export default Vue.extend({
 
 <style lang="scss">
 .nav-header-container {
-  position: absolute;
+  position: sticky;
   top: 0;
   display: flex;
   align-items: center;
