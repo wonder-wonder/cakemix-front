@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title" v-text="'Document'" />
+    <BorderTitle :title="'Document'" />
     <div class="list-container">
       <Document
         v-for="(model, index) in models"
@@ -15,6 +15,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import Document from '@/components/atoms/folder/Document.vue'
 
 export type DataType = {
@@ -23,6 +24,7 @@ export type DataType = {
 
 export default Vue.extend({
   components: {
+    BorderTitle,
     Document,
   },
   props: {
