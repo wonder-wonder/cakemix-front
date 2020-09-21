@@ -16,6 +16,7 @@
           :title="cell.title"
           :is-selected="cell.isSelected"
           :is-last="isLast(headerIndex, cellIndex)"
+          @click="$emit('click', headerIndex, cellIndex)"
         />
       </div>
     </div>

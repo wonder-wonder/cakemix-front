@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-cell-container" :class="customClass">
+  <div class="menu-cell-container" :class="customClass" @click="$emit('click')">
     <div v-text="title" />
   </div>
 </template>
