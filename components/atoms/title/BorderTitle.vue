@@ -21,8 +21,7 @@ export default Vue.extend({
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 16px auto;
-  padding: 8px 32px;
+  margin: 0 auto;
   border-radius: 8px;
   color: white;
   font-size: 24px;

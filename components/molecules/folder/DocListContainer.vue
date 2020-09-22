@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BorderTitle :title="'Document'" />
+    <BorderTitle :title="'Document'" class="border-title" />
     <div class="list-container">
       <Document
         v-for="(model, index) in models"
@@ -82,5 +82,12 @@ export default Vue.extend({
   .document-box {
     margin: 16px 0 0 16px;
   }
+}
+
+.border-title {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  padding-left: 32px;
+  padding-right: 32px;
 }
 </style>
