@@ -1,6 +1,7 @@
 <template>
   <div class="menu-view-container">
     <VerticalMenu :models="models" @click="clickedCell" />
+    <Profile />
   </div>
 </template>
 
@@ -10,6 +11,7 @@ import VerticalMenu, {
   MenuModels,
   MenuModel,
 } from '@/components/molecules/menu/VerticalMenu.vue'
+import Profile from '@/components/organisms/settings/Profile.vue'
 
 export type SelectedModel = {
   hIndex: Number
@@ -24,6 +26,7 @@ export type DataType = {
 export default Vue.extend({
   components: {
     VerticalMenu,
+    Profile,
   },
   data(): DataType {
     return {
@@ -70,7 +73,7 @@ export default Vue.extend({
 <style lang="scss">
 .menu-view-container {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: columns wrap;
   width: 1000px;
   margin: 32px auto;
   background-color: rgb(32, 32, 32);
