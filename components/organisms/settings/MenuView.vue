@@ -37,17 +37,12 @@ export default Vue.extend({
           cells: [
             { title: 'Profile', isSelected: false } as MenuModel,
             { title: 'Auth', isSelected: false } as MenuModel,
-            { title: 'Admin', isSelected: false } as MenuModel,
           ],
         } as MenuModels,
         {
           title: 'Admin',
           isAdmin: true,
-          cells: [
-            { title: 'Profile', isSelected: false } as MenuModel,
-            { title: 'Users', isSelected: false } as MenuModel,
-            { title: 'Admin', isSelected: false } as MenuModel,
-          ],
+          cells: [{ title: 'Users', isSelected: false } as MenuModel],
         } as MenuModels,
       ],
       current: { hIndex: 0, cIndex: 0 } as SelectedModel,
