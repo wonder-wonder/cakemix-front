@@ -1,7 +1,7 @@
 <template>
   <div class="nav-header-container">
     <HomeIcon class="home-icon-box" />
-    <DropDown v-if="isLoggedin" class="dropdown-box" />
+    <DropDown v-if="isLoggedin && isDropDownEnable" class="dropdown-box" />
   </div>
 </template>
 
@@ -16,6 +16,12 @@ export type DataType = {
 
 export default Vue.extend({
   components: { HomeIcon, DropDown },
+  props: {
+    isDropDownEnable: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data(): DataType {
     return {
       isLoggedin: true,

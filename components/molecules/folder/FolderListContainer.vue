@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title" v-text="'Folder'" />
+    <BorderTitle :title="'Folder'" class="border-title" />
     <div class="list-container">
       <Folder
         v-for="(model, index) in models"
@@ -15,6 +15,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import Folder from '@/components/atoms/folder/Folder.vue'
 
 export type DataType = {
@@ -23,6 +24,7 @@ export type DataType = {
 
 export default Vue.extend({
   components: {
+    BorderTitle,
     Folder,
   },
   props: {
@@ -80,5 +82,12 @@ export default Vue.extend({
   .folder-box {
     margin: 16px 0 0 16px;
   }
+}
+
+.border-title {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  padding-left: 32px;
+  padding-right: 32px;
 }
 </style>
