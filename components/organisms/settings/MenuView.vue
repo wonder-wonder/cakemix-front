@@ -1,8 +1,8 @@
 <template>
   <div class="menu-view-container">
     <VerticalMenu :models="models" @click="clickedCell" />
-    <Profile />
-    <!-- <Auth /> -->
+    <!-- <Profile /> -->
+    <Auth />
   </div>
 </template>
 
