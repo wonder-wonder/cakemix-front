@@ -1,7 +1,8 @@
 <template>
   <div class="menu-view-container">
     <VerticalMenu :models="models" @click="clickedCell" />
-    <Profile />
+    <!-- <Profile /> -->
+    <Auth />
   </div>
 </template>
 
@@ -12,6 +13,7 @@ import VerticalMenu, {
   MenuModel,
 } from '@/components/molecules/menu/VerticalMenu.vue'
 import Profile from '@/components/organisms/settings/Profile.vue'
+import Auth from '@/components/organisms/settings/Auth.vue'
 
 export type SelectedModel = {
   hIndex: Number
@@ -27,6 +29,7 @@ export default Vue.extend({
   components: {
     VerticalMenu,
     Profile,
+    Auth,
   },
   data(): DataType {
     return {

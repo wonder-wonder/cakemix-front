@@ -3,6 +3,7 @@
     <b-input
       :type="isPassword ? 'password' : 'text'"
       :password-reveal="isPassword"
+      :value="value"
       @input="$emit('text', $event)"
     />
   </b-field>
@@ -24,6 +25,10 @@ export default Vue.extend({
     isPassword: {
       type: Boolean,
       default: false,
+    },
+    value: {
+      type: String,
+      default: '',
     },
   },
 })
