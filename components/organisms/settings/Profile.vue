@@ -1,20 +1,23 @@
 <template>
   <div class="profile-container">
-    <BorderTitle :title="title" />
+    <BorderTitle :title="'Profile'" />
     <div class="profile-item-box">
-      <SquareIcon
-        class="icon"
-        :label-name="'Icon'"
-        :current="'https://picsum.photos/256/256'"
+      <SquareIcon class="icon" :label-name="'Icon'" :src="src" />
+      <ValidateInput
+        :label-name="'UserName'"
+        :message="['OK', 'Invalid charactor or already used']"
+        :is-valid="usernameValidator(userName)"
+        :value="userName"
+        @text="userName = $event"
       />
-      <Input :label-name="'UserName'" />
       <Select
         :label-name="'Language'"
         :select-items="selectItems"
         :placeholder="'Select a language'"
+        :current="current"
         @input="current = $event"
       />
-      <TextArea :label-name="'Biography'" />
+      <TextArea :label-name="'Biography'" :value="bio" />
       <b-button
         class="update-button is-primary"
         :loading="isLoading"
@@ -29,7 +32,7 @@
 import Vue from 'vue'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import SquareIcon from '@/components/molecules/image/UploadableImage.vue'
-import Input from '@/components/atoms/input/Input.vue'
+import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import TextArea from '@/components/atoms/input/TextArea.vue'
 import Select from '@/components/atoms/input/Select.vue'
 
@@ -37,26 +40,26 @@ export default Vue.extend({
   components: {
     BorderTitle,
     SquareIcon,
-    Input,
+    ValidateInput,
     TextArea,
     Select,
   },
-  props: {
-    title: {
-      type: String,
-      default: 'Profile',
-    },
-  },
   data() {
     return {
-      current: '',
+      current: 'English',
       selectItems: ['English', 'Japanese'],
+      src: 'https://picsum.photos/256/256',
+      userName: 'abcdefg',
+      bio: 'Hello!!\nThis is test biography.',
       isLoading: false,
     }
   },
   methods: {
     request() {
-      console.log('UPDATE INFO')
+      console.log('UPDATE INFO', this.current)
+    },
+    usernameValidator(text: string): boolean {
+      return text === 'abcdefg'
     },
   },
 })

@@ -3,7 +3,7 @@
     <b-field :label="labelName">
       <b-image
         class="image-box"
-        :src="current"
+        :src="src"
         :alt="labelName"
         :ratio="ratio"
         :rounded="rounded"
@@ -42,7 +42,7 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    current: {
+    src: {
       type: String,
       default: 'https://picsum.photos/256/256',
     },

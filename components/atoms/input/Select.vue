@@ -1,14 +1,13 @@
 <template>
   <b-field :label="labelName">
     <b-select
-      :v-text="current"
+      :value="current"
       :placeholder="placeholder"
       @input="$emit('input', $event)"
     >
       <option
         v-for="(item, index) in selectItems"
         :key="`select-option-${uuid}-${index}`"
-        :value="item"
         v-text="item"
       />
     </b-select>
