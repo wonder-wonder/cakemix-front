@@ -1,8 +1,15 @@
 <template>
   <div class="menu-view-container">
     <VerticalMenu :models="models" @click="clickedCell" />
-    <!-- <Profile /> -->
-    <Auth />
+    <Profile
+      v-if="models[current.hIndex].cells[current.cIndex].title === 'Profile'"
+    />
+    <Auth
+      v-if="models[current.hIndex].cells[current.cIndex].title === 'Auth'"
+    />
+    <Users
+      v-if="models[current.hIndex].cells[current.cIndex].title === 'Users'"
+    />
   </div>
 </template>
 
@@ -14,6 +21,7 @@ import VerticalMenu, {
 } from '@/components/molecules/menu/VerticalMenu.vue'
 import Profile from '@/components/organisms/settings/Profile.vue'
 import Auth from '@/components/organisms/settings/Auth.vue'
+import Users from '@/components/organisms/settings/Users.vue'
 
 export type SelectedModel = {
   hIndex: Number
@@ -30,6 +38,7 @@ export default Vue.extend({
     VerticalMenu,
     Profile,
     Auth,
+    Users,
   },
   data(): DataType {
     return {
@@ -38,7 +47,7 @@ export default Vue.extend({
           title: 'User',
           isAdmin: false,
           cells: [
-            { title: 'Profile', isSelected: false } as MenuModel,
+            { title: 'Profile', isSelected: true } as MenuModel,
             { title: 'Auth', isSelected: false } as MenuModel,
           ],
         } as MenuModels,
