@@ -1,15 +1,9 @@
 <template>
   <div class="menu-view-container">
     <VerticalMenu :models="models" @click="clickedCell" />
-    <Profile
-      v-if="models[current.hIndex].cells[current.cIndex].title === 'Profile'"
-    />
-    <Auth
-      v-if="models[current.hIndex].cells[current.cIndex].title === 'Auth'"
-    />
-    <Users
-      v-if="models[current.hIndex].cells[current.cIndex].title === 'Users'"
-    />
+    <Profile v-if="currentView === 'Profile'" />
+    <Auth v-if="currentView === 'Auth'" />
+    <Users v-if="currentView === 'Users'" />
   </div>
 </template>
 
@@ -60,6 +54,13 @@ export default Vue.extend({
       current: { hIndex: 0, cIndex: 0 } as SelectedModel,
     }
   },
+  computed: {
+    currentView(): String {
+      const h = this.current.hIndex as number
+      const c = this.current.cIndex as number
+      return this.models[h].cells[c].title
+    },
+  },
   methods: {
     clickedCell(h: number, c: number) {
       this.models.forEach(model =>
@@ -71,7 +72,6 @@ export default Vue.extend({
       }
       this.current.hIndex = h
       this.current.cIndex = c
-      console.log(this.current)
     },
   },
 })

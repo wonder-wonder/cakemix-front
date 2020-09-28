@@ -31,12 +31,6 @@ export type DataType = {
   generatedLink: String
 }
 
-const User = {
-  icon: 'https://picsum.photos/64/64',
-  userName: 'user_name',
-  joinedAt: '2020-09-27 21:17:40',
-}
-
 export default Vue.extend({
   components: {
     BorderTitle,
@@ -46,7 +40,13 @@ export default Vue.extend({
   data(): DataType {
     return {
       uuid: uuidv4(),
-      users: [User, User, User],
+      users: [
+        {
+          icon: 'https://picsum.photos/64/64',
+          userName: 'user_name',
+          joinedAt: '2020-09-27 21:17:40',
+        },
+      ],
       generatedLink: '',
     }
   },
