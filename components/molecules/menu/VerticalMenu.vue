@@ -3,6 +3,7 @@
     <div
       v-for="(model, headerIndex) in models"
       :key="`menu-header-${headerIndex}`"
+      class="menu-section-container"
     >
       <MenuHeader
         v-if="isVisibleMenu(model.isAdmin)"
@@ -75,7 +76,11 @@ export default Vue.extend({
   width: 200px;
   height: auto;
   background-color: rgb(32, 32, 32);
-  border: solid 1px rgb(100, 100, 100);
-  border-radius: 8px;
+
+  .menu-section-container {
+    margin-bottom: 8px;
+    border: solid 1px rgb(100, 100, 100);
+    border-radius: 8px;
+  }
 }
 </style>
