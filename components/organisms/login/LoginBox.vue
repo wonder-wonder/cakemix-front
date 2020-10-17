@@ -13,6 +13,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
+const auth = require('@/scripts/api/auth')
 
 export type DataType = {
   username: string
@@ -33,7 +34,17 @@ export default Vue.extend({
   },
   methods: {
     request() {
-      this.isLoading = !this.isLoading
+      this.isLoading = true
+      auth.login(this.username, this.password).then((res: string) => {
+        this.isLoading = false
+        if (res !== '') {
+          this.$store.commit('auth/login', res)
+          // TODO: login successful and page move
+        } else {
+          // TODO: login failed and show error message
+          console.error('Login error')
+        }
+      })
     },
   },
 })
