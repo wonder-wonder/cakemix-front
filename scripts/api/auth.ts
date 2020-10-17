@@ -1,21 +1,20 @@
+import axios from 'axios'
 const common = require('@/scripts/api/common')
 
 const AUTHLOGIN = '/auth/login'
 
+interface LoginResponse {
+  jwt: string
+}
+
 function login(id: string, pass: string) {
-  return fetch(common.APIBASE + AUTHLOGIN, {
-    method: 'POST',
-    mode: 'cors',
-    body: JSON.stringify({
+  return axios
+    .post<LoginResponse>(common.APIBASE + AUTHLOGIN, {
       id,
       pass,
-    }),
-  })
-    .then(res => {
-      if (!res.ok) throw res
-      return res.json()
     })
-    .then(res => res.jwt)
+    .then(res => res.data.jwt)
     .catch(() => '')
 }
+
 export { login }
