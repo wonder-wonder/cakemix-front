@@ -16,8 +16,14 @@ export default Vue.extend({
     NavHeader,
     SignupBox,
   },
+  computed: {
+    signupToken() {
+      return this.$route.params.id
+    },
+  },
   created() {
     // TODO: impl: verify signup token
+    console.log(this.signupToken)
   },
 })
 </script>

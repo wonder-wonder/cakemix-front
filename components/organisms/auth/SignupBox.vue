@@ -47,6 +47,11 @@ export default Vue.extend({
       isLoading: false,
     }
   },
+  computed: {
+    signupToken() {
+      return this.$route.params.id
+    },
+  },
   methods: {
     usernameValidator(text: string): boolean {
       return text === 'abcdefg'
@@ -60,7 +65,12 @@ export default Vue.extend({
       return reg.test(text)
     },
     request() {
-      if (this.username === '' || this.email === '' || this.password === '') {
+      if (
+        this.username === '' ||
+        this.email === '' ||
+        this.password === '' ||
+        this.signupToken === ''
+      ) {
         this.failureToast(1)
         return
       }
@@ -71,7 +81,7 @@ export default Vue.extend({
         password: this.password,
       }
       new AuthApi()
-        .postRegist('', model)
+        .postRegist(this.signupToken, model)
         .then(() => {
           this.successToast()
           this.$router.push('/auth/login')
