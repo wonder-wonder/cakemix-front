@@ -1,13 +1,13 @@
 <template>
-  <div class="login-container">
+  <div class="passwd-container">
     <NavHeader :is-drop-down-enable="isLoggedIn" />
-    <LoginBox class="login-box" />
+    <LoginBox class="passwd-box" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import LoginBox from '@/components/organisms/login/LoginBox.vue'
+import LoginBox from '@/components/organisms/auth/LoginBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 
 export default Vue.extend({
@@ -34,11 +34,11 @@ export default Vue.extend({
 html {
   background-color: rgb(32, 32, 32);
 }
-.login-container {
+.passwd-container {
   height: 100vh;
   width: 100vw;
 
-  .login-box {
+  .passwd-box {
     position: absolute;
     top: 45%;
     left: 50%;

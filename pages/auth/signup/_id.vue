@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import SignupBox from '@/components/organisms/singup/SignupBox.vue'
+import SignupBox from '@/components/organisms/auth/SignupBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 
 export default Vue.extend({

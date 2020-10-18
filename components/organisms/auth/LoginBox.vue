@@ -12,6 +12,7 @@
       @text="password = $event"
     />
     <b-button :loading="isLoading" @click="request" v-text="'Login'" />
+    <a class="option" @click="forgotPassword" v-text="'Forgot Password'" />
   </div>
 </template>
 
@@ -43,6 +44,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    forgotPassword() {
+      this.$router.push('/auth/passwd')
+    },
     request() {
       this.isLoading = !this.isLoading
       const model: AuthLoginReqModel = {
@@ -91,6 +95,11 @@ export default Vue.extend({
   button {
     margin-top: 16px;
     width: 50%;
+  }
+
+  .option {
+    margin-top: 4px;
+    font-size: 12px;
   }
 }
 </style>

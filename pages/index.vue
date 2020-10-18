@@ -1,7 +1,7 @@
 <template>
   <div class="index-container">
     <div class="image-box">
-      <img src="@/assets/icon.png" alt="cakemix_icon" >
+      <img src="@/assets/icon.png" alt="cakemix_icon">
     </div>
     <div class="description">
       <div class="service-name" v-text="'Cakemix'" />
@@ -19,7 +19,7 @@ import Vue from 'vue'
 export default Vue.extend({
   methods: {
     gotoLogin() {
-      this.$router.push({ path: `/login` })
+      this.$router.push({ path: `/auth/login` })
     },
   },
 })
