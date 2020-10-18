@@ -1,6 +1,6 @@
 <template>
   <div class="signup-container">
-    <NavHeader />
+    <NavHeader :is-drop-down-enable="false" />
     <SignupBox class="signup-box" />
   </div>
 </template>

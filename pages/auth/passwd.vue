@@ -1,31 +1,24 @@
 <template>
   <div class="passwd-container">
-    <NavHeader :is-drop-down-enable="isLoggedIn" />
-    <LoginBox class="passwd-box" />
+    <NavHeader :is-drop-down-enable="false" />
+    <PasswdBox class="passwd-box" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import LoginBox from '@/components/organisms/auth/LoginBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
+import PasswdBox from '@/components/organisms/auth/PasswdBox.vue'
 
 export default Vue.extend({
   components: {
     NavHeader,
-    LoginBox,
+    PasswdBox,
   },
-  computed: {
-    isLoggedIn() {
+  methods: {
+    request() {
       return this.$store.state.auth.isLogin
     },
-  },
-  beforeCreate() {
-    // TODO: need to refactor this routing
-    if (this.$store.state.auth.isLogin) {
-      // TODO: need to modify route
-      this.$router.push('/folder/fwk6al7nyj4qdufaz')
-    }
   },
 })
 </script>

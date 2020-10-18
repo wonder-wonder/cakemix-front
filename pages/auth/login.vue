@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <NavHeader :is-drop-down-enable="isLoggedIn" />
+    <NavHeader :is-drop-down-enable="false" />
     <LoginBox class="login-box" />
   </div>
 </template>
@@ -14,11 +14,6 @@ export default Vue.extend({
   components: {
     NavHeader,
     LoginBox,
-  },
-  computed: {
-    isLoggedIn() {
-      return this.$store.state.auth.isLogin
-    },
   },
   beforeCreate() {
     // TODO: need to refactor this routing

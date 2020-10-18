@@ -17,17 +17,15 @@
 </template>
 
 <script lang="ts">
-import { AuthLoginReqModel, AuthApi } from '@/scripts/api/index'
-
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
+import { AuthLoginReqModel, AuthApi } from '@/scripts/api/index'
 
 export type DataType = {
   username: string
   password: string
   isLoading: boolean
   isError: boolean
-  authApi: AuthApi
 }
 
 export default Vue.extend({
@@ -40,7 +38,6 @@ export default Vue.extend({
       password: '',
       isLoading: false,
       isError: false,
-      authApi: new AuthApi(),
     }
   },
   methods: {
@@ -48,12 +45,17 @@ export default Vue.extend({
       this.$router.push('/auth/passwd')
     },
     request() {
+      if (this.username === '' || this.password === '') {
+        this.isError = true
+        this.failureToast(1)
+        return
+      }
       this.isLoading = !this.isLoading
       const model: AuthLoginReqModel = {
         id: this.username,
         pass: this.password,
       }
-      this.authApi
+      new AuthApi()
         .postLogin(model)
         .then(res => {
           this.$store.commit('auth/login', res.data.jwt)
@@ -61,17 +63,17 @@ export default Vue.extend({
         })
         .catch(() => {
           this.isError = true
-          this.failureToast()
+          this.failureToast(2)
         })
         .finally(() => {
           this.isLoading = false
         })
     },
-    failureToast() {
+    failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
         duration: 2000,
-        message: 'Login Failed, Please check login information.',
+        message: `Login Failed [ Error : ${err} ]`,
         position: 'is-bottom',
         type: 'is-danger',
       })
