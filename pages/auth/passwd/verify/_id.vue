@@ -53,6 +53,7 @@ export default Vue.extend({
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
+        duration: 3000,
         message: 'Token was verified',
         type: 'is-success',
       })

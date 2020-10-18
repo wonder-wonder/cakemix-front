@@ -43,6 +43,7 @@ export default Vue.extend({
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
+        duration: 3000,
         message: 'Signup requested, a varification url will be sent',
         type: 'is-success',
       })
