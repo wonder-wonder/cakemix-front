@@ -1,37 +1,24 @@
 <template>
-  <div class="signup-box">
+  <div class="passwd-reset-box">
     <ValidateInput
-      :label-name="'UserName'"
-      :message="['OK', 'Invalid charactor or already used']"
-      :is-valid="usernameValidator(username)"
-      @text="username = $event"
-    />
-    <ValidateInput
-      :label-name="'Email'"
-      :message="['OK', 'Invalid email']"
-      :is-valid="emailValidator(email)"
-      @text="email = $event"
-    />
-    <ValidateInput
-      :label-name="'Password'"
+      :label-name="'New Password'"
       :message="['OK', 'Needs 8 or more characters']"
       :is-password="true"
       :is-valid="passwordValidator(password)"
       @text="password = $event"
     />
-    <b-button :loading="isLoading" @click="request" v-text="'Sign up'" />
+    <b-button :loading="isLoading" @click="request" v-text="'Reset'" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
-import { AuthRegistReqModel, AuthApi } from '@/scripts/api/index'
+import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
 
 export type DataType = {
-  email: string
-  username: string
   password: string
+  passwordConfirm: string
   isLoading: boolean
 }
 
@@ -41,47 +28,32 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      email: '',
-      username: '',
       password: '',
+      passwordConfirm: '',
       isLoading: false,
     }
   },
   computed: {
-    signupToken() {
+    passwdResetToken() {
       return this.$route.params.id
     },
   },
   methods: {
-    usernameValidator(text: string): boolean {
-      return text === 'abcdefg'
-    },
-    emailValidator(text: string): boolean {
-      const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/
-      return reg.test(text)
-    },
     passwordValidator(text: string): boolean {
       const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}$/i
       return reg.test(text)
     },
     request() {
-      if (
-        this.username === '' ||
-        this.email === '' ||
-        this.password === '' ||
-        this.signupToken === ''
-      ) {
+      if (!this.passwordValidator(this.password)) {
         this.failureToast(1)
         return
       }
       this.isLoading = !this.isLoading
-      const model: AuthRegistReqModel = {
-        email: this.email,
-        username: this.username,
-        password: this.password,
+      const model: AuthPassChangeReqModel = {
+        newpass: this.password,
       }
       new AuthApi()
-        .postRegist(this.signupToken, model)
+        .postPassResetVerify(this.passwdResetToken, model)
         .then(() => {
           this.successToast()
           this.$router.push('/auth/login')
@@ -114,7 +86,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.signup-box {
+.passwd-reset-box {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;

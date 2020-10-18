@@ -1,49 +1,59 @@
 <template>
-  <div class="signup-verify-container">
+  <div class="passwd-verify-container">
     <NavHeader :is-drop-down-enable="false" />
-    <section class="signup-verify-box">
+    <section v-if="!isVarified" class="passwd-verify-box">
       <b-progress size="is-large" />
     </section>
+    <PasswdReset v-if="isVarified" class="passwd-verify-box" />
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
+import PasswdReset from '@/components/organisms/auth/PasswdReset.vue'
 import { AuthApi } from '@/scripts/api/index'
+
+export type DataType = {
+  isVarified: boolean
+}
 
 export default Vue.extend({
   components: {
     NavHeader,
+    PasswdReset,
+  },
+  data(): DataType {
+    return {
+      isVarified: false,
+    }
   },
   computed: {
-    signupToken() {
+    passwdToken() {
       return this.$route.params.id
     },
   },
   created() {
-    if (this.signupToken === '') {
+    if (this.passwdToken === '') {
       this.failureToast(1)
-      this.$router.push('/auth/login')
+      this.$router.push('/auth/passwd')
       return
     }
     new AuthApi()
-      .postRegistVerify(this.signupToken)
+      .getPassResetVerify(this.passwdToken)
       .then(() => {
         this.successToast()
-        this.$router.push('/')
+        this.isVarified = true
       })
       .catch(() => {
         this.failureToast(2)
-      })
-      .finally(() => {
-        this.$router.push('/auth/login')
+        this.$router.push('/auth/passwd')
       })
   },
   methods: {
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
-        message: 'Signup requested, a varification url will be sent',
+        message: 'Token was verified',
         type: 'is-success',
       })
     },
@@ -51,7 +61,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.toast.open({
         duration: 3000,
-        message: `Signup Failed [ Error : ${err} ]`,
+        message: `Token verification Failed [ Error : ${err} ]`,
         position: 'is-bottom',
         type: 'is-danger',
       })
@@ -64,11 +74,11 @@ export default Vue.extend({
 html {
   background-color: rgb(32, 32, 32);
 }
-.signup-verify-container {
+.passwd-verify-container {
   height: 100vh;
   width: 100vw;
 
-  .signup-verify-box {
+  .passwd-verify-box {
     position: absolute;
     background-color: whitesmoke;
     top: 45%;

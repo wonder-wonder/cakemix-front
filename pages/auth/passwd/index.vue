@@ -15,11 +15,6 @@ export default Vue.extend({
     NavHeader,
     PasswdBox,
   },
-  methods: {
-    request() {
-      return this.$store.state.auth.isLogin
-    },
-  },
 })
 </script>
 

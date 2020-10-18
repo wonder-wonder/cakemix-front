@@ -8,16 +8,9 @@
         @text="oldPassword = $event"
       />
       <ValidateInput
-        :label-name="'Confirm'"
-        :is-password="true"
-        :is-valid="isMatchConfirm(cOldPassword)"
-        :message="['OK', 'password does not match']"
-        @text="cOldPassword = $event"
-      />
-      <ValidateInput
         :label-name="'New Password'"
         :is-password="true"
-        :message="['OK', 'Invalid password']"
+        :message="['OK', 'Needs 8 or more characters']"
         :is-valid="passwordValidator(newPassword)"
         @text="newPassword = $event"
       />
@@ -54,9 +47,6 @@ export default Vue.extend({
   methods: {
     request() {
       console.log('UPDATE INFO')
-    },
-    isMatchConfirm(cPassword: string): boolean {
-      return this.oldPassword !== '' && this.oldPassword === cPassword
     },
     passwordValidator(text: string): boolean {
       const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}$/i
