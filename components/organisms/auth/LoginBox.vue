@@ -55,7 +55,7 @@ export default Vue.extend({
         id: this.username,
         pass: this.password,
       }
-      new AuthApi()
+      new AuthApi(this.$store.getters['auth/config'])
         .postLogin(model)
         .then(res => {
           this.$store.commit('auth/login', res.data.jwt)

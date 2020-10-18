@@ -1,9 +1,8 @@
 import { MutationTree } from 'vuex'
-import { RootState } from '../types'
 import { DeviceState } from './types'
 
 const mutations: MutationTree<DeviceState> = {
-  isMobile(state, isMobile: boolean) {
+  isMobile(state: DeviceState, isMobile: boolean) {
     state.isMobile = isMobile
   },
 }

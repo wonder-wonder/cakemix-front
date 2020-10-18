@@ -17,7 +17,7 @@ export default Vue.extend({
   },
   beforeCreate() {
     // TODO: need to refactor this routing
-    if (this.$store.state.auth.isLogin) {
+    if (this.$store.getters['auth/isLoggedIn']) {
       // TODO: need to modify route
       this.$router.push('/folder/fwk6al7nyj4qdufaz')
     }

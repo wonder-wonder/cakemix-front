@@ -38,7 +38,7 @@ export default Vue.extend({
       this.$router.push('/auth/passwd')
       return
     }
-    new AuthApi()
+    new AuthApi(this.$store.getters['auth/config'])
       .getPassResetVerify(this.passwdToken)
       .then(() => {
         this.successToast()

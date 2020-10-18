@@ -26,7 +26,7 @@ export default Vue.extend({
       this.$router.push('/auth/login')
       return
     }
-    new AuthApi()
+    new AuthApi(this.$store.getters['auth/config'])
       .postRegistVerify(this.signupToken)
       .then(() => {
         this.successToast()

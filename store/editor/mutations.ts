@@ -2,7 +2,7 @@ import { MutationTree } from 'vuex'
 import { EditorState } from './types'
 
 const mutations: MutationTree<EditorState> = {
-  displayType(state, type: number) {
+  displayType(state: EditorState, type: number) {
     state.displayType = type
   },
 }

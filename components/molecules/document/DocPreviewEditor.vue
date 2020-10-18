@@ -48,7 +48,7 @@ export default Vue.extend({
   },
   computed: {
     displayType() {
-      return this.$store.state.editor.displayType
+      return this.$store.getters['editor/displayType']
     },
   },
   methods: {

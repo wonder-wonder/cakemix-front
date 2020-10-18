@@ -29,7 +29,7 @@ import DocSwitchButton from '@/components/atoms/document/DocSwitchButton.vue'
 })
 export default class DocSwitch extends Vue {
   get selectedRef() {
-    return this.$store.state.editor.displayType
+    return this.$store.getters['editor/displayType']
   }
 
   selected(ref: number) {

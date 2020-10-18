@@ -7,7 +7,7 @@ import { RootState } from '../types'
 import { AuthState } from './types'
 
 const getters: GetterTree<AuthState, RootState> = {
-  loginStatus(state: AuthState): boolean {
+  isLoggedIn(state: AuthState): boolean {
     return state.isLoggedIn
   },
   token(state: AuthState): string {

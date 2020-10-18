@@ -80,7 +80,7 @@ export default Vue.extend({
         username: this.username,
         password: this.password,
       }
-      new AuthApi()
+      new AuthApi(this.$store.getters['auth/config'])
         .postRegist(this.signupToken, model)
         .then(() => {
           this.successToast()

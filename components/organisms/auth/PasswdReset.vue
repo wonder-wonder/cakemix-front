@@ -52,7 +52,7 @@ export default Vue.extend({
       const model: AuthPassChangeReqModel = {
         newpass: this.password,
       }
-      new AuthApi()
+      new AuthApi(this.$store.getters['auth/config'])
         .postPassResetVerify(this.passwdResetToken, model)
         .then(() => {
           this.successToast()

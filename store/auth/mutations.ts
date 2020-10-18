@@ -2,11 +2,11 @@ import { MutationTree } from 'vuex'
 import { AuthState } from './types'
 
 const mutations: MutationTree<AuthState> = {
-  login(state, token: string) {
+  login(state: AuthState, token: string) {
     state.isLoggedIn = true
     state.token = token
   },
-  logout(state) {
+  logout(state: AuthState) {
     state.isLoggedIn = false
     state.token = ''
   },
