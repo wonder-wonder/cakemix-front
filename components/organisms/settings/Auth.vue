@@ -61,7 +61,7 @@ export default Vue.extend({
         oldpass: this.oldPassword,
         newpass: this.newPassword,
       }
-      new AuthApi()
+      new AuthApi(this.$store.state.auth.config)
         .postPassChange(model)
         .then(() => {
           this.successToast()
