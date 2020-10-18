@@ -9,11 +9,15 @@
 import Vue from 'vue'
 import SignupBox from '@/components/organisms/auth/SignupBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
+import { AuthApi } from '@/scripts/api/index'
 
 export default Vue.extend({
   components: {
     NavHeader,
     SignupBox,
+  },
+  created() {
+    // TODO: impl: verify signup token
   },
 })
 </script>

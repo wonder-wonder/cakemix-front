@@ -26,6 +26,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
+import { AuthRegistReqModel, AuthApi } from '@/scripts/api/index'
 
 export type DataType = {
   email: string
@@ -59,7 +60,44 @@ export default Vue.extend({
       return reg.test(text)
     },
     request() {
+      if (this.username === '' || this.email === '' || this.password === '') {
+        this.failureToast(1)
+        return
+      }
       this.isLoading = !this.isLoading
+      const model: AuthRegistReqModel = {
+        email: this.email,
+        username: this.username,
+        password: this.password,
+      }
+      new AuthApi()
+        .postRegist('', model)
+        .then(() => {
+          this.successToast()
+          this.$router.push('/auth/login')
+        })
+        .catch(() => {
+          this.failureToast(2)
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
+    },
+    successToast() {
+      // @ts-ignore
+      this.$buefy.toast.open({
+        message: 'Signup requested, a varification url will be sent',
+        type: 'is-success',
+      })
+    },
+    failureToast(err: Number) {
+      // @ts-ignore
+      this.$buefy.toast.open({
+        duration: 2000,
+        message: `Signup Failed [ Error : ${err} ]`,
+        position: 'is-bottom',
+        type: 'is-danger',
+      })
     },
   },
 })

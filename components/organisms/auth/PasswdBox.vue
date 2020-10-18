@@ -6,12 +6,6 @@
       :is-valid="emailValidator(email)"
       @text="email = $event"
     />
-    <ValidateInput
-      :label-name="'Confirm Email'"
-      :message="['OK', 'Invalid email']"
-      :is-valid="emailValidator(confirmEmail)"
-      @text="confirmEmail = $event"
-    />
     <b-button :loading="isLoading" @click="request" v-text="'Reset request'" />
   </div>
 </template>
@@ -23,7 +17,6 @@ import { AuthPassResetReqModel, AuthApi } from '@/scripts/api/index'
 
 export type DataType = {
   email: string
-  confirmEmail: string
   isLoading: boolean
 }
 
@@ -34,7 +27,6 @@ export default Vue.extend({
   data(): DataType {
     return {
       email: '',
-      confirmEmail: '',
       isLoading: false,
     }
   },
@@ -44,9 +36,7 @@ export default Vue.extend({
       return reg.test(text)
     },
     request() {
-      if (
-        !(this.emailValidator(this.email) && this.email === this.confirmEmail)
-      ) {
+      if (!this.emailValidator(this.email)) {
         this.failureToast(1)
         return
       }
@@ -57,6 +47,7 @@ export default Vue.extend({
       new AuthApi()
         .postPassReset(model)
         .then(() => {
+          this.successToast()
           this.$router.push('/')
         })
         .catch(() => {
@@ -65,6 +56,13 @@ export default Vue.extend({
         .finally(() => {
           this.isLoading = false
         })
+    },
+    successToast() {
+      // @ts-ignore
+      this.$buefy.toast.open({
+        message: 'Password reset requested, a varification url will be sent',
+        type: 'is-success',
+      })
     },
     failureToast(err: Number) {
       // @ts-ignore
