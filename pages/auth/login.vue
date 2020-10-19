@@ -1,19 +1,26 @@
 <template>
   <div class="login-container">
-    <NavHeader />
+    <NavHeader :is-drop-down-enable="false" />
     <LoginBox class="login-box" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import LoginBox from '@/components/organisms/login/LoginBox.vue'
+import LoginBox from '@/components/organisms/auth/LoginBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 
 export default Vue.extend({
   components: {
     NavHeader,
     LoginBox,
+  },
+  beforeCreate() {
+    // TODO: need to refactor this routing
+    if (this.$store.getters['auth/isLoggedIn']) {
+      // TODO: need to modify route
+      this.$router.push('/folder/fwk6al7nyj4qdufaz')
+    }
   },
 })
 </script>

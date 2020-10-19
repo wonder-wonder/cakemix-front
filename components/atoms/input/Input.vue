@@ -1,5 +1,5 @@
 <template>
-  <b-field :label="labelName">
+  <b-field :label="labelName" :type="isError ? 'is-danger' : ''">
     <b-input
       :type="isPassword ? 'password' : 'text'"
       :password-reveal="isPassword"
@@ -23,6 +23,10 @@ export default Vue.extend({
       default: '',
     },
     isPassword: {
+      type: Boolean,
+      default: false,
+    },
+    isError: {
       type: Boolean,
       default: false,
     },

@@ -1,19 +1,19 @@
 <template>
-  <div class="signup-container">
-    <NavHeader />
-    <SignupBox class="signup-box" />
+  <div class="passwd-container">
+    <NavHeader :is-drop-down-enable="false" />
+    <PasswdBox class="passwd-box" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import SignupBox from '@/components/organisms/singup/SignupBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
+import PasswdBox from '@/components/organisms/auth/PasswdBox.vue'
 
 export default Vue.extend({
   components: {
     NavHeader,
-    SignupBox,
+    PasswdBox,
   },
 })
 </script>
@@ -22,17 +22,17 @@ export default Vue.extend({
 html {
   background-color: rgb(32, 32, 32);
 }
-.signup-container {
-  height: 100%;
+.passwd-container {
+  height: 100vh;
   width: 100vw;
 
-  .signup-box {
+  .passwd-box {
     position: absolute;
     top: 45%;
     left: 50%;
     transform: translateY(-50%) translateX(-50%);
     max-width: 320px;
-    width: 100vw;
+    width: 100%;
     border-radius: 8px;
   }
 }
