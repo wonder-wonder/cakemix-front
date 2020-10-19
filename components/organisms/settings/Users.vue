@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import UserCell, { UserModel } from '@/components/atoms/cell/UserCell.vue'
 import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
+import { AuthApi } from '@/scripts/api/index'
 
 export type DataType = {
   uuid: String
@@ -52,7 +53,23 @@ export default Vue.extend({
   },
   methods: {
     generateLink() {
-      this.generatedLink = 'http://localhost:3000/invite/qawsedrftgyhujikolp'
+      new AuthApi(this.$store.getters['auth/config'])
+        .getNewTokenRegist()
+        .then(res => {
+          this.generatedLink = res.data.token
+        })
+        .catch(() => {
+          this.failureToast(1)
+        })
+    },
+    failureToast(err: Number) {
+      // @ts-ignore
+      this.$buefy.toast.open({
+        duration: 3000,
+        message: `Generate a invitation link Failed [ Error : ${err} ]`,
+        position: 'is-bottom',
+        type: 'is-danger',
+      })
     },
   },
 })

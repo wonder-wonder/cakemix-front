@@ -22,8 +22,21 @@ export default Vue.extend({
     },
   },
   created() {
-    // TODO: impl: verify signup token
-    console.log(this.signupToken)
+    new AuthApi().getAuthRegistPreToken(this.signupToken).catch(() => {
+      this.failureToast(1)
+      this.$router.push('/')
+    })
+  },
+  methods: {
+    failureToast(err: Number) {
+      // @ts-ignore
+      this.$buefy.toast.open({
+        duration: 3000,
+        message: `Signup token is invalid [ Error : ${err} ]`,
+        position: 'is-bottom',
+        type: 'is-danger',
+      })
+    },
   },
 })
 </script>

@@ -3,8 +3,8 @@
     <ValidateInput
       :label-name="'UserName'"
       :message="['OK', 'Invalid charactor or already used']"
-      :is-valid="usernameValidator(username)"
-      @text="username = $event"
+      :is-valid="isUnique"
+      @text="updateUserName"
     />
     <ValidateInput
       :label-name="'Email'"
@@ -31,6 +31,7 @@ import { AuthRegistReqModel, AuthApi } from '@/scripts/api/index'
 export type DataType = {
   email: string
   username: string
+  isUnique: boolean
   password: string
   isLoading: boolean
 }
@@ -43,6 +44,7 @@ export default Vue.extend({
     return {
       email: '',
       username: '',
+      isUnique: false,
       password: '',
       isLoading: false,
     }
@@ -53,8 +55,16 @@ export default Vue.extend({
     },
   },
   methods: {
-    usernameValidator(text: string): boolean {
-      return text === 'abcdefg'
+    updateUserName(userName: string) {
+      this.username = userName
+      new AuthApi()
+        .getAuthCheckUserUsername(this.signupToken, userName)
+        .then(() => {
+          this.isUnique = true
+        })
+        .catch(() => {
+          this.isUnique = false
+        })
     },
     emailValidator(text: string): boolean {
       const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/
