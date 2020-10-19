@@ -414,6 +414,83 @@ export interface ProfileModel {
 export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Check username is not taken by other
+         * @summary Check username
+         * @param {string} token 
+         * @param {string} userName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthCheckUserUsername: async (token: string, userName: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'token' is not null or undefined
+            if (token === null || token === undefined) {
+                throw new RequiredError('token','Required parameter token was null or undefined when calling getAuthCheckUserUsername.');
+            }
+            // verify required parameter 'userName' is not null or undefined
+            if (userName === null || userName === undefined) {
+                throw new RequiredError('userName','Required parameter userName was null or undefined when calling getAuthCheckUserUsername.');
+            }
+            const localVarPath = `/auth/check/user/{user_name}/{token}`
+                .replace(`{${"token"}}`, encodeURIComponent(String(token)))
+                .replace(`{${"user_name"}}`, encodeURIComponent(String(userName)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Request to verify invitation link
+         * @param {string} token Verification token for registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthRegistPreToken: async (token: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'token' is not null or undefined
+            if (token === null || token === undefined) {
+                throw new RequiredError('token','Required parameter token was null or undefined when calling getAuthRegistPreToken.');
+            }
+            const localVarPath = `/auth/regist/pre/{token}`
+                .replace(`{${"token"}}`, encodeURIComponent(String(token)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Checks JWT token is valid.
          * @summary Check token
          * @param {*} [options] Override http request option.
@@ -808,6 +885,34 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 export const AuthApiFp = function(configuration?: Configuration) {
     return {
         /**
+         * Check username is not taken by other
+         * @summary Check username
+         * @param {string} token 
+         * @param {string} userName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAuthCheckUserUsername(token: string, userName: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthCheckUserUsername(token, userName, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * Request to verify invitation link
+         * @param {string} token Verification token for registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAuthRegistPreToken(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthRegistPreToken(token, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
          * Checks JWT token is valid.
          * @summary Check token
          * @param {*} [options] Override http request option.
@@ -956,6 +1061,26 @@ export const AuthApiFp = function(configuration?: Configuration) {
 export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
+         * Check username is not taken by other
+         * @summary Check username
+         * @param {string} token 
+         * @param {string} userName 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthCheckUserUsername(token: string, userName: string, options?: any): AxiosPromise<void> {
+            return AuthApiFp(configuration).getAuthCheckUserUsername(token, userName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Request to verify invitation link
+         * @param {string} token Verification token for registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthRegistPreToken(token: string, options?: any): AxiosPromise<void> {
+            return AuthApiFp(configuration).getAuthRegistPreToken(token, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Checks JWT token is valid.
          * @summary Check token
          * @param {*} [options] Override http request option.
@@ -1064,6 +1189,30 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
  * @extends {BaseAPI}
  */
 export class AuthApi extends BaseAPI {
+    /**
+     * Check username is not taken by other
+     * @summary Check username
+     * @param {string} token 
+     * @param {string} userName 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public getAuthCheckUserUsername(token: string, userName: string, options?: any) {
+        return AuthApiFp(this.configuration).getAuthCheckUserUsername(token, userName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Request to verify invitation link
+     * @param {string} token Verification token for registration.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public getAuthRegistPreToken(token: string, options?: any) {
+        return AuthApiFp(this.configuration).getAuthRegistPreToken(token, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Checks JWT token is valid.
      * @summary Check token
