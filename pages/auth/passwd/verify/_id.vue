@@ -1,10 +1,10 @@
 <template>
   <div class="passwd-verify-container">
     <NavHeader :is-drop-down-enable="false" />
-    <section v-if="!isVarified" class="passwd-verify-box">
+    <section v-if="!isVerified" class="passwd-verify-box">
       <b-progress size="is-large" />
     </section>
-    <PasswdReset v-if="isVarified" class="passwd-verify-box" />
+    <PasswdReset v-if="isVerified" class="passwd-verify-box" />
   </div>
 </template>
 <script lang="ts">
@@ -14,7 +14,7 @@ import PasswdReset from '@/components/organisms/auth/PasswdReset.vue'
 import { AuthApi } from '@/scripts/api/index'
 
 export type DataType = {
-  isVarified: boolean
+  isVerified: boolean
 }
 
 export default Vue.extend({
@@ -24,7 +24,7 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      isVarified: false,
+      isVerified: false,
     }
   },
   computed: {
@@ -42,7 +42,7 @@ export default Vue.extend({
       .getPassResetVerify(this.passwdToken)
       .then(() => {
         this.successToast()
-        this.isVarified = true
+        this.isVerified = true
       })
       .catch(() => {
         this.failureToast(2)
