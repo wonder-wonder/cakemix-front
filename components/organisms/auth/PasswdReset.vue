@@ -48,7 +48,7 @@ export default Vue.extend({
         this.failureToast(1)
         return
       }
-      this.isLoading = !this.isLoading
+      this.isLoading = true
       const model: AuthPassChangeReqModel = {
         newpass: this.password,
       }

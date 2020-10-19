@@ -50,7 +50,7 @@ export default Vue.extend({
         this.failureToast(1)
         return
       }
-      this.isLoading = !this.isLoading
+      this.isLoading = true
       const model: AuthLoginReqModel = {
         id: this.username,
         pass: this.password,
