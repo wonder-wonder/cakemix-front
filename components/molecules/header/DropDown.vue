@@ -16,11 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {
-  AuthApi,
-  Configuration,
-  ConfigurationParameters,
-} from '@/scripts/api/index'
+import { AuthApi } from '@/scripts/api/index'
 
 export default Vue.extend({
   methods: {
@@ -30,16 +26,12 @@ export default Vue.extend({
           this.$router.push({ path: `/settings` })
           break
         case 'logout':
-          // eslint-disable-next-line no-case-declarations
-          const config = new Configuration({
-            accessToken: this.$store.state.auth.token,
-          } as ConfigurationParameters)
-          // eslint-disable-next-line no-case-declarations
-          const authApi = new AuthApi(config)
-          authApi.postLogout().finally(() => {
-            this.$store.commit('auth/logout')
-            this.$router.push({ path: `/` })
-          })
+          new AuthApi(this.$store.getters['auth/config'])
+            .postLogout()
+            .finally(() => {
+              this.$store.commit('auth/logout')
+              this.$router.push({ path: `/` })
+            })
           break
         default:
           break

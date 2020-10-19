@@ -26,7 +26,7 @@ export default Vue.extend({
       this.$router.push('/auth/login')
       return
     }
-    new AuthApi()
+    new AuthApi(this.$store.getters['auth/config'])
       .postRegistVerify(this.signupToken)
       .then(() => {
         this.successToast()
@@ -43,6 +43,7 @@ export default Vue.extend({
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
+        duration: 3000,
         message: 'Signup requested, a varification url will be sent',
         type: 'is-success',
       })

@@ -80,7 +80,7 @@ export default Vue.extend({
         username: this.username,
         password: this.password,
       }
-      new AuthApi()
+      new AuthApi(this.$store.getters['auth/config'])
         .postRegist(this.signupToken, model)
         .then(() => {
           this.successToast()
@@ -96,6 +96,7 @@ export default Vue.extend({
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
+        duration: 3000,
         message: 'Signup requested, a varification url will be sent',
         type: 'is-success',
       })
@@ -103,7 +104,7 @@ export default Vue.extend({
     failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 2000,
+        duration: 3000,
         message: `Signup Failed [ Error : ${err} ]`,
         position: 'is-bottom',
         type: 'is-danger',

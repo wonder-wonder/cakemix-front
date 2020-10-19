@@ -38,7 +38,7 @@ export default Vue.extend({
       this.$router.push('/auth/passwd')
       return
     }
-    new AuthApi()
+    new AuthApi(this.$store.getters['auth/config'])
       .getPassResetVerify(this.passwdToken)
       .then(() => {
         this.successToast()
@@ -53,6 +53,7 @@ export default Vue.extend({
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
+        duration: 3000,
         message: 'Token was verified',
         type: 'is-success',
       })

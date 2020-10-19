@@ -55,7 +55,7 @@ export default Vue.extend({
         id: this.username,
         pass: this.password,
       }
-      new AuthApi()
+      new AuthApi(this.$store.getters['auth/config'])
         .postLogin(model)
         .then(res => {
           this.$store.commit('auth/login', res.data.jwt)
@@ -72,7 +72,7 @@ export default Vue.extend({
     failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 2000,
+        duration: 3000,
         message: `Login Failed [ Error : ${err} ]`,
         position: 'is-bottom',
         type: 'is-danger',

@@ -61,7 +61,7 @@ export default Vue.extend({
         oldpass: this.oldPassword,
         newpass: this.newPassword,
       }
-      new AuthApi()
+      new AuthApi(this.$store.getters['auth/config'])
         .postPassChange(model)
         .then(() => {
           this.successToast()
@@ -76,6 +76,7 @@ export default Vue.extend({
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
+        duration: 3000,
         message: 'Password changed',
         type: 'is-success',
       })
@@ -83,7 +84,7 @@ export default Vue.extend({
     failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 2000,
+        duration: 3000,
         message: `Unable to change [ Error : ${err} ]`,
         position: 'is-bottom',
         type: 'is-danger',
