@@ -11,10 +11,11 @@ import Vue from 'vue'
 import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
+import { FolderApi, FolderModel, DocumentModel } from '@/scripts/api/index'
 
 export type DataType = {
-  folders: Array<Object>
-  docs: Array<Object>
+  folders: Array<FolderModel>
+  docs: Array<DocumentModel>
 }
 
 export default Vue.extend({
@@ -25,9 +26,32 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      folders: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-      docs: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      folders: [],
+      docs: [],
     }
+  },
+  created() {
+    new FolderApi(this.$store.getters['auth/config'])
+      // .getList(this.$route.params.id, 'all')
+      .getList('fdahpbkboamdbgnua', 'all')
+      .then(res => {
+        this.folders = res.data.folder ?? []
+        this.docs = res.data.document ?? []
+      })
+      .catch(() => {
+        this.failureToast(1)
+      })
+  },
+  methods: {
+    failureToast(err: Number) {
+      // @ts-ignore
+      this.$buefy.toast.open({
+        duration: 3000,
+        message: `Fetch folder Failed [ Error : ${err} ]`,
+        position: 'is-bottom',
+        type: 'is-danger',
+      })
+    },
   },
 })
 </script>
