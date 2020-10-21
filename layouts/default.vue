@@ -15,7 +15,7 @@ export default Vue.extend({
       .catch(() => {
         this.failureToast()
         this.$store.commit('auth/logout')
-        this.$router.push('/login')
+        this.$router.push('/auth/login')
       })
   },
   methods: {

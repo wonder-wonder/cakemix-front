@@ -4,25 +4,26 @@
       <i class="fa fa-folder fa-fw" />
     </div>
     <div class="title-box">
-      <span v-text="folder.title" />
+      <span v-text="folder.name" />
     </div>
     <div class="desc1-box">
-      <span v-text="folder.detail" />
+      <span v-text="folder.owner.name" />
     </div>
     <div class="desc2-box">
-      <span v-text="folder.date" />
+      <span v-text="folder.created_at" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
+import { FolderModel } from '@/scripts/api/index'
 
 export default Vue.extend({
   props: {
     folder: {
-      type: Object,
-      default: null,
+      type: Object as PropType<FolderModel>,
+      default: Object as FolderModel,
     },
   },
 })

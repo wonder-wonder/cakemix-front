@@ -132,7 +132,7 @@ export interface BreadcrumbModel {
      * @type {string}
      * @memberof BreadcrumbModel
      */
-    folderId?: string;
+    folder_id?: string;
     /**
      * 
      * @type {string}
@@ -181,13 +181,13 @@ export interface DocumentModel {
      * @type {number}
      * @memberof DocumentModel
      */
-    createdAt?: number;
+    created_at?: number;
     /**
      * document creation date
      * @type {number}
      * @memberof DocumentModel
      */
-    updatedAt?: number;
+    updated_at?: number;
 }
 /**
  * Document modify request model
@@ -219,7 +219,7 @@ export interface DocumentResModel {
      * @type {string}
      * @memberof DocumentResModel
      */
-    docId: string;
+    doc_id: string;
 }
 /**
  * Folder model
@@ -250,13 +250,13 @@ export interface FolderModel {
      * @type {number}
      * @memberof FolderModel
      */
-    createdAt?: number;
+    created_at?: number;
     /**
      * folder creation date
      * @type {number}
      * @memberof FolderModel
      */
-    updatedAt?: number;
+    updated_at?: number;
     /**
      * 
      * @type {Array<BreadcrumbModel>}
@@ -306,7 +306,7 @@ export interface InlineResponse200 {
      * @type {string}
      * @memberof InlineResponse200
      */
-    docId?: string;
+    doc_id?: string;
 }
 /**
  * List of Folder and Document
@@ -338,7 +338,7 @@ export interface InlineResponse2002 {
      * @type {string}
      * @memberof InlineResponse2002
      */
-    folderId?: string;
+    folder_id?: string;
 }
 /**
  * JSON Web Token(JWT) is used for authorization. Geekers API uses only requred items.
@@ -437,13 +437,13 @@ export interface ProfileModel {
      * @type {string}
      * @memberof ProfileModel
      */
-    iconUri: string;
+    icon_uri: string;
     /**
      * User/team creation date
      * @type {number}
      * @memberof ProfileModel
      */
-    createdAt?: number;
+    created_at?: number;
     /**
      * Attribute(Official, SysAdmin)
      * @type {string}
@@ -455,7 +455,7 @@ export interface ProfileModel {
      * @type {boolean}
      * @memberof ProfileModel
      */
-    isTeam: boolean;
+    is_team: boolean;
     /**
      * List for joining teams
      * @type {Array<ProfileModel>}

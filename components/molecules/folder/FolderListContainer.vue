@@ -13,10 +13,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import Folder from '@/components/atoms/folder/Folder.vue'
+import { FolderModel } from '@/scripts/api/index'
 
 export type DataType = {
   uuid: String
@@ -29,8 +30,8 @@ export default Vue.extend({
   },
   props: {
     models: {
-      type: Array,
-      default: null,
+      type: Array as PropType<FolderModel[]>,
+      default: [],
     },
   },
   data(): DataType {
