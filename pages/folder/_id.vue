@@ -2,6 +2,7 @@
   <div class="folder-container">
     <NavHeader />
     <ToolBar />
+    <Breadcrumb v-if="breadcrumb.length > 0" :breadcrumb="breadcrumb" />
     <FolderListContainer :models="folders" />
     <DocListContainer :models="docs" />
   </div>
@@ -9,29 +10,37 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ToolBar from '@/components/molecules/folder/ToolBar.vue'
+import Breadcrumb from '@/components/molecules/folder/Breadcrumb.vue'
+import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
-import ToolBar from '@/components/molecules/folder/ToolBar.vue'
-
-import NavHeader from '@/components/organisms/header/NavHeader.vue'
-import { FolderApi, FolderModel, DocumentModel } from '@/scripts/api/index'
+import {
+  FolderApi,
+  FolderModel,
+  DocumentModel,
+  BreadcrumbModel,
+} from '@/scripts/api/index'
 
 export type DataType = {
   folders: Array<FolderModel>
   docs: Array<DocumentModel>
+  breadcrumb: Array<BreadcrumbModel>
 }
 
 export default Vue.extend({
   components: {
     NavHeader,
+    ToolBar,
+    Breadcrumb,
     FolderListContainer,
     DocListContainer,
-    ToolBar,
   },
   data(): DataType {
     return {
       folders: [],
       docs: [],
+      breadcrumb: [],
     }
   },
   created() {
@@ -40,6 +49,7 @@ export default Vue.extend({
       .then(res => {
         this.folders = res.data.folder ?? []
         this.docs = res.data.document ?? []
+        this.breadcrumb = res.data.path ?? []
       })
       .catch(() => {
         this.failureToast(1)
