@@ -228,6 +228,31 @@ export interface DocumentResModel {
     doc_id: string;
 }
 /**
+ * Folder list model
+ * @export
+ * @interface FolderListModel
+ */
+export interface FolderListModel {
+    /**
+     * 
+     * @type {Array<FolderModel>}
+     * @memberof FolderListModel
+     */
+    folder?: Array<FolderModel>;
+    /**
+     * 
+     * @type {Array<DocumentModel>}
+     * @memberof FolderListModel
+     */
+    document?: Array<DocumentModel>;
+    /**
+     * 
+     * @type {Array<BreadcrumbModel>}
+     * @memberof FolderListModel
+     */
+    path: Array<BreadcrumbModel>;
+}
+/**
  * Folder model
  * @export
  * @interface FolderModel
@@ -263,12 +288,6 @@ export interface FolderModel {
      * @memberof FolderModel
      */
     updated_at?: number;
-    /**
-     * 
-     * @type {Array<BreadcrumbModel>}
-     * @memberof FolderModel
-     */
-    path?: Array<BreadcrumbModel>;
     /**
      * 
      * @type {string}
@@ -321,34 +340,15 @@ export interface InlineResponse200 {
     doc_id?: string;
 }
 /**
- * List of Folder and Document
+ * 
  * @export
  * @interface InlineResponse2001
  */
 export interface InlineResponse2001 {
     /**
      * 
-     * @type {Array<FolderModel>}
-     * @memberof InlineResponse2001
-     */
-    folder?: Array<FolderModel>;
-    /**
-     * 
-     * @type {Array<DocumentModel>}
-     * @memberof InlineResponse2001
-     */
-    document?: Array<DocumentModel>;
-}
-/**
- * 
- * @export
- * @interface InlineResponse2002
- */
-export interface InlineResponse2002 {
-    /**
-     * 
      * @type {string}
-     * @memberof InlineResponse2002
+     * @memberof InlineResponse2001
      */
     folder_id?: string;
 }
@@ -2186,7 +2186,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createNewFolder(folderId: string, name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+        async createNewFolder(folderId: string, name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
             const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).createNewFolder(folderId, name, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2215,7 +2215,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getList(folderId: string, type: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
+        async getList(folderId: string, type: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FolderListModel>> {
             const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).getList(folderId, type, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2269,7 +2269,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createNewFolder(folderId: string, name: string, options?: any): AxiosPromise<InlineResponse2002> {
+        createNewFolder(folderId: string, name: string, options?: any): AxiosPromise<InlineResponse2001> {
             return FolderApiFp(configuration).createNewFolder(folderId, name, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2290,7 +2290,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getList(folderId: string, type: string, options?: any): AxiosPromise<InlineResponse2001> {
+        getList(folderId: string, type: string, options?: any): AxiosPromise<FolderListModel> {
             return FolderApiFp(configuration).getList(folderId, type, options).then((request) => request(axios, basePath));
         },
         /**
