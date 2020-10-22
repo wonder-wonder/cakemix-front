@@ -32,8 +32,7 @@ export default Vue.extend({
   },
   created() {
     new FolderApi(this.$store.getters['auth/config'])
-      .getList(this.$route.params.id, '')
-      // .getList('fdahpbkboamdbgnua', '')
+      .getList(this.$route.params.id ?? '', '')
       .then(res => {
         this.folders = res.data.folder ?? []
         this.docs = res.data.document ?? []

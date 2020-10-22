@@ -188,6 +188,12 @@ export interface DocumentModel {
      * @memberof DocumentModel
      */
     updated_at?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DocumentModel
+     */
+    uuid?: string;
 }
 /**
  * Document modify request model
@@ -269,6 +275,12 @@ export interface FolderModel {
      * @memberof FolderModel
      */
     name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FolderModel
+     */
+    uuid?: string;
 }
 /**
  * Folder modify request model
