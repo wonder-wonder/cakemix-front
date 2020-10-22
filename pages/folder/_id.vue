@@ -1,6 +1,7 @@
 <template>
   <div class="folder-container">
     <NavHeader />
+    <ToolBar />
     <FolderListContainer :models="folders" />
     <DocListContainer :models="docs" />
   </div>
@@ -10,6 +11,8 @@
 import Vue from 'vue'
 import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
+import ToolBar from '@/components/molecules/folder/ToolBar.vue'
+
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import { FolderApi, FolderModel, DocumentModel } from '@/scripts/api/index'
 
@@ -23,6 +26,7 @@ export default Vue.extend({
     NavHeader,
     FolderListContainer,
     DocListContainer,
+    ToolBar,
   },
   data(): DataType {
     return {
