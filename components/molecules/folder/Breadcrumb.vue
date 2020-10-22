@@ -20,7 +20,7 @@ export default Vue.extend({
   },
   props: {
     breadcrumb: {
-      type: Object as PropType<BreadcrumbModel[]>,
+      type: Array as PropType<BreadcrumbModel[]>,
       default: [],
     },
   },

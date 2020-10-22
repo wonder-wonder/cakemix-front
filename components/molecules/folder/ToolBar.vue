@@ -6,10 +6,18 @@
       icon="magnify"
       class="search-input"
     />
-    <b-button type="is-success" icon-left="folder">
+    <b-button
+      type="is-success"
+      icon-left="folder"
+      @click="$emit('create-folder')"
+    >
       Create
     </b-button>
-    <b-button type="is-success" icon-left="file-document">
+    <b-button
+      type="is-success"
+      icon-left="file-document"
+      @click="$emit('create-doc')"
+    >
       Create
     </b-button>
   </div>
@@ -29,7 +37,6 @@ export default Vue.extend({
   data(): DataType {
     return {}
   },
-  methods: {},
 })
 </script>
 
