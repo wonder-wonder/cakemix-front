@@ -56,6 +56,7 @@ export default Vue.extend({
   color: white;
   background-color: black;
   transition: all 100ms;
+  user-select: none;
 
   &:hover {
     background-color: rgb(100, 100, 100);
