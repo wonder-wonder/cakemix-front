@@ -61,7 +61,7 @@ export default Vue.extend({
         })
     },
     createFolder() {
-      const fId = this.breadcrumb[0].folder_id
+      const fId = this.breadcrumb[this.breadcrumb.length - 1].folder_id
       if (!fId) {
         return
       }
@@ -75,7 +75,7 @@ export default Vue.extend({
         })
     },
     createDoc() {
-      const fId = this.breadcrumb[0].folder_id
+      const fId = this.breadcrumb[this.breadcrumb.length - 1].folder_id
       if (!fId) {
         return
       }
