@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb-cell-container">
-    <a class="title" @click="goToFolder" v-text="title" />
-    <a class="triangle-right" />
+    <div class="title" @click="goToFolder" v-text="title" />
+    <div class="triangle-right" />
   </div>
 </template>
 
@@ -43,15 +43,15 @@ export default Vue.extend({
     width: auto;
     color: whitesmoke;
     border-radius: 8px;
+    padding: 0;
     margin: 0;
-    border-radius: 0;
+    border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
 
     &:hover {
       color: black;
       background-color: whitesmoke;
-      border-radius: 8px;
     }
 
     transition: all 200ms;
