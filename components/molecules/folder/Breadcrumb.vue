@@ -39,6 +39,8 @@ export default Vue.extend({
   align-content: center;
   justify-content: left;
   padding: 0 32px;
+  height: auto;
+  min-height: 40px;
   width: auto;
 }
 </style>
