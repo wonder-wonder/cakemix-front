@@ -6,6 +6,7 @@
         v-for="(model, index) in models"
         :key="`F${index}${uuid}`"
         :folder="model"
+        @click.native="$emit('select', model)"
         @dblclick.native="goToFolder(model.uuid)"
       />
     </div>
