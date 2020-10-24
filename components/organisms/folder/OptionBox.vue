@@ -3,9 +3,9 @@
     <i class="fa fa-folder fa-fw" />
     <div class="detail-items">
       <OptionInfoCell
-        v-for="(model, index) in options"
+        v-for="(mo, index) in options"
         :key="`option-info-cell${index}`"
-        :model="model"
+        :model="mo"
       />
     </div>
     <Input
@@ -111,7 +111,7 @@ export default Vue.extend({
         } as OptionInfoModel,
       ]
     },
-    title(): String {
+    title(): string {
       let name = ''
       if ('name' in this.model) {
         name = this.model.name ?? ''
@@ -120,16 +120,19 @@ export default Vue.extend({
       }
       return name
     },
-    permission(): String {
-      return this.selectModels[this.model.permission ?? 0]
+    permission(): string {
+      return this.selectModels[this.model.permission ?? 0] as string
     },
-    isWritable(): boolean {
+    isWritable(): Boolean {
+      if (!this.model.owner) {
+        return false
+      }
       const owner = this.model.owner as ProfileModel
       return this.model.permission === 2 || owner.uuid === ''
     },
   },
   methods: {
-    selected(type: string) {
+    selected(type: String) {
       const perm = this.selectModels.indexOf(type)
       this.model.permission = perm
     },
