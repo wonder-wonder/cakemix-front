@@ -7,7 +7,8 @@ const mutations: MutationTree<AuthState> = {
   login(state: AuthState, token: string) {
     state.isLoggedIn = true
     state.token = token
-    state.uuid = jwt_decode(token)
+    const decoded = jwt_decode(token) as any
+    state.uuid = decoded ? decoded.aud : ''
   },
   logout(state: AuthState) {
     state.isLoggedIn = false

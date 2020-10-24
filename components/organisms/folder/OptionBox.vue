@@ -124,11 +124,14 @@ export default Vue.extend({
       return this.selectModels[this.model.permission ?? 0] as string
     },
     isWritable(): Boolean {
-      if (!this.model.owner) {
+      const owner = (this.model.owner as ProfileModel) ?? {}
+      if (!('uuid' in owner)) {
         return false
       }
-      const owner = this.model.owner as ProfileModel
-      return this.model.permission === 2 || owner.uuid === ''
+      const flag =
+        this.model.permission === 2 ||
+        owner.uuid === this.$store.getters['auth/uuid']
+      return flag
     },
   },
   methods: {
