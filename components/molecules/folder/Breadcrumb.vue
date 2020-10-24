@@ -24,14 +24,6 @@ export default Vue.extend({
       default: [],
     },
   },
-  watch: {
-    breadcrumb() {
-      setTimeout(() => {
-        const bc = this.$refs.breadcrumb as HTMLDivElement
-        bc.scrollTop = bc.clientHeight
-      }, 200)
-    },
-  },
   methods: {
     getTitle(title: string): string {
       return title === '' ? 'Home' : title
@@ -49,6 +41,5 @@ export default Vue.extend({
   min-height: 40px;
   height: auto;
   width: 100vw;
-  overflow-x: scroll;
 }
 </style>
