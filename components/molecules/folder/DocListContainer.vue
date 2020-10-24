@@ -6,7 +6,7 @@
         v-for="(model, index) in models"
         :key="`D${index}${uuid}`"
         :doc="model"
-        @click.native="goToDoc(model.id)"
+        @click.native="goToDoc(model.uuid)"
       />
     </div>
   </div>
