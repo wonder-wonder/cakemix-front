@@ -1,10 +1,21 @@
 <template>
   <div class="folder-container">
     <NavHeader />
-    <ToolBar @create-folder="createFolder" @create-doc="createDoc" />
-    <Breadcrumb :breadcrumb="breadcrumb" />
-    <FolderListContainer :models="folders" />
-    <DocListContainer :models="docs" />
+    <ToolBar
+      class="toolbar-item"
+      @create-folder="createFolder"
+      @create-doc="createDoc"
+    />
+    <Breadcrumb class="breadcrumb-item" :breadcrumb="breadcrumb" />
+    <div class="explore-container">
+      <div class="scroll-container">
+        <FolderListContainer :models="folders" />
+        <DocListContainer :models="docs" />
+      </div>
+      <div class="detail-container">
+        <div v-text="" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -110,5 +121,39 @@ html {
   flex-flow: column wrap;
   width: 100vw;
   background-color: rgb(32, 32, 32);
+
+  .toolbar-item {
+    position: sticky;
+    top: 50px;
+    background-color: rgb(32, 32, 32);
+  }
+  .breadcrumb-item {
+    position: sticky;
+    top: 146px;
+    padding-bottom: 16px;
+    border-bottom: solid 1px whitesmoke;
+    background-color: rgb(32, 32, 32);
+  }
+  .explore-container {
+    display: flex;
+    flex-flow: row nowrap;
+    // height: calc(100vh - 218px);
+    height: auto;
+    .scroll-container {
+      height: 100%;
+      width: calc(100vw - 300px);
+      overflow: scroll;
+    }
+    .detail-container {
+      position: sticky;
+      top: 232px;
+      height: 400px;
+      width: 268px;
+      background-color: black;
+      border-radius: 32px;
+      margin: 32px;
+      margin-left: 0;
+    }
+  }
 }
 </style>

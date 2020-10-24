@@ -39,6 +39,7 @@ export default Vue.extend({
   height: 50px;
   width: 100vw;
   background-color: black;
+  z-index: 999;
 
   .home-icon-box {
     margin-left: 32px;

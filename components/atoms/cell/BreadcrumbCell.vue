@@ -36,8 +36,9 @@ export default Vue.extend({
   display: flex;
   flex-flow: row nowrap;
   align-content: center;
-  margin-top: 8px;
+  margin-top: 4px;
   width: auto;
+  user-select: none;
 
   .title {
     height: 30px;

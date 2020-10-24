@@ -52,11 +52,12 @@ export default Vue.extend({
   .search-input {
     max-width: 500px;
     width: 100%;
+    margin: 4px;
   }
   button {
     width: auto;
     font-weight: bold;
-    margin-left: 4px;
+    margin: 4px;
   }
 }
 </style>
