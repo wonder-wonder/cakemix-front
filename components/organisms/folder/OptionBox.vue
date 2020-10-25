@@ -205,6 +205,7 @@ export default Vue.extend({
         new FolderApi(this.$store.getters['auth/config'])
           .modifyFolder(fuuid, req)
           .then(() => {
+            this.$emit('reload')
             this.successToast()
           })
           .catch(() => {
@@ -224,6 +225,7 @@ export default Vue.extend({
         new DocumentApi(this.$store.getters['auth/config'])
           .putDocDocId(duuid, req)
           .then(() => {
+            this.$emit('reload')
             this.successToast()
           })
           .catch(() => {
@@ -243,6 +245,7 @@ export default Vue.extend({
         new FolderApi(this.$store.getters['auth/config'])
           .deleteFolder(fduuid)
           .then(() => {
+            this.$emit('reload')
             this.successToast()
           })
           .catch(() => {
@@ -252,6 +255,7 @@ export default Vue.extend({
         new DocumentApi(this.$store.getters['auth/config'])
           .deleteDoc(fduuid)
           .then(() => {
+            this.$emit('reload')
             this.successToast()
           })
           .catch(() => {

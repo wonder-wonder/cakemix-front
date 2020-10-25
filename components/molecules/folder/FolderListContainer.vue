@@ -36,12 +36,21 @@ export default Vue.extend({
       type: Array as PropType<FolderModel[]>,
       default: [],
     },
+    resetIndex: {
+      type: Number,
+      default: -1,
+    },
   },
   data(): DataType {
     return {
       uuid: uuidv4(),
       selectedIndex: -1,
     }
+  },
+  watch: {
+    resetIndex() {
+      this.selectedIndex = -1
+    },
   },
   methods: {
     goToFolder(folderId: string) {

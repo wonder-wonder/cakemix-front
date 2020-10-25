@@ -9,11 +9,24 @@
     <Breadcrumb class="breadcrumb-item" :breadcrumb="breadcrumb" />
     <div class="explore-container">
       <div class="left-container">
-        <FolderListContainer :models="folders" @select="selectedFolderDoc" />
-        <DocListContainer :models="docs" @select="selectedFolderDoc" />
+        <FolderListContainer
+          v-if="folderAvailable"
+          :models="folders"
+          :reset-index="selectedIndex"
+          @select="selectedFolderDoc"
+        />
+        <DocListContainer
+          v-if="docAvailable"
+          :models="docs"
+          @select="selectedFolderDoc"
+        />
       </div>
       <div class="right-container">
-        <OptionBox :model="selectItem" :model-type="selectType" />
+        <OptionBox
+          :model="selectItem"
+          :model-type="selectType"
+          @reload="fetchFolder"
+        />
       </div>
     </div>
   </div>
@@ -39,8 +52,9 @@ export type DataType = {
   folders: Array<FolderModel>
   docs: Array<DocumentModel>
   breadcrumb: Array<BreadcrumbModel>
-  selectType: String
+  selectType: string
   selectItem: FolderModel | DocumentModel
+  selectedIndex: number
 }
 
 export default Vue.extend({
@@ -59,17 +73,36 @@ export default Vue.extend({
       breadcrumb: [],
       selectType: 'NONE',
       selectItem: {},
+      selectedIndex: -1,
     }
+  },
+  computed: {
+    folderAvailable(): boolean {
+      return this.folders.length > 0
+    },
+    docAvailable(): boolean {
+      return this.docs.length > 0
+    },
+    listAvailable(): boolean {
+      return !this.folderAvailable && !this.docAvailable
+    },
   },
   created() {
     this.fetchFolder()
   },
   methods: {
-    selectedFolderDoc(modelType: String, model: FolderModel | DocumentModel) {
+    selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
       this.selectType = modelType
       this.selectItem = model
     },
+    resetSelect() {
+      this.selectType = ''
+      this.selectItem = {}
+      this.selectedIndex = Date.now()
+    },
     fetchFolder() {
+      this.resetSelect()
+
       new FolderApi(this.$store.getters['auth/config'])
         .getList(this.$route.params.id ?? '', '')
         .then(res => {
@@ -109,7 +142,7 @@ export default Vue.extend({
           this.fetchFolder()
         })
     },
-    failureToast(err: Number) {
+    failureToast(err: number) {
       // @ts-ignore
       this.$buefy.toast.open({
         duration: 3000,
