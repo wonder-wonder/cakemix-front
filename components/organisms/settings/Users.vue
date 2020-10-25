@@ -65,9 +65,10 @@ export default Vue.extend({
     failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 3000,
+        duration: 1000,
+        queue: false,
+        position: 'is-bottom-right',
         message: `Generate a invitation link Failed [ Error : ${err} ]`,
-        position: 'is-bottom',
         type: 'is-danger',
       })
     },

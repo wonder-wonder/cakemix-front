@@ -75,7 +75,7 @@ export default Vue.extend({
         duration: 1000,
         queue: false,
         message: `Login Failed [ Error : ${err} ]`,
-        position: 'is-top-right',
+        position: 'is-bottom-right',
         type: 'is-danger',
       })
     },

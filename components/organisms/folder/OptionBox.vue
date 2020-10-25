@@ -290,7 +290,9 @@ export default Vue.extend({
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 3000,
+        duration: 1000,
+        queue: false,
+        position: 'is-bottom-right',
         message: 'Success',
         type: 'is-success',
       })
@@ -298,9 +300,10 @@ export default Vue.extend({
     failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 3000,
+        duration: 1000,
+        queue: false,
+        position: 'is-bottom-right',
         message: `Failed [ Error : ${err} ]`,
-        position: 'is-bottom',
         type: 'is-danger',
       })
     },

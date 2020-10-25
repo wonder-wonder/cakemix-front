@@ -68,17 +68,20 @@ export default Vue.extend({
     successToast() {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 3000,
+        duration: 1000,
+        queue: false,
         message: 'Signup requested, a varification url will be sent',
+        position: 'is-bottom-right',
         type: 'is-success',
       })
     },
     failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 3000,
+        duration: 1000,
+        queue: false,
         message: `Signup Failed [ Error : ${err} ]`,
-        position: 'is-bottom',
+        position: 'is-bottom-right',
         type: 'is-danger',
       })
     },

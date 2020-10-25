@@ -191,9 +191,10 @@ export default Vue.extend({
     failureToast(err: number) {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 3000,
+        duration: 1000,
+        queue: false,
+        position: 'is-bottom-right',
         message: `Failed to fetch folder  [ Error : ${err} ]`,
-        position: 'is-bottom',
         type: 'is-danger',
       })
     },
