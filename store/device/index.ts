@@ -7,8 +7,8 @@ import actions from './actions'
 
 const namespaced: boolean = true
 
-export const state: DeviceState = {
-  isMobile: false,
+export const state = (): DeviceState => {
+  return { isMobile: false }
 }
 
 export const device: Module<DeviceState, RootState> = {
