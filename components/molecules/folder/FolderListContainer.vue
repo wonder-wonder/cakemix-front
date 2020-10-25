@@ -22,8 +22,8 @@ import Folder from '@/components/atoms/folder/Folder.vue'
 import { FolderModel } from '@/scripts/api/index'
 
 export type DataType = {
-  uuid: String
-  selectedIndex: Number
+  uuid: string
+  selectedIndex: number
 }
 
 export default Vue.extend({
@@ -56,7 +56,7 @@ export default Vue.extend({
     goToFolder(folderId: string) {
       this.$router.push({ path: `/folder/${folderId}` })
     },
-    selected(model: FolderModel, index: Number) {
+    selected(model: FolderModel, index: number) {
       this.selectedIndex = index
       this.$emit('select', 'FOLDER', model)
     },

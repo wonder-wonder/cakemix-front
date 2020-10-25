@@ -41,7 +41,7 @@ export default Vue.extend({
 
 <style lang="scss">
 html {
-  background-color: white;
+  background-color: rgb(32, 32, 32);
 }
 .document-container {
   height: 100vh;

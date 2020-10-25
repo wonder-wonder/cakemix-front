@@ -5,6 +5,7 @@
       type="search"
       icon="magnify"
       class="search-input"
+      @input="$emit('search', $event)"
     />
     <b-button
       type="is-success"
@@ -33,9 +34,6 @@ export default Vue.extend({
       type: Array,
       default: null,
     },
-  },
-  data(): DataType {
-    return {}
   },
 })
 </script>

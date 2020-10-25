@@ -5,19 +5,21 @@
       class="toolbar-item"
       @create-folder="isCreateViewEnable = true"
       @create-doc="createDoc"
+      @search="searchText = $event"
     />
     <Breadcrumb class="breadcrumb-item" :breadcrumb="breadcrumb" />
-    <div class="explore-container">
+    <div v-if="!isNoItems" class="explore-container">
       <div class="left-container">
         <FolderListContainer
-          v-if="folderAvailable"
+          v-if="isFolderAvailable"
           :models="folders"
-          :reset-index="selectedIndex"
+          :reset-index="selectedFolderIndex"
           @select="selectedFolderDoc"
         />
         <DocListContainer
-          v-if="docAvailable"
+          v-if="isDocAvailable"
           :models="docs"
+          :reset-index="selectedDocIndex"
           @select="selectedFolderDoc"
         />
       </div>
@@ -29,6 +31,7 @@
         />
       </div>
     </div>
+    <NoList v-if="isNoItems && isLoaded" />
     <b-modal v-model="isCreateViewEnable" trap-focus>
       <CreateBox @create="createFolder" @close="isCreateViewEnable = false" />
     </b-modal>
@@ -44,6 +47,7 @@ import FolderListContainer from '@/components/molecules/folder/FolderListContain
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
 import CreateBox from '@/components/organisms/folder/CreateBox.vue'
+import NoList from '@/components/atoms/folder/NoList.vue'
 import {
   FolderApi,
   DocumentApi,
@@ -58,8 +62,11 @@ export type DataType = {
   breadcrumb: Array<BreadcrumbModel>
   selectType: string
   selectItem: FolderModel | DocumentModel
-  selectedIndex: number
+  selectedFolderIndex: number
+  selectedDocIndex: number
   isCreateViewEnable: boolean
+  searchText: string
+  isLoaded: boolean
 }
 
 export default Vue.extend({
@@ -71,6 +78,7 @@ export default Vue.extend({
     FolderListContainer,
     DocListContainer,
     CreateBox,
+    NoList,
   },
   data(): DataType {
     return {
@@ -79,19 +87,40 @@ export default Vue.extend({
       breadcrumb: [],
       selectType: 'NONE',
       selectItem: {},
-      selectedIndex: -1,
+      selectedFolderIndex: -1,
+      selectedDocIndex: -1,
       isCreateViewEnable: false,
+      searchText: '',
+      isLoaded: false,
     }
   },
   computed: {
-    folderAvailable(): boolean {
-      return this.folders.length > 0
+    filteredFolder(): Array<FolderModel> {
+      if (this.searchText === '') {
+        return this.folders
+      }
+      return this.folders.filter(f => {
+        const name = f.name ?? ''
+        return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
+      })
     },
-    docAvailable(): boolean {
-      return this.docs.length > 0
+    filteredDoc(): Array<DocumentModel> {
+      if (this.searchText === '') {
+        return this.docs
+      }
+      return this.docs.filter(f => {
+        const name = f.title ?? ''
+        return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
+      })
     },
-    listAvailable(): boolean {
-      return !this.folderAvailable && !this.docAvailable
+    isFolderAvailable(): boolean {
+      return this.filteredFolder.length > 0
+    },
+    isDocAvailable(): boolean {
+      return this.filteredDoc.length > 0
+    },
+    isNoItems(): boolean {
+      return !this.isFolderAvailable && !this.isDocAvailable
     },
   },
   created() {
@@ -101,11 +130,17 @@ export default Vue.extend({
     selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
       this.selectType = modelType
       this.selectItem = model
+      if (modelType === 'FOLDER') {
+        this.selectedDocIndex = Date.now()
+      } else if (modelType === 'DOCUMENT') {
+        this.selectedFolderIndex = Date.now()
+      }
     },
     resetSelect() {
       this.selectType = ''
       this.selectItem = {}
-      this.selectedIndex = Date.now()
+      this.selectedFolderIndex = Date.now()
+      this.selectedDocIndex = Date.now()
     },
     fetchFolder() {
       this.resetSelect()
@@ -119,6 +154,9 @@ export default Vue.extend({
         })
         .catch(() => {
           this.failureToast(1)
+        })
+        .finally(() => {
+          this.isLoaded = true
         })
     },
     createFolder(name: string) {

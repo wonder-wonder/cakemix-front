@@ -1,6 +1,6 @@
 <template>
   <div class="option-box">
-    <i class="fa fa-folder fa-fw" />
+    <i class="fa fa-fw" :class="imageType" />
     <div class="detail-items">
       <OptionInfoCell
         v-for="(mo, index) in options"
@@ -9,28 +9,28 @@
       />
     </div>
     <Input
-      v-if="modelType === 'FOLDER'"
+      v-if="isPermEditable"
       :label-name="'Name'"
       :is-password="false"
       :value="title"
-      :disabled="!isWritable"
+      :disabled="!isNameEditable"
       @text="updateTitle"
     />
     <Select
-      v-if="isWritable"
+      v-if="isPermEditable"
       :label-name="'Others Permission'"
       :current="permission"
       :select-items="selectModels"
       @input="selected"
     />
     <b-button
-      v-if="isWritable"
+      v-if="isPermEditable"
       type="is-success"
       @click="update"
       v-text="'Update'"
     />
     <b-button
-      v-if="isWritable"
+      v-if="isPermEditable"
       type="is-danger"
       @click="del"
       v-text="'Delete'"
@@ -84,6 +84,13 @@ export default Vue.extend({
     }
   },
   computed: {
+    imageType(): string {
+      return this.modelType === 'FOLDER'
+        ? 'fa-folder'
+        : this.modelType === 'DOCUMENT'
+        ? 'fa-file'
+        : 'fa-minus'
+    },
     isSelected(): boolean {
       return 'uuid' in this.newModel
     },
@@ -146,7 +153,22 @@ export default Vue.extend({
         ? this.selectModels[this.newModel.permission]
         : '---'
     },
-    isWritable(): boolean {
+    isNameEditable(): boolean {
+      if (this.modelType === 'DOCUMENT') {
+        return false
+      }
+      if (this.newModel.owner === undefined) {
+        return false
+      }
+      const owner = this.newModel.owner as ProfileModel
+      if (owner.uuid === undefined) {
+        return false
+      }
+      const uuid = owner.uuid
+      const perm = this.newModel.permission
+      return perm === 2 || uuid === this.$store.getters['auth/uuid']
+    },
+    isPermEditable(): boolean {
       if (this.newModel.owner === undefined) {
         return false
       }
