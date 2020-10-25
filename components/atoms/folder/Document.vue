@@ -33,7 +33,7 @@ export default Vue.extend({
   display: grid;
   width: 344px;
   grid-template-rows: 32px 20px 24px;
-  grid-template-columns: 64px 280px;
+  grid-template-columns: 64px 266px 14px;
   border: solid 1px white;
   border-radius: 5px;
   color: white;
@@ -58,8 +58,9 @@ export default Vue.extend({
     align-items: center;
     grid-row: 1;
     grid-column: 2;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
+    overflow: hidden;
   }
 
   .desc1-box {

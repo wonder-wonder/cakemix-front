@@ -1,28 +1,54 @@
 <template>
-  <div class="folder-box">
+  <div :class="selected">
     <div class="icon-box">
       <i class="fa fa-folder fa-fw" />
     </div>
     <div class="title-box">
-      <span v-text="folder.title" />
+      <span v-text="folder.name" />
     </div>
     <div class="desc1-box">
-      <span v-text="folder.detail" />
+      <span v-text="folder.owner.name" />
     </div>
     <div class="desc2-box">
-      <span v-text="folder.date" />
+      <span v-text="toDate(folder.created_at)" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
+import { FolderModel } from '@/scripts/api/index'
 
 export default Vue.extend({
   props: {
     folder: {
-      type: Object,
-      default: null,
+      type: Object as PropType<FolderModel>,
+      default: Object as FolderModel,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    selected() {
+      return this.isSelected ? 'folder-box selected' : 'folder-box'
+    },
+  },
+  methods: {
+    toDate(utime: number): string {
+      const dt = new Date(utime * 1000)
+      if (!dt) {
+        return ''
+      }
+      const year = dt.getFullYear()
+      const month = dt.getMonth() + 1
+      const day = dt.getDate()
+      const hour = ('0' + dt.getHours()).slice(-2)
+      const min = ('0' + dt.getMinutes()).slice(-2)
+      const sec = ('0' + dt.getSeconds()).slice(-2)
+
+      return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
     },
   },
 })
@@ -39,9 +65,14 @@ export default Vue.extend({
   color: white;
   background-color: black;
   transition: all 100ms;
+  user-select: none;
 
   &:hover {
-    background-color: rgb(100, 100, 100);
+    background-color: rgb(50, 50, 50);
+  }
+
+  &.selected {
+    background-color: rgb(120, 120, 120);
   }
 
   .icon-box {
@@ -58,7 +89,7 @@ export default Vue.extend({
     align-items: center;
     grid-row: 1;
     grid-column: 2;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
   }
 

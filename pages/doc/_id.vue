@@ -6,38 +6,37 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 import DocPreviewEditor from '@/components/molecules/document/DocPreviewEditor.vue'
 import DocHeader from '@/components/organisms/document/DocHeader.vue'
 
-@Component({
+export default Vue.extend({
   components: {
-    DocPreviewEditor,
     DocHeader,
+    DocPreviewEditor,
+  },
+  methods: {
+    onClicked(ref: string) {
+      switch (ref) {
+        case 'question':
+          this.copyToClip()
+          break
+        default:
+          break
+      }
+    },
+    copyToClip() {
+      const str = require('@/scripts/markdown/samplemd').sample
+      const listener = function (e: any) {
+        e.clipboardData.setData('text/plain', str)
+        e.preventDefault()
+        document.removeEventListener('copy', listener)
+      }
+      document.addEventListener('copy', listener)
+      document.execCommand('copy')
+    },
   },
 })
-export default class Document extends Vue {
-  onClicked(ref: string) {
-    switch (ref) {
-      case 'question':
-        this.copyToClip()
-        break
-      default:
-        break
-    }
-  }
-
-  copyToClip() {
-    const str = require('@/scripts/markdown/samplemd').sample
-    const listener = function (e: any) {
-      e.clipboardData.setData('text/plain', str)
-      e.preventDefault()
-      document.removeEventListener('copy', listener)
-    }
-    document.addEventListener('copy', listener)
-    document.execCommand('copy')
-  }
-}
 </script>
 
 <style lang="scss">

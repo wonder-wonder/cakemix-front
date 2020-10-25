@@ -59,7 +59,7 @@ export default Vue.extend({
         .postLogin(model)
         .then(res => {
           this.$store.commit('auth/login', res.data.jwt)
-          this.$router.push('/folder/fwk6al7nyj4qdufaz')
+          this.$router.push('/folder/')
         })
         .catch(() => {
           this.isError = true

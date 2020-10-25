@@ -132,7 +132,7 @@ export interface BreadcrumbModel {
      * @type {string}
      * @memberof BreadcrumbModel
      */
-    folderId?: string;
+    folder_id?: string;
     /**
      * 
      * @type {string}
@@ -181,13 +181,38 @@ export interface DocumentModel {
      * @type {number}
      * @memberof DocumentModel
      */
-    createdAt?: number;
+    created_at?: number;
     /**
      * document creation date
      * @type {number}
      * @memberof DocumentModel
      */
-    updatedAt?: number;
+    updated_at?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DocumentModel
+     */
+    uuid?: string;
+}
+/**
+ * Document modify request model
+ * @export
+ * @interface DocumentModifyReqModel
+ */
+export interface DocumentModifyReqModel {
+    /**
+     * Owner UUID
+     * @type {string}
+     * @memberof DocumentModifyReqModel
+     */
+    owneruuid?: string;
+    /**
+     * Permission
+     * @type {number}
+     * @memberof DocumentModifyReqModel
+     */
+    permission?: number;
 }
 /**
  * Response of document creation
@@ -200,7 +225,32 @@ export interface DocumentResModel {
      * @type {string}
      * @memberof DocumentResModel
      */
-    docId: string;
+    doc_id: string;
+}
+/**
+ * Folder list model
+ * @export
+ * @interface FolderListModel
+ */
+export interface FolderListModel {
+    /**
+     * 
+     * @type {Array<FolderModel>}
+     * @memberof FolderListModel
+     */
+    folder?: Array<FolderModel>;
+    /**
+     * 
+     * @type {Array<DocumentModel>}
+     * @memberof FolderListModel
+     */
+    document?: Array<DocumentModel>;
+    /**
+     * 
+     * @type {Array<BreadcrumbModel>}
+     * @memberof FolderListModel
+     */
+    path: Array<BreadcrumbModel>;
 }
 /**
  * Folder model
@@ -231,25 +281,50 @@ export interface FolderModel {
      * @type {number}
      * @memberof FolderModel
      */
-    createdAt?: number;
+    created_at?: number;
     /**
      * folder creation date
      * @type {number}
      * @memberof FolderModel
      */
-    updatedAt?: number;
-    /**
-     * 
-     * @type {Array<BreadcrumbModel>}
-     * @memberof FolderModel
-     */
-    path?: Array<BreadcrumbModel>;
+    updated_at?: number;
     /**
      * 
      * @type {string}
      * @memberof FolderModel
      */
     name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FolderModel
+     */
+    uuid?: string;
+}
+/**
+ * Folder modify request model
+ * @export
+ * @interface FolderModifyReqModel
+ */
+export interface FolderModifyReqModel {
+    /**
+     * Owner UUID
+     * @type {string}
+     * @memberof FolderModifyReqModel
+     */
+    owneruuid?: string;
+    /**
+     * Folder name
+     * @type {string}
+     * @memberof FolderModifyReqModel
+     */
+    name?: string;
+    /**
+     * Permission
+     * @type {number}
+     * @memberof FolderModifyReqModel
+     */
+    permission?: number;
 }
 /**
  * 
@@ -262,7 +337,7 @@ export interface InlineResponse200 {
      * @type {string}
      * @memberof InlineResponse200
      */
-    docId?: string;
+    doc_id?: string;
 }
 /**
  * 
@@ -275,7 +350,7 @@ export interface InlineResponse2001 {
      * @type {string}
      * @memberof InlineResponse2001
      */
-    folderId?: string;
+    folder_id?: string;
 }
 /**
  * JSON Web Token(JWT) is used for authorization. Geekers API uses only requred items.
@@ -374,13 +449,13 @@ export interface ProfileModel {
      * @type {string}
      * @memberof ProfileModel
      */
-    iconUri: string;
+    icon_uri: string;
     /**
      * User/team creation date
      * @type {number}
      * @memberof ProfileModel
      */
-    createdAt?: number;
+    created_at?: number;
     /**
      * Attribute(Official, SysAdmin)
      * @type {string}
@@ -392,7 +467,7 @@ export interface ProfileModel {
      * @type {boolean}
      * @memberof ProfileModel
      */
-    isTeam: boolean;
+    is_team: boolean;
     /**
      * List for joining teams
      * @type {Array<ProfileModel>}
@@ -1603,6 +1678,56 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Modify document property
+         * @param {string} docId Document ID
+         * @param {DocumentModifyReqModel} [documentModifyReqModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putDocDocId: async (docId: string, documentModifyReqModel?: DocumentModifyReqModel, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'docId' is not null or undefined
+            if (docId === null || docId === undefined) {
+                throw new RequiredError('docId','Required parameter docId was null or undefined when calling putDocDocId.');
+            }
+            const localVarPath = `/doc/{doc_id}`
+                .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? configuration.accessToken()
+                    : configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof documentModifyReqModel !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(documentModifyReqModel !== undefined ? documentModifyReqModel : {}) : (documentModifyReqModel || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1655,6 +1780,21 @@ export const DocumentApiFp = function(configuration?: Configuration) {
                 return axios.request(axiosRequestArgs);
             };
         },
+        /**
+         * 
+         * @summary Modify document property
+         * @param {string} docId Document ID
+         * @param {DocumentModifyReqModel} [documentModifyReqModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putDocDocId(docId: string, documentModifyReqModel?: DocumentModifyReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).putDocDocId(docId, documentModifyReqModel, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
     }
 };
 
@@ -1694,6 +1834,17 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          */
         moveDoc(docId: string, folderId: string, options?: any): AxiosPromise<void> {
             return DocumentApiFp(configuration).moveDoc(docId, folderId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Modify document property
+         * @param {string} docId Document ID
+         * @param {DocumentModifyReqModel} [documentModifyReqModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putDocDocId(docId: string, documentModifyReqModel?: DocumentModifyReqModel, options?: any): AxiosPromise<void> {
+            return DocumentApiFp(configuration).putDocDocId(docId, documentModifyReqModel, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1740,6 +1891,19 @@ export class DocumentApi extends BaseAPI {
      */
     public moveDoc(docId: string, folderId: string, options?: any) {
         return DocumentApiFp(this.configuration).moveDoc(docId, folderId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Modify document property
+     * @param {string} docId Document ID
+     * @param {DocumentModifyReqModel} [documentModifyReqModel] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DocumentApi
+     */
+    public putDocDocId(docId: string, documentModifyReqModel?: DocumentModifyReqModel, options?: any) {
+        return DocumentApiFp(this.configuration).putDocDocId(docId, documentModifyReqModel, options).then((request) => request(this.axios, this.basePath));
     }
 
 }
@@ -1906,6 +2070,56 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @summary Modify folder property
+         * @param {string} folderId Folder ID
+         * @param {FolderModifyReqModel} [folderModifyReqModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyFolder: async (folderId: string, folderModifyReqModel?: FolderModifyReqModel, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'folderId' is not null or undefined
+            if (folderId === null || folderId === undefined) {
+                throw new RequiredError('folderId','Required parameter folderId was null or undefined when calling modifyFolder.');
+            }
+            const localVarPath = `/folder/{folder_id}`
+                .replace(`{${"folder_id"}}`, encodeURIComponent(String(folderId)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? configuration.accessToken()
+                    : configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof folderModifyReqModel !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(folderModifyReqModel !== undefined ? folderModifyReqModel : {}) : (folderModifyReqModel || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Move folder to target parent.
          * @param {string} folderId Folder ID
          * @param {string} targetFolderId Target Folder ID
@@ -2001,8 +2215,23 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getList(folderId: string, type: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FolderModel | DocumentModel>> {
+        async getList(folderId: string, type: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FolderListModel>> {
             const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).getList(folderId, type, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary Modify folder property
+         * @param {string} folderId Folder ID
+         * @param {FolderModifyReqModel} [folderModifyReqModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async modifyFolder(folderId: string, folderModifyReqModel?: FolderModifyReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).modifyFolder(folderId, folderModifyReqModel, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -2061,8 +2290,19 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getList(folderId: string, type: string, options?: any): AxiosPromise<FolderModel | DocumentModel> {
+        getList(folderId: string, type: string, options?: any): AxiosPromise<FolderListModel> {
             return FolderApiFp(configuration).getList(folderId, type, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Modify folder property
+         * @param {string} folderId Folder ID
+         * @param {FolderModifyReqModel} [folderModifyReqModel] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyFolder(folderId: string, folderModifyReqModel?: FolderModifyReqModel, options?: any): AxiosPromise<void> {
+            return FolderApiFp(configuration).modifyFolder(folderId, folderModifyReqModel, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2121,6 +2361,19 @@ export class FolderApi extends BaseAPI {
      */
     public getList(folderId: string, type: string, options?: any) {
         return FolderApiFp(this.configuration).getList(folderId, type, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Modify folder property
+     * @param {string} folderId Folder ID
+     * @param {FolderModifyReqModel} [folderModifyReqModel] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FolderApi
+     */
+    public modifyFolder(folderId: string, folderModifyReqModel?: FolderModifyReqModel, options?: any) {
+        return FolderApiFp(this.configuration).modifyFolder(folderId, folderModifyReqModel, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
