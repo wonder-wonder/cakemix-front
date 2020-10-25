@@ -57,8 +57,11 @@ export default Vue.extend({
     this.cMirror.on('change', this.changeEvent)
     this.cMirror.on('scroll', this.scrollEvent)
     // cMirror.on('drop', this.dropEvent)
-    const url = 'ws://localhost:8081/v1/ws'
-    // const url = 'ws://localhost:3001/ws'
+    const url =
+      'wss://localhost:3001/v1/doc/' +
+      this.$route.params.id +
+      '/ws?token=' +
+      this.$store.getters['auth/token']
     this.websocket = new socket.SocketConnection(url)
     this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
     this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)

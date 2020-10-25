@@ -10,6 +10,7 @@ const namespaced: boolean = true
 export const state: AuthState = {
   isLoggedIn: false,
   token: '',
+  uuid: '',
 }
 
 export const auth: Module<AuthState, RootState> = {

@@ -20,7 +20,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 export type DataType = {
   uuid: String
-  selected: String[]
 }
 
 export default Vue.extend({
@@ -42,10 +41,9 @@ export default Vue.extend({
       default: false,
     },
   },
-  data() {
+  data(): DataType {
     return {
       uuid: uuidv4(),
-      selected: '',
     }
   },
 })

@@ -13,6 +13,9 @@ const getters: GetterTree<AuthState, RootState> = {
   token(state: AuthState): string {
     return state.token
   },
+  uuid(state: AuthState): string {
+    return state.uuid
+  },
   config(state: AuthState): Configuration {
     return new Configuration({
       accessToken: state.token,

@@ -8,12 +8,25 @@
     />
     <Breadcrumb class="breadcrumb-item" :breadcrumb="breadcrumb" />
     <div class="explore-container">
-      <div class="scroll-container">
-        <FolderListContainer :models="folders" />
-        <DocListContainer :models="docs" />
+      <div class="left-container">
+        <FolderListContainer
+          v-if="folderAvailable"
+          :models="folders"
+          :reset-index="selectedIndex"
+          @select="selectedFolderDoc"
+        />
+        <DocListContainer
+          v-if="docAvailable"
+          :models="docs"
+          @select="selectedFolderDoc"
+        />
       </div>
-      <div class="detail-container">
-        <div v-text="" />
+      <div class="right-container">
+        <OptionBox
+          :model="selectItem"
+          :model-type="selectType"
+          @reload="fetchFolder"
+        />
       </div>
     </div>
   </div>
@@ -26,6 +39,7 @@ import Breadcrumb from '@/components/molecules/folder/Breadcrumb.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
+import OptionBox from '@/components/organisms/folder/OptionBox.vue'
 import {
   FolderApi,
   DocumentApi,
@@ -38,6 +52,9 @@ export type DataType = {
   folders: Array<FolderModel>
   docs: Array<DocumentModel>
   breadcrumb: Array<BreadcrumbModel>
+  selectType: string
+  selectItem: FolderModel | DocumentModel
+  selectedIndex: number
 }
 
 export default Vue.extend({
@@ -45,6 +62,7 @@ export default Vue.extend({
     NavHeader,
     ToolBar,
     Breadcrumb,
+    OptionBox,
     FolderListContainer,
     DocListContainer,
   },
@@ -53,13 +71,38 @@ export default Vue.extend({
       folders: [],
       docs: [],
       breadcrumb: [],
+      selectType: 'NONE',
+      selectItem: {},
+      selectedIndex: -1,
     }
+  },
+  computed: {
+    folderAvailable(): boolean {
+      return this.folders.length > 0
+    },
+    docAvailable(): boolean {
+      return this.docs.length > 0
+    },
+    listAvailable(): boolean {
+      return !this.folderAvailable && !this.docAvailable
+    },
   },
   created() {
     this.fetchFolder()
   },
   methods: {
+    selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
+      this.selectType = modelType
+      this.selectItem = model
+    },
+    resetSelect() {
+      this.selectType = ''
+      this.selectItem = {}
+      this.selectedIndex = Date.now()
+    },
     fetchFolder() {
+      this.resetSelect()
+
       new FolderApi(this.$store.getters['auth/config'])
         .getList(this.$route.params.id ?? '', '')
         .then(res => {
@@ -99,7 +142,7 @@ export default Vue.extend({
           this.fetchFolder()
         })
     },
-    failureToast(err: Number) {
+    failureToast(err: number) {
       // @ts-ignore
       this.$buefy.toast.open({
         duration: 3000,
@@ -137,20 +180,17 @@ html {
   .explore-container {
     display: flex;
     flex-flow: row nowrap;
-    // height: calc(100vh - 218px);
     height: auto;
-    .scroll-container {
+
+    .left-container {
       height: 100%;
       width: calc(100vw - 300px);
-      overflow: scroll;
     }
-    .detail-container {
+    .right-container {
       position: sticky;
       top: 232px;
-      height: 400px;
+      max-height: 400px;
       width: 268px;
-      background-color: black;
-      border-radius: 32px;
       margin: 32px;
       margin-left: 0;
     }
