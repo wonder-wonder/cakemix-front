@@ -13,7 +13,11 @@ import Vue from 'vue'
 export default Vue.extend({
   methods: {
     gotoHome() {
-      this.$router.push({ path: `/` })
+      if (this.$store.getters['auth/isLoggedIn']) {
+        this.$router.push({ path: `/folder/` })
+      } else {
+        this.$router.push({ path: `/` })
+      }
     },
   },
 })
