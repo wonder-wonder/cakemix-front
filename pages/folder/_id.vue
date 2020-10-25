@@ -5,6 +5,7 @@
       class="toolbar-item"
       @create-folder="isCreateViewEnable = true"
       @create-doc="createDoc"
+      @search="searchText = $event"
     />
     <Breadcrumb class="breadcrumb-item" :breadcrumb="breadcrumb" />
     <div v-if="!isNoItems" class="explore-container">
@@ -64,6 +65,7 @@ export type DataType = {
   selectedFolderIndex: number
   selectedDocIndex: number
   isCreateViewEnable: boolean
+  searchText: string
 }
 
 export default Vue.extend({
@@ -87,14 +89,33 @@ export default Vue.extend({
       selectedFolderIndex: -1,
       selectedDocIndex: -1,
       isCreateViewEnable: false,
+      searchText: '',
     }
   },
   computed: {
+    filteredFolder(): Array<FolderModel> {
+      if (this.searchText === '') {
+        return this.folders
+      }
+      return this.folders.filter(f => {
+        const name = f.name ?? ''
+        return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
+      })
+    },
+    filteredDoc(): Array<DocumentModel> {
+      if (this.searchText === '') {
+        return this.docs
+      }
+      return this.docs.filter(f => {
+        const name = f.title ?? ''
+        return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
+      })
+    },
     isFolderAvailable(): boolean {
-      return this.folders.length > 0
+      return this.filteredFolder.length > 0
     },
     isDocAvailable(): boolean {
-      return this.docs.length > 0
+      return this.filteredDoc.length > 0
     },
     isNoItems(): boolean {
       return !this.isFolderAvailable && !this.isDocAvailable
