@@ -55,6 +55,7 @@ import {
   DocumentModifyReqModel,
   DocumentApi,
 } from '@/scripts/api/index'
+import { toDate } from '@/scripts/tools/date'
 
 export type DataType = {
   selectModels: Array<string>
@@ -95,21 +96,8 @@ export default Vue.extend({
       return 'uuid' in this.newModel
     },
     options(): Array<OptionInfoModel> {
-      const toDate = (utime: number, isSelected: boolean) => {
-        const dt = new Date(utime * 1000)
-        if (!dt) {
-          return ''
-        }
-        const year = dt.getFullYear()
-        const month = dt.getMonth() + 1
-        const day = dt.getDate()
-        const hour = ('0' + dt.getHours()).slice(-2)
-        const min = ('0' + dt.getMinutes()).slice(-2)
-        const sec = ('0' + dt.getSeconds()).slice(-2)
-
-        return isSelected
-          ? year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
-          : '---'
+      const toDate = (utime: number) => {
+        return this.isSelected ? this.toDate(utime) : '---'
       }
 
       const uuid = this.newModel.uuid !== undefined ? this.newModel.uuid : '---'
@@ -131,11 +119,11 @@ export default Vue.extend({
         } as OptionInfoModel,
         {
           title: 'Created at',
-          detail: toDate(createdAt, this.isSelected),
+          detail: toDate(createdAt),
         } as OptionInfoModel,
         {
           title: 'Updated at',
-          detail: toDate(updatedAt, this.isSelected),
+          detail: toDate(updatedAt),
         } as OptionInfoModel,
       ]
     },
@@ -188,6 +176,7 @@ export default Vue.extend({
     },
   },
   methods: {
+    toDate,
     selected(type: string) {
       const perm = this.selectModels.indexOf(type) ?? this.newModel.permission
       this.newModel.permission = perm

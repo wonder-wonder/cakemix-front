@@ -11,17 +11,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 import DocSwitch from '@/components/molecules/document/DocSwitch.vue'
 import DocSwitchButton from '@/components/atoms/document/DocSwitchButton.vue'
 
-@Component({
+export default Vue.extend({
   components: {
     DocSwitch,
     DocSwitchButton,
   },
 })
-export default class DocHeader extends Vue {}
 </script>
 
 <style lang="scss">
