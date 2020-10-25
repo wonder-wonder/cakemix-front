@@ -31,7 +31,7 @@
         />
       </div>
     </div>
-    <NoList v-if="isNoItems" />
+    <NoList v-if="isNoItems && isLoaded" />
     <b-modal v-model="isCreateViewEnable" trap-focus>
       <CreateBox @create="createFolder" @close="isCreateViewEnable = false" />
     </b-modal>
@@ -66,6 +66,7 @@ export type DataType = {
   selectedDocIndex: number
   isCreateViewEnable: boolean
   searchText: string
+  isLoaded: boolean
 }
 
 export default Vue.extend({
@@ -90,6 +91,7 @@ export default Vue.extend({
       selectedDocIndex: -1,
       isCreateViewEnable: false,
       searchText: '',
+      isLoaded: false,
     }
   },
   computed: {
@@ -152,6 +154,9 @@ export default Vue.extend({
         })
         .catch(() => {
           this.failureToast(1)
+        })
+        .finally(() => {
+          this.isLoaded = true
         })
     },
     createFolder(name: string) {
