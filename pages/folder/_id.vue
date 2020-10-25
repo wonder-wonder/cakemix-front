@@ -12,12 +12,13 @@
         <FolderListContainer
           v-if="folderAvailable"
           :models="folders"
-          :reset-index="selectedIndex"
+          :reset-index="selectedFolderIndex"
           @select="selectedFolderDoc"
         />
         <DocListContainer
           v-if="docAvailable"
           :models="docs"
+          :reset-index="selectedDocIndex"
           @select="selectedFolderDoc"
         />
       </div>
@@ -58,7 +59,8 @@ export type DataType = {
   breadcrumb: Array<BreadcrumbModel>
   selectType: string
   selectItem: FolderModel | DocumentModel
-  selectedIndex: number
+  selectedFolderIndex: number
+  selectedDocIndex: number
   isCreateViewEnable: boolean
 }
 
@@ -79,7 +81,8 @@ export default Vue.extend({
       breadcrumb: [],
       selectType: 'NONE',
       selectItem: {},
-      selectedIndex: -1,
+      selectedFolderIndex: -1,
+      selectedDocIndex: -1,
       isCreateViewEnable: false,
     }
   },
@@ -101,11 +104,17 @@ export default Vue.extend({
     selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
       this.selectType = modelType
       this.selectItem = model
+      if (modelType === 'FOLDER') {
+        this.selectedDocIndex = Date.now()
+      } else if (modelType === 'DOCUMENT') {
+        this.selectedFolderIndex = Date.now()
+      }
     },
     resetSelect() {
       this.selectType = ''
       this.selectItem = {}
-      this.selectedIndex = Date.now()
+      this.selectedFolderIndex = Date.now()
+      this.selectedDocIndex = Date.now()
     },
     fetchFolder() {
       this.resetSelect()

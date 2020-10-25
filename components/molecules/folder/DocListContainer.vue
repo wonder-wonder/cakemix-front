@@ -6,20 +6,24 @@
         v-for="(model, index) in models"
         :key="`D${index}${uuid}`"
         :doc="model"
-        @click.native="goToDoc(model.uuid)"
+        :is-selected="selectedIndex === index"
+        @click.native="selected(model, index)"
+        @dblclick.native="goToDoc(model.uuid)"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import Document from '@/components/atoms/folder/Document.vue'
+import { DocumentModel } from '~/scripts/api'
 
 export type DataType = {
-  uuid: String
+  uuid: string
+  selectedIndex: Number
 }
 
 export default Vue.extend({
@@ -29,18 +33,32 @@ export default Vue.extend({
   },
   props: {
     models: {
-      type: Array,
-      default: null,
+      type: Array as PropType<DocumentModel[]>,
+      default: [],
+    },
+    resetIndex: {
+      type: Number,
+      default: -1,
     },
   },
   data(): DataType {
     return {
       uuid: uuidv4(),
+      selectedIndex: -1,
     }
+  },
+  watch: {
+    resetIndex() {
+      this.selectedIndex = -1
+    },
   },
   methods: {
     goToDoc(documentId: string) {
       this.$router.push({ path: `/doc/${documentId}` })
+    },
+    selected(model: DocumentModel, index: Number) {
+      this.selectedIndex = index
+      this.$emit('select', 'DOCUMENT', model)
     },
   },
 })
