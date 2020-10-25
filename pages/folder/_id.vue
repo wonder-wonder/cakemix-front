@@ -3,7 +3,7 @@
     <NavHeader />
     <ToolBar
       class="toolbar-item"
-      @create-folder="createFolder"
+      @create-folder="isCreateViewEnable = true"
       @create-doc="createDoc"
     />
     <Breadcrumb class="breadcrumb-item" :breadcrumb="breadcrumb" />
@@ -29,6 +29,9 @@
         />
       </div>
     </div>
+    <b-modal v-model="isCreateViewEnable" trap-focus>
+      <CreateBox @create="createFolder" @close="isCreateViewEnable = false" />
+    </b-modal>
   </div>
 </template>
 
@@ -40,6 +43,7 @@ import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
+import CreateBox from '@/components/organisms/folder/CreateBox.vue'
 import {
   FolderApi,
   DocumentApi,
@@ -55,6 +59,7 @@ export type DataType = {
   selectType: string
   selectItem: FolderModel | DocumentModel
   selectedIndex: number
+  isCreateViewEnable: boolean
 }
 
 export default Vue.extend({
@@ -65,6 +70,7 @@ export default Vue.extend({
     OptionBox,
     FolderListContainer,
     DocListContainer,
+    CreateBox,
   },
   data(): DataType {
     return {
@@ -74,6 +80,7 @@ export default Vue.extend({
       selectType: 'NONE',
       selectItem: {},
       selectedIndex: -1,
+      isCreateViewEnable: false,
     }
   },
   computed: {
@@ -114,17 +121,18 @@ export default Vue.extend({
           this.failureToast(1)
         })
     },
-    createFolder() {
+    createFolder(name: string) {
       const fId = this.breadcrumb[this.breadcrumb.length - 1].folder_id
       if (!fId) {
         return
       }
       new FolderApi(this.$store.getters['auth/config'])
-        .createNewFolder(fId, 'Untitled')
+        .createNewFolder(fId, name)
         .catch(() => {
           this.failureToast(2)
         })
         .finally(() => {
+          this.isCreateViewEnable = false
           this.fetchFolder()
         })
     },
@@ -194,6 +202,10 @@ html {
       margin: 32px;
       margin-left: 0;
     }
+  }
+
+  .modal .modal-content {
+    width: auto;
   }
 }
 </style>
