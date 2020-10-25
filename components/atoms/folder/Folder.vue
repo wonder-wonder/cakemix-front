@@ -1,5 +1,5 @@
 <template>
-  <div class="folder-box">
+  <div :class="selected">
     <div class="icon-box">
       <i class="fa fa-folder fa-fw" />
     </div>
@@ -24,6 +24,15 @@ export default Vue.extend({
     folder: {
       type: Object as PropType<FolderModel>,
       default: Object as FolderModel,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    selected() {
+      return this.isSelected ? 'folder-box selected' : 'folder-box'
     },
   },
   methods: {
@@ -59,7 +68,11 @@ export default Vue.extend({
   user-select: none;
 
   &:hover {
-    background-color: rgb(100, 100, 100);
+    background-color: rgb(50, 50, 50);
+  }
+
+  &.selected {
+    background-color: rgb(120, 120, 120);
   }
 
   .icon-box {

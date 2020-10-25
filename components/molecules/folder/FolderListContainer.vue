@@ -6,7 +6,8 @@
         v-for="(model, index) in models"
         :key="`F${index}${uuid}`"
         :folder="model"
-        @click.native="$emit('select', model)"
+        :is-selected="selectedIndex === index"
+        @click.native="selected(model, index)"
         @dblclick.native="goToFolder(model.uuid)"
       />
     </div>
@@ -22,6 +23,7 @@ import { FolderModel } from '@/scripts/api/index'
 
 export type DataType = {
   uuid: String
+  selectedIndex: Number
 }
 
 export default Vue.extend({
@@ -38,11 +40,16 @@ export default Vue.extend({
   data(): DataType {
     return {
       uuid: uuidv4(),
+      selectedIndex: -1,
     }
   },
   methods: {
     goToFolder(folderId: string) {
       this.$router.push({ path: `/folder/${folderId}` })
+    },
+    selected(model: FolderModel, index: Number) {
+      this.selectedIndex = index
+      this.$emit('select', 'FOLDER', model)
     },
   },
 })

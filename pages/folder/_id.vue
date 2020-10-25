@@ -10,10 +10,10 @@
     <div class="explore-container">
       <div class="left-container">
         <FolderListContainer :models="folders" @select="selectedFolderDoc" />
-        <DocListContainer :models="docs" />
+        <DocListContainer :models="docs" @select="selectedFolderDoc" />
       </div>
       <div class="right-container">
-        <OptionBox :model="selectItem" />
+        <OptionBox :model="selectItem" :model-type="selectType" />
       </div>
     </div>
   </div>
@@ -39,6 +39,7 @@ export type DataType = {
   folders: Array<FolderModel>
   docs: Array<DocumentModel>
   breadcrumb: Array<BreadcrumbModel>
+  selectType: String
   selectItem: FolderModel | DocumentModel
 }
 
@@ -56,6 +57,7 @@ export default Vue.extend({
       folders: [],
       docs: [],
       breadcrumb: [],
+      selectType: 'NONE',
       selectItem: {},
     }
   },
@@ -63,7 +65,8 @@ export default Vue.extend({
     this.fetchFolder()
   },
   methods: {
-    selectedFolderDoc(model: FolderModel | DocumentModel) {
+    selectedFolderDoc(modelType: String, model: FolderModel | DocumentModel) {
+      this.selectType = modelType
       this.selectItem = model
     },
     fetchFolder() {

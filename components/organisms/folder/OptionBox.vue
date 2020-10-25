@@ -9,11 +9,12 @@
       />
     </div>
     <Input
+      v-if="modelType === 'FOLDER'"
       :label-name="'Name'"
       :is-password="false"
       :value="title"
       :disabled="!isWritable"
-      @text="password = $event"
+      @text="updateTitle"
     />
     <Select
       v-if="isWritable"
@@ -25,13 +26,13 @@
     <b-button
       v-if="isWritable"
       type="is-success"
-      @click="$emit('cupdate')"
+      @click="update"
       v-text="'Update'"
     />
     <b-button
       v-if="isWritable"
       type="is-danger"
-      @click="$emit('cdelete')"
+      @click="del"
       v-text="'Delete'"
     />
   </div>
@@ -39,15 +40,25 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import CloneDeep from 'lodash/cloneDeep'
 import Input from '@/components/atoms/input/Input.vue'
 import Select from '@/components/atoms/input/Select.vue'
 import OptionInfoCell, {
   OptionInfoModel,
 } from '@/components/atoms/cell/OptionInfoCell.vue'
-import { FolderModel, DocumentModel, ProfileModel } from '@/scripts/api/index'
+import {
+  FolderModel,
+  DocumentModel,
+  ProfileModel,
+  FolderApi,
+  FolderModifyReqModel,
+  DocumentModifyReqModel,
+  DocumentApi,
+} from '@/scripts/api/index'
 
 export type DataType = {
-  selectModels: Array<String>
+  selectModels: Array<string>
+  newModel: DocumentModel | FolderModel
 }
 
 export default Vue.extend({
@@ -61,21 +72,23 @@ export default Vue.extend({
       type: Object as PropType<FolderModel | DocumentModel>,
       default: {},
     },
+    modelType: {
+      type: String,
+      default: 'NONE',
+    },
   },
   data(): DataType {
     return {
       selectModels: ['Private', 'Read', 'Read / Write'],
+      newModel: {},
     }
   },
   computed: {
-    isSeleted() {
-      return !!this.model.uuid
+    isSelected(): boolean {
+      return 'uuid' in this.newModel
     },
-
-    options() {
-      const permType = ['Private', 'Read', 'Read / Write']
-      const owner = this.model.owner as ProfileModel
-      const toDate = (utime: number) => {
+    options(): Array<OptionInfoModel> {
+      const toDate = (utime: number, isSelected: boolean) => {
         const dt = new Date(utime * 1000)
         if (!dt) {
           return ''
@@ -87,63 +100,180 @@ export default Vue.extend({
         const min = ('0' + dt.getMinutes()).slice(-2)
         const sec = ('0' + dt.getSeconds()).slice(-2)
 
-        return (
-          year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
-        )
+        return isSelected
+          ? year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
+          : '---'
       }
+
+      const uuid = this.newModel.uuid !== undefined ? this.newModel.uuid : '---'
+      const owner = this.newModel.owner as ProfileModel
+      const ownerName = owner !== undefined ? owner.name : '---'
+      const createdAt = this.newModel.created_at ?? 0
+      const updatedAt = this.newModel.updated_at ?? 0
+      const perm = this.permission
+
       return [
-        { title: 'UUID', detail: this.model.uuid } as OptionInfoModel,
+        { title: 'UUID', detail: uuid } as OptionInfoModel,
         {
           title: 'Owner',
-          detail: owner ? owner.name : '',
+          detail: ownerName,
         } as OptionInfoModel,
         {
           title: 'Permission',
-          detail: permType[this.model.permission ?? 0],
+          detail: perm,
         } as OptionInfoModel,
         {
           title: 'Created at',
-          detail: toDate(this.model.created_at ?? 0),
+          detail: toDate(createdAt, this.isSelected),
         } as OptionInfoModel,
         {
           title: 'Updated at',
-          detail: toDate(this.model.updated_at ?? 0),
+          detail: toDate(updatedAt, this.isSelected),
         } as OptionInfoModel,
       ]
     },
     title(): string {
-      let name = ''
-      if ('name' in this.model) {
-        name = this.model.name ?? ''
-      } else if ('title' in this.model) {
-        name = this.model.title ?? ''
-      }
+      const name =
+        this.modelType === 'FOLDER'
+          ? (this.newModel as FolderModel).name ?? ''
+          : this.modelType === 'DOCUMENT'
+          ? (this.newModel as DocumentModel).title ?? ''
+          : ''
       return name
     },
     permission(): string {
-      return this.selectModels[this.model.permission ?? 0] as string
+      return this.newModel.permission !== undefined
+        ? this.selectModels[this.newModel.permission]
+        : '---'
     },
-    isWritable(): Boolean {
-      const owner = (this.model.owner as ProfileModel) ?? {}
-      if (!('uuid' in owner)) {
+    isWritable(): boolean {
+      if (this.newModel.owner === undefined) {
         return false
       }
-      const flag =
-        this.model.permission === 2 ||
-        owner.uuid === this.$store.getters['auth/uuid']
-      return flag
+      const owner = this.newModel.owner as ProfileModel
+      if (owner.uuid === undefined) {
+        return false
+      }
+      const uuid = owner.uuid
+      const perm = this.newModel.permission
+      return perm === 2 || uuid === this.$store.getters['auth/uuid']
+    },
+  },
+  watch: {
+    model() {
+      // deep copy using clone deep in the lodash
+      this.newModel = CloneDeep(this.model)
     },
   },
   methods: {
-    selected(type: String) {
-      const perm = this.selectModels.indexOf(type)
-      this.model.permission = perm
+    selected(type: string) {
+      const perm = this.selectModels.indexOf(type) ?? this.newModel.permission
+      this.newModel.permission = perm
+    },
+    updateTitle(title: string) {
+      if (this.modelType === 'FOLDER') {
+        const cModel = this.newModel as FolderModel
+        cModel.name = title
+      }
+    },
+    update() {
+      if (this.newModel.owner === undefined) {
+        return
+      }
+      const uuuid = (this.newModel.owner as ProfileModel).uuid
+      const perm = this.newModel.permission
+      if (uuuid === undefined || perm === undefined) {
+        this.failureToast(1)
+        return
+      }
+      if (this.modelType === 'FOLDER') {
+        const fModel = this.newModel as FolderModel
+        if (fModel.name === undefined || fModel.name === '') {
+          this.failureToast(1)
+          return
+        }
+        const fuuid = fModel.uuid
+        if (fuuid === undefined) {
+          this.failureToast(1)
+          return
+        }
+        const req = {
+          owneruuid: uuuid,
+          name: fModel.name,
+          permission: perm,
+        } as FolderModifyReqModel
+        new FolderApi(this.$store.getters['auth/config'])
+          .modifyFolder(fuuid, req)
+          .then(() => {
+            this.successToast()
+          })
+          .catch(() => {
+            this.failureToast(3)
+          })
+      } else if (this.modelType === 'DOCUMENT') {
+        const dModel = this.newModel as DocumentModel
+        const duuid = dModel.uuid
+        if (duuid === undefined) {
+          this.failureToast(1)
+          return
+        }
+        const req = {
+          owneruuid: uuuid,
+          permission: perm,
+        } as DocumentModifyReqModel
+        new DocumentApi(this.$store.getters['auth/config'])
+          .putDocDocId(duuid, req)
+          .then(() => {
+            this.successToast()
+          })
+          .catch(() => {
+            this.failureToast(3)
+          })
+      } else {
+        this.failureToast(2)
+      }
+    },
+    del() {
+      const fduuid = this.newModel.uuid
+      if (fduuid === undefined) {
+        this.failureToast(1)
+        return
+      }
+      if (this.modelType === 'FOLDER') {
+        new FolderApi(this.$store.getters['auth/config'])
+          .deleteFolder(fduuid)
+          .then(() => {
+            this.successToast()
+          })
+          .catch(() => {
+            this.failureToast(3)
+          })
+      } else if (this.modelType === 'DOCUMENT') {
+        new DocumentApi(this.$store.getters['auth/config'])
+          .deleteDoc(fduuid)
+          .then(() => {
+            this.successToast()
+          })
+          .catch(() => {
+            this.failureToast(3)
+          })
+      } else {
+        this.failureToast(2)
+      }
+    },
+    successToast() {
+      // @ts-ignore
+      this.$buefy.toast.open({
+        duration: 3000,
+        message: 'Success',
+        type: 'is-success',
+      })
     },
     failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
         duration: 3000,
-        message: `Update Failed [ Error : ${err} ]`,
+        message: `Failed [ Error : ${err} ]`,
         position: 'is-bottom',
         type: 'is-danger',
       })
