@@ -1,5 +1,5 @@
 <template>
-  <div class="login-box">
+  <form class="login-box" @submit.prevent="request">
     <Input
       :label-name="'UserName'"
       :is-error="isError"
@@ -11,9 +11,9 @@
       :is-error="isError"
       @text="password = $event"
     />
-    <b-button :loading="isLoading" @click="request" v-text="'Login'" />
+    <b-button :loading="isLoading" :native-type="'submit'" v-text="'Login'" />
     <a class="option" @click="forgotPassword" v-text="'Forgot Password'" />
-  </div>
+  </form>
 </template>
 
 <script lang="ts">
@@ -72,9 +72,10 @@ export default Vue.extend({
     failureToast(err: Number) {
       // @ts-ignore
       this.$buefy.toast.open({
-        duration: 3000,
+        duration: 1000,
+        queue: false,
         message: `Login Failed [ Error : ${err} ]`,
-        position: 'is-bottom',
+        position: 'is-top-right',
         type: 'is-danger',
       })
     },
