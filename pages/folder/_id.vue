@@ -7,16 +7,16 @@
       @create-doc="createDoc"
     />
     <Breadcrumb class="breadcrumb-item" :breadcrumb="breadcrumb" />
-    <div class="explore-container">
+    <div v-if="!isNoItems" class="explore-container">
       <div class="left-container">
         <FolderListContainer
-          v-if="folderAvailable"
+          v-if="isFolderAvailable"
           :models="folders"
           :reset-index="selectedFolderIndex"
           @select="selectedFolderDoc"
         />
         <DocListContainer
-          v-if="docAvailable"
+          v-if="isDocAvailable"
           :models="docs"
           :reset-index="selectedDocIndex"
           @select="selectedFolderDoc"
@@ -30,6 +30,7 @@
         />
       </div>
     </div>
+    <NoList v-if="isNoItems" />
     <b-modal v-model="isCreateViewEnable" trap-focus>
       <CreateBox @create="createFolder" @close="isCreateViewEnable = false" />
     </b-modal>
@@ -45,6 +46,7 @@ import FolderListContainer from '@/components/molecules/folder/FolderListContain
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
 import CreateBox from '@/components/organisms/folder/CreateBox.vue'
+import NoList from '@/components/atoms/folder/NoList.vue'
 import {
   FolderApi,
   DocumentApi,
@@ -73,6 +75,7 @@ export default Vue.extend({
     FolderListContainer,
     DocListContainer,
     CreateBox,
+    NoList,
   },
   data(): DataType {
     return {
@@ -87,14 +90,14 @@ export default Vue.extend({
     }
   },
   computed: {
-    folderAvailable(): boolean {
+    isFolderAvailable(): boolean {
       return this.folders.length > 0
     },
-    docAvailable(): boolean {
+    isDocAvailable(): boolean {
       return this.docs.length > 0
     },
-    listAvailable(): boolean {
-      return !this.folderAvailable && !this.docAvailable
+    isNoItems(): boolean {
+      return !this.isFolderAvailable && !this.isDocAvailable
     },
   },
   created() {
