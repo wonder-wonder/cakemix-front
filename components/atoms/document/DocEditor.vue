@@ -58,7 +58,7 @@ export default Vue.extend({
     this.cMirror.on('scroll', this.scrollEvent)
     // cMirror.on('drop', this.dropEvent)
     const url =
-      'wss://localhost:3001/v1/doc/' +
+      `wss://${process.env.BASE_PATH}/doc/` +
       this.$route.params.id +
       '/ws?token=' +
       this.$store.getters['auth/token']
