@@ -9,10 +9,12 @@ const mutations: MutationTree<AuthState> = {
     state.token = token
     const decoded = jwt_decode(token) as any
     state.uuid = decoded ? decoded.aud : ''
+    localStorage.setItem('isLoggedIn', 'true')
   },
   logout(state: AuthState) {
     state.isLoggedIn = false
     state.token = ''
+    localStorage.setItem('isLoggedIn', 'false')
   },
 }
 
