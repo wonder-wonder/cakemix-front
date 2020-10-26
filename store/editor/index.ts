@@ -7,8 +7,8 @@ import actions from './actions'
 
 const namespaced: boolean = true
 
-export const state: EditorState = {
-  displayType: 2,
+export const state = (): EditorState => {
+  return { displayType: 2 }
 }
 
 export const editor: Module<EditorState, RootState> = {
