@@ -20,6 +20,7 @@
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { AuthLoginReqModel, AuthApi } from '@/scripts/api/index'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   username: string
@@ -41,13 +42,16 @@ export default Vue.extend({
     }
   },
   methods: {
+    successToast,
+    failureToast,
     forgotPassword() {
       this.$router.push('/auth/passwd')
     },
     request() {
       if (this.username === '' || this.password === '') {
         this.isError = true
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Login failed', 1)
         return
       }
       this.isLoading = true
@@ -63,21 +67,12 @@ export default Vue.extend({
         })
         .catch(() => {
           this.isError = true
-          this.failureToast(2)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Login failed', 2)
         })
         .finally(() => {
           this.isLoading = false
         })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        message: `Login Failed [ Error : ${err} ]`,
-        position: 'is-top-right',
-        type: 'is-danger',
-      })
     },
   },
 })

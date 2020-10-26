@@ -49,6 +49,12 @@ export default {
     ],
   },
   /*
+   ** Router
+   */
+  router: {
+    middleware: ['redirect'],
+  },
+  /*
    ** Global CSS
    */
   css: ['~/styles/bulma.scss'],

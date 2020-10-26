@@ -1,7 +1,7 @@
 <template>
   <div class="home-icon-box" @click="gotoHome">
     <div class="image-box">
-      <img src="@/assets/icon.png" alt="cakemix_home_icon" />
+      <img src="@/assets/icon.png" alt="cakemix_home_icon">
     </div>
     <div class="service-name" v-text="'Cakemix'" />
   </div>
@@ -13,11 +13,7 @@ import Vue from 'vue'
 export default Vue.extend({
   methods: {
     gotoHome() {
-      if (this.$store.getters['auth/isLoggedIn']) {
-        this.$router.push({ path: `/folder/` })
-      } else {
-        this.$router.push({ path: `/` })
-      }
+      this.$router.push({ path: `/` })
     },
   },
 })

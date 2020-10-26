@@ -15,6 +15,7 @@
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   password: string
@@ -39,13 +40,16 @@ export default Vue.extend({
     },
   },
   methods: {
+    successToast,
+    failureToast,
     passwordValidator(text: string): boolean {
       const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}$/i
       return reg.test(text)
     },
     request() {
       if (!this.passwordValidator(this.password)) {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Signup failed', 1)
         return
       }
       this.isLoading = true
@@ -55,32 +59,20 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postPassResetVerify(this.passwdResetToken, model)
         .then(() => {
-          this.successToast()
+          this.successToast(
+            // @ts-ignore
+            this.$buefy,
+            'Signup requested, a varification url will be sent'
+          )
           this.$router.push('/auth/login')
         })
         .catch(() => {
-          this.failureToast(2)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Signup failed', 2)
         })
         .finally(() => {
           this.isLoading = false
         })
-    },
-    successToast() {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: 'Signup requested, a varification url will be sent',
-        type: 'is-success',
-      })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: `Signup Failed [ Error : ${err} ]`,
-        position: 'is-bottom',
-        type: 'is-danger',
-      })
     },
   },
 })

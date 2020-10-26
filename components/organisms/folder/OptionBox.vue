@@ -55,6 +55,8 @@ import {
   DocumentModifyReqModel,
   DocumentApi,
 } from '@/scripts/api/index'
+import { toDate } from '@/scripts/tools/date'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   selectModels: Array<string>
@@ -95,21 +97,8 @@ export default Vue.extend({
       return 'uuid' in this.newModel
     },
     options(): Array<OptionInfoModel> {
-      const toDate = (utime: number, isSelected: boolean) => {
-        const dt = new Date(utime * 1000)
-        if (!dt) {
-          return ''
-        }
-        const year = dt.getFullYear()
-        const month = dt.getMonth() + 1
-        const day = dt.getDate()
-        const hour = ('0' + dt.getHours()).slice(-2)
-        const min = ('0' + dt.getMinutes()).slice(-2)
-        const sec = ('0' + dt.getSeconds()).slice(-2)
-
-        return isSelected
-          ? year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
-          : '---'
+      const toDate = (utime: number) => {
+        return this.isSelected ? this.toDate(utime) : '---'
       }
 
       const uuid = this.newModel.uuid !== undefined ? this.newModel.uuid : '---'
@@ -131,11 +120,11 @@ export default Vue.extend({
         } as OptionInfoModel,
         {
           title: 'Created at',
-          detail: toDate(createdAt, this.isSelected),
+          detail: toDate(createdAt),
         } as OptionInfoModel,
         {
           title: 'Updated at',
-          detail: toDate(updatedAt, this.isSelected),
+          detail: toDate(updatedAt),
         } as OptionInfoModel,
       ]
     },
@@ -188,6 +177,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    successToast,
+    failureToast,
+    toDate,
     selected(type: string) {
       const perm = this.selectModels.indexOf(type) ?? this.newModel.permission
       this.newModel.permission = perm
@@ -205,18 +197,21 @@ export default Vue.extend({
       const uuuid = (this.newModel.owner as ProfileModel).uuid
       const perm = this.newModel.permission
       if (uuuid === undefined || perm === undefined) {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Failed', 1)
         return
       }
       if (this.modelType === 'FOLDER') {
         const fModel = this.newModel as FolderModel
         if (fModel.name === undefined || fModel.name === '') {
-          this.failureToast(1)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const fuuid = fModel.uuid
         if (fuuid === undefined) {
-          this.failureToast(1)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const req = {
@@ -228,16 +223,19 @@ export default Vue.extend({
           .modifyFolder(fuuid, req)
           .then(() => {
             this.$emit('reload')
-            this.successToast()
+            // @ts-ignore
+            this.successToast(this.$buefy, 'Success')
           })
           .catch(() => {
-            this.failureToast(3)
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Failed', 3)
           })
       } else if (this.modelType === 'DOCUMENT') {
         const dModel = this.newModel as DocumentModel
         const duuid = dModel.uuid
         if (duuid === undefined) {
-          this.failureToast(1)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const req = {
@@ -248,19 +246,23 @@ export default Vue.extend({
           .putDocDocId(duuid, req)
           .then(() => {
             this.$emit('reload')
-            this.successToast()
+            // @ts-ignore
+            this.successToast(this.$buefy, 'Success')
           })
           .catch(() => {
-            this.failureToast(3)
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Failed', 3)
           })
       } else {
-        this.failureToast(2)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Failed', 2)
       }
     },
     del() {
       const fduuid = this.newModel.uuid
       if (fduuid === undefined) {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Failed', 1)
         return
       }
       if (this.modelType === 'FOLDER') {
@@ -268,41 +270,29 @@ export default Vue.extend({
           .deleteFolder(fduuid)
           .then(() => {
             this.$emit('reload')
-            this.successToast()
+            // @ts-ignore
+            this.successToast(this.$buefy, 'Success')
           })
           .catch(() => {
-            this.failureToast(3)
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Failed', 3)
           })
       } else if (this.modelType === 'DOCUMENT') {
         new DocumentApi(this.$store.getters['auth/config'])
           .deleteDoc(fduuid)
           .then(() => {
             this.$emit('reload')
-            this.successToast()
+            // @ts-ignore
+            this.successToast(this.$buefy, 'Success')
           })
           .catch(() => {
-            this.failureToast(3)
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Failed', 3)
           })
       } else {
-        this.failureToast(2)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Failed', 2)
       }
-    },
-    successToast() {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: 'Success',
-        type: 'is-success',
-      })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: `Failed [ Error : ${err} ]`,
-        position: 'is-bottom',
-        type: 'is-danger',
-      })
     },
   },
 })

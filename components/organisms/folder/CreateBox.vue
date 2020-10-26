@@ -15,6 +15,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
+import { failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   selectModels: Array<string>
@@ -32,21 +33,14 @@ export default Vue.extend({
     }
   },
   methods: {
+    failureToast,
     createFolder() {
       if (this.name === '') {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Need to set folder name', 1)
         return
       }
       this.$emit('create', this.name)
-    },
-    failureToast(err: number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: `Need to set folder name  [ Error : ${err} ]`,
-        position: 'is-bottom',
-        type: 'is-danger',
-      })
     },
   },
 })

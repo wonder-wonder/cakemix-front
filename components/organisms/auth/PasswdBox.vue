@@ -14,6 +14,7 @@
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassResetReqModel, AuthApi } from '@/scripts/api/index'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   email: string
@@ -31,13 +32,16 @@ export default Vue.extend({
     }
   },
   methods: {
+    successToast,
+    failureToast,
     emailValidator(text: string): boolean {
       const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/
       return reg.test(text)
     },
     request() {
       if (!this.emailValidator(this.email)) {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Request failed', 1)
         return
       }
       this.isLoading = true
@@ -47,32 +51,20 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postPassReset(model)
         .then(() => {
-          this.successToast()
+          this.successToast(
+            // @ts-ignore
+            this.$buefy,
+            'Password reset requested, a varification url will be sent'
+          )
           this.$router.push('/')
         })
         .catch(() => {
-          this.failureToast(2)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Request failed', 2)
         })
         .finally(() => {
           this.isLoading = false
         })
-    },
-    successToast() {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: 'Password reset requested, a varification url will be sent',
-        type: 'is-success',
-      })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: `Unable to request [ Error : ${err} ]`,
-        position: 'is-bottom',
-        type: 'is-danger',
-      })
     },
   },
 })

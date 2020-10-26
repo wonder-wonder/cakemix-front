@@ -9,7 +9,9 @@
       <span v-text="'Real-time edit with multiple users'" />
       <span v-text="'Open source'" />
     </div>
-    <b-button rounded @click="gotoLogin" v-text="'Login'" />
+    <b-button rounded @click="gotoLogin">
+      Login
+    </b-button>
   </div>
 </template>
 
@@ -17,6 +19,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  created() {},
   methods: {
     gotoLogin() {
       this.$router.push({ path: `/auth/login` })
@@ -61,6 +64,10 @@ html {
   }
 
   button {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: center;
+    justify-content: center;
     margin-top: 40px;
     height: 48px;
     width: 160px;
