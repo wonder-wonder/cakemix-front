@@ -58,7 +58,7 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .getNewTokenRegist()
         .then(res => {
-          this.generatedLink = `https://${process.env.BASE_PATH}/auth/signup/${res.data.token}`
+          this.generatedLink = `${process.env.HTTP_SCHEME}://${process.env.BASE_PATH}/auth/signup/${res.data.token}`
         })
         .catch(() => {
           // @ts-ignore
