@@ -35,6 +35,7 @@ import SquareIcon from '@/components/molecules/image/UploadableImage.vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import TextArea from '@/components/atoms/input/TextArea.vue'
 import Select from '@/components/atoms/input/Select.vue'
+import { checkAuthWithStatus } from '@/scripts/api/index'
 
 export default Vue.extend({
   components: {
@@ -55,6 +56,7 @@ export default Vue.extend({
     }
   },
   methods: {
+    checkAuthWithStatus,
     request() {
       console.log('UPDATE INFO', this.current)
     },

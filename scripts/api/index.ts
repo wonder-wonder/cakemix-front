@@ -11,6 +11,14 @@
  * Do not edit the class manually.
  */
 
-
+import { AuthApi } from "./api";
+import Vue from "vue"
 export * from "./api";
 export * from "./configuration";
+
+export const checkAuthWithStatus = (self: Vue, statusCode: number) => {  
+  if (statusCode === 401) {
+    self.$store.commit("auth/logout")
+    self.$router.push({ path: "/auth/login", query: { redirect: self.$route.path } })
+  }
+}

@@ -54,6 +54,7 @@ import {
   FolderModel,
   DocumentModel,
   BreadcrumbModel,
+  checkAuthWithStatus,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/tools/toast'
 
@@ -129,6 +130,7 @@ export default Vue.extend({
   },
   methods: {
     failureToast,
+    checkAuthWithStatus,
     selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
       this.selectType = modelType
       this.selectItem = model
@@ -154,7 +156,8 @@ export default Vue.extend({
           this.docs = res.data.document ?? []
           this.breadcrumb = res.data.path ?? []
         })
-        .catch(() => {
+        .catch(err => {
+          this.checkAuthWithStatus(this, err.response.status)
           // @ts-ignore
           this.failureToast(this.$buefy, 'Failed to fetch folder', 1)
         })
@@ -169,7 +172,8 @@ export default Vue.extend({
       }
       new FolderApi(this.$store.getters['auth/config'])
         .createNewFolder(fId, name)
-        .catch(() => {
+        .catch(err => {
+          this.checkAuthWithStatus(this, err.response.status)
           // @ts-ignore
           this.failureToast(this.$buefy, 'Failed to fetch folder', 2)
         })
@@ -185,7 +189,8 @@ export default Vue.extend({
       }
       new DocumentApi(this.$store.getters['auth/config'])
         .createNewDoc(fId, 'Untitled')
-        .catch(() => {
+        .catch(err => {
+          this.checkAuthWithStatus(this, err.response.status)
           // @ts-ignore
           this.failureToast(this.$buefy, 'Failed to fetch folder', 3)
         })

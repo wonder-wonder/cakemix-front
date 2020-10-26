@@ -24,7 +24,7 @@ import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import UserCell, { UserModel } from '@/components/atoms/cell/UserCell.vue'
 import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
-import { AuthApi } from '@/scripts/api/index'
+import { AuthApi, checkAuthWithStatus } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
@@ -54,13 +54,15 @@ export default Vue.extend({
   },
   methods: {
     failureToast,
+    checkAuthWithStatus,
     generateLink() {
       new AuthApi(this.$store.getters['auth/config'])
         .getNewTokenRegist()
         .then(res => {
           this.generatedLink = `${process.env.HTTP_SCHEME}://${process.env.BASE_PATH}/auth/signup/${res.data.token}`
         })
-        .catch(() => {
+        .catch(err => {
+          this.checkAuthWithStatus(this, err.response.status)
           // @ts-ignore
           this.failureToast(this.$buefy, 'Generate a invitation link failed', 1)
         })
