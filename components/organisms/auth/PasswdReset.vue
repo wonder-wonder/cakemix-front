@@ -14,7 +14,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
-import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
+import {
+  AuthPassChangeReqModel,
+  AuthApi,
+  checkAuthWithStatus,
+} from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
@@ -40,6 +44,7 @@ export default Vue.extend({
     },
   },
   methods: {
+    checkAuthWithStatus,
     successToast,
     failureToast,
     passwordValidator(text: string): boolean {
@@ -66,7 +71,8 @@ export default Vue.extend({
           )
           this.$router.push('/auth/login')
         })
-        .catch(() => {
+        .catch(err => {
+          this.checkAuthWithStatus(this, err.response.status)
           // @ts-ignore
           this.failureToast(this.$buefy, 'Signup failed', 2)
         })

@@ -63,6 +63,11 @@ export default Vue.extend({
         .postLogin(model)
         .then(res => {
           this.$store.commit('auth/login', res.data.jwt)
+          const re = this.$route.query.redirect
+          if (typeof re === 'string') {
+            this.$router.push(re)
+            return
+          }
           this.$router.push('/folder/')
         })
         .catch(() => {

@@ -54,6 +54,7 @@ import {
   FolderModifyReqModel,
   DocumentModifyReqModel,
   DocumentApi,
+  checkAuthWithStatus,
 } from '@/scripts/api/index'
 import { toDate } from '@/scripts/tools/date'
 import { successToast, failureToast } from '@/scripts/tools/toast'
@@ -180,6 +181,7 @@ export default Vue.extend({
     successToast,
     failureToast,
     toDate,
+    checkAuthWithStatus,
     selected(type: string) {
       const perm = this.selectModels.indexOf(type) ?? this.newModel.permission
       this.newModel.permission = perm
@@ -226,7 +228,8 @@ export default Vue.extend({
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
-          .catch(() => {
+          .catch(err => {
+            this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
             this.failureToast(this.$buefy, 'Failed', 3)
           })
@@ -249,7 +252,8 @@ export default Vue.extend({
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
-          .catch(() => {
+          .catch(err => {
+            this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
             this.failureToast(this.$buefy, 'Failed', 3)
           })
@@ -273,7 +277,8 @@ export default Vue.extend({
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
-          .catch(() => {
+          .catch(err => {
+            this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
             this.failureToast(this.$buefy, 'Failed', 3)
           })
@@ -285,7 +290,8 @@ export default Vue.extend({
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
-          .catch(() => {
+          .catch(err => {
+            this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
             this.failureToast(this.$buefy, 'Failed', 3)
           })
