@@ -10,6 +10,7 @@ import Vue from 'vue'
 import SignupBox from '@/components/organisms/auth/SignupBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import { AuthApi } from '@/scripts/api/index'
+import { failureToast } from '@/scripts/tools/toast'
 
 export default Vue.extend({
   components: {
@@ -23,21 +24,13 @@ export default Vue.extend({
   },
   created() {
     new AuthApi().getAuthRegistPreToken(this.signupToken).catch(() => {
-      this.failureToast(1)
+      // @ts-ignore
+      this.failureToast(this.$buefy, 'Signup token is invalid', 1)
       this.$router.push('/')
     })
   },
   methods: {
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: `Signup token is invalid [ Error : ${err} ]`,
-        type: 'is-danger',
-      })
-    },
+    failureToast,
   },
 })
 </script>

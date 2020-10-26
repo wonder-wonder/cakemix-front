@@ -56,6 +56,7 @@ import {
   DocumentApi,
 } from '@/scripts/api/index'
 import { toDate } from '@/scripts/tools/date'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   selectModels: Array<string>
@@ -176,6 +177,8 @@ export default Vue.extend({
     },
   },
   methods: {
+    successToast,
+    failureToast,
     toDate,
     selected(type: string) {
       const perm = this.selectModels.indexOf(type) ?? this.newModel.permission
@@ -194,18 +197,21 @@ export default Vue.extend({
       const uuuid = (this.newModel.owner as ProfileModel).uuid
       const perm = this.newModel.permission
       if (uuuid === undefined || perm === undefined) {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Failed', 1)
         return
       }
       if (this.modelType === 'FOLDER') {
         const fModel = this.newModel as FolderModel
         if (fModel.name === undefined || fModel.name === '') {
-          this.failureToast(1)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const fuuid = fModel.uuid
         if (fuuid === undefined) {
-          this.failureToast(1)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const req = {
@@ -217,16 +223,19 @@ export default Vue.extend({
           .modifyFolder(fuuid, req)
           .then(() => {
             this.$emit('reload')
-            this.successToast()
+            // @ts-ignore
+            this.successToast(this.$buefy, 'Success')
           })
           .catch(() => {
-            this.failureToast(3)
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Failed', 3)
           })
       } else if (this.modelType === 'DOCUMENT') {
         const dModel = this.newModel as DocumentModel
         const duuid = dModel.uuid
         if (duuid === undefined) {
-          this.failureToast(1)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const req = {
@@ -237,19 +246,23 @@ export default Vue.extend({
           .putDocDocId(duuid, req)
           .then(() => {
             this.$emit('reload')
-            this.successToast()
+            // @ts-ignore
+            this.successToast(this.$buefy, 'Success')
           })
           .catch(() => {
-            this.failureToast(3)
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Failed', 3)
           })
       } else {
-        this.failureToast(2)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Failed', 2)
       }
     },
     del() {
       const fduuid = this.newModel.uuid
       if (fduuid === undefined) {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Failed', 1)
         return
       }
       if (this.modelType === 'FOLDER') {
@@ -257,44 +270,29 @@ export default Vue.extend({
           .deleteFolder(fduuid)
           .then(() => {
             this.$emit('reload')
-            this.successToast()
+            // @ts-ignore
+            this.successToast(this.$buefy, 'Success')
           })
           .catch(() => {
-            this.failureToast(3)
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Failed', 3)
           })
       } else if (this.modelType === 'DOCUMENT') {
         new DocumentApi(this.$store.getters['auth/config'])
           .deleteDoc(fduuid)
           .then(() => {
             this.$emit('reload')
-            this.successToast()
+            // @ts-ignore
+            this.successToast(this.$buefy, 'Success')
           })
           .catch(() => {
-            this.failureToast(3)
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Failed', 3)
           })
       } else {
-        this.failureToast(2)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Failed', 2)
       }
-    },
-    successToast() {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: 'Success',
-        type: 'is-success',
-      })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: `Failed [ Error : ${err} ]`,
-        type: 'is-danger',
-      })
     },
   },
 })

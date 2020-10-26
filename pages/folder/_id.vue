@@ -55,6 +55,7 @@ import {
   DocumentModel,
   BreadcrumbModel,
 } from '@/scripts/api/index'
+import { failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   folders: Array<FolderModel>
@@ -127,6 +128,7 @@ export default Vue.extend({
     this.fetchFolder()
   },
   methods: {
+    failureToast,
     selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
       this.selectType = modelType
       this.selectItem = model
@@ -153,7 +155,8 @@ export default Vue.extend({
           this.breadcrumb = res.data.path ?? []
         })
         .catch(() => {
-          this.failureToast(1)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed to fetch folder', 1)
         })
         .finally(() => {
           this.isLoaded = true
@@ -167,7 +170,8 @@ export default Vue.extend({
       new FolderApi(this.$store.getters['auth/config'])
         .createNewFolder(fId, name)
         .catch(() => {
-          this.failureToast(2)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed to fetch folder', 2)
         })
         .finally(() => {
           this.isCreateViewEnable = false
@@ -182,21 +186,12 @@ export default Vue.extend({
       new DocumentApi(this.$store.getters['auth/config'])
         .createNewDoc(fId, 'Untitled')
         .catch(() => {
-          this.failureToast(3)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Failed to fetch folder', 3)
         })
         .finally(() => {
           this.fetchFolder()
         })
-    },
-    failureToast(err: number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: `Failed to fetch folder  [ Error : ${err} ]`,
-        type: 'is-danger',
-      })
     },
   },
 })

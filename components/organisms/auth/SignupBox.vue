@@ -27,6 +27,7 @@
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthRegistReqModel, AuthApi } from '@/scripts/api/index'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   email: string
@@ -55,6 +56,8 @@ export default Vue.extend({
     },
   },
   methods: {
+    successToast,
+    failureToast,
     updateUserName(userName: string) {
       this.username = userName
       new AuthApi()
@@ -81,7 +84,8 @@ export default Vue.extend({
         this.password === '' ||
         this.signupToken === ''
       ) {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Signup Failed', 1)
         return
       }
       this.isLoading = true
@@ -93,35 +97,20 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postRegist(this.signupToken, model)
         .then(() => {
-          this.successToast()
+          this.successToast(
+            // @ts-ignore
+            this.$buefy,
+            'Signup requested, a varification url will be sent'
+          )
           this.$router.push('/auth/login')
         })
         .catch(() => {
-          this.failureToast(2)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Signup Failed', 2)
         })
         .finally(() => {
           this.isLoading = false
         })
-    },
-    successToast() {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        message: 'Signup requested, a varification url will be sent',
-        queue: false,
-        position: 'is-bottom-right',
-        type: 'is-success',
-      })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        message: `Signup Failed [ Error : ${err} ]`,
-        queue: false,
-        position: 'is-bottom-right',
-        type: 'is-danger',
-      })
     },
   },
 })

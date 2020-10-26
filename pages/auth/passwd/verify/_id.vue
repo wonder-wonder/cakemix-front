@@ -12,6 +12,7 @@ import Vue from 'vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import PasswdReset from '@/components/organisms/auth/PasswdReset.vue'
 import { AuthApi } from '@/scripts/api/index'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   isVerified: boolean
@@ -34,42 +35,27 @@ export default Vue.extend({
   },
   created() {
     if (this.passwdToken === '') {
-      this.failureToast(1)
+      // @ts-ignore
+      this.failureToast(this.$buefy, 'Token verification failed ', 1)
       this.$router.push('/auth/passwd')
       return
     }
     new AuthApi(this.$store.getters['auth/config'])
       .getPassResetVerify(this.passwdToken)
       .then(() => {
-        this.successToast()
+        // @ts-ignore
+        this.successToast(this.$buefy, 'Token was verified')
         this.isVerified = true
       })
       .catch(() => {
-        this.failureToast(2)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Token verification failed ', 2)
         this.$router.push('/auth/passwd')
       })
   },
   methods: {
-    successToast() {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: 'Token was verified',
-        type: 'is-success',
-      })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: `Token verification Failed [ Error : ${err} ]`,
-        type: 'is-danger',
-      })
-    },
+    successToast,
+    failureToast,
   },
 })
 </script>

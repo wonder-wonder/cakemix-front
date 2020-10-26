@@ -10,6 +10,7 @@
 import Vue from 'vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import { AuthApi } from '@/scripts/api/index'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export default Vue.extend({
   components: {
@@ -22,44 +23,32 @@ export default Vue.extend({
   },
   created() {
     if (this.signupToken === '') {
-      this.failureToast(1)
+      // @ts-ignore
+      this.failureToast(this.$buefy, 'Signup failed', 1)
       this.$router.push('/auth/login')
       return
     }
     new AuthApi(this.$store.getters['auth/config'])
       .postRegistVerify(this.signupToken)
       .then(() => {
-        this.successToast()
+        this.successToast(
+          // @ts-ignore
+          this.$buefy,
+          'Signup requested, a varification url will be sent'
+        )
         this.$router.push('/')
       })
       .catch(() => {
-        this.failureToast(2)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Signup failed', 2)
       })
       .finally(() => {
         this.$router.push('/auth/login')
       })
   },
   methods: {
-    successToast() {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: 'Signup requested, a varification url will be sent',
-        type: 'is-success',
-      })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: `Signup Failed [ Error : ${err} ]`,
-        type: 'is-danger',
-      })
-    },
+    successToast,
+    failureToast,
   },
 })
 </script>

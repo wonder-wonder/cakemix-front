@@ -30,6 +30,7 @@ import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import Input from '@/components/atoms/input/Input.vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
+import { successToast, failureToast } from '@/scripts/tools/toast'
 
 export default Vue.extend({
   components: {
@@ -45,6 +46,8 @@ export default Vue.extend({
     }
   },
   methods: {
+    successToast,
+    failureToast,
     passwordValidator(text: string): boolean {
       const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}$/i
       return reg.test(text)
@@ -53,7 +56,8 @@ export default Vue.extend({
       if (
         !(this.oldPassword !== '' && this.passwordValidator(this.newPassword))
       ) {
-        this.failureToast(1)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Request failed', 1)
         return
       }
       this.isLoading = true
@@ -64,34 +68,16 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postPassChange(model)
         .then(() => {
-          this.successToast()
+          // @ts-ignore
+          this.successToast(this.$buefy, 'Password changed')
         })
         .catch(() => {
-          this.failureToast(2)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Request failed', 2)
         })
         .finally(() => {
           this.isLoading = false
         })
-    },
-    successToast() {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: 'Password changed',
-        type: 'is-success',
-      })
-    },
-    failureToast(err: Number) {
-      // @ts-ignore
-      this.$buefy.toast.open({
-        duration: 1000,
-        queue: false,
-        position: 'is-bottom-right',
-        message: `Unable to change [ Error : ${err} ]`,
-        type: 'is-danger',
-      })
     },
   },
 })
