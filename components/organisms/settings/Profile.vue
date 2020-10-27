@@ -68,6 +68,7 @@ export default Vue.extend({
 .setting-profile-container {
   display: flex;
   flex-flow: row wrap;
+  justify-content: center;
   width: 100%;
   height: 40px;
   padding: 0px 32px;
@@ -81,7 +82,7 @@ export default Vue.extend({
   }
 
   .profile-item-box {
-    min-width: 300px;
+    max-width: 500px;
     width: 100%;
 
     .label {

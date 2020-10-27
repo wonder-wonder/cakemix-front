@@ -1,7 +1,7 @@
 <template>
   <div class="setting-auth-container">
-    <BorderTitle :title="'Change Password'" />
     <div class="auth-item-box">
+      <BorderTitle :title="'Change Password'" />
       <Input
         :label-name="'Current Password'"
         :is-password="true"
@@ -87,7 +87,7 @@ export default Vue.extend({
 .setting-auth-container {
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   height: 40px;
   padding: 0px 32px;
@@ -102,7 +102,7 @@ export default Vue.extend({
   }
 
   .auth-item-box {
-    min-width: 300px;
+    max-width: 500px;
     width: 100%;
 
     .label {

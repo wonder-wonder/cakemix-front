@@ -1,6 +1,7 @@
 <template>
   <div class="setting-users-container">
     <ButtonInput
+      class="button-input"
       :button-name="'Generate link'"
       :label-name="'Invitation Link'"
       :value="generatedLink"
@@ -75,7 +76,7 @@ export default Vue.extend({
 .setting-users-container {
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   height: 40px;
   padding: 0px 32px;
@@ -84,8 +85,13 @@ export default Vue.extend({
   font-size: 14px;
   font-weight: bold;
 
-  .label {
+  label {
     color: white;
+  }
+
+  .button-input {
+    max-width: 500px;
+    width: 100%;
   }
 
   .border-title {
@@ -97,6 +103,7 @@ export default Vue.extend({
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
+    width: 100%;
 
     .user-cell {
       margin: 16px 16px 0 0;

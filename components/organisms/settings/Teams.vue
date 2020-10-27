@@ -31,7 +31,6 @@ export default Vue.extend({
   components: {
     BorderTitle,
     UserCell,
-    ButtonInput,
   },
   data(): DataType {
     return {
@@ -69,7 +68,7 @@ export default Vue.extend({
 .setting-teams-container {
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   height: 40px;
   padding: 0px 32px;
@@ -91,6 +90,7 @@ export default Vue.extend({
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
+    width: 100%;
 
     .user-cell {
       margin: 16px 16px 0 0;

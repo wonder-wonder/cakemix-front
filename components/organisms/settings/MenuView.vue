@@ -100,11 +100,15 @@ export default Vue.extend({
 .menu-view-container {
   display: flex;
   flex-flow: row wrap;
+  justify-content: center;
   width: 100%;
   margin: 32px auto;
   background-color: rgb(32, 32, 32);
 
   .menu-tabs-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
     width: 100%;
     padding: 16px 32px;
     border-radius: 8px;
