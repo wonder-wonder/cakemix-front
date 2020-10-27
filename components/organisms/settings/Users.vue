@@ -1,5 +1,5 @@
 <template>
-  <div class="users-container">
+  <div class="setting-users-container">
     <ButtonInput
       :button-name="'Generate link'"
       :label-name="'Invitation Link'"
@@ -72,7 +72,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.users-container {
+.setting-users-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
@@ -90,6 +90,7 @@ export default Vue.extend({
 
   .border-title {
     width: 100%;
+    margin: 20px 0;
   }
 
   .users-item-box {

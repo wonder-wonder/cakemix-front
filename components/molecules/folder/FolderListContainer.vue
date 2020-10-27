@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="list-container">
     <BorderTitle :title="'Folder'" class="border-title" />
-    <div class="list-container">
+    <div class="item-container">
       <Folder
         v-for="(model, index) in models"
         :key="`F${index}${uuid}`"
@@ -65,47 +65,49 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin: 16px auto;
-  padding: 8px 32px;
-  border-radius: 8px;
-  color: white;
-  font-size: 24px;
-
-  &:before,
-  &:after {
-    content: '';
-    flex-grow: 1;
-    height: 1px;
-    background: grey;
-    display: block;
-  }
-  &:before {
-    margin-right: 16px;
-  }
-  &:after {
-    margin-left: 16px;
-  }
-}
-
 .list-container {
-  display: flex;
-  flex-flow: row wrap;
-  margin: 16px;
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 16px auto;
+    padding: 8px 32px;
+    border-radius: 8px;
+    color: white;
+    font-size: 24px;
 
-  .folder-box {
-    margin: 16px 0 0 16px;
+    &:before,
+    &:after {
+      content: '';
+      flex-grow: 1;
+      height: 1px;
+      background: grey;
+      display: block;
+    }
+    &:before {
+      margin-right: 16px;
+    }
+    &:after {
+      margin-left: 16px;
+    }
   }
-}
 
-.border-title {
-  margin-top: 24px;
-  margin-bottom: 24px;
-  padding-left: 32px;
-  padding-right: 32px;
+  .item-container {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 16px;
+
+    .folder-box {
+      margin: 16px 0 0 16px;
+    }
+  }
+
+  .border-title {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
 }
 </style>
