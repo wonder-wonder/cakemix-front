@@ -93,14 +93,14 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scope>
+<style lang="scss">
 .viewer-container {
   display: grid;
   height: 100%;
   background-color: white;
-}
 
-.split {
-  grid-template-columns: repeat(2, 50%);
+  &.split {
+    grid-template-columns: repeat(2, 50%);
+  }
 }
 </style>

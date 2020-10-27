@@ -1,7 +1,7 @@
 <template>
   <div class="user-cell-container">
     <div class="icon-box">
-      <img :src="user.icon" :alt="'user_icon'" >
+      <img :src="user.icon" :alt="'user_icon'">
     </div>
     <div class="username-box">
       <span v-text="user.userName" />
