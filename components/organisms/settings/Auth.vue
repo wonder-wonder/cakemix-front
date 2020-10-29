@@ -1,7 +1,7 @@
 <template>
-  <div class="profile-container">
-    <BorderTitle :title="'Auth'" />
-    <div class="profile-item-box">
+  <div class="setting-auth-container">
+    <div class="auth-item-box">
+      <BorderTitle :title="'Change Password'" />
       <Input
         :label-name="'Current Password'"
         :is-password="true"
@@ -84,10 +84,10 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.profile-container {
+.setting-auth-container {
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   height: 40px;
   padding: 0px 32px;
@@ -98,10 +98,12 @@ export default Vue.extend({
 
   .border-title {
     width: 100%;
+    margin-bottom: 20px;
   }
 
-  .profile-item-box {
-    width: 60%;
+  .auth-item-box {
+    max-width: 500px;
+    width: 100%;
 
     .label {
       color: white;

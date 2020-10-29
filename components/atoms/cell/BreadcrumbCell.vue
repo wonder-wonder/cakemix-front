@@ -42,10 +42,11 @@ export default Vue.extend({
 
   .title {
     height: 30px;
+    line-height: 28px;
     width: auto;
     color: whitesmoke;
     border-radius: 8px;
-    padding: 0;
+    padding: 0 8px;
     margin: 0;
     border-radius: 8px;
     font-size: 16px;
@@ -55,8 +56,6 @@ export default Vue.extend({
       color: black;
       background-color: whitesmoke;
     }
-
-    transition: all 200ms;
   }
   .triangle-right {
     width: 21px;

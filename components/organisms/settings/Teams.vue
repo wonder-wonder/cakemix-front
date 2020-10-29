@@ -1,14 +1,7 @@
 <template>
-  <div class="setting-users-container">
-    <ButtonInput
-      class="button-input"
-      :button-name="'Generate link'"
-      :label-name="'Invitation Link'"
-      :value="generatedLink"
-      @click="generateLink"
-    />
-    <BorderTitle :title="'Users'" />
-    <div class="users-item-box">
+  <div class="setting-teams-container">
+    <BorderTitle :title="'Teams'" />
+    <div class="teams-item-box">
       <UserCell
         v-for="(user, index) in users"
         :key="`user-cell-${uuid}-${index}`"
@@ -38,7 +31,6 @@ export default Vue.extend({
   components: {
     BorderTitle,
     UserCell,
-    ButtonInput,
   },
   data(): DataType {
     return {
@@ -73,7 +65,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.setting-users-container {
+.setting-teams-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -85,13 +77,8 @@ export default Vue.extend({
   font-size: 14px;
   font-weight: bold;
 
-  label {
+  .label {
     color: white;
-  }
-
-  .button-input {
-    max-width: 500px;
-    width: 100%;
   }
 
   .border-title {
@@ -99,7 +86,7 @@ export default Vue.extend({
     margin: 20px 0;
   }
 
-  .users-item-box {
+  .teams-item-box {
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;

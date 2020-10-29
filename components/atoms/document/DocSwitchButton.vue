@@ -30,11 +30,12 @@ export default class DocSwitchButton extends Vue {
   padding: 8px 16px;
   font-size: 16px;
   border-radius: 5px;
-}
-.active {
-  background-color: rgb(255, 183, 50);
-  .fa {
-    color: white;
+
+  &.active {
+    background-color: rgb(255, 183, 50);
+    .fa {
+      color: white;
+    }
   }
 }
 </style>

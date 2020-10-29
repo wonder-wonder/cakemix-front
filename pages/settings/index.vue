@@ -1,6 +1,6 @@
 <template>
   <div class="settings-container">
-    <NavHeader :is-drop-down-enable="false" />
+    <NavHeader :is-drop-down-enable="true" />
     <MenuView />
   </div>
 </template>
