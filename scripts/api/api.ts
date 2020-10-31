@@ -1411,127 +1411,6 @@ export class AuthApi extends BaseAPI {
 
 
 /**
- * DefaultApi - axios parameter creator
- * @export
- */
-export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Your GET endpoint
-         * @param {string} docId 
-         * @param {string} token security token
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDocDocIdWs: async (docId: string, token: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'docId' is not null or undefined
-            if (docId === null || docId === undefined) {
-                throw new RequiredError('docId','Required parameter docId was null or undefined when calling getDocDocIdWs.');
-            }
-            // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling getDocDocIdWs.');
-            }
-            const localVarPath = `/doc/{doc_id}/ws`
-                .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
-            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (token !== undefined) {
-                localVarQueryParameter['token'] = token;
-            }
-
-
-    
-            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: globalImportUrl.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * DefaultApi - functional programming interface
- * @export
- */
-export const DefaultApiFp = function(configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Your GET endpoint
-         * @param {string} docId 
-         * @param {string} token security token
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getDocDocIdWs(docId: string, token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).getDocDocIdWs(docId, token, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-    }
-};
-
-/**
- * DefaultApi - factory interface
- * @export
- */
-export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    return {
-        /**
-         * 
-         * @summary Your GET endpoint
-         * @param {string} docId 
-         * @param {string} token security token
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDocDocIdWs(docId: string, token: string, options?: any): AxiosPromise<void> {
-            return DefaultApiFp(configuration).getDocDocIdWs(docId, token, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * DefaultApi - object-oriented interface
- * @export
- * @class DefaultApi
- * @extends {BaseAPI}
- */
-export class DefaultApi extends BaseAPI {
-    /**
-     * 
-     * @summary Your GET endpoint
-     * @param {string} docId 
-     * @param {string} token security token
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public getDocDocIdWs(docId: string, token: string, options?: any) {
-        return DefaultApiFp(this.configuration).getDocDocIdWs(docId, token, options).then((request) => request(this.axios, this.basePath));
-    }
-
-}
-
-
-/**
  * DocumentApi - axios parameter creator
  * @export
  */
@@ -1612,6 +1491,51 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
                     ? configuration.accessToken()
                     : configuration.accessToken;
                 localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Your GET endpoint
+         * @param {string} docId 
+         * @param {string} token security token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDocDocIdWs: async (docId: string, token: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'docId' is not null or undefined
+            if (docId === null || docId === undefined) {
+                throw new RequiredError('docId','Required parameter docId was null or undefined when calling getDocDocIdWs.');
+            }
+            // verify required parameter 'token' is not null or undefined
+            if (token === null || token === undefined) {
+                throw new RequiredError('token','Required parameter token was null or undefined when calling getDocDocIdWs.');
+            }
+            const localVarPath = `/doc/{doc_id}/ws`
+                .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
             }
 
 
@@ -1767,6 +1691,21 @@ export const DocumentApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Your GET endpoint
+         * @param {string} docId 
+         * @param {string} token security token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDocDocIdWs(docId: string, token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).getDocDocIdWs(docId, token, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @summary Move document to target folder
          * @param {string} docId Folder ID
          * @param {string} folderId Folder ID
@@ -1826,6 +1765,17 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @summary Your GET endpoint
+         * @param {string} docId 
+         * @param {string} token security token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDocDocIdWs(docId: string, token: string, options?: any): AxiosPromise<void> {
+            return DocumentApiFp(configuration).getDocDocIdWs(docId, token, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Move document to target folder
          * @param {string} docId Folder ID
          * @param {string} folderId Folder ID
@@ -1878,6 +1828,19 @@ export class DocumentApi extends BaseAPI {
      */
     public deleteDoc(docId: string, options?: any) {
         return DocumentApiFp(this.configuration).deleteDoc(docId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Your GET endpoint
+     * @param {string} docId 
+     * @param {string} token security token
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DocumentApi
+     */
+    public getDocDocIdWs(docId: string, token: string, options?: any) {
+        return DocumentApiFp(this.configuration).getDocDocIdWs(docId, token, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2594,6 +2557,139 @@ export class ProfileApi extends BaseAPI {
      */
     public putUserProfileUuid(userName: string, profileModel?: ProfileModel, options?: any) {
         return ProfileApiFp(this.configuration).putUserProfileUuid(userName, profileModel, options).then((request) => request(this.axios, this.basePath));
+    }
+
+}
+
+
+/**
+ * SearchApi - axios parameter creator
+ * @export
+ */
+export const SearchApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get user list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSearchUser: async (q?: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/search/user`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? configuration.accessToken()
+                    : configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SearchApi - functional programming interface
+ * @export
+ */
+export const SearchApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get user list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProfileModel>>> {
+            const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchUser(q, limit, offset, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+    }
+};
+
+/**
+ * SearchApi - factory interface
+ * @export
+ */
+export const SearchApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    return {
+        /**
+         * 
+         * @summary Get user list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSearchUser(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<Array<ProfileModel>> {
+            return SearchApiFp(configuration).getSearchUser(q, limit, offset, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SearchApi - object-oriented interface
+ * @export
+ * @class SearchApi
+ * @extends {BaseAPI}
+ */
+export class SearchApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get user list
+     * @param {string} [q] search filter
+     * @param {number} [limit] search limit
+     * @param {number} [offset] search offset
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SearchApi
+     */
+    public getSearchUser(q?: string, limit?: number, offset?: number, options?: any) {
+        return SearchApiFp(this.configuration).getSearchUser(q, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
 
 }
