@@ -16,6 +16,18 @@
         :user="user"
       />
     </div>
+    <!-- offset -->
+    <!-- <b-pagination
+      v-model="page"
+      class="pagination"
+      :total="userCount"
+      :per-page="PER_PAGE"
+      :simple="true"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page"
+    /> -->
   </div>
 </template>
 
@@ -23,14 +35,21 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
-import UserCell, { UserModel } from '@/components/atoms/cell/UserCell.vue'
+import UserCell from '@/components/atoms/cell/UserCell.vue'
 import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
-import { AuthApi, checkAuthWithStatus } from '@/scripts/api/index'
+import {
+  AuthApi,
+  checkAuthWithStatus,
+  SearchApi,
+  ProfileModel,
+} from '@/scripts/api/index'
 import { failureToast } from '@/scripts/tools/toast'
 
-export type DataType = {
+type DataType = {
   uuid: String
-  users: UserModel[]
+  users: ProfileModel[]
+  nextUsers: ProfileModel[]
+  page: number
   generatedLink: String
 }
 
@@ -43,19 +62,35 @@ export default Vue.extend({
   data(): DataType {
     return {
       uuid: uuidv4(),
-      users: [
-        {
-          icon: 'https://picsum.photos/64/64',
-          userName: 'user_name',
-          joinedAt: '2020-09-27 21:17:40',
-        },
-      ],
+      users: [],
+      nextUsers: [],
+      page: 1,
       generatedLink: '',
     }
+  },
+  computed: {
+    userCount(): number {
+      return this.users.length + this.nextUsers.length
+    },
+  },
+  created() {
+    this.getUsers()
   },
   methods: {
     failureToast,
     checkAuthWithStatus,
+    getUsers() {
+      new SearchApi(this.$store.getters['auth/config'])
+        .getSearchUser()
+        .then(res => {
+          this.users = this.users.concat(res.data)
+        })
+        .catch(err => {
+          this.checkAuthWithStatus(this, err.response.status)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Search user failed', 1)
+        })
+    },
     generateLink() {
       new AuthApi(this.$store.getters['auth/config'])
         .getNewTokenRegist()
@@ -104,6 +139,7 @@ export default Vue.extend({
     flex-flow: row wrap;
     justify-content: flex-start;
     width: 100%;
+    margin-bottom: 20px;
 
     .user-cell {
       margin: 16px 16px 0 0;
@@ -114,6 +150,10 @@ export default Vue.extend({
       margin-top: 16px;
       font-weight: bold;
     }
+  }
+
+  .pagination {
+    margin: 16px;
   }
 }
 </style>
