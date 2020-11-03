@@ -69,12 +69,14 @@ export default Vue.extend({
     this.websocket.on('join', this.joinEvent)
     this.websocket.on('quit', this.quitEvent)
     this.websocket.on('doc', this.docEvent)
+    this.websocket.on('close', this.closeEvent)
   },
   beforeDestroy() {
     this.websocket.off('registered', this.registeredEvent)
     this.websocket.off('join', this.joinEvent)
     this.websocket.off('quit', this.quitEvent)
     this.websocket.off('doc', this.docEvent)
+    this.websocket.off('close', this.closeEvent)
     this.cMirror = null
     this.serverAdapter = null
     this.editorAdapter = null
@@ -108,11 +110,11 @@ export default Vue.extend({
       this.cMirror.setOption('readOnly', false)
       console.log(clientId)
     },
-    joinEvent(data: any) {
-      console.log(data)
+    joinEvent(ev: any) {
+      console.log(ev)
     },
-    quitEvent(data: any) {
-      console.log(data)
+    quitEvent(ev: any) {
+      console.log(ev)
     },
     docEvent(data: any) {
       this.cMirror.setValue(data.document)
@@ -122,6 +124,14 @@ export default Vue.extend({
         this.serverAdapter,
         this.editorAdapter
       )
+    },
+    closeEvent() {
+      // @ts-ignore
+      this.$buefy.dialog.confirm({
+        message: 'Do you want to reconnect?',
+        onConfirm: () => this.websocket.reconnect(),
+        onCancel: () => this.$router.push('/'),
+      })
     },
   },
 })

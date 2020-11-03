@@ -36,16 +36,14 @@ export default Vue.extend({
   top: 0;
   display: flex;
   align-items: center;
-  height: 50px;
+  height: 56px;
   width: 100vw;
+  padding: 0 16px;
   background-color: black;
   z-index: 999;
 
-  .home-icon-box {
-    margin-left: 32px;
-  }
   .dropdown-box {
-    margin: 0 32px 0 auto;
+    margin: 0 0 0 auto;
     right: 0;
   }
 }
