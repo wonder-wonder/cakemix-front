@@ -1,13 +1,13 @@
 <template>
-  <div class="create-folder-box">
-    <i class="fa fa-folder fa-fw" />
+  <div class="create-team-box">
+    <i class="fa fa-users fa-fw" />
     <Input
-      :label-name="'Folder Name'"
+      :label-name="'Team Name'"
       :is-password="false"
       :value="name"
       @text="name = $event"
     />
-    <b-button type="is-success" @click="createFolder" v-text="'Create'" />
+    <b-button type="is-success" @click="createTeam" v-text="'Create'" />
     <b-button type="is-danger" @click="$emit('close')" v-text="'Cancel'" />
   </div>
 </template>
@@ -32,10 +32,10 @@ export default Vue.extend({
   },
   methods: {
     failureToast,
-    createFolder() {
+    createTeam() {
       if (this.name === '') {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Need to set folder name', 1)
+        this.failureToast(this.$buefy, 'Need to set team name', 1)
         return
       }
       this.$emit('create', this.name)
@@ -45,7 +45,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.create-folder-box {
+.create-team-box {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -62,6 +62,9 @@ export default Vue.extend({
   button {
     min-width: 160px;
     margin: 4px;
+  }
+  label {
+    color: black;
   }
 }
 </style>

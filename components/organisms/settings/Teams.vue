@@ -1,5 +1,6 @@
 <template>
   <div class="setting-teams-container">
+    <TeamTools @create-team="isCreateViewEnable = true" />
     <BorderTitle :title="'Teams'" />
     <div class="teams-item-box">
       <UserCell
@@ -9,6 +10,9 @@
         :user="user"
       />
     </div>
+    <b-modal v-model="isCreateViewEnable" trap-focus>
+      <CreateBox @create="createTeam" @close="isCreateViewEnable = false" />
+    </b-modal>
   </div>
 </template>
 
@@ -16,39 +20,54 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
+import TeamTools from '@/components/molecules/settings/TeamTools.vue'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
 import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
+import CreateBox from '@/components/organisms/settings/CreateBox.vue'
 import {
   TeamApi,
   SearchApi,
   checkAuthWithStatus,
   ProfileModel,
 } from '@/scripts/api/index'
-import { failureToast } from '@/scripts/tools/toast'
+import { failureToast, successToast } from '@/scripts/tools/toast'
 
-export type DataType = {
+type DataType = {
   uuid: String
   users: ProfileModel[]
   generatedLink: String
+  isCreateViewEnable: boolean
 }
 
 export default Vue.extend({
   components: {
     BorderTitle,
+    TeamTools,
     UserCell,
+    CreateBox,
   },
   data(): DataType {
     return {
       uuid: uuidv4(),
       users: [],
       generatedLink: '',
+      isCreateViewEnable: false,
     }
   },
   methods: {
     failureToast,
+    successToast,
     checkAuthWithStatus,
     getTeams() {
       // new TeamApi(this.$store.getters['auth/config']).
+    },
+    createTeam(name: string) {
+      new TeamApi(this.$store.getters['auth/config'])
+        .postTeam(name)
+        .then(() => {
+          // @ts-ignore
+          this.successToast(this.$buefy, 'Success to create new team')
+        })
     },
   },
 })
@@ -66,10 +85,6 @@ export default Vue.extend({
   background-color: rgb(32, 32, 32);
   font-size: 14px;
   font-weight: bold;
-
-  .label {
-    color: white;
-  }
 
   .border-title {
     width: 100%;
@@ -91,6 +106,9 @@ export default Vue.extend({
       margin-top: 16px;
       font-weight: bold;
     }
+  }
+  .modal .modal-content {
+    width: auto;
   }
 }
 </style>
