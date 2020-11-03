@@ -14,7 +14,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-head
    */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'Cakemix',
     meta: [
       { charset: 'utf-8' },
       {
@@ -24,7 +24,8 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || '',
+        content:
+          'Document management system for all creative team\nReal-time edit with multiple users',
       },
     ],
     bodyAttrs: {
