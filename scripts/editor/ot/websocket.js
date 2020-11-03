@@ -5,7 +5,15 @@ class SocketConnection extends EventEmitter {
     super()
 
     this.url = _url
-    this.ws = new WebSocket(_url)
+    this.connect()
+  }
+
+  connect() {
+    if (!this.url) {
+      return
+    }
+
+    this.ws = new WebSocket(this.url)
 
     this.ws.onopen = evt => {
       this.emit('open', evt)
@@ -19,6 +27,10 @@ class SocketConnection extends EventEmitter {
         this.emit(m.e, m.d, evt)
       }
     }
+  }
+
+  reconnect() {
+    this.connect()
   }
 
   close() {
