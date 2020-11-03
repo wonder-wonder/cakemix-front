@@ -16,14 +16,19 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
-import UserCell, { UserModel } from '@/components/atoms/cell/UserCell.vue'
+import UserCell from '@/components/atoms/cell/UserCell.vue'
 import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
-import { AuthApi, checkAuthWithStatus } from '@/scripts/api/index'
+import {
+  TeamApi,
+  SearchApi,
+  checkAuthWithStatus,
+  ProfileModel,
+} from '@/scripts/api/index'
 import { failureToast } from '@/scripts/tools/toast'
 
 export type DataType = {
   uuid: String
-  users: UserModel[]
+  users: ProfileModel[]
   generatedLink: String
 }
 
@@ -35,30 +40,15 @@ export default Vue.extend({
   data(): DataType {
     return {
       uuid: uuidv4(),
-      users: [
-        {
-          icon: 'https://picsum.photos/64/64',
-          userName: 'user_name',
-          joinedAt: '2020-09-27 21:17:40',
-        },
-      ],
+      users: [],
       generatedLink: '',
     }
   },
   methods: {
     failureToast,
     checkAuthWithStatus,
-    generateLink() {
-      new AuthApi(this.$store.getters['auth/config'])
-        .getNewTokenRegist()
-        .then(res => {
-          this.generatedLink = `${process.env.HTTP_SCHEME}://${process.env.DOMAIN}/auth/signup/${res.data.token}`
-        })
-        .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Generate a invitation link failed', 1)
-        })
+    getTeams() {
+      // new TeamApi(this.$store.getters['auth/config']).
     },
   },
 })
