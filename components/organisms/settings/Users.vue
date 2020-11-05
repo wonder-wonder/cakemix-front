@@ -16,18 +16,16 @@
         :user="user"
       />
     </div>
-    <!-- offset -->
-    <!-- <b-pagination
+    <b-pagination
       v-model="page"
       class="pagination"
-      :total="userCount"
+      :total="total"
       :per-page="PER_PAGE"
-      :simple="true"
       aria-next-label="Next page"
       aria-previous-label="Previous page"
       aria-page-label="Page"
       aria-current-label="Current page"
-    /> -->
+    />
   </div>
 </template>
 
@@ -46,11 +44,12 @@ import {
 import { failureToast } from '@/scripts/tools/toast'
 
 type DataType = {
-  uuid: String
+  uuid: string
   users: ProfileModel[]
-  nextUsers: ProfileModel[]
+  total: number
   page: number
-  generatedLink: String
+  generatedLink: string
+  PER_PAGE: number
 }
 
 export default Vue.extend({
@@ -63,14 +62,15 @@ export default Vue.extend({
     return {
       uuid: uuidv4(),
       users: [],
-      nextUsers: [],
+      total: 0,
       page: 1,
       generatedLink: '',
+      PER_PAGE: 10,
     }
   },
-  computed: {
-    userCount(): number {
-      return this.users.length + this.nextUsers.length
+  watch: {
+    page() {
+      this.getUsers()
     },
   },
   created() {
@@ -81,9 +81,10 @@ export default Vue.extend({
     checkAuthWithStatus,
     getUsers() {
       new SearchApi(this.$store.getters['auth/config'])
-        .getSearchUser()
+        .getSearchUser('', this.PER_PAGE, (this.page - 1) * this.PER_PAGE)
         .then(res => {
-          this.users = this.users.concat(res.data)
+          this.total = res.data.total ?? 0
+          this.users = this.users.concat(res.data.users ?? [])
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)

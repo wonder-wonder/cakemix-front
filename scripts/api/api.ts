@@ -3007,7 +3007,7 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
             if (name === null || name === undefined) {
                 throw new RequiredError('name','Required parameter name was null or undefined when calling postTeam.');
             }
-            const localVarPath = `/team`;
+            const localVarPath = `/team/`;
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
