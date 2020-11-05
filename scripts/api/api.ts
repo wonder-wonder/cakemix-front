@@ -327,17 +327,23 @@ export interface FolderModifyReqModel {
     permission?: number;
 }
 /**
- * 
+ * Member list
  * @export
  * @interface InlineResponse200
  */
 export interface InlineResponse200 {
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof InlineResponse200
      */
-    doc_id?: string;
+    total?: number;
+    /**
+     * 
+     * @type {Array<MemberInfoModel>}
+     * @memberof InlineResponse200
+     */
+    members?: Array<MemberInfoModel>;
 }
 /**
  * 
@@ -350,7 +356,39 @@ export interface InlineResponse2001 {
      * @type {string}
      * @memberof InlineResponse2001
      */
+    doc_id?: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineResponse2002
+ */
+export interface InlineResponse2002 {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2002
+     */
     folder_id?: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineResponse2003
+ */
+export interface InlineResponse2003 {
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse2003
+     */
+    total?: number;
+    /**
+     * 
+     * @type {Array<ProfileModel>}
+     * @memberof InlineResponse2003
+     */
+    users?: Array<ProfileModel>;
 }
 /**
  * JSON Web Token(JWT) is used for authorization. Geekers API uses only requred items.
@@ -480,6 +518,12 @@ export interface ProfileModel {
      * @memberof ProfileModel
      */
     lang?: string;
+    /**
+     * Admin or not
+     * @type {boolean}
+     * @memberof ProfileModel
+     */
+    isadmin?: boolean;
 }
 
 /**
@@ -1668,7 +1712,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createNewDoc(folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
+        async createNewDoc(folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
             const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).createNewDoc(folderId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -1750,7 +1794,7 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createNewDoc(folderId: string, options?: any): AxiosPromise<InlineResponse200> {
+        createNewDoc(folderId: string, options?: any): AxiosPromise<InlineResponse2001> {
             return DocumentApiFp(configuration).createNewDoc(folderId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2149,7 +2193,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createNewFolder(folderId: string, name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
+        async createNewFolder(folderId: string, name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
             const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).createNewFolder(folderId, name, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2232,7 +2276,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createNewFolder(folderId: string, name: string, options?: any): AxiosPromise<InlineResponse2001> {
+        createNewFolder(folderId: string, name: string, options?: any): AxiosPromise<InlineResponse2002> {
             return FolderApiFp(configuration).createNewFolder(folderId, name, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2364,17 +2408,17 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Get profile for user/team.
          * @summary Get profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserProfileUuid: async (userName: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userName' is not null or undefined
-            if (userName === null || userName === undefined) {
-                throw new RequiredError('userName','Required parameter userName was null or undefined when calling getUserProfileUuid.');
+        getUserProfileUuid: async (uuid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            if (uuid === null || uuid === undefined) {
+                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling getUserProfileUuid.');
             }
-            const localVarPath = `/profile/{user_name}`
-                .replace(`{${"user_name"}}`, encodeURIComponent(String(userName)));
+            const localVarPath = `/profile/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -2409,18 +2453,18 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Edit profile
          * @summary Edit profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {ProfileModel} [profileModel] Updated profile data. The parameters can be omitted if no update. Some parameter cannot be changed because of readonly.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putUserProfileUuid: async (userName: string, profileModel?: ProfileModel, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userName' is not null or undefined
-            if (userName === null || userName === undefined) {
-                throw new RequiredError('userName','Required parameter userName was null or undefined when calling putUserProfileUuid.');
+        putUserProfileUuid: async (uuid: string, profileModel?: ProfileModel, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            if (uuid === null || uuid === undefined) {
+                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling putUserProfileUuid.');
             }
-            const localVarPath = `/profile/{user_name}`
-                .replace(`{${"user_name"}}`, encodeURIComponent(String(userName)));
+            const localVarPath = `/profile/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -2468,12 +2512,12 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         /**
          * Get profile for user/team.
          * @summary Get profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserProfileUuid(userName: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileModel>> {
-            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).getUserProfileUuid(userName, options);
+        async getUserProfileUuid(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileModel>> {
+            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).getUserProfileUuid(uuid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -2482,13 +2526,13 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         /**
          * Edit profile
          * @summary Edit profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {ProfileModel} [profileModel] Updated profile data. The parameters can be omitted if no update. Some parameter cannot be changed because of readonly.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putUserProfileUuid(userName: string, profileModel?: ProfileModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).putUserProfileUuid(userName, profileModel, options);
+        async putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).putUserProfileUuid(uuid, profileModel, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -2506,23 +2550,23 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
         /**
          * Get profile for user/team.
          * @summary Get profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserProfileUuid(userName: string, options?: any): AxiosPromise<ProfileModel> {
-            return ProfileApiFp(configuration).getUserProfileUuid(userName, options).then((request) => request(axios, basePath));
+        getUserProfileUuid(uuid: string, options?: any): AxiosPromise<ProfileModel> {
+            return ProfileApiFp(configuration).getUserProfileUuid(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Edit profile
          * @summary Edit profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {ProfileModel} [profileModel] Updated profile data. The parameters can be omitted if no update. Some parameter cannot be changed because of readonly.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putUserProfileUuid(userName: string, profileModel?: ProfileModel, options?: any): AxiosPromise<void> {
-            return ProfileApiFp(configuration).putUserProfileUuid(userName, profileModel, options).then((request) => request(axios, basePath));
+        putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any): AxiosPromise<void> {
+            return ProfileApiFp(configuration).putUserProfileUuid(uuid, profileModel, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2537,26 +2581,26 @@ export class ProfileApi extends BaseAPI {
     /**
      * Get profile for user/team.
      * @summary Get profile
-     * @param {string} userName Username or teamname
+     * @param {string} uuid Username or teamname
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProfileApi
      */
-    public getUserProfileUuid(userName: string, options?: any) {
-        return ProfileApiFp(this.configuration).getUserProfileUuid(userName, options).then((request) => request(this.axios, this.basePath));
+    public getUserProfileUuid(uuid: string, options?: any) {
+        return ProfileApiFp(this.configuration).getUserProfileUuid(uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Edit profile
      * @summary Edit profile
-     * @param {string} userName Username or teamname
+     * @param {string} uuid Username or teamname
      * @param {ProfileModel} [profileModel] Updated profile data. The parameters can be omitted if no update. Some parameter cannot be changed because of readonly.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProfileApi
      */
-    public putUserProfileUuid(userName: string, profileModel?: ProfileModel, options?: any) {
-        return ProfileApiFp(this.configuration).putUserProfileUuid(userName, profileModel, options).then((request) => request(this.axios, this.basePath));
+    public putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any) {
+        return ProfileApiFp(this.configuration).putUserProfileUuid(uuid, profileModel, options).then((request) => request(this.axios, this.basePath));
     }
 
 }
@@ -2568,6 +2612,60 @@ export class ProfileApi extends BaseAPI {
  */
 export const SearchApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Get team list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSearchTeam: async (q?: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/search/team`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? configuration.accessToken()
+                    : configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Get user list
@@ -2633,6 +2731,22 @@ export const SearchApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Get team list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
+            const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchTeam(q, limit, offset, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @summary Get user list
          * @param {string} [q] search filter
          * @param {number} [limit] search limit
@@ -2640,7 +2754,7 @@ export const SearchApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProfileModel>>> {
+        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
             const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchUser(q, limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2658,6 +2772,18 @@ export const SearchApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * 
+         * @summary Get team list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2003> {
+            return SearchApiFp(configuration).getSearchTeam(q, limit, offset, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get user list
          * @param {string} [q] search filter
          * @param {number} [limit] search limit
@@ -2665,7 +2791,7 @@ export const SearchApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSearchUser(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<Array<ProfileModel>> {
+        getSearchUser(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2003> {
             return SearchApiFp(configuration).getSearchUser(q, limit, offset, options).then((request) => request(axios, basePath));
         },
     };
@@ -2678,6 +2804,20 @@ export const SearchApiFactory = function (configuration?: Configuration, basePat
  * @extends {BaseAPI}
  */
 export class SearchApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get team list
+     * @param {string} [q] search filter
+     * @param {number} [limit] search limit
+     * @param {number} [offset] search offset
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SearchApi
+     */
+    public getSearchTeam(q?: string, limit?: number, offset?: number, options?: any) {
+        return SearchApiFp(this.configuration).getSearchTeam(q, limit, offset, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Get user list
@@ -2804,10 +2944,12 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          * Get team member list.
          * @summary Get team member list
          * @param {string} teamid 
+         * @param {number} [limit] member limit
+         * @param {number} [offset] member offset
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeamTeamidMember: async (teamid: string, options: any = {}): Promise<RequestArgs> => {
+        getTeamTeamidMember: async (teamid: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamid' is not null or undefined
             if (teamid === null || teamid === undefined) {
                 throw new RequiredError('teamid','Required parameter teamid was null or undefined when calling getTeamTeamidMember.');
@@ -2830,6 +2972,14 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
                     ? configuration.accessToken()
                     : configuration.accessToken;
                 localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
             }
 
 
@@ -3035,11 +3185,13 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * Get team member list.
          * @summary Get team member list
          * @param {string} teamid 
+         * @param {number} [limit] member limit
+         * @param {number} [offset] member offset
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTeamTeamidMember(teamid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MemberInfoModel>>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).getTeamTeamidMember(teamid, options);
+        async getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
+            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).getTeamTeamidMember(teamid, limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -3123,11 +3275,13 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * Get team member list.
          * @summary Get team member list
          * @param {string} teamid 
+         * @param {number} [limit] member limit
+         * @param {number} [offset] member offset
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeamTeamidMember(teamid: string, options?: any): AxiosPromise<Array<MemberInfoModel>> {
-            return TeamApiFp(configuration).getTeamTeamidMember(teamid, options).then((request) => request(axios, basePath));
+        getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse200> {
+            return TeamApiFp(configuration).getTeamTeamidMember(teamid, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * Create new team.
@@ -3200,12 +3354,14 @@ export class TeamApi extends BaseAPI {
      * Get team member list.
      * @summary Get team member list
      * @param {string} teamid 
+     * @param {number} [limit] member limit
+     * @param {number} [offset] member offset
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamApi
      */
-    public getTeamTeamidMember(teamid: string, options?: any) {
-        return TeamApiFp(this.configuration).getTeamTeamidMember(teamid, options).then((request) => request(this.axios, this.basePath));
+    public getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any) {
+        return TeamApiFp(this.configuration).getTeamTeamidMember(teamid, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
