@@ -3,6 +3,7 @@
     <b-select
       :value="current"
       :placeholder="placeholder"
+      :disabled="disabled"
       @input="$emit('input', $event)"
     >
       <option
@@ -38,6 +39,10 @@ export default Vue.extend({
     },
     selectItems: {
       type: Array as PropType<String[]>,
+      default: false,
+    },
+    disabled: {
+      type: Boolean,
       default: false,
     },
   },

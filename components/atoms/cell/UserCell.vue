@@ -29,7 +29,7 @@ export default Vue.extend({
   },
   computed: {
     hasImage() {
-      return !(this.user.icon_uri !== undefined || this.user.icon_uri === '')
+      return !(this.user.icon_uri === undefined || this.user.icon_uri === '')
     },
   },
   methods: {

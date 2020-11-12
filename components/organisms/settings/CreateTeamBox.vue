@@ -53,7 +53,6 @@ export default Vue.extend({
   background-color: whitesmoke;
   border-radius: 16px;
   height: auto;
-  width: 100%;
 
   i {
     font-size: 80px;

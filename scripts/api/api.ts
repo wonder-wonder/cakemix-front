@@ -327,23 +327,17 @@ export interface FolderModifyReqModel {
     permission?: number;
 }
 /**
- * Member list
+ * 
  * @export
  * @interface InlineResponse200
  */
 export interface InlineResponse200 {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof InlineResponse200
      */
-    total?: number;
-    /**
-     * 
-     * @type {Array<MemberInfoModel>}
-     * @memberof InlineResponse200
-     */
-    members?: Array<MemberInfoModel>;
+    doc_id?: string;
 }
 /**
  * 
@@ -356,7 +350,7 @@ export interface InlineResponse2001 {
      * @type {string}
      * @memberof InlineResponse2001
      */
-    doc_id?: string;
+    folder_id?: string;
 }
 /**
  * 
@@ -366,10 +360,16 @@ export interface InlineResponse2001 {
 export interface InlineResponse2002 {
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof InlineResponse2002
      */
-    folder_id?: string;
+    total?: number;
+    /**
+     * 
+     * @type {Array<ProfileModel>}
+     * @memberof InlineResponse2002
+     */
+    users?: Array<ProfileModel>;
 }
 /**
  * 
@@ -378,17 +378,11 @@ export interface InlineResponse2002 {
  */
 export interface InlineResponse2003 {
     /**
-     * 
-     * @type {number}
+     * Image ID
+     * @type {string}
      * @memberof InlineResponse2003
      */
-    total?: number;
-    /**
-     * 
-     * @type {Array<ProfileModel>}
-     * @memberof InlineResponse2003
-     */
-    users?: Array<ProfileModel>;
+    id?: string;
 }
 /**
  * JSON Web Token(JWT) is used for authorization. Geekers API uses only requred items.
@@ -523,7 +517,7 @@ export interface ProfileModel {
      * @type {boolean}
      * @memberof ProfileModel
      */
-    isadmin?: boolean;
+    is_admin?: boolean;
 }
 
 /**
@@ -1455,6 +1449,187 @@ export class AuthApi extends BaseAPI {
 
 
 /**
+ * DefaultApi - axios parameter creator
+ * @export
+ */
+export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getImageImgid: async (imgid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'imgid' is not null or undefined
+            if (imgid === null || imgid === undefined) {
+                throw new RequiredError('imgid','Required parameter imgid was null or undefined when calling getImageImgid.');
+            }
+            const localVarPath = `/image/{imgid}`
+                .replace(`{${"imgid"}}`, encodeURIComponent(String(imgid)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postImage: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/image`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? configuration.accessToken()
+                    : configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DefaultApi - functional programming interface
+ * @export
+ */
+export const DefaultApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getImageImgid(imgid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).getImageImgid(imgid, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postImage(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).postImage(options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+    }
+};
+
+/**
+ * DefaultApi - factory interface
+ * @export
+ */
+export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    return {
+        /**
+         * 
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getImageImgid(imgid: string, options?: any): AxiosPromise<void> {
+            return DefaultApiFp(configuration).getImageImgid(imgid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postImage(options?: any): AxiosPromise<InlineResponse2003> {
+            return DefaultApiFp(configuration).postImage(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DefaultApi - object-oriented interface
+ * @export
+ * @class DefaultApi
+ * @extends {BaseAPI}
+ */
+export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get uploaded image
+     * @param {string} imgid Image ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getImageImgid(imgid: string, options?: any) {
+        return DefaultApiFp(this.configuration).getImageImgid(imgid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Upload image
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public postImage(options?: any) {
+        return DefaultApiFp(this.configuration).postImage(options).then((request) => request(this.axios, this.basePath));
+    }
+
+}
+
+
+/**
  * DocumentApi - axios parameter creator
  * @export
  */
@@ -1712,7 +1887,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createNewDoc(folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
+        async createNewDoc(folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
             const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).createNewDoc(folderId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -1794,7 +1969,7 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createNewDoc(folderId: string, options?: any): AxiosPromise<InlineResponse2001> {
+        createNewDoc(folderId: string, options?: any): AxiosPromise<InlineResponse200> {
             return DocumentApiFp(configuration).createNewDoc(folderId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2193,7 +2368,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createNewFolder(folderId: string, name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+        async createNewFolder(folderId: string, name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
             const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).createNewFolder(folderId, name, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2276,7 +2451,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createNewFolder(folderId: string, name: string, options?: any): AxiosPromise<InlineResponse2002> {
+        createNewFolder(folderId: string, name: string, options?: any): AxiosPromise<InlineResponse2001> {
             return FolderApiFp(configuration).createNewFolder(folderId, name, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2738,7 +2913,7 @@ export const SearchApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
+        async getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
             const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchTeam(q, limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2754,7 +2929,7 @@ export const SearchApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
+        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
             const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchUser(q, limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2779,7 +2954,7 @@ export const SearchApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2003> {
+        getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2002> {
             return SearchApiFp(configuration).getSearchTeam(q, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2791,7 +2966,7 @@ export const SearchApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSearchUser(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2003> {
+        getSearchUser(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2002> {
             return SearchApiFp(configuration).getSearchUser(q, limit, offset, options).then((request) => request(axios, basePath));
         },
     };
@@ -2944,12 +3119,10 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          * Get team member list.
          * @summary Get team member list
          * @param {string} teamid 
-         * @param {number} [limit] member limit
-         * @param {number} [offset] member offset
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeamTeamidMember: async (teamid: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
+        getTeamTeamidMember: async (teamid: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamid' is not null or undefined
             if (teamid === null || teamid === undefined) {
                 throw new RequiredError('teamid','Required parameter teamid was null or undefined when calling getTeamTeamidMember.');
@@ -2972,14 +3145,6 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
                     ? configuration.accessToken()
                     : configuration.accessToken;
                 localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-            if (offset !== undefined) {
-                localVarQueryParameter['offset'] = offset;
             }
 
 
@@ -3185,13 +3350,11 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * Get team member list.
          * @summary Get team member list
          * @param {string} teamid 
-         * @param {number} [limit] member limit
-         * @param {number} [offset] member offset
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).getTeamTeamidMember(teamid, limit, offset, options);
+        async getTeamTeamidMember(teamid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MemberInfoModel>>> {
+            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).getTeamTeamidMember(teamid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -3275,13 +3438,11 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * Get team member list.
          * @summary Get team member list
          * @param {string} teamid 
-         * @param {number} [limit] member limit
-         * @param {number} [offset] member offset
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse200> {
-            return TeamApiFp(configuration).getTeamTeamidMember(teamid, limit, offset, options).then((request) => request(axios, basePath));
+        getTeamTeamidMember(teamid: string, options?: any): AxiosPromise<Array<MemberInfoModel>> {
+            return TeamApiFp(configuration).getTeamTeamidMember(teamid, options).then((request) => request(axios, basePath));
         },
         /**
          * Create new team.
@@ -3354,14 +3515,12 @@ export class TeamApi extends BaseAPI {
      * Get team member list.
      * @summary Get team member list
      * @param {string} teamid 
-     * @param {number} [limit] member limit
-     * @param {number} [offset] member offset
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamApi
      */
-    public getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any) {
-        return TeamApiFp(this.configuration).getTeamTeamidMember(teamid, limit, offset, options).then((request) => request(this.axios, this.basePath));
+    public getTeamTeamidMember(teamid: string, options?: any) {
+        return TeamApiFp(this.configuration).getTeamTeamidMember(teamid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
