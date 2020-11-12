@@ -1,7 +1,7 @@
 <template>
   <div class="user-cell-container">
     <div class="icon-box">
-      <i v-if="!hasImage" class="fa fa-user" />
+      <i v-if="!hasImage" class="fa" :class="isTeam ? 'fa-users' : 'fa-user'" />
       <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded">
         <b-skeleton slot="placeholder" class="skeleton-placeholder" />
       </b-image>
@@ -28,8 +28,11 @@ export default Vue.extend({
     },
   },
   computed: {
-    hasImage() {
+    hasImage(): boolean {
       return !(this.user.icon_uri === undefined || this.user.icon_uri === '')
+    },
+    isTeam(): boolean {
+      return this.user.is_team
     },
   },
   methods: {
