@@ -1,13 +1,15 @@
 <template>
   <div class="setting-users-container">
-    <ButtonInput
-      class="button-input"
-      :button-name="'Generate link'"
-      :label-name="'Invitation Link'"
-      :value="generatedLink"
-      @click="generateLink"
-    />
-    <div class="users-iteam-container">
+    <div class="users-tool-container">
+      <ButtonInput
+        class="button-input"
+        :button-name="'Generate link'"
+        :label-name="'Invitation Link'"
+        :value="generatedLink"
+        @click="generateLink"
+      />
+    </div>
+    <div class="users-item-container">
       <BorderTitle :title="'Users'" />
       <div class="users-item-box">
         <UserCell
@@ -123,16 +125,23 @@ export default Vue.extend({
   font-size: 14px;
   font-weight: bold;
 
-  label {
-    color: white;
-  }
-
-  .button-input {
-    max-width: 500px;
+  .users-tool-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
     width: 100%;
+
+    label {
+      color: white;
+    }
+
+    .button-input {
+      max-width: 500px;
+      width: 100%;
+    }
   }
 
-  .users-iteam-container {
+  .users-item-container {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;

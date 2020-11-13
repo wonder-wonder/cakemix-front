@@ -1,7 +1,7 @@
 <template>
   <div class="setting-teams-container">
     <TeamTools @create-team="isCreateViewEnable = true" />
-    <div class="teams-iteam-container">
+    <div class="teams-item-container">
       <BorderTitle :title="'Teams'" />
       <div class="teams-item-box">
         <UserCell
@@ -147,7 +147,7 @@ export default Vue.extend({
   font-size: 14px;
   font-weight: bold;
 
-  .teams-iteam-container {
+  .teams-item-container {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
