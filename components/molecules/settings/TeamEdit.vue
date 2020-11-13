@@ -184,7 +184,7 @@ export default Vue.extend({
       new TeamApi(this.$store.getters['auth/config'])
         .getTeamTeamidMember(teamId)
         .then(res => {
-          this.members = res.data.members ?? []
+          this.members = res.data
         })
     },
     getUsers(name: string) {
