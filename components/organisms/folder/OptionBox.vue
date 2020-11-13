@@ -1,5 +1,5 @@
 <template>
-  <div class="option-box">
+  <div class="option-box-container">
     <i class="fa fa-fw" :class="imageType" />
     <div class="detail-items">
       <OptionInfoCell
@@ -287,8 +287,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scope>
-.option-box {
+<style lang="scss">
+.option-box-container {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
