@@ -7,25 +7,27 @@
       :value="generatedLink"
       @click="generateLink"
     />
-    <BorderTitle :title="'Users'" />
-    <div class="users-item-box">
-      <UserCell
-        v-for="(user, index) in users"
-        :key="`user-cell-${uuid}-${index}`"
-        class="user-cell"
-        :user="user"
+    <div class="users-iteam-container">
+      <BorderTitle :title="'Users'" />
+      <div class="users-item-box">
+        <UserCell
+          v-for="(user, index) in users"
+          :key="`user-cell-${uuid}-${index}`"
+          class="user-cell"
+          :user="user"
+        />
+      </div>
+      <b-pagination
+        v-model="page"
+        class="pagination"
+        :total="total"
+        :per-page="PER_PAGE"
+        aria-next-label="Next page"
+        aria-previous-label="Previous page"
+        aria-page-label="Page"
+        aria-current-label="Current page"
       />
     </div>
-    <b-pagination
-      v-model="page"
-      class="pagination"
-      :total="total"
-      :per-page="PER_PAGE"
-      aria-next-label="Next page"
-      aria-previous-label="Previous page"
-      aria-page-label="Page"
-      aria-current-label="Current page"
-    />
   </div>
 </template>
 
@@ -130,31 +132,40 @@ export default Vue.extend({
     width: 100%;
   }
 
-  .border-title {
-    width: 100%;
-    margin: 20px 0;
-  }
-
-  .users-item-box {
+  .users-iteam-container {
     display: flex;
     flex-flow: row wrap;
-    justify-content: flex-start;
+    justify-content: center;
     width: 100%;
-    margin-bottom: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 
-    .user-cell {
-      margin: 16px 16px 0 0;
+    .border-title {
+      width: 100%;
+      margin: 20px 0;
     }
 
-    .update-button {
-      width: 120px;
-      margin-top: 16px;
-      font-weight: bold;
-    }
-  }
+    .users-item-box {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: flex-start;
+      width: 100%;
+      margin-bottom: 20px;
 
-  .pagination {
-    margin: 16px;
+      .user-cell {
+        margin: 16px 16px 0 0;
+      }
+
+      .update-button {
+        width: 120px;
+        margin-top: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .pagination {
+      margin: 16px;
+    }
   }
 }
 </style>
