@@ -194,6 +194,12 @@ export interface DocumentModel {
      * @memberof DocumentModel
      */
     uuid?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof DocumentModel
+     */
+    editable?: boolean;
 }
 /**
  * Document modify request model
@@ -300,6 +306,12 @@ export interface FolderModel {
      * @memberof FolderModel
      */
     uuid?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof FolderModel
+     */
+    editable?: boolean;
 }
 /**
  * Folder modify request model

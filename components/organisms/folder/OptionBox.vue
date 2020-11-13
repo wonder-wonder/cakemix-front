@@ -9,7 +9,7 @@
       />
     </div>
     <Input
-      v-if="isPermEditable"
+      v-if="isEditable"
       :label-name="'Name'"
       :is-password="false"
       :value="title"
@@ -17,20 +17,20 @@
       @text="updateTitle"
     />
     <Select
-      v-if="isPermEditable"
+      v-if="isEditable"
       :label-name="'Others Permission'"
       :current="permission"
       :select-items="selectModels"
       @input="selected"
     />
     <b-button
-      v-if="isPermEditable"
+      v-if="isEditable"
       type="is-success"
       @click="update"
       v-text="'Update'"
     />
     <b-button
-      v-if="isPermEditable"
+      v-if="isEditable"
       type="is-danger"
       @click="del"
       v-text="'Delete'"
@@ -147,28 +147,11 @@ export default Vue.extend({
       if (this.modelType === 'DOCUMENT') {
         return false
       }
-      if (this.newModel.owner === undefined) {
-        return false
-      }
-      const owner = this.newModel.owner as ProfileModel
-      if (owner.uuid === undefined) {
-        return false
-      }
-      const uuid = owner.uuid
-      const perm = this.newModel.permission
-      return perm === 2 || uuid === this.$store.getters['auth/uuid']
+      return this.isEditable
     },
-    isPermEditable(): boolean {
-      if (this.newModel.owner === undefined) {
-        return false
-      }
-      const owner = this.newModel.owner as ProfileModel
-      if (owner.uuid === undefined) {
-        return false
-      }
-      const uuid = owner.uuid
-      const perm = this.newModel.permission
-      return perm === 2 || uuid === this.$store.getters['auth/uuid']
+    isEditable(): boolean {
+      const perm: boolean = this.newModel.editable ?? false
+      return perm
     },
   },
   watch: {
@@ -304,7 +287,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 .option-box {
   display: flex;
   flex-flow: column nowrap;
