@@ -353,6 +353,38 @@ export interface InlineResponse2001 {
     folder_id?: string;
 }
 /**
+ * 
+ * @export
+ * @interface InlineResponse2002
+ */
+export interface InlineResponse2002 {
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse2002
+     */
+    total?: number;
+    /**
+     * 
+     * @type {Array<ProfileModel>}
+     * @memberof InlineResponse2002
+     */
+    users?: Array<ProfileModel>;
+}
+/**
+ * 
+ * @export
+ * @interface InlineResponse2003
+ */
+export interface InlineResponse2003 {
+    /**
+     * Image ID
+     * @type {string}
+     * @memberof InlineResponse2003
+     */
+    id?: string;
+}
+/**
  * JSON Web Token(JWT) is used for authorization. Geekers API uses only requred items.
  * @export
  * @interface JWT
@@ -480,6 +512,12 @@ export interface ProfileModel {
      * @memberof ProfileModel
      */
     lang?: string;
+    /**
+     * Admin or not
+     * @type {boolean}
+     * @memberof ProfileModel
+     */
+    is_admin?: boolean;
 }
 
 /**
@@ -1418,23 +1456,18 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @summary Your GET endpoint
-         * @param {string} docId 
-         * @param {string} token security token
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDocDocIdWs: async (docId: string, token: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'docId' is not null or undefined
-            if (docId === null || docId === undefined) {
-                throw new RequiredError('docId','Required parameter docId was null or undefined when calling getDocDocIdWs.');
+        getImageImgid: async (imgid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'imgid' is not null or undefined
+            if (imgid === null || imgid === undefined) {
+                throw new RequiredError('imgid','Required parameter imgid was null or undefined when calling getImageImgid.');
             }
-            // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling getDocDocIdWs.');
-            }
-            const localVarPath = `/doc/{doc_id}/ws`
-                .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
+            const localVarPath = `/image/{imgid}`
+                .replace(`{${"imgid"}}`, encodeURIComponent(String(imgid)));
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -1444,8 +1477,43 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (token !== undefined) {
-                localVarQueryParameter['token'] = token;
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postImage: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/image`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? configuration.accessToken()
+                    : configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
             }
 
 
@@ -1472,14 +1540,26 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Your GET endpoint
-         * @param {string} docId 
-         * @param {string} token security token
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getDocDocIdWs(docId: string, token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).getDocDocIdWs(docId, token, options);
+        async getImageImgid(imgid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).getImageImgid(imgid, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postImage(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).postImage(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1496,14 +1576,22 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @summary Your GET endpoint
-         * @param {string} docId 
-         * @param {string} token security token
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDocDocIdWs(docId: string, token: string, options?: any): AxiosPromise<void> {
-            return DefaultApiFp(configuration).getDocDocIdWs(docId, token, options).then((request) => request(axios, basePath));
+        getImageImgid(imgid: string, options?: any): AxiosPromise<void> {
+            return DefaultApiFp(configuration).getImageImgid(imgid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postImage(options?: any): AxiosPromise<InlineResponse2003> {
+            return DefaultApiFp(configuration).postImage(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1517,15 +1605,25 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
 export class DefaultApi extends BaseAPI {
     /**
      * 
-     * @summary Your GET endpoint
-     * @param {string} docId 
-     * @param {string} token security token
+     * @summary Get uploaded image
+     * @param {string} imgid Image ID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getDocDocIdWs(docId: string, token: string, options?: any) {
-        return DefaultApiFp(this.configuration).getDocDocIdWs(docId, token, options).then((request) => request(this.axios, this.basePath));
+    public getImageImgid(imgid: string, options?: any) {
+        return DefaultApiFp(this.configuration).getImageImgid(imgid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Upload image
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public postImage(options?: any) {
+        return DefaultApiFp(this.configuration).postImage(options).then((request) => request(this.axios, this.basePath));
     }
 
 }
@@ -1612,6 +1710,51 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
                     ? configuration.accessToken()
                     : configuration.accessToken;
                 localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Your GET endpoint
+         * @param {string} docId 
+         * @param {string} token security token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDocDocIdWs: async (docId: string, token: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'docId' is not null or undefined
+            if (docId === null || docId === undefined) {
+                throw new RequiredError('docId','Required parameter docId was null or undefined when calling getDocDocIdWs.');
+            }
+            // verify required parameter 'token' is not null or undefined
+            if (token === null || token === undefined) {
+                throw new RequiredError('token','Required parameter token was null or undefined when calling getDocDocIdWs.');
+            }
+            const localVarPath = `/doc/{doc_id}/ws`
+                .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (token !== undefined) {
+                localVarQueryParameter['token'] = token;
             }
 
 
@@ -1767,6 +1910,21 @@ export const DocumentApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Your GET endpoint
+         * @param {string} docId 
+         * @param {string} token security token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDocDocIdWs(docId: string, token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).getDocDocIdWs(docId, token, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @summary Move document to target folder
          * @param {string} docId Folder ID
          * @param {string} folderId Folder ID
@@ -1826,6 +1984,17 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @summary Your GET endpoint
+         * @param {string} docId 
+         * @param {string} token security token
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDocDocIdWs(docId: string, token: string, options?: any): AxiosPromise<void> {
+            return DocumentApiFp(configuration).getDocDocIdWs(docId, token, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Move document to target folder
          * @param {string} docId Folder ID
          * @param {string} folderId Folder ID
@@ -1878,6 +2047,19 @@ export class DocumentApi extends BaseAPI {
      */
     public deleteDoc(docId: string, options?: any) {
         return DocumentApiFp(this.configuration).deleteDoc(docId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Your GET endpoint
+     * @param {string} docId 
+     * @param {string} token security token
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DocumentApi
+     */
+    public getDocDocIdWs(docId: string, token: string, options?: any) {
+        return DocumentApiFp(this.configuration).getDocDocIdWs(docId, token, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2401,17 +2583,17 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Get profile for user/team.
          * @summary Get profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserProfileUuid: async (userName: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userName' is not null or undefined
-            if (userName === null || userName === undefined) {
-                throw new RequiredError('userName','Required parameter userName was null or undefined when calling getUserProfileUuid.');
+        getUserProfileUuid: async (uuid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            if (uuid === null || uuid === undefined) {
+                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling getUserProfileUuid.');
             }
-            const localVarPath = `/profile/{user_name}`
-                .replace(`{${"user_name"}}`, encodeURIComponent(String(userName)));
+            const localVarPath = `/profile/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -2446,18 +2628,18 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Edit profile
          * @summary Edit profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {ProfileModel} [profileModel] Updated profile data. The parameters can be omitted if no update. Some parameter cannot be changed because of readonly.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putUserProfileUuid: async (userName: string, profileModel?: ProfileModel, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userName' is not null or undefined
-            if (userName === null || userName === undefined) {
-                throw new RequiredError('userName','Required parameter userName was null or undefined when calling putUserProfileUuid.');
+        putUserProfileUuid: async (uuid: string, profileModel?: ProfileModel, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            if (uuid === null || uuid === undefined) {
+                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling putUserProfileUuid.');
             }
-            const localVarPath = `/profile/{user_name}`
-                .replace(`{${"user_name"}}`, encodeURIComponent(String(userName)));
+            const localVarPath = `/profile/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -2505,12 +2687,12 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         /**
          * Get profile for user/team.
          * @summary Get profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserProfileUuid(userName: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileModel>> {
-            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).getUserProfileUuid(userName, options);
+        async getUserProfileUuid(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileModel>> {
+            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).getUserProfileUuid(uuid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -2519,13 +2701,13 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         /**
          * Edit profile
          * @summary Edit profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {ProfileModel} [profileModel] Updated profile data. The parameters can be omitted if no update. Some parameter cannot be changed because of readonly.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putUserProfileUuid(userName: string, profileModel?: ProfileModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).putUserProfileUuid(userName, profileModel, options);
+        async putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).putUserProfileUuid(uuid, profileModel, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -2543,23 +2725,23 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
         /**
          * Get profile for user/team.
          * @summary Get profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserProfileUuid(userName: string, options?: any): AxiosPromise<ProfileModel> {
-            return ProfileApiFp(configuration).getUserProfileUuid(userName, options).then((request) => request(axios, basePath));
+        getUserProfileUuid(uuid: string, options?: any): AxiosPromise<ProfileModel> {
+            return ProfileApiFp(configuration).getUserProfileUuid(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Edit profile
          * @summary Edit profile
-         * @param {string} userName Username or teamname
+         * @param {string} uuid Username or teamname
          * @param {ProfileModel} [profileModel] Updated profile data. The parameters can be omitted if no update. Some parameter cannot be changed because of readonly.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putUserProfileUuid(userName: string, profileModel?: ProfileModel, options?: any): AxiosPromise<void> {
-            return ProfileApiFp(configuration).putUserProfileUuid(userName, profileModel, options).then((request) => request(axios, basePath));
+        putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any): AxiosPromise<void> {
+            return ProfileApiFp(configuration).putUserProfileUuid(uuid, profileModel, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2574,26 +2756,255 @@ export class ProfileApi extends BaseAPI {
     /**
      * Get profile for user/team.
      * @summary Get profile
-     * @param {string} userName Username or teamname
+     * @param {string} uuid Username or teamname
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProfileApi
      */
-    public getUserProfileUuid(userName: string, options?: any) {
-        return ProfileApiFp(this.configuration).getUserProfileUuid(userName, options).then((request) => request(this.axios, this.basePath));
+    public getUserProfileUuid(uuid: string, options?: any) {
+        return ProfileApiFp(this.configuration).getUserProfileUuid(uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Edit profile
      * @summary Edit profile
-     * @param {string} userName Username or teamname
+     * @param {string} uuid Username or teamname
      * @param {ProfileModel} [profileModel] Updated profile data. The parameters can be omitted if no update. Some parameter cannot be changed because of readonly.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProfileApi
      */
-    public putUserProfileUuid(userName: string, profileModel?: ProfileModel, options?: any) {
-        return ProfileApiFp(this.configuration).putUserProfileUuid(userName, profileModel, options).then((request) => request(this.axios, this.basePath));
+    public putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any) {
+        return ProfileApiFp(this.configuration).putUserProfileUuid(uuid, profileModel, options).then((request) => request(this.axios, this.basePath));
+    }
+
+}
+
+
+/**
+ * SearchApi - axios parameter creator
+ * @export
+ */
+export const SearchApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get team list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSearchTeam: async (q?: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/search/team`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? configuration.accessToken()
+                    : configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get user list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSearchUser: async (q?: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/search/user`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? configuration.accessToken()
+                    : configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SearchApi - functional programming interface
+ * @export
+ */
+export const SearchApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get team list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+            const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchTeam(q, limit, offset, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary Get user list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+            const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchUser(q, limit, offset, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+    }
+};
+
+/**
+ * SearchApi - factory interface
+ * @export
+ */
+export const SearchApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    return {
+        /**
+         * 
+         * @summary Get team list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2002> {
+            return SearchApiFp(configuration).getSearchTeam(q, limit, offset, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get user list
+         * @param {string} [q] search filter
+         * @param {number} [limit] search limit
+         * @param {number} [offset] search offset
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSearchUser(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2002> {
+            return SearchApiFp(configuration).getSearchUser(q, limit, offset, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SearchApi - object-oriented interface
+ * @export
+ * @class SearchApi
+ * @extends {BaseAPI}
+ */
+export class SearchApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get team list
+     * @param {string} [q] search filter
+     * @param {number} [limit] search limit
+     * @param {number} [offset] search offset
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SearchApi
+     */
+    public getSearchTeam(q?: string, limit?: number, offset?: number, options?: any) {
+        return SearchApiFp(this.configuration).getSearchTeam(q, limit, offset, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get user list
+     * @param {string} [q] search filter
+     * @param {number} [limit] search limit
+     * @param {number} [offset] search offset
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SearchApi
+     */
+    public getSearchUser(q?: string, limit?: number, offset?: number, options?: any) {
+        return SearchApiFp(this.configuration).getSearchUser(q, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
 
 }
@@ -2761,7 +3172,7 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
             if (name === null || name === undefined) {
                 throw new RequiredError('name','Required parameter name was null or undefined when calling postTeam.');
             }
-            const localVarPath = `/team`;
+            const localVarPath = `/team/`;
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {

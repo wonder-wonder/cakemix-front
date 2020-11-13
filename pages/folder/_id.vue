@@ -32,8 +32,11 @@
       </div>
     </div>
     <NoList v-if="isNoItems && isLoaded" />
-    <b-modal v-model="isCreateViewEnable" trap-focus>
-      <CreateBox @create="createFolder" @close="isCreateViewEnable = false" />
+    <b-modal v-model="isCreateViewEnable">
+      <CreateFolderBox
+        @create="createFolder"
+        @close="isCreateViewEnable = false"
+      />
     </b-modal>
   </div>
 </template>
@@ -46,7 +49,7 @@ import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
-import CreateBox from '@/components/organisms/folder/CreateBox.vue'
+import CreateFolderBox from '@/components/organisms/folder/CreateFolderBox.vue'
 import NoList from '@/components/atoms/folder/NoList.vue'
 import {
   FolderApi,
@@ -79,7 +82,7 @@ export default Vue.extend({
     OptionBox,
     FolderListContainer,
     DocListContainer,
-    CreateBox,
+    CreateFolderBox,
     NoList,
   },
   data(): DataType {
@@ -241,10 +244,6 @@ html {
       margin: 32px;
       margin-left: 0;
     }
-  }
-
-  .modal .modal-content {
-    width: auto;
   }
 }
 </style>

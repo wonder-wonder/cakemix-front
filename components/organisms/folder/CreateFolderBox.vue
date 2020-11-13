@@ -2,7 +2,7 @@
   <div class="create-folder-box">
     <i class="fa fa-folder fa-fw" />
     <Input
-      :label-name="'Name'"
+      :label-name="'Folder Name'"
       :is-password="false"
       :value="name"
       @text="name = $event"
@@ -17,8 +17,7 @@ import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { failureToast } from '@/scripts/tools/toast'
 
-export type DataType = {
-  selectModels: Array<string>
+type DataType = {
   name: string
 }
 
@@ -28,7 +27,6 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      selectModels: ['Private', 'Read', 'Read / Write'],
       name: '',
     }
   },

@@ -1,32 +1,42 @@
 <template>
   <div class="user-cell-container">
     <div class="icon-box">
-      <img :src="user.icon" :alt="'user_icon'">
+      <i v-if="!hasImage" class="fa" :class="isTeam ? 'fa-users' : 'fa-user'" />
+      <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded">
+        <b-skeleton slot="placeholder" class="skeleton-placeholder" />
+      </b-image>
     </div>
     <div class="username-box">
-      <span v-text="user.userName" />
+      <span v-text="user.name" />
     </div>
     <div class="joinedat-box">
-      <span v-text="user.joinedAt" />
+      <span v-text="toDate(user.created_at)" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
-export type UserModel = {
-  icon: String
-  userName: String
-  joinedAt: String
-}
+import { ProfileModel } from '@/scripts/api/index'
+import { toDate } from '@/scripts/tools/date'
 
 export default Vue.extend({
   props: {
     user: {
-      type: Object as PropType<UserModel>,
-      default: {} as UserModel,
+      type: Object as PropType<ProfileModel>,
+      default: {} as ProfileModel,
     },
+  },
+  computed: {
+    hasImage(): boolean {
+      return !(this.user.icon_uri === undefined || this.user.icon_uri === '')
+    },
+    isTeam(): boolean {
+      return this.user.is_team
+    },
+  },
+  methods: {
+    toDate,
   },
 })
 </script>
@@ -49,17 +59,17 @@ export default Vue.extend({
   }
 
   .icon-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     grid-row: 1 / 3;
     grid-column: 1;
-    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
 
-    img {
-      height: 100%;
-      width: 100%;
-      border-radius: 4px;
+    .b-skeleton,
+    .b-skeleton-item {
+      width: 64px;
+      height: 64px;
     }
   }
 
