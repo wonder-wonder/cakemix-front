@@ -58,5 +58,9 @@ export default Vue.extend({
     width: 100%;
     margin-left: 4px;
   }
+
+  button {
+    width: 160px;
+  }
 }
 </style>

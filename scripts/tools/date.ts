@@ -1,6 +1,6 @@
 export const toDate = (utime: number): string => {
   const dt = new Date(utime * 1000)
-  if (!dt) {
+  if (dt.toString() === 'Invalid Date') {
     return ''
   }
   const year = dt.getFullYear()

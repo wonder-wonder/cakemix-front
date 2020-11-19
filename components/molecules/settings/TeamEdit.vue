@@ -193,6 +193,7 @@ export default Vue.extend({
         this.searchPaging.total = 999
         this.searchPaging.page = 1
       }
+      this.searchName = name
       if (this.searchPaging.total < this.searchPaging.page) {
         return
       }
