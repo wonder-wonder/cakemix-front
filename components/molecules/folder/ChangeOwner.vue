@@ -275,7 +275,7 @@ export default Vue.extend({
 
   .users-cell-item-box {
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     align-items: center;
     justify-content: center;
     height: auto;
