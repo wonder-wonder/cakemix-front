@@ -59,7 +59,7 @@ export default Vue.extend({
     color: black;
   }
   button {
-    min-width: 160px;
+    width: 190px;
     margin: 4px;
   }
   label {

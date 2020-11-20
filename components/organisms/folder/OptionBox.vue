@@ -8,6 +8,12 @@
         :model="mo"
       />
     </div>
+    <Button
+      v-if="isEditable"
+      :label-name="'Owner'"
+      :button-name="'Change Owner'"
+      @click="isChangeOwnerEnable = true"
+    />
     <Input
       v-if="isEditable"
       :label-name="'Name'"
@@ -25,16 +31,21 @@
     />
     <b-button
       v-if="isEditable"
+      class="option-button"
       type="is-success"
       @click="update"
       v-text="'Update'"
     />
     <b-button
       v-if="isEditable"
+      class="option-button"
       type="is-danger"
       @click="del"
       v-text="'Delete'"
     />
+    <b-modal v-model="isChangeOwnerEnable">
+      <ChangeOwner :current-owner="model.owner" @update-user="updateOwner" />
+    </b-modal>
   </div>
 </template>
 
@@ -43,6 +54,8 @@ import Vue, { PropType } from 'vue'
 import CloneDeep from 'lodash/cloneDeep'
 import Input from '@/components/atoms/input/Input.vue'
 import Select from '@/components/atoms/input/Select.vue'
+import Button from '@/components/atoms/button/Button.vue'
+import ChangeOwner from '@/components/molecules/folder/ChangeOwner.vue'
 import OptionInfoCell, {
   OptionInfoModel,
 } from '@/components/atoms/cell/OptionInfoCell.vue'
@@ -62,6 +75,7 @@ import { successToast, failureToast } from '@/scripts/tools/toast'
 export type DataType = {
   selectModels: Array<string>
   newModel: DocumentModel | FolderModel
+  isChangeOwnerEnable: boolean
 }
 
 export default Vue.extend({
@@ -69,6 +83,8 @@ export default Vue.extend({
     Input,
     OptionInfoCell,
     Select,
+    Button,
+    ChangeOwner,
   },
   props: {
     model: {
@@ -84,6 +100,7 @@ export default Vue.extend({
     return {
       selectModels: ['Private', 'Read', 'Read / Write'],
       newModel: {},
+      isChangeOwnerEnable: false,
     }
   },
   computed: {
@@ -174,6 +191,10 @@ export default Vue.extend({
         const cModel = this.newModel as FolderModel
         cModel.name = title
       }
+    },
+    updateOwner(newOwner: ProfileModel) {
+      this.newModel.owner = newOwner
+      this.isChangeOwnerEnable = false
     },
     update() {
       if (this.newModel.owner === undefined) {
@@ -298,7 +319,7 @@ export default Vue.extend({
   height: auto;
   width: 100%;
 
-  i {
+  .fa-fw {
     font-size: 80px;
     color: black;
   }
@@ -315,8 +336,8 @@ export default Vue.extend({
     width: 100%;
   }
 
-  button {
-    min-width: 160px;
+  .option-button {
+    width: 100%;
     margin: 4px;
   }
 }

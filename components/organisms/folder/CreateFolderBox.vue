@@ -53,14 +53,13 @@ export default Vue.extend({
   background-color: whitesmoke;
   border-radius: 16px;
   height: auto;
-  width: 100%;
 
   i {
     font-size: 80px;
     color: black;
   }
   button {
-    min-width: 160px;
+    width: 190px;
     margin: 4px;
   }
 }
