@@ -43,7 +43,7 @@
     "markdown-it-sub": "^1.0.0",
     "markdown-it-video": "^0.6.3",
     "mermaid": "^8.7.0",
-    "nuxt": "^2.14.1",
+    "nuxt": "^2.14.7",
     "nuxt-buefy": "^0.3.31",
     "nuxt-property-decorator": "^2.7.2",
     "plantuml-encoder": "^1.4.0",
