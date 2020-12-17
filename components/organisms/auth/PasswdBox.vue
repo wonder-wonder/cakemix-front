@@ -35,7 +35,7 @@ export default Vue.extend({
     successToast,
     failureToast,
     emailValidator(text: string): boolean {
-      const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/
+      const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-\\+]*@.+$/
       return reg.test(text)
     },
     request() {

@@ -47,7 +47,6 @@ export default Vue.extend({
 <style lang="scss">
 .button-input-container {
   width: 100%;
-
   .link-button {
     font-weight: bold;
     border-top-right-radius: 0px;

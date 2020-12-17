@@ -70,11 +70,11 @@ export default Vue.extend({
         })
     },
     emailValidator(text: string): boolean {
-      const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/
+      const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-\\+]*@.+$/
       return reg.test(text)
     },
     passwordValidator(text: string): boolean {
-      const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}$/i
+      const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)[a-z\d!-\\/:-@[-`{-~]{8,100}$/i
       return reg.test(text)
     },
     request() {

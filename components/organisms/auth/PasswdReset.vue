@@ -48,7 +48,7 @@ export default Vue.extend({
     successToast,
     failureToast,
     passwordValidator(text: string): boolean {
-      const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}$/i
+      const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)[a-z\d!-\\/:-@[-`{-~]{8,100}$/i
       return reg.test(text)
     },
     request() {
