@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
-import { failureToast } from '@/scripts/tools/toast'
+import { failureToast } from '@/scripts/utils/toast'
 
 type DataType = {
   name: string

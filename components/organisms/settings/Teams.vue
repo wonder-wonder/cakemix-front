@@ -51,7 +51,7 @@ import {
   checkAuthWithStatus,
   ProfileModel,
 } from '@/scripts/api/index'
-import { failureToast, successToast } from '@/scripts/tools/toast'
+import { failureToast, successToast } from '@/scripts/utils/toast'
 
 type DataType = {
   uuid: string

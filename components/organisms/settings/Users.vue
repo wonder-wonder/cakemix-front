@@ -45,7 +45,7 @@ import {
   SearchApi,
   ProfileModel,
 } from '@/scripts/api/index'
-import { failureToast } from '@/scripts/tools/toast'
+import { failureToast } from '@/scripts/utils/toast'
 
 type DataType = {
   uuid: string

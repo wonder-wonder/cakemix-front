@@ -27,7 +27,8 @@
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthRegistReqModel, AuthApi } from '@/scripts/api/index'
-import { successToast, failureToast } from '@/scripts/tools/toast'
+import { successToast, failureToast } from '@/scripts/utils/toast'
+import { emailValidator, passwordValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
   email: string
@@ -58,6 +59,8 @@ export default Vue.extend({
   methods: {
     successToast,
     failureToast,
+    emailValidator,
+    passwordValidator,
     updateUserName(userName: string) {
       this.username = userName
       new AuthApi()
@@ -68,14 +71,6 @@ export default Vue.extend({
         .catch(() => {
           this.isUnique = false
         })
-    },
-    emailValidator(text: string): boolean {
-      const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/
-      return reg.test(text)
-    },
-    passwordValidator(text: string): boolean {
-      const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]{8,100}$/i
-      return reg.test(text)
     },
     request() {
       if (

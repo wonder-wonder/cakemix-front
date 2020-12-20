@@ -18,7 +18,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { ProfileModel } from '@/scripts/api/index'
-import { toDate } from '@/scripts/tools/date'
+import { toDate } from '@/scripts/utils/date'
 
 export default Vue.extend({
   props: {

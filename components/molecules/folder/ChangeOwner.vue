@@ -58,7 +58,7 @@
 import Vue, { PropType } from 'vue'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
 import { v4 as uuidv4 } from 'uuid'
-import { failureToast } from '@/scripts/tools/toast'
+import { failureToast } from '@/scripts/utils/toast'
 import {
   checkAuthWithStatus,
   SearchApi,
