@@ -30,7 +30,8 @@ import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import Input from '@/components/atoms/input/Input.vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
-import { successToast, failureToast } from '@/scripts/tools/toast'
+import { successToast, failureToast } from '@/scripts/utils/toast'
+import { passwordValidator } from '@/scripts/utils/validator'
 
 export default Vue.extend({
   components: {
@@ -48,10 +49,7 @@ export default Vue.extend({
   methods: {
     successToast,
     failureToast,
-    passwordValidator(text: string): boolean {
-      const reg: RegExp = /^(?=.*?[a-z])(?=.*?\d)[a-z\d!-\\/:-@[-`{-~]{8,100}$/i
-      return reg.test(text)
-    },
+    passwordValidator,
     request() {
       if (
         !(this.oldPassword !== '' && this.passwordValidator(this.newPassword))

@@ -70,7 +70,7 @@ import Vue, { PropType } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import TeamMemberWideCell from '@/components/molecules/settings/cell/TeamMemberWideCell.vue'
 import Input from '@/components/atoms/input/Input.vue'
-import { successToast, failureToast } from '@/scripts/tools/toast'
+import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
   checkAuthWithStatus,
   TeamApi,

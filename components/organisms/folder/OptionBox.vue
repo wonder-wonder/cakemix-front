@@ -69,8 +69,8 @@ import {
   DocumentApi,
   checkAuthWithStatus,
 } from '@/scripts/api/index'
-import { toDate } from '@/scripts/tools/date'
-import { successToast, failureToast } from '@/scripts/tools/toast'
+import { toDate } from '@/scripts/utils/date'
+import { successToast, failureToast } from '@/scripts/utils/toast'
 
 export type DataType = {
   selectModels: Array<string>

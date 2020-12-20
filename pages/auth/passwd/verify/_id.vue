@@ -12,7 +12,7 @@ import Vue from 'vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import PasswdReset from '@/components/organisms/auth/PasswdReset.vue'
 import { AuthApi } from '@/scripts/api/index'
-import { successToast, failureToast } from '@/scripts/tools/toast'
+import { successToast, failureToast } from '@/scripts/utils/toast'
 
 export type DataType = {
   isVerified: boolean

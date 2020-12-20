@@ -14,7 +14,8 @@
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassResetReqModel, AuthApi } from '@/scripts/api/index'
-import { successToast, failureToast } from '@/scripts/tools/toast'
+import { successToast, failureToast } from '@/scripts/utils/toast'
+import { emailValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
   email: string
@@ -34,10 +35,7 @@ export default Vue.extend({
   methods: {
     successToast,
     failureToast,
-    emailValidator(text: string): boolean {
-      const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-\\+]*@.+$/
-      return reg.test(text)
-    },
+    emailValidator,
     request() {
       if (!this.emailValidator(this.email)) {
         // @ts-ignore

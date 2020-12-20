@@ -10,7 +10,7 @@ import Vue from 'vue'
 import SignupBox from '@/components/organisms/auth/SignupBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import { AuthApi } from '@/scripts/api/index'
-import { failureToast } from '@/scripts/tools/toast'
+import { failureToast } from '@/scripts/utils/toast'
 
 export default Vue.extend({
   components: {
