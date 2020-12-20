@@ -7,7 +7,11 @@
       @create-doc="createDoc"
       @search="searchText = $event"
     />
-    <Breadcrumb class="breadcrumb-item" :breadcrumb="breadcrumb" />
+    <Breadcrumb
+      class="breadcrumb-item"
+      :breadcrumb="breadcrumb"
+      @click="goToFolder"
+    />
     <div v-if="!isNoItems" class="explore-container">
       <div class="left-container">
         <FolderListContainer
@@ -25,6 +29,7 @@
       </div>
       <div class="right-container">
         <OptionBox
+          :current-folder-id="currentFolderId"
           :model="selectItem"
           :model-type="selectType"
           @reload="fetchFolder"
@@ -127,6 +132,10 @@ export default Vue.extend({
     isNoItems(): boolean {
       return !this.isFolderAvailable && !this.isDocAvailable
     },
+    currentFolderId(): string {
+      const fId = this.breadcrumb[this.breadcrumb.length - 1].folder_id ?? ''
+      return fId
+    },
   },
   created() {
     this.fetchFolder()
@@ -200,6 +209,9 @@ export default Vue.extend({
         .finally(() => {
           this.fetchFolder()
         })
+    },
+    goToFolder(id: string) {
+      this.$router.push(`/folder/${id}`)
     },
   },
 })

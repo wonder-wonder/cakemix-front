@@ -10,9 +10,13 @@
     </div>
     <Button
       v-if="isEditable"
-      :label-name="'Owner'"
       :button-name="'Change Owner'"
       @click="isChangeOwnerEnable = true"
+    />
+    <Button
+      v-if="isEditable"
+      :button-name="'Move'"
+      @click="isMoveEnable = true"
     />
     <Input
       v-if="isEditable"
@@ -46,6 +50,14 @@
     <b-modal v-model="isChangeOwnerEnable">
       <ChangeOwner :current-owner="model.owner" @update-user="updateOwner" />
     </b-modal>
+    <b-modal v-model="isMoveEnable">
+      <ChangeDirectory
+        :current-folder-id="currentFolderId"
+        :item-id="model.uuid"
+        :is-folder="isFolder"
+        @updated="isMoveEnable = false"
+      />
+    </b-modal>
   </div>
 </template>
 
@@ -56,6 +68,7 @@ import Input from '@/components/atoms/input/Input.vue'
 import Select from '@/components/atoms/input/Select.vue'
 import Button from '@/components/atoms/button/Button.vue'
 import ChangeOwner from '@/components/molecules/folder/ChangeOwner.vue'
+import ChangeDirectory from '@/components/molecules/folder/ChangeDirectory.vue'
 import OptionInfoCell, {
   OptionInfoModel,
 } from '@/components/atoms/cell/OptionInfoCell.vue'
@@ -76,6 +89,7 @@ export type DataType = {
   selectModels: Array<string>
   newModel: DocumentModel | FolderModel
   isChangeOwnerEnable: boolean
+  isMoveEnable: boolean
 }
 
 export default Vue.extend({
@@ -85,8 +99,13 @@ export default Vue.extend({
     Select,
     Button,
     ChangeOwner,
+    ChangeDirectory,
   },
   props: {
+    currentFolderId: {
+      type: String,
+      default: '',
+    },
     model: {
       type: Object as PropType<FolderModel | DocumentModel>,
       default: {},
@@ -101,6 +120,7 @@ export default Vue.extend({
       selectModels: ['Private', 'Read', 'Read / Write'],
       newModel: {},
       isChangeOwnerEnable: false,
+      isMoveEnable: false,
     }
   },
   computed: {
@@ -169,6 +189,9 @@ export default Vue.extend({
     isEditable(): boolean {
       const perm: boolean = this.newModel.editable ?? false
       return perm
+    },
+    isFolder(): Boolean {
+      return this.modelType === 'FOLDER'
     },
   },
   watch: {

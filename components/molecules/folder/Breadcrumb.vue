@@ -5,6 +5,8 @@
       :key="index"
       :title="getTitle(item.title)"
       :folder-id="item.folder_id"
+      :dark="dark"
+      @click="$emit('click', $event)"
     />
   </div>
 </template>
@@ -21,7 +23,11 @@ export default Vue.extend({
   props: {
     breadcrumb: {
       type: Array as PropType<BreadcrumbModel[]>,
-      default: [],
+      default: [] as BreadcrumbModel[],
+    },
+    dark: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
@@ -40,6 +46,6 @@ export default Vue.extend({
   padding: 0 32px;
   min-height: 40px;
   height: auto;
-  width: 100vw;
+  width: 100%;
 }
 </style>
