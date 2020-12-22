@@ -91,9 +91,10 @@ export default Vue.extend({
     },
     transfer() {
       const tId = this.breadcrumb[this.breadcrumb.length - 1].folder_id ?? ''
-      if (!tId) {
+      if (!tId || tId === this.itemId) {
         // @ts-ignore
         this.failureToast(this.$buefy, 'Unable to move folder or document', 1)
+        return
       }
       if (this.isFolder) {
         new FolderApi(this.$store.getters['auth/config'])
@@ -103,6 +104,10 @@ export default Vue.extend({
             this.successToast(this.$buefy, 'Moved folder')
             this.$emit('updated')
           })
+          .catch(() => {
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Unable to move folder', 2)
+          })
       } else {
         new DocumentApi(this.$store.getters['auth/config'])
           .moveDoc(this.itemId, tId)
@@ -110,6 +115,10 @@ export default Vue.extend({
             // @ts-ignore
             this.successToast(this.$buefy, 'Document moved ')
             this.$emit('updated')
+          })
+          .catch(() => {
+            // @ts-ignore
+            this.failureToast(this.$buefy, 'Unable to move document', 2)
           })
       }
     },
