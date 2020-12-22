@@ -146,7 +146,7 @@ export default Vue.extend({
       return own[0].permission ?? 0
     },
   },
-  mounted() {
+  created() {
     this.getMembers()
   },
   methods: {
@@ -184,7 +184,9 @@ export default Vue.extend({
       new TeamApi(this.$store.getters['auth/config'])
         .getTeamTeamidMember(teamId)
         .then(res => {
-          this.members = res.data
+          console.log(res)
+
+          this.members = res.data.members ?? []
         })
     },
     getUsers(name: string) {

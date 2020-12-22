@@ -219,7 +219,7 @@ export default Vue.extend({
             (res.data.total ?? 0) / this.searchPaging.PER_PAGE
           )
           this.searchPaging.data = this.searchPaging.data.concat(
-            res.data.users ?? []
+            res.data.teams ?? []
           )
         })
         .catch(err => {

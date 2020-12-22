@@ -102,7 +102,7 @@ export default Vue.extend({
         .getSearchTeam('', this.PER_PAGE, (this.page - 1) * this.PER_PAGE)
         .then(res => {
           this.total = res.data.total ?? 0
-          this.users = res.data.users ?? []
+          this.users = res.data.teams ?? []
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
