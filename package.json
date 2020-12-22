@@ -1,6 +1,7 @@
 {
   "name": "Cakemix",
-  "version": "1.0.0",
+  "description": "Document management system for all creative team\nReal-time edit with multiple users",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "dev": "nuxt-ts",
