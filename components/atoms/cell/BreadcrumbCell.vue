@@ -1,7 +1,11 @@
 <template>
   <div class="breadcrumb-cell-container">
-    <div class="title" @click="goToFolder" v-text="title" />
-    <div class="triangle-right" />
+    <div
+      :class="dark ? 'black-title' : 'white-title'"
+      @click="$emit('click', folderId)"
+      v-text="title"
+    />
+    <div :class="dark ? 'black-triangle-right' : 'white-triangle-right'" />
   </div>
 </template>
 
@@ -19,13 +23,9 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-  },
-  data(): DataType {
-    return {}
-  },
-  methods: {
-    goToFolder() {
-      this.$router.push(`/folder/${this.folderId}`)
+    dark: {
+      type: Boolean,
+      default: false,
     },
   },
 })
@@ -44,19 +44,30 @@ export default Vue.extend({
     height: 30px;
     line-height: 28px;
     width: auto;
-    color: whitesmoke;
     border-radius: 8px;
     padding: 0 8px;
     margin: 0;
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
-
+  }
+  .white-title {
+    @extend .title;
+    color: whitesmoke;
     &:hover {
       color: black;
       background-color: whitesmoke;
     }
   }
+  .black-title {
+    @extend .title;
+    color: black;
+    &:hover {
+      color: whitesmoke;
+      background-color: black;
+    }
+  }
+
   .triangle-right {
     width: 21px;
     height: 21px;
@@ -64,8 +75,15 @@ export default Vue.extend({
     margin-left: -4px;
     margin-right: 12px;
     border: 5px solid;
-    border-color: whitesmoke whitesmoke transparent transparent;
     transform: rotate(45deg);
+  }
+  .white-triangle-right {
+    @extend .triangle-right;
+    border-color: whitesmoke whitesmoke transparent transparent;
+  }
+  .black-triangle-right {
+    @extend .triangle-right;
+    border-color: black black transparent transparent;
   }
 }
 </style>
