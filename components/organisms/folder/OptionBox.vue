@@ -55,7 +55,7 @@
         :current-folder-id="currentFolderId"
         :item-id="model.uuid"
         :is-folder="isFolder"
-        @updated="isMoveEnable = false"
+        @updated="moved"
       />
     </b-modal>
   </div>
@@ -218,6 +218,10 @@ export default Vue.extend({
     updateOwner(newOwner: ProfileModel) {
       this.newModel.owner = newOwner
       this.isChangeOwnerEnable = false
+    },
+    moved() {
+      this.isMoveEnable = false
+      this.$emit('reload')
     },
     update() {
       if (this.newModel.owner === undefined) {

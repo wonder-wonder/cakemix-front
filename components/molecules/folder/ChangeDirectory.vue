@@ -108,7 +108,7 @@ export default Vue.extend({
           .moveDoc(this.itemId, tId)
           .then(() => {
             // @ts-ignore
-            this.successToast(this.$buefy, 'Moved document')
+            this.successToast(this.$buefy, 'Document moved ')
             this.$emit('updated')
           })
       }
