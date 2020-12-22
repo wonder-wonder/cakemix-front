@@ -58,7 +58,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/styles/bulma.scss'],
+  css: ['@mdi/font/css/materialdesignicons.min.css', '~/styles/bulma.scss'],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
@@ -78,7 +78,13 @@ export default {
    */
   modules: [
     // Doc: https://buefy.github.io/#/documentation
-    ['nuxt-buefy', { css: false }],
+    [
+      'nuxt-buefy',
+      {
+        css: false,
+        materialDesignIcons: false,
+      },
+    ],
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
