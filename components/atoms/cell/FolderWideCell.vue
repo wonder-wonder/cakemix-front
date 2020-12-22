@@ -1,5 +1,5 @@
 <template>
-  <div class="user-wide-cell-container">
+  <div class="folder-wide-cell-container">
     <div class="icon-box">
       <i class="fa fa-folder" />
     </div>
@@ -11,7 +11,6 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { FolderModel } from '@/scripts/api/index'
-import { toDate } from '@/scripts/utils/date'
 
 export default Vue.extend({
   props: {
@@ -20,14 +19,11 @@ export default Vue.extend({
       default: {} as FolderModel,
     },
   },
-  methods: {
-    toDate,
-  },
 })
 </script>
 
 <style lang="scss">
-.user-wide-cell-container {
+.folder-wide-cell-container {
   display: grid;
   grid-template-rows: 20px 20px;
   grid-template-columns: 40px auto;
