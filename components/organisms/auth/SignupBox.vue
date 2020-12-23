@@ -32,7 +32,7 @@ import { emailValidator, passwordValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
   email: string
-  username: string
+  userName: string
   isUnique: boolean
   password: string
   isLoading: boolean
@@ -45,7 +45,7 @@ export default Vue.extend({
   data(): DataType {
     return {
       email: '',
-      username: '',
+      userName: '',
       isUnique: false,
       password: '',
       isLoading: false,
@@ -62,7 +62,7 @@ export default Vue.extend({
     emailValidator,
     passwordValidator,
     updateUserName(userName: string) {
-      this.username = userName
+      this.userName = userName
       new AuthApi()
         .getAuthCheckUserUsername(this.signupToken, userName)
         .then(() => {
@@ -74,7 +74,7 @@ export default Vue.extend({
     },
     request() {
       if (
-        this.username === '' ||
+        this.userName === '' ||
         this.email === '' ||
         this.password === '' ||
         this.signupToken === ''
@@ -86,7 +86,7 @@ export default Vue.extend({
       this.isLoading = true
       const model: AuthRegistReqModel = {
         email: this.email,
-        username: this.username,
+        username: this.userName,
         password: this.password,
       }
       new AuthApi(this.$store.getters['auth/config'])
