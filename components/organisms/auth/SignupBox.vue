@@ -8,13 +8,13 @@
     />
     <ValidateInput
       :label-name="'Email'"
-      :message="['OK', 'Invalid email']"
+      :message="['OK', 'Invalid email address']"
       :is-valid="emailValidator(email)"
       @text="email = $event"
     />
     <ValidateInput
       :label-name="'Password'"
-      :message="['OK', 'Needs 8 or more characters']"
+      :message="['OK', 'Needs 8 or more characters includes number']"
       :is-password="true"
       :is-valid="passwordValidator(password)"
       @text="password = $event"
@@ -99,9 +99,9 @@ export default Vue.extend({
           )
           this.$router.push('/auth/login')
         })
-        .catch(() => {
+        .catch(err => {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Signup Failed', 2)
+          this.failureToast(this.$buefy, 'Signup Failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

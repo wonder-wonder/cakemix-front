@@ -1,5 +1,5 @@
 export const emailValidator = (text: string): boolean => {
-  const reg: RegExp = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-\\+]*@.+$/
+  const reg: RegExp = /^.+@.+$/
   return reg.test(text)
 }
 
