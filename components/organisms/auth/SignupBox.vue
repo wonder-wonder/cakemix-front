@@ -8,13 +8,13 @@
     />
     <ValidateInput
       :label-name="'Email'"
-      :message="['OK', 'Invalid email']"
+      :message="['OK', 'Invalid email address']"
       :is-valid="emailValidator(email)"
       @text="email = $event"
     />
     <ValidateInput
       :label-name="'Password'"
-      :message="['OK', 'Needs 8 or more characters']"
+      :message="['OK', 'Needs 8 or more characters includes number']"
       :is-password="true"
       :is-valid="passwordValidator(password)"
       @text="password = $event"
