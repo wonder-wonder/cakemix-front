@@ -99,9 +99,9 @@ export default Vue.extend({
           )
           this.$router.push('/auth/login')
         })
-        .catch(() => {
+        .catch(err => {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Signup Failed', 2)
+          this.failureToast(this.$buefy, 'Signup Failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false
