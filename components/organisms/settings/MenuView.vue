@@ -1,6 +1,11 @@
 <template>
   <div class="menu-view-container">
-    <b-tabs v-model="current" class="menu-tabs-container" type="is-boxed">
+    <b-tabs
+      :value="current"
+      class="menu-tabs-container"
+      type="is-boxed"
+      @input="changedTab"
+    >
       <template v-for="tab in tabs">
         <b-tab-item
           v-if="tab.displayed"
@@ -34,10 +39,10 @@ type TabModel = {
 }
 
 const TAB_TYPE_MODEL = {
-  PROFILE: '0',
-  AUTH: '1',
-  USERS: '2',
-  TEAMS: '3',
+  PROFILE: 'profile',
+  AUTH: 'auth',
+  USERS: 'users',
+  TEAMS: 'teams',
 } as const
 
 const tabs = [
@@ -74,7 +79,6 @@ const tabs = [
 type DataType = {
   TAB_TYPE_MODEL: Object
   tabs: TabModel[]
-  current: string
 }
 
 export default Vue.extend({
@@ -84,15 +88,23 @@ export default Vue.extend({
     Users,
     Teams,
   },
+  props: {
+    current: {
+      type: String,
+      default: TAB_TYPE_MODEL.PROFILE,
+    },
+  },
   data(): DataType {
     return {
       tabs,
       TAB_TYPE_MODEL,
-      current: TAB_TYPE_MODEL.PROFILE,
     }
   },
-  computed: {},
-  methods: {},
+  methods: {
+    changedTab(view: string) {
+      this.$router.push(`/settings/${view}`)
+    },
+  },
 })
 </script>
 

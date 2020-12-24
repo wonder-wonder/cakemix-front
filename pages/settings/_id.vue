@@ -1,7 +1,7 @@
 <template>
   <div class="settings-container">
     <NavHeader :is-drop-down-enable="true" />
-    <MenuView />
+    <MenuView :current="view" />
   </div>
 </template>
 
@@ -14,6 +14,11 @@ export default Vue.extend({
   components: {
     NavHeader,
     MenuView,
+  },
+  computed: {
+    view(): string {
+      return this.$route.params.id
+    },
   },
 })
 </script>
