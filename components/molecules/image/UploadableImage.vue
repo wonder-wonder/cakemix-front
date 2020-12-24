@@ -7,19 +7,11 @@
         :alt="labelName"
         :ratio="ratio"
         :rounded="rounded"
-      >
-        <b-skeleton
-          slot="placeholder"
-          class="skeleton-placeholder"
-          height="100%"
-        />
-      </b-image>
+        :placeholder="placeholder"
+      />
     </b-field>
-    <b-field
-      class="file is-primary file-button-box"
-      :class="{ 'has-name': !!file }"
-    >
-      <b-upload v-model="file" class="file-label">
+    <b-field class="file is-primary file-button-box">
+      <b-upload class="file-label" @input="$emit('upload', $event)">
         <span class="file-cta">
           <b-icon class="file-icon" icon="upload" />
           <span class="file-label">Click to upload</span>
@@ -40,11 +32,11 @@ export default Vue.extend({
     },
     placeholder: {
       type: String,
-      default: '',
+      default: require('@/assets/noimage.png'),
     },
     src: {
       type: String,
-      default: 'https://picsum.photos/256/256',
+      default: require('@/assets/noimage.png'),
     },
     ratio: {
       type: String,
@@ -54,11 +46,6 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      file: null,
-    }
   },
 })
 </script>

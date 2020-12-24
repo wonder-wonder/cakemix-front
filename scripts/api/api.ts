@@ -400,7 +400,7 @@ export interface InlineResponse2003 {
      * @type {Array<ProfileModel>}
      * @memberof InlineResponse2003
      */
-    users?: Array<ProfileModel>;
+    teams?: Array<ProfileModel>;
 }
 /**
  * 
@@ -419,7 +419,7 @@ export interface InlineResponse2004 {
      * @type {Array<ProfileModel>}
      * @memberof InlineResponse2004
      */
-    teams?: Array<ProfileModel>;
+    users?: Array<ProfileModel>;
 }
 /**
  * 
@@ -1607,200 +1607,6 @@ export class AuthApi extends BaseAPI {
 
 
 /**
- * DefaultApi - axios parameter creator
- * @export
- */
-export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Get uploaded image
-         * @param {string} imgid Image ID
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getImageImgid: async (imgid: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'imgid' is not null or undefined
-            if (imgid === null || imgid === undefined) {
-                throw new RequiredError('imgid','Required parameter imgid was null or undefined when calling getImageImgid.');
-            }
-            const localVarPath = `/image/{imgid}`
-                .replace(`{${"imgid"}}`, encodeURIComponent(String(imgid)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Upload image
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postImage: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/image`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication JWT required
-            // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
-
-
-    
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * DefaultApi - functional programming interface
- * @export
- */
-export const DefaultApiFp = function(configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @summary Get uploaded image
-         * @param {string} imgid Image ID
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getImageImgid(imgid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).getImageImgid(imgid, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
-         * @summary Upload image
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async postImage(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).postImage(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-    }
-};
-
-/**
- * DefaultApi - factory interface
- * @export
- */
-export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    return {
-        /**
-         * 
-         * @summary Get uploaded image
-         * @param {string} imgid Image ID
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getImageImgid(imgid: string, options?: any): AxiosPromise<void> {
-            return DefaultApiFp(configuration).getImageImgid(imgid, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Upload image
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postImage(options?: any): AxiosPromise<InlineResponse2005> {
-            return DefaultApiFp(configuration).postImage(options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * DefaultApi - object-oriented interface
- * @export
- * @class DefaultApi
- * @extends {BaseAPI}
- */
-export class DefaultApi extends BaseAPI {
-    /**
-     * 
-     * @summary Get uploaded image
-     * @param {string} imgid Image ID
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public getImageImgid(imgid: string, options?: any) {
-        return DefaultApiFp(this.configuration).getImageImgid(imgid, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Upload image
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public postImage(options?: any) {
-        return DefaultApiFp(this.configuration).postImage(options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
  * DocumentApi - axios parameter creator
  * @export
  */
@@ -2824,6 +2630,216 @@ export class FolderApi extends BaseAPI {
 
 
 /**
+ * ImageApi - axios parameter creator
+ * @export
+ */
+export const ImageApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getImageImgid: async (imgid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'imgid' is not null or undefined
+            if (imgid === null || imgid === undefined) {
+                throw new RequiredError('imgid','Required parameter imgid was null or undefined when calling getImageImgid.');
+            }
+            const localVarPath = `/image/{imgid}`
+                .replace(`{${"imgid"}}`, encodeURIComponent(String(imgid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {any} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postImage: async (file: any, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'file' is not null or undefined
+            if (file === null || file === undefined) {
+                throw new RequiredError('file','Required parameter file was null or undefined when calling postImage.');
+            }
+            const localVarPath = `/image`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+            if (file !== undefined) { 
+                localVarFormParams.append('file', file as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ImageApi - functional programming interface
+ * @export
+ */
+export const ImageApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getImageImgid(imgid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ImageApiAxiosParamCreator(configuration).getImageImgid(imgid, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {any} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postImage(file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
+            const localVarAxiosArgs = await ImageApiAxiosParamCreator(configuration).postImage(file, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+    }
+};
+
+/**
+ * ImageApi - factory interface
+ * @export
+ */
+export const ImageApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    return {
+        /**
+         * 
+         * @summary Get uploaded image
+         * @param {string} imgid Image ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getImageImgid(imgid: string, options?: any): AxiosPromise<void> {
+            return ImageApiFp(configuration).getImageImgid(imgid, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Upload image
+         * @param {any} file 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postImage(file: any, options?: any): AxiosPromise<InlineResponse2005> {
+            return ImageApiFp(configuration).postImage(file, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ImageApi - object-oriented interface
+ * @export
+ * @class ImageApi
+ * @extends {BaseAPI}
+ */
+export class ImageApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get uploaded image
+     * @param {string} imgid Image ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ImageApi
+     */
+    public getImageImgid(imgid: string, options?: any) {
+        return ImageApiFp(this.configuration).getImageImgid(imgid, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Upload image
+     * @param {any} file 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ImageApi
+     */
+    public postImage(file: any, options?: any) {
+        return ImageApiFp(this.configuration).postImage(file, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * ProfileApi - axios parameter creator
  * @export
  */
@@ -3194,7 +3210,7 @@ export const SearchApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004>> {
+        async getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
             const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchTeam(q, limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
@@ -3210,7 +3226,7 @@ export const SearchApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
+        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004>> {
             const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchUser(q, limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};

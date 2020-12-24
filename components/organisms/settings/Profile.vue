@@ -1,22 +1,28 @@
 <template>
   <div class="setting-profile-container">
     <div class="profile-item-box">
-      <SquareIcon class="icon" :label-name="'Icon'" :src="src" />
+      <SquareIcon
+        class="icon"
+        :label-name="'Icon'"
+        :src="icon"
+        @upload="uploadImage"
+      />
       <ValidateInput
         :label-name="'UserName'"
         :message="['OK', 'Invalid charactor or already used']"
-        :is-valid="usernameValidator(userName)"
+        :is-valid="isUnique"
         :value="userName"
-        @text="userName = $event"
+        :disabled="true"
+        @text="updateUserName"
       />
       <Select
         :label-name="'Language'"
-        :select-items="selectItems"
+        :select-items="languageModel"
         :placeholder="'Select a language'"
         :current="current"
         @input="current = $event"
       />
-      <TextArea :label-name="'Biography'" :value="bio" />
+      <TextArea :label-name="'Biography'" :value="bio" @text="bio = $event" />
       <b-button
         class="update-button is-primary"
         :loading="isLoading"
@@ -33,7 +39,26 @@ import SquareIcon from '@/components/molecules/image/UploadableImage.vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import TextArea from '@/components/atoms/input/TextArea.vue'
 import Select from '@/components/atoms/input/Select.vue'
-import { checkAuthWithStatus } from '@/scripts/api/index'
+import { successToast, failureToast } from '@/scripts/utils/toast'
+import {
+  checkAuthWithStatus,
+  SearchApi,
+  ProfileApi,
+  ImageApi,
+  ProfileModel,
+} from '@/scripts/api/index'
+
+type DataType = {
+  current: string
+  icon: string
+  userName: string
+  bio: string
+  isLoading: boolean
+  isUnique: boolean
+  languageModel: string[]
+}
+
+const languageModel = ['English', 'Japanese']
 
 export default Vue.extend({
   components: {
@@ -42,23 +67,71 @@ export default Vue.extend({
     TextArea,
     Select,
   },
-  data() {
+  data(): DataType {
     return {
-      current: 'English',
-      selectItems: ['English', 'Japanese'],
-      src: 'https://picsum.photos/256/256',
-      userName: 'abcdefg',
-      bio: 'Hello!!\nThis is test biography.',
+      current: '',
+      icon: require('@/assets/noimage.png'),
+      userName: '',
+      bio: '',
       isLoading: false,
+      isUnique: false,
+      languageModel,
     }
   },
+  created() {
+    new ProfileApi(this.$store.getters['auth/config'])
+      .getUserProfileUuid(this.$store.getters['auth/uuid'])
+      .then(res => {
+        this.userName = res.data.name
+        this.current = res.data.lang === 'ja' ? 'Japanese' : 'English'
+        this.bio = res.data.bio ?? ''
+        if (res.data.icon_uri) {
+          this.icon = res.data.icon_uri
+        }
+      })
+  },
   methods: {
+    successToast,
+    failureToast,
     checkAuthWithStatus,
     request() {
-      console.log('UPDATE INFO', this.current)
+      const profile = {
+        uuid: this.$store.getters['auth/uuid'],
+        name: this.userName,
+        bio: this.bio,
+        icon_uri: this.icon,
+        lang: this.current,
+      } as ProfileModel
+      this.isLoading = true
+      new ProfileApi(this.$store.getters['auth/config'])
+        .putUserProfileUuid(this.$store.getters['auth/uuid'], profile)
+        .then(() => {
+          // @ts-ignore
+          this.successToast(this.$buefy, 'Request succeeded')
+        })
+        .catch(err => {
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Request failed', err.response.status)
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
     },
-    usernameValidator(text: string): boolean {
-      return text === 'abcdefg'
+    uploadImage(file: File) {
+      new ImageApi(this.$store.getters['auth/config'])
+        .postImage(file)
+        .then(res => {
+          this.icon = `${process.env.HTTP_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/image/${res.data.id}`
+        })
+    },
+    updateUserName(userName: string) {
+      this.userName = userName
+      new SearchApi(this.$store.getters['auth/config'])
+        .getSearchUser(userName)
+        .then(res => {
+          const users = res.data.users ?? []
+          this.isUnique = users.filter(u => u.name === userName).length === 0
+        })
     },
   },
 })
