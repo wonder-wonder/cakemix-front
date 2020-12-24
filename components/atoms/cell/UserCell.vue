@@ -26,7 +26,7 @@ export default Vue.extend({
     },
     rounded: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   computed: {
@@ -72,6 +72,10 @@ export default Vue.extend({
     .b-skeleton-item {
       width: 64px;
       height: 64px;
+    }
+
+    img {
+      border-radius: 8px;
     }
   }
 
