@@ -38,6 +38,10 @@ export default Vue.extend({
       type: Number,
       default: 3,
     },
+    rounded: {
+      type: Boolean,
+      default: true,
+    },
   },
   data(): DataType {
     return {
