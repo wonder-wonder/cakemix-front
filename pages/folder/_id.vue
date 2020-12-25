@@ -28,7 +28,9 @@
         />
       </div>
       <div class="right-container">
+        <SortBox @input="sortFunction = $event" />
         <OptionBox
+          class="option-box"
           :current-folder-id="currentFolderId"
           :model="selectItem"
           :model-type="selectType"
@@ -54,6 +56,10 @@ import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import FolderListContainer from '@/components/molecules/folder/FolderListContainer.vue'
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
+import SortBox, {
+  alphabetSort,
+  SortModel,
+} from '@/components/organisms/folder/SortBox.vue'
 import CreateFolderBox from '@/components/organisms/folder/CreateFolderBox.vue'
 import NoList from '@/components/atoms/folder/NoList.vue'
 import {
@@ -70,6 +76,7 @@ export type DataType = {
   folders: FolderModel[]
   docs: DocumentModel[]
   breadcrumb: BreadcrumbModel[]
+  sortFunction: SortModel
   selectType: string
   selectItem: FolderModel | DocumentModel
   selectedFolderIndex: number
@@ -95,6 +102,7 @@ export default Vue.extend({
       folders: [],
       docs: [],
       breadcrumb: [],
+      sortFunction: alphabetSort,
       selectType: 'NONE',
       selectItem: {},
       selectedFolderIndex: -1,
@@ -105,20 +113,26 @@ export default Vue.extend({
     }
   },
   computed: {
+    sortedFolder(): FolderModel[] {
+      return this.sortFunction.folder(this.folders)
+    },
+    sortedDocs(): DocumentModel[] {
+      return this.sortFunction.document(this.docs)
+    },
     filteredFolder(): FolderModel[] {
       if (this.searchText === '') {
-        return this.folders
+        return this.sortedFolder
       }
-      return this.folders.filter(f => {
+      return this.sortedFolder.filter(f => {
         const name = f.name ?? ''
         return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
       })
     },
     filteredDocs(): DocumentModel[] {
       if (this.searchText === '') {
-        return this.docs
+        return this.sortedDocs
       }
-      return this.docs.filter(f => {
+      return this.sortedDocs.filter(f => {
         const name = f.title ?? ''
         return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
       })
@@ -231,6 +245,7 @@ html {
     position: sticky;
     top: 50px;
     background-color: rgb(32, 32, 32);
+    z-index: 999;
   }
   .breadcrumb-item {
     position: sticky;
@@ -238,6 +253,7 @@ html {
     padding-bottom: 16px;
     border-bottom: solid 1px whitesmoke;
     background-color: rgb(32, 32, 32);
+    z-index: 999;
   }
   .explore-container {
     display: flex;
@@ -249,12 +265,14 @@ html {
       width: calc(100vw - 300px);
     }
     .right-container {
-      position: sticky;
       top: 232px;
-      max-height: 400px;
       width: 268px;
       margin: 32px;
       margin-left: 0;
+
+      .option-box {
+        margin: 16px 0;
+      }
     }
   }
 }
