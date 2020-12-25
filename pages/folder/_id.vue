@@ -16,13 +16,13 @@
       <div class="left-container">
         <FolderListContainer
           v-if="isFolderAvailable"
-          :models="folders"
+          :models="filteredFolder"
           :reset-index="selectedFolderIndex"
           @select="selectedFolderDoc"
         />
         <DocListContainer
           v-if="isDocAvailable"
-          :models="docs"
+          :models="filteredDocs"
           :reset-index="selectedDocIndex"
           @select="selectedFolderDoc"
         />
@@ -67,9 +67,9 @@ import {
 import { failureToast } from '@/scripts/utils/toast'
 
 export type DataType = {
-  folders: Array<FolderModel>
-  docs: Array<DocumentModel>
-  breadcrumb: Array<BreadcrumbModel>
+  folders: FolderModel[]
+  docs: DocumentModel[]
+  breadcrumb: BreadcrumbModel[]
   selectType: string
   selectItem: FolderModel | DocumentModel
   selectedFolderIndex: number
@@ -105,7 +105,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    filteredFolder(): Array<FolderModel> {
+    filteredFolder(): FolderModel[] {
       if (this.searchText === '') {
         return this.folders
       }
@@ -114,7 +114,7 @@ export default Vue.extend({
         return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
       })
     },
-    filteredDoc(): Array<DocumentModel> {
+    filteredDocs(): DocumentModel[] {
       if (this.searchText === '') {
         return this.docs
       }
@@ -127,7 +127,7 @@ export default Vue.extend({
       return this.filteredFolder.length > 0
     },
     isDocAvailable(): boolean {
-      return this.filteredDoc.length > 0
+      return this.filteredDocs.length > 0
     },
     isNoItems(): boolean {
       return !this.isFolderAvailable && !this.isDocAvailable
