@@ -4,6 +4,7 @@
       :value="current"
       :placeholder="placeholder"
       :disabled="disabled"
+      expanded
       @input="$emit('input', $event)"
     >
       <option
