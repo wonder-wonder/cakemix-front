@@ -6,14 +6,9 @@
         :src="src"
         :alt="labelName"
         :ratio="ratio"
+        :placeholder="placeholder"
         :rounded="rounded"
-      >
-        <b-skeleton
-          slot="placeholder"
-          class="skeleton-placeholder"
-          height="100%"
-        />
-      </b-image>
+      />
     </b-field>
   </div>
 </template>
@@ -29,7 +24,7 @@ export default Vue.extend({
     },
     placeholder: {
       type: String,
-      default: '',
+      default: require('@/assets/noimage.png'),
     },
     src: {
       type: String,
@@ -69,11 +64,5 @@ export default Vue.extend({
   .file-button-box {
     margin-bottom: 12px;
   }
-}
-
-/deep/ .b-skeleton {
-  height: 100%;
-  position: absolute;
-  top: 0;
 }
 </style>

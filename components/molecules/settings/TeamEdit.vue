@@ -18,11 +18,7 @@
           <div class="user-search-cell-container">
             <div class="icon-box">
               <i v-if="!teamHasImage" class="fa fa-user" />
-              <b-image
-                v-if="teamHasImage"
-                :src="props.option.icon_uri"
-                :rounded="rounded"
-              />
+              <b-image v-if="teamHasImage" :src="props.option.icon_uri" />
             </div>
             <div class="name">
               {{ props.option.name }}
@@ -337,7 +333,7 @@ export default Vue.extend({
 
   .users-item-box {
     width: 100%;
-    height: 250px;
+    height: 280px;
     overflow: scroll;
   }
 
