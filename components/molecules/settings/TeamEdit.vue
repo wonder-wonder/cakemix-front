@@ -2,13 +2,6 @@
   <div class="team-edit-container">
     <div class="team-item-tool-box">
       <Input :label-name="'Team Name'" :value="team.name" :disabled="true" />
-      <!-- <b-button
-        type="is-success"
-        class="change-team-name-button"
-        @click="$emit('change-team-name')"
-      >
-        Change
-      </b-button> -->
     </div>
     <b-field label="Add new member">
       <b-autocomplete
@@ -25,11 +18,7 @@
           <div class="user-search-cell-container">
             <div class="icon-box">
               <i v-if="!teamHasImage" class="fa fa-user" />
-              <b-image
-                v-if="teamHasImage"
-                :src="props.option.icon_uri"
-                :rounded="rounded"
-              />
+              <b-image v-if="teamHasImage" :src="props.option.icon_uri" />
             </div>
             <div class="name">
               {{ props.option.name }}
@@ -38,23 +27,25 @@
         </template>
       </b-autocomplete>
     </b-field>
-    <div class="users-item-tool-box">
-      <b-input
-        placeholder="Search..."
-        type="text"
-        class="user-search-input"
-        @input="userSearchInput = $event"
-      />
-    </div>
     <div class="users-item-box">
       <TeamMemberWideCell
-        v-for="(user, index) in filteredMember"
+        v-for="(user, index) in memberPaging.data"
         :key="`user-cell-${uuid}-${index}`"
         :user="user"
         :own-permission="ownPermission"
         @changed="changedPermComfirm(user, $event)"
       />
     </div>
+    <b-pagination
+      v-model="memberPaging.page"
+      class="pagination"
+      :total="memberPaging.total"
+      :per-page="memberPaging.PER_PAGE"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page"
+    />
     <b-button
       type="is-danger"
       class="delete-team-button"
@@ -82,13 +73,13 @@ import {
 type DataType = {
   uuid: string
   searchName: string
-  searchPaging: SearchPagingModel
-  members: MemberInfoModel[]
+  memberPaging: PagingModel
+  searchPaging: PagingModel
   userSearchInput: string
 }
 
-type SearchPagingModel = {
-  data: ProfileModel[]
+type PagingModel = {
+  data: ProfileModel[] | MemberInfoModel[]
   total: number
   page: number
   PER_PAGE: number
@@ -110,14 +101,20 @@ export default Vue.extend({
     return {
       uuid: uuidv4(),
       searchName: '',
+      memberPaging: {
+        data: [] as MemberInfoModel[],
+        total: 0,
+        page: 1,
+        PER_PAGE: 5,
+        isFetching: false,
+      } as PagingModel,
       searchPaging: {
         data: [] as ProfileModel[],
-        total: 9999,
+        total: 0,
         page: 1,
         PER_PAGE: 20,
         isFetching: false,
-      } as SearchPagingModel,
-      members: [] as MemberInfoModel[],
+      } as PagingModel,
       userSearchInput: '',
     }
   },
@@ -125,21 +122,12 @@ export default Vue.extend({
     teamHasImage(): boolean {
       return !(this.team.icon_uri === undefined || this.team.icon_uri === '')
     },
-    filteredMember(): MemberInfoModel[] {
-      if (this.userSearchInput === '') {
-        return this.members
-      }
-      const reg = RegExp(`.*${this.userSearchInput}.*`)
-      return this.members.filter(mm => {
-        const name = (mm.member as ProfileModel).name
-        return reg.test(name)
-      })
-    },
     ownPermission(): number {
-      const own = this.members.filter(mm => {
+      const members = this.memberPaging.data as MemberInfoModel[]
+      const own = members.filter(mm => {
         const uuid = (mm.member as ProfileModel).uuid
         return uuid === this.$store.getters['auth/uuid']
-      }) as MemberInfoModel[]
+      })
       if (own.length === 0) {
         return 3
       }
@@ -182,9 +170,21 @@ export default Vue.extend({
         return
       }
       new TeamApi(this.$store.getters['auth/config'])
-        .getTeamTeamidMember(teamId)
+        .getTeamTeamidMember(
+          teamId,
+          this.memberPaging.PER_PAGE,
+          (this.memberPaging.page - 1) * this.memberPaging.PER_PAGE
+        )
         .then(res => {
-          this.members = res.data.members ?? []
+          this.memberPaging.total = res.data.total ?? 0
+          const member = this.memberPaging.data as MemberInfoModel[]
+          this.memberPaging.data = member.concat(res.data.members ?? [])
+        })
+        .catch(err => {
+          const status = err.response.status
+          this.checkAuthWithStatus(this, err.response.status)
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Get member failed', status)
         })
     },
     getUsers(name: string) {
@@ -208,9 +208,8 @@ export default Vue.extend({
           this.searchPaging.total = Math.ceil(
             (res.data.total ?? 0) / this.searchPaging.PER_PAGE
           )
-          this.searchPaging.data = this.searchPaging.data.concat(
-            res.data.users ?? []
-          )
+          const users = this.searchPaging.data as ProfileModel[]
+          this.searchPaging.data = users.concat(res.data.users ?? [])
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
@@ -334,7 +333,7 @@ export default Vue.extend({
 
   .users-item-box {
     width: 100%;
-    height: 300px;
+    height: 280px;
     overflow: scroll;
   }
 
@@ -347,6 +346,10 @@ export default Vue.extend({
       margin-right: 16px;
       color: black;
     }
+  }
+
+  .pagination {
+    margin: 8px 0px;
   }
 
   .delete-team-button {

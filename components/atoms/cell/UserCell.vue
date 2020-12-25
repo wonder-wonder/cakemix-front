@@ -2,9 +2,7 @@
   <div class="user-cell-container">
     <div class="icon-box">
       <i v-if="!hasImage" class="fa" :class="isTeam ? 'fa-users' : 'fa-user'" />
-      <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded">
-        <b-skeleton slot="placeholder" class="skeleton-placeholder" />
-      </b-image>
+      <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded" />
     </div>
     <div class="username-box">
       <span v-text="user.name" />
@@ -25,6 +23,10 @@ export default Vue.extend({
     user: {
       type: Object as PropType<ProfileModel>,
       default: {} as ProfileModel,
+    },
+    rounded: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -66,10 +68,8 @@ export default Vue.extend({
     justify-content: center;
     font-size: 40px;
 
-    .b-skeleton,
-    .b-skeleton-item {
-      width: 64px;
-      height: 64px;
+    img {
+      border-radius: 4px;
     }
   }
 

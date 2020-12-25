@@ -33,7 +33,6 @@
               <b-image
                 v-if="props.option.icon_uri"
                 :src="props.option.icon_uri"
-                :rounded="rounded"
               />
             </div>
             <div class="name">

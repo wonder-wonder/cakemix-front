@@ -38,6 +38,10 @@ export default Vue.extend({
       type: Number,
       default: 3,
     },
+    rounded: {
+      type: Boolean,
+      default: false,
+    },
   },
   data(): DataType {
     return {
@@ -105,8 +109,12 @@ export default Vue.extend({
     height: 40px;
     width: 40px;
     font-size: 32px;
-    border-radius: 8px;
+    border-radius: 4px;
     background-color: black;
+
+    img {
+      border-radius: 4px;
+    }
   }
 
   .title-item {
