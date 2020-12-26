@@ -1,10 +1,11 @@
 <template>
   <div class="list-container">
     <BorderTitle :title="'Folder'" class="border-title" />
-    <div class="item-container">
+    <div ref="folder-container" class="item-container">
       <Folder
         v-for="(model, index) in models"
         :key="`F${index}${uuid}`"
+        class="folder-cell"
         :folder="model"
         :is-selected="selectedIndex === index"
         @click.native="selected(model, index)"
@@ -52,6 +53,13 @@ export default Vue.extend({
       this.selectedIndex = -1
     },
   },
+  mounted() {
+    this.updateWidth()
+    window.addEventListener('resize', this.updateWidth)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth)
+  },
   methods: {
     goToFolder(folderId: string) {
       this.$router.push({ path: `/folder/${folderId}` })
@@ -59,6 +67,21 @@ export default Vue.extend({
     selected(model: FolderModel, index: number) {
       this.selectedIndex = index
       this.$emit('select', 'FOLDER', model)
+    },
+    updateWidth() {
+      const cellWidth = 316
+      const hMargin = 8 * 2
+      const folderContainer = this.$refs['folder-container'] as HTMLElement
+      const listWidth = folderContainer.clientWidth
+      const leastNumCell = Math.floor(listWidth / cellWidth)
+      const listWidthDiff = listWidth - leastNumCell * cellWidth
+      const eCellWidth =
+        cellWidth - hMargin + Math.floor(listWidthDiff / leastNumCell)
+      const folderCells = document.getElementsByClassName('folder-cell')
+      for (let index = 0; index < folderCells.length; index++) {
+        const cell = folderCells[index] as HTMLElement
+        cell.style.width = `${eCellWidth}px`
+      }
     },
   },
 })

@@ -59,7 +59,7 @@ export default Vue.extend({
 <style lang="scss">
 .document-box {
   display: grid;
-  width: 300px;
+  min-width: 300px;
   grid-template-rows: 48px 4px 16px 16px;
   grid-template-columns: 36px 1fr;
   border: solid 1px white;
