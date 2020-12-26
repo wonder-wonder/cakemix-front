@@ -142,9 +142,10 @@ export default Vue.extend({
       const uuid = this.newModel.uuid !== undefined ? this.newModel.uuid : '---'
       const owner = this.newModel.owner as ProfileModel
       const ownerName = owner !== undefined ? owner.name : '---'
+      const updater = this.newModel.updater as ProfileModel
+      const updaterName = updater !== undefined ? updater.name : '---'
       const createdAt = this.newModel.created_at ?? 0
       const updatedAt = this.newModel.updated_at ?? 0
-      const perm = this.permission
 
       return [
         { title: 'UUID', detail: uuid } as OptionInfoModel,
@@ -153,8 +154,8 @@ export default Vue.extend({
           detail: ownerName,
         } as OptionInfoModel,
         {
-          title: 'Permission',
-          detail: perm,
+          title: 'Updater',
+          detail: updaterName,
         } as OptionInfoModel,
         {
           title: 'Created at',
