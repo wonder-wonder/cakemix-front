@@ -245,7 +245,7 @@ html {
     position: sticky;
     top: 50px;
     background-color: rgb(32, 32, 32);
-    z-index: 999;
+    z-index: 10;
   }
   .breadcrumb-item {
     position: sticky;
@@ -253,7 +253,7 @@ html {
     padding-bottom: 16px;
     border-bottom: solid 1px whitesmoke;
     background-color: rgb(32, 32, 32);
-    z-index: 999;
+    z-index: 10;
   }
   .explore-container {
     display: flex;
