@@ -7,7 +7,7 @@
       <span v-text="doc.title" />
     </div>
     <div class="desc1-box">
-      <span v-text="doc.owner.name" />
+      <span v-text="doc.updater.name" />
     </div>
     <div class="desc2-box">
       <span v-text="toDate(doc.updated_at)" />
