@@ -96,10 +96,10 @@ export default Vue.extend({
   .item-container {
     display: flex;
     flex-flow: row wrap;
-    margin: 16px;
+    margin: 0px 24px;
 
     .folder-box {
-      margin: 16px 0 0 16px;
+      margin: 8px;
     }
   }
 
