@@ -12,16 +12,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 
-@Component
-export default class DocSwitchButton extends Vue {
-  @Prop({ default: 'pencil' })
-  iconType!: string
-
-  @Prop({ default: 'false' })
-  isSelected!: boolean
-}
+export default Vue.extend({
+  props: {
+    iconType: {
+      type: String,
+      default: 'pencil',
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
+  },
+})
 </script>
 
 <style lang="scss" scoped>

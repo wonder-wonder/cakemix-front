@@ -19,23 +19,24 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
 import DocSwitchButton from '@/components/atoms/document/DocSwitchButton.vue'
 
-@Component({
+export default Vue.extend({
   components: {
     DocSwitchButton,
   },
+  computed: {
+    selectedRef() {
+      return this.$store.getters['editor/displayType']
+    },
+  },
+  methods: {
+    selected(ref: number) {
+      this.$store.commit('editor/displayType', ref)
+    },
+  },
 })
-export default class DocSwitch extends Vue {
-  get selectedRef() {
-    return this.$store.getters['editor/displayType']
-  }
-
-  selected(ref: number) {
-    this.$store.commit('editor/displayType', ref)
-  }
-}
 </script>
 
 <style lang="scss">
