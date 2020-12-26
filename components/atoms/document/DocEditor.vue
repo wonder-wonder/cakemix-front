@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { AuthApi, checkAuthWithStatus } from '~/scripts/api'
 const editor = require('@/scripts/editor/editor.ts')
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 const ot = require('@/scripts/editor/ot/ot.js')
@@ -53,23 +54,16 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.cMirror = editor.newEditor(this.$refs.cmeditor)
-    this.cMirror.on('change', this.changeEvent)
-    this.cMirror.on('scroll', this.scrollEvent)
-    // cMirror.on('drop', this.dropEvent)
-    const url =
-      `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/` +
-      this.$route.params.id +
-      '/ws?token=' +
-      this.$store.getters['auth/token']
-    this.websocket = new socket.SocketConnection(url)
-    this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
-    this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
-    this.websocket.on('registered', this.registeredEvent)
-    this.websocket.on('join', this.joinEvent)
-    this.websocket.on('quit', this.quitEvent)
-    this.websocket.on('doc', this.docEvent)
-    this.websocket.on('close', this.closeEvent)
+    new AuthApi(this.$store.getters['auth/config'])
+      .getCheckToken()
+      .then(() => {
+        this.makeConnection()
+      })
+      .catch(err => {
+        this.checkAuthWithStatus(this, err.response.status)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Auth failed', err.response.status)
+      })
   },
   beforeDestroy() {
     this.websocket.off('registered', this.registeredEvent)
@@ -87,6 +81,26 @@ export default Vue.extend({
     this.websocket = null
   },
   methods: {
+    checkAuthWithStatus,
+    makeConnection() {
+      this.cMirror = editor.newEditor(this.$refs.cmeditor)
+      this.cMirror.on('change', this.changeEvent)
+      this.cMirror.on('scroll', this.scrollEvent)
+      // cMirror.on('drop', this.dropEvent)
+      const url =
+        `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/` +
+        this.$route.params.id +
+        '/ws?token=' +
+        this.$store.getters['auth/token']
+      this.websocket = new socket.SocketConnection(url)
+      this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
+      this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
+      this.websocket.on('registered', this.registeredEvent)
+      this.websocket.on('join', this.joinEvent)
+      this.websocket.on('quit', this.quitEvent)
+      this.websocket.on('doc', this.docEvent)
+      this.websocket.on('close', this.closeEvent)
+    },
     //
     // CodeMirror Event
     //
