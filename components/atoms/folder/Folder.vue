@@ -10,7 +10,7 @@
       <span v-text="folder.owner.name" />
     </div>
     <div class="desc2-box">
-      <span v-text="toDate(folder.created_at)" />
+      <span v-text="toDate(folder.updated_at)" />
     </div>
   </div>
 </template>

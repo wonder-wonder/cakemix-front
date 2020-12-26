@@ -10,7 +10,7 @@
       <span v-text="doc.owner.name" />
     </div>
     <div class="desc2-box">
-      <span v-text="toDate(doc.created_at)" />
+      <span v-text="toDate(doc.updated_at)" />
     </div>
   </div>
 </template>
