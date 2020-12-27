@@ -64,6 +64,11 @@ export default Vue.extend({
         // @ts-ignore
         this.failureToast(this.$buefy, 'Auth failed', err.response.status)
       })
+
+    this.cMirror = editor.newEditor(this.$refs.cmeditor)
+    this.cMirror.on('change', this.changeEvent)
+    this.cMirror.on('scroll', this.scrollEvent)
+    this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
   },
   beforeDestroy() {
     this.websocket.off('registered', this.registeredEvent)
@@ -83,10 +88,6 @@ export default Vue.extend({
   methods: {
     checkAuthWithStatus,
     makeConnection() {
-      this.cMirror = editor.newEditor(this.$refs.cmeditor)
-      this.cMirror.on('change', this.changeEvent)
-      this.cMirror.on('scroll', this.scrollEvent)
-      // cMirror.on('drop', this.dropEvent)
       const url =
         `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/` +
         this.$route.params.id +
@@ -94,7 +95,6 @@ export default Vue.extend({
         this.$store.getters['auth/token']
       this.websocket = new socket.SocketConnection(url)
       this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
-      this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
       this.websocket.on('registered', this.registeredEvent)
       this.websocket.on('join', this.joinEvent)
       this.websocket.on('quit', this.quitEvent)
