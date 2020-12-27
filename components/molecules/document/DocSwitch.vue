@@ -2,18 +2,18 @@
   <div class="document-switch-container">
     <DocSwitchButton
       :icon-type="'pencil'"
-      :is-selected="selectedRef === 1"
-      @click="selected(1)"
+      :is-selected="selected === 1"
+      @click="updateStatus(1)"
     />
     <DocSwitchButton
       :icon-type="'split'"
-      :is-selected="selectedRef === 2"
-      @click="selected(2)"
+      :is-selected="selected === 2"
+      @click="updateStatus(2)"
     />
     <DocSwitchButton
       :icon-type="'eye'"
-      :is-selected="selectedRef === 3"
-      @click="selected(3)"
+      :is-selected="selected === 3"
+      @click="updateStatus(3)"
     />
   </div>
 </template>
@@ -27,13 +27,16 @@ export default Vue.extend({
     DocSwitchButton,
   },
   computed: {
-    selectedRef() {
+    selected() {
       return this.$store.getters['editor/displayType']
     },
   },
+  created() {
+    this.updateStatus(2)
+  },
   methods: {
-    selected(ref: number) {
-      this.$store.commit('editor/displayType', ref)
+    updateStatus(status: number) {
+      this.$store.commit('editor/displayType', status)
     },
   },
 })
@@ -44,6 +47,7 @@ export default Vue.extend({
   display: inline-flex;
   flex-flow: row nowrap;
   border-radius: 5px;
-  background-color: white;
+  color: white;
+  background-color: gray;
 }
 </style>

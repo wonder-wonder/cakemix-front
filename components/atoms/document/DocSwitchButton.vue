@@ -31,14 +31,14 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .document-switch-button {
   height: 40px;
-  padding: 8px 16px;
-  font-size: 16px;
+  padding: 5px 16px;
+  font-size: 20px;
   border-radius: 5px;
 
   &.active {
-    background-color: rgb(255, 183, 50);
+    background-color: white;
     .fa {
-      color: white;
+      color: black;
     }
   }
 }
