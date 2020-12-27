@@ -1,10 +1,11 @@
 <template>
   <div class="list-container">
     <BorderTitle :title="'Document'" class="border-title" />
-    <div class="item-container">
+    <div ref="doc-container" class="item-container">
       <Document
         v-for="(model, index) in models"
         :key="`D${index}${uuid}`"
+        class="doc-cell"
         :doc="model"
         :is-selected="selectedIndex === index"
         @click.native="selected(model, index)"
@@ -52,6 +53,13 @@ export default Vue.extend({
       this.selectedIndex = -1
     },
   },
+  mounted() {
+    this.updateWidth()
+    window.addEventListener('resize', this.updateWidth)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth)
+  },
   methods: {
     goToDoc(documentId: string) {
       this.$router.push({ path: `/doc/${documentId}` })
@@ -59,6 +67,21 @@ export default Vue.extend({
     selected(model: DocumentModel, index: Number) {
       this.selectedIndex = index
       this.$emit('select', 'DOCUMENT', model)
+    },
+    updateWidth() {
+      const cellWidth = 316
+      const hMargin = 8 * 2
+      const docContainer = this.$refs['doc-container'] as HTMLElement
+      const listWidth = docContainer.clientWidth
+      const leastNumCell = Math.floor(listWidth / cellWidth)
+      const listWidthDiff = listWidth - leastNumCell * cellWidth
+      const eCellWidth =
+        cellWidth - hMargin + Math.floor(listWidthDiff / leastNumCell)
+      const docCells = document.getElementsByClassName('doc-cell')
+      for (let index = 0; index < docCells.length; index++) {
+        const cell = docCells[index] as HTMLElement
+        cell.style.width = `${eCellWidth}px`
+      }
     },
   },
 })
@@ -96,10 +119,10 @@ export default Vue.extend({
   .item-container {
     display: flex;
     flex-flow: row wrap;
-    margin: 16px;
+    margin: 0px 24px;
 
     .document-box {
-      margin: 16px 0 0 16px;
+      margin: 8px;
     }
   }
 
