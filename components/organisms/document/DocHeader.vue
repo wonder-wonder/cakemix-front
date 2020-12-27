@@ -1,6 +1,6 @@
 <template>
   <div class="editor-header">
-    <HomeIcon class="home-icon-box" />
+    <DocNav class="doc-nav-box" :folder-id="parentId" />
     <DocSwitch />
     <DocSwitchButton
       :icon-type="'question'"
@@ -12,13 +12,28 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import DocNav from '@/components/molecules/document/DocNav.vue'
 import DocSwitch from '@/components/molecules/document/DocSwitch.vue'
 import DocSwitchButton from '@/components/atoms/document/DocSwitchButton.vue'
 
+type DataType = {
+  parentId: string
+}
+
 export default Vue.extend({
   components: {
+    DocNav,
     DocSwitch,
     DocSwitchButton,
+  },
+  data(): DataType {
+    return {
+      parentId: '',
+    }
+  },
+  created() {
+    // TODO: api call to get parent id
+    this.parentId = ''
   },
 })
 </script>
