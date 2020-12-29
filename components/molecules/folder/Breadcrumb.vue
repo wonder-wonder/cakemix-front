@@ -3,6 +3,7 @@
     <Cell
       v-for="(item, index) in breadcrumb"
       :key="index"
+      class="breadcrumb-cell"
       :title="getTitle(item.title)"
       :folder-id="item.folder_id"
       :dark="dark"
@@ -43,9 +44,12 @@ export default Vue.extend({
   display: flex;
   flex-flow: row wrap;
   justify-content: left;
-  padding: 0 32px;
-  min-height: 40px;
+  min-height: 38px;
   height: auto;
   width: 100%;
+
+  .breadcrumb-cell {
+    margin: 4px;
+  }
 }
 </style>

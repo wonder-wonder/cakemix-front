@@ -343,7 +343,7 @@ export default Vue.extend({
   align-items: center;
   padding: 20px;
   background-color: whitesmoke;
-  border-radius: 16px;
+  border-radius: 4px;
   height: auto;
   width: 100%;
 

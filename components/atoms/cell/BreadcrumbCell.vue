@@ -5,7 +5,11 @@
       @click="$emit('click', folderId)"
       v-text="title"
     />
-    <div :class="dark ? 'black-triangle-right' : 'white-triangle-right'" />
+    <i
+      class="fa fa-chevron-right"
+      :class="dark ? 'white-triangle' : 'black-triangle'"
+    />
+    <!-- <div :class="dark ? 'black-triangle-right' : 'white-triangle-right'" /> -->
   </div>
 </template>
 
@@ -35,8 +39,9 @@ export default Vue.extend({
 .breadcrumb-cell-container {
   display: flex;
   flex-flow: row nowrap;
-  align-content: center;
-  margin-top: 4px;
+  justify-content: center;
+  align-items: center;
+  height: auto;
   width: auto;
   user-select: none;
 
@@ -46,10 +51,11 @@ export default Vue.extend({
     width: auto;
     border-radius: 8px;
     padding: 0 8px;
-    margin: 0;
+    margin-right: 8px;
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
+    overflow: hidden;
   }
   .white-title {
     @extend .title;
@@ -68,22 +74,19 @@ export default Vue.extend({
     }
   }
 
-  .triangle-right {
-    width: 21px;
-    height: 21px;
-    margin-top: 4px;
-    margin-left: -4px;
-    margin-right: 12px;
-    border: 5px solid;
-    transform: rotate(45deg);
+  .triangle {
+    font-size: 24px;
+    margin-top: 2px;
   }
-  .white-triangle-right {
-    @extend .triangle-right;
-    border-color: whitesmoke whitesmoke transparent transparent;
+
+  .black-triangle {
+    @extend .triangle;
+    color: white;
   }
-  .black-triangle-right {
-    @extend .triangle-right;
-    border-color: black black transparent transparent;
+
+  .white-triangle {
+    @extend .triangle;
+    color: black;
   }
 }
 </style>

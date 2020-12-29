@@ -1,12 +1,10 @@
 <template>
-  <div class="sort-container">
-    <Select
-      :label-name="'Sort'"
-      :current="current"
-      :select-items="selectModel"
-      @input="selected"
-    />
-  </div>
+  <Select
+    :label-name="''"
+    :current="current"
+    :select-items="selectModel"
+    @input="selected"
+  />
 </template>
 
 <script lang="ts">
@@ -73,12 +71,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.sort-container {
-  width: 100%;
-  padding: 8px 20px 16px 20px;
-  background-color: whitesmoke;
-  border-radius: 16px;
-  height: auto;
-}
-</style>
+<style lang="scss"></style>
