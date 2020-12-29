@@ -1,15 +1,16 @@
 <template>
-  <div class="create-folder-box">
+  <form class="create-folder-box" @submit.prevent="createFolder">
     <i class="fa fa-folder fa-fw" />
     <Input
       :label-name="'Folder Name'"
       :is-password="false"
       :value="name"
+      :autofocus="true"
       @text="name = $event"
     />
-    <b-button type="is-success" @click="createFolder" v-text="'Create'" />
+    <b-button type="is-success" :native-type="'submit'" v-text="'Create'" />
     <b-button type="is-danger" @click="$emit('close')" v-text="'Cancel'" />
-  </div>
+  </form>
 </template>
 
 <script lang="ts">
