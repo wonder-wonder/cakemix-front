@@ -1,6 +1,7 @@
 <template>
   <b-field :label="labelName" :type="isError ? 'is-danger' : ''">
     <b-input
+      ref="input"
       :type="isPassword ? 'password' : 'text'"
       :password-reveal="isPassword"
       :value="value"
@@ -39,6 +40,15 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    autofocus: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  mounted() {
+    if (this.autofocus) {
+      ;(this.$refs.input as HTMLInputElement).focus()
+    }
   },
 })
 </script>

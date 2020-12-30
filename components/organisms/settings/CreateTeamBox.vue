@@ -1,15 +1,16 @@
 <template>
-  <div class="create-team-box">
+  <form class="create-team-box" @submit.prevent="createTeam">
     <i class="fa fa-users fa-fw" />
     <Input
       :label-name="'Team Name'"
       :is-password="false"
       :value="name"
+      :autofocus="true"
       @text="name = $event"
     />
-    <b-button type="is-success" @click="createTeam" v-text="'Create'" />
+    <b-button type="is-success" :native-type="'submit'" v-text="'Create'" />
     <b-button type="is-danger" @click="$emit('close')" v-text="'Cancel'" />
-  </div>
+  </form>
 </template>
 
 <script lang="ts">

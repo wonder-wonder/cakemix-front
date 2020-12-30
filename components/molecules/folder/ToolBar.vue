@@ -48,7 +48,7 @@ export default Vue.extend({
   width: auto;
 
   .search-input {
-    max-width: 500px;
+    max-width: 400px;
     width: 100%;
     margin: 4px;
   }

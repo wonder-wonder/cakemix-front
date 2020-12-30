@@ -1,17 +1,19 @@
 <template>
   <div class="folder-container">
-    <NavHeader />
-    <ToolBar
-      class="toolbar-item"
-      @create-folder="isCreateViewEnable = true"
-      @create-doc="createDoc"
-      @search="searchText = $event"
-    />
-    <Breadcrumb
-      class="breadcrumb-item"
-      :breadcrumb="breadcrumb"
-      @click="goToFolder"
-    />
+    <div class="sticky-container">
+      <NavHeader />
+      <ToolBar
+        class="toolbar-item"
+        @create-folder="isCreateViewEnable = true"
+        @create-doc="createDoc"
+        @search="searchText = $event"
+      />
+      <Breadcrumb
+        class="breadcrumb-item"
+        :breadcrumb="breadcrumb"
+        @click="goToFolder"
+      />
+    </div>
     <div v-if="!isNoItems" class="explore-container">
       <div class="left-container">
         <FolderListContainer
@@ -241,20 +243,21 @@ html {
   width: 100vw;
   background-color: rgb(32, 32, 32);
 
-  .toolbar-item {
+  .sticky-container {
     position: sticky;
-    top: 50px;
-    background-color: rgb(32, 32, 32);
     z-index: 10;
-  }
-  .breadcrumb-item {
-    position: sticky;
-    top: 146px;
-    padding-bottom: 16px;
+    background-color: rgb(32, 32, 32);
+    top: 0px;
     border-bottom: solid 1px whitesmoke;
-    background-color: rgb(32, 32, 32);
-    z-index: 10;
+
+    .toolbar-item {
+      margin: 8px 0;
+    }
+    .breadcrumb-item {
+      margin: 8px 28px;
+    }
   }
+
   .explore-container {
     display: flex;
     flex-flow: row nowrap;

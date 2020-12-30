@@ -48,6 +48,7 @@ export default Vue.extend({
     height: 40px;
     width: 40px;
     font-size: 32px;
+    padding: 2px 0 0 1px;
     border-radius: 8px;
     background-color: black;
   }
