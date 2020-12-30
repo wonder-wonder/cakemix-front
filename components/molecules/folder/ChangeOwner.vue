@@ -42,12 +42,17 @@
         </template>
       </b-autocomplete>
     </b-field>
-    <div class="users-cell-item-box">
+    <div v-if="isUserSelected" class="users-cell-item-box">
       <UserCell :user="currentOwner" />
       <i class="fa fa-arrow-circle-right" />
       <UserCell :user="selectedUser" />
     </div>
-    <b-button type="is-danger" class="change-owner-button" @click="changeOwner">
+    <b-button
+      v-if="isUserSelected"
+      type="is-danger"
+      class="change-owner-button"
+      @click="changeOwner"
+    >
       Change
     </b-button>
   </div>
@@ -139,6 +144,11 @@ export default Vue.extend({
       currentTab: TAB_TYPE_MODEL.USER,
       selectedUser: {} as ProfileModel,
     }
+  },
+  computed: {
+    isUserSelected(): boolean {
+      return !!this.selectedUser.uuid
+    },
   },
   watch: {
     currentTab() {
@@ -243,6 +253,7 @@ export default Vue.extend({
   flex-flow: column nowrap;
   align-items: center;
   width: 100%;
+  min-height: 300px;
   padding: 20px;
   background-color: white;
   border-radius: 16px;
