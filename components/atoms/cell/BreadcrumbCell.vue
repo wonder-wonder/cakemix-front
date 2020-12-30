@@ -9,7 +9,6 @@
       class="fa fa-chevron-right"
       :class="dark ? 'white-triangle' : 'black-triangle'"
     />
-    <!-- <div :class="dark ? 'black-triangle-right' : 'white-triangle-right'" /> -->
   </div>
 </template>
 
