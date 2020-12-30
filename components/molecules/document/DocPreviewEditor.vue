@@ -4,9 +4,11 @@
       v-show="displayType !== 3"
       :p-markdown="markdown"
       :current-pos="editorPosition"
+      :is-editable="isEditable"
       @input="onChangedEditorText"
       @update="onChangedEditorPoints"
       @updatepos="onUpdatedEditorPosition"
+      @toParentFolder="$emit('toParentFolder')"
     />
     <DocPreview
       v-show="displayType !== 1"
@@ -36,6 +38,12 @@ export default Vue.extend({
   components: {
     DocEditor,
     DocPreview,
+  },
+  props: {
+    isEditable: {
+      type: Boolean,
+      default: false,
+    },
   },
   data(): DataType {
     return {

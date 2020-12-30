@@ -1,21 +1,23 @@
 <template>
-  <div class="document-switch-container">
-    <DocSwitchButton
-      :icon-type="'pencil'"
-      :is-selected="selected === 1"
-      @click="updateStatus(1)"
-    />
-    <DocSwitchButton
-      :icon-type="'split'"
-      :is-selected="selected === 2"
-      @click="updateStatus(2)"
-    />
-    <DocSwitchButton
-      :icon-type="'eye'"
-      :is-selected="selected === 3"
-      @click="updateStatus(3)"
-    />
-  </div>
+  <b-tooltip
+    label="This is read-only document"
+    position="is-bottom"
+    type="is-info"
+    :animated="true"
+    :active="showToolTip"
+  >
+    <div class="document-switch-container">
+      <DocSwitchButton :is-selected="selected === 1" @click="updateStatus(1)">
+        <i class="fa fa-pencil fa-fw" />
+      </DocSwitchButton>
+      <DocSwitchButton :is-selected="selected === 2" @click="updateStatus(2)">
+        <i class="fa fa-columns fa-fw" />
+      </DocSwitchButton>
+      <DocSwitchButton :is-selected="selected === 3" @click="updateStatus(3)">
+        <i class="fa fa-eye fa-fw" />
+      </DocSwitchButton>
+    </div>
+  </b-tooltip>
 </template>
 
 <script lang="ts">
@@ -26,17 +28,28 @@ export default Vue.extend({
   components: {
     DocSwitchButton,
   },
+  props: {
+    isEditable: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
-    selected() {
+    showToolTip(): boolean {
+      return !this.isEditable
+    },
+    selected(): boolean {
       return this.$store.getters['editor/displayType']
     },
   },
   created() {
-    this.updateStatus(2)
+    this.$store.commit('editor/displayType', this.isEditable ? 2 : 3)
   },
   methods: {
     updateStatus(status: number) {
-      this.$store.commit('editor/displayType', status)
+      if (this.isEditable) {
+        this.$store.commit('editor/displayType', status)
+      }
     },
   },
 })

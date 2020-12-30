@@ -1,7 +1,18 @@
 <template>
   <div class="document-container">
-    <DocHeader class="document-header" @input="onClicked" />
-    <DocPreviewEditor class="document-preview-editor" />
+    <DocHeader
+      class="document-header"
+      :is-loaded="isLoaded"
+      :is-editable="isEditable"
+      @input="onClicked"
+      @toParentFolder="toParentFolder"
+    />
+    <DocPreviewEditor
+      v-if="isLoaded"
+      :is-editable="isEditable"
+      class="document-preview-editor"
+      @toParentFolder="toParentFolder"
+    />
   </div>
 </template>
 
@@ -9,13 +20,50 @@
 import Vue from 'vue'
 import DocPreviewEditor from '@/components/molecules/document/DocPreviewEditor.vue'
 import DocHeader from '@/components/organisms/document/DocHeader.vue'
+import { DocumentApi, checkAuthWithStatus } from '@/scripts/api/index'
+
+type DataType = {
+  isLoaded: boolean
+  parentFolderId: string
+  isEditable: boolean
+}
 
 export default Vue.extend({
   components: {
     DocHeader,
     DocPreviewEditor,
   },
+  data(): DataType {
+    return {
+      isLoaded: false,
+      parentFolderId: '',
+      isEditable: false,
+    }
+  },
+  computed: {
+    docId(): string {
+      return this.$route.params.id
+    },
+  },
+  created() {
+    new DocumentApi(this.$store.getters['auth/config'])
+      .getDocDocId(this.docId)
+      .then(res => {
+        this.isLoaded = true
+        this.parentFolderId = res.data.parentfolderid ?? ''
+        this.isEditable = res.data.editable ?? false
+      })
+      .catch(err => {
+        this.checkAuthWithStatus(this, err.response.status)
+        // @ts-ignore
+        this.failureToast(this.$buefy, 'Auth failed', err.response.status)
+      })
+  },
   methods: {
+    checkAuthWithStatus,
+    toParentFolder() {
+      this.$router.push(`/folder/${this.parentFolderId}`)
+    },
     onClicked(ref: string) {
       switch (ref) {
         case 'question':

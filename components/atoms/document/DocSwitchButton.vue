@@ -2,12 +2,10 @@
   <div
     class="document-switch-button"
     :class="isSelected ? 'active' : ''"
+    :active="false"
     @click="$emit('click')"
   >
-    <i v-if="iconType === 'pencil'" class="fa fa-pencil fa-fw" />
-    <i v-if="iconType === 'split'" class="fa fa-columns fa-fw" />
-    <i v-if="iconType === 'eye'" class="fa fa-eye fa-fw" />
-    <i v-if="iconType === 'question'" class="fa fa-question-circle" />
+    <slot />
   </div>
 </template>
 
@@ -16,10 +14,6 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
-    iconType: {
-      type: String,
-      default: 'pencil',
-    },
     isSelected: {
       type: Boolean,
       default: false,
@@ -31,13 +25,14 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .document-switch-button {
   height: 40px;
+  width: auto;
   padding: 5px 16px;
   font-size: 20px;
   border-radius: 5px;
 
   &.active {
     background-color: white;
-    .fa {
+    i {
       color: black;
     }
   }

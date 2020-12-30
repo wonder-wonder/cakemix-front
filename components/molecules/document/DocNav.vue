@@ -1,5 +1,5 @@
 <template>
-  <div class="doc-nav-box" @click="gotoHome">
+  <div class="doc-nav-box" @click="$emit('toParentFolder')">
     <div class="image-box">
       <i class="fa fa-chevron-left" />
     </div>
@@ -10,19 +10,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({
-  props: {
-    folderId: {
-      type: String,
-      default: '',
-    },
-  },
-  methods: {
-    gotoHome() {
-      this.$router.push({ path: `/folder/${this.folderId}` })
-    },
-  },
-})
+export default Vue.extend({})
 </script>
 
 <style lang="scss">
