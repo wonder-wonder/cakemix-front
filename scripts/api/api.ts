@@ -200,6 +200,12 @@ export interface DocumentModel {
      * @memberof DocumentModel
      */
     editable?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof DocumentModel
+     */
+    parentfolderid?: string;
 }
 /**
  * Document modify request model
@@ -1718,6 +1724,57 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {string} docId Document ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDocDocId: async (docId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'docId' is not null or undefined
+            if (docId === null || docId === undefined) {
+                throw new RequiredError('docId','Required parameter docId was null or undefined when calling getDocDocId.');
+            }
+            const localVarPath = `/doc/{doc_id}`
+                .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Your GET endpoint
          * @param {string} docId 
          * @param {string} token security token
@@ -1927,6 +1984,19 @@ export const DocumentApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} docId Document ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDocDocId(docId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DocumentModel>> {
+            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).getDocDocId(docId, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @summary Your GET endpoint
          * @param {string} docId 
          * @param {string} token security token
@@ -2001,6 +2071,15 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @param {string} docId Document ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDocDocId(docId: string, options?: any): AxiosPromise<DocumentModel> {
+            return DocumentApiFp(configuration).getDocDocId(docId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Your GET endpoint
          * @param {string} docId 
          * @param {string} token security token
@@ -2064,6 +2143,17 @@ export class DocumentApi extends BaseAPI {
      */
     public deleteDoc(docId: string, options?: any) {
         return DocumentApiFp(this.configuration).deleteDoc(docId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} docId Document ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DocumentApi
+     */
+    public getDocDocId(docId: string, options?: any) {
+        return DocumentApiFp(this.configuration).getDocDocId(docId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

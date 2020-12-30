@@ -1,10 +1,11 @@
 const EventEmitter = require('events')
 
 class SocketConnection extends EventEmitter {
-  constructor(_url) {
+  constructor(_url, _readOnly) {
     super()
 
     this.url = _url
+    this.readOnly = _readOnly
     this.connect()
   }
 
@@ -41,7 +42,7 @@ class SocketConnection extends EventEmitter {
   }
 
   send(eventName, data) {
-    if (this.ws === null) {
+    if (this.ws === null || this.readOnly) {
       return
     }
     this.ws.send(JSON.stringify({ e: eventName, d: data }))

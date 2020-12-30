@@ -1,7 +1,7 @@
 <template>
   <div class="editor-container">
     <textarea
-      :ref="`cmeditor`"
+      ref="cmeditor"
       :placeholder="'Text or Markdown'"
       @input="$emit('input', $event.target.value)"
       v-text="pMarkdown"
@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { AuthApi, checkAuthWithStatus } from '~/scripts/api'
 const editor = require('@/scripts/editor/editor.ts')
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 const ot = require('@/scripts/editor/ot/ot.js')
@@ -35,6 +34,10 @@ export default Vue.extend({
       type: Number,
       default: 0,
     },
+    isEditable: {
+      type: Boolean,
+      default: false,
+    },
   },
   data(): DataType {
     return {
@@ -54,47 +57,39 @@ export default Vue.extend({
     },
   },
   mounted() {
-    new AuthApi(this.$store.getters['auth/config'])
-      .getCheckToken()
-      .then(() => {
-        this.makeConnection()
-      })
-      .catch(err => {
-        this.checkAuthWithStatus(this, err.response.status)
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Auth failed', err.response.status)
-      })
+    this.loadEditor()
+    this.makeConnection()
   },
   beforeDestroy() {
-    this.websocket.off('registered', this.registeredEvent)
-    this.websocket.off('join', this.joinEvent)
-    this.websocket.off('quit', this.quitEvent)
-    this.websocket.off('doc', this.docEvent)
-    this.websocket.off('close', this.closeEvent)
+    if (this.websocket) {
+      this.websocket.off('registered', this.registeredEvent)
+      this.websocket.off('join', this.joinEvent)
+      this.websocket.off('quit', this.quitEvent)
+      this.websocket.off('doc', this.docEvent)
+      this.websocket.off('close', this.closeEvent)
+      this.websocket.close()
+    }
     this.cMirror = null
     this.serverAdapter = null
     this.editorAdapter = null
     this.otClient = null
-  },
-  destroyed() {
-    this.websocket.close()
     this.websocket = null
   },
   methods: {
-    checkAuthWithStatus,
-    makeConnection() {
+    loadEditor() {
       this.cMirror = editor.newEditor(this.$refs.cmeditor)
       this.cMirror.on('change', this.changeEvent)
       this.cMirror.on('scroll', this.scrollEvent)
-      // cMirror.on('drop', this.dropEvent)
+      this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
+    },
+    makeConnection() {
       const url =
         `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/` +
         this.$route.params.id +
         '/ws?token=' +
         this.$store.getters['auth/token']
-      this.websocket = new socket.SocketConnection(url)
+      this.websocket = new socket.SocketConnection(url, !this.isEditable)
       this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
-      this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
       this.websocket.on('registered', this.registeredEvent)
       this.websocket.on('join', this.joinEvent)
       this.websocket.on('quit', this.quitEvent)
@@ -121,7 +116,7 @@ export default Vue.extend({
     // EventEmitter Event
     //
     registeredEvent(clientId: any) {
-      this.cMirror.setOption('readOnly', false)
+      this.cMirror.setOption('readOnly', !this.isEditable)
       console.log(clientId)
     },
     joinEvent(ev: any) {
@@ -144,7 +139,7 @@ export default Vue.extend({
       this.$buefy.dialog.confirm({
         message: 'Do you want to reconnect?',
         onConfirm: () => this.websocket.reconnect(),
-        onCancel: () => this.$router.push('/'),
+        onCancel: () => this.$emit('toParentFolder'),
       })
     },
   },
