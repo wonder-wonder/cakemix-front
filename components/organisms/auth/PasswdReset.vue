@@ -72,7 +72,7 @@ export default Vue.extend({
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Signup failed', 2)
+          this.failureToast(this.$buefy, 'Signup failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

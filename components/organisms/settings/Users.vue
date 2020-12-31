@@ -92,8 +92,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Search user failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Search user failed',
+            err.response.status
+          )
         })
     },
     generateLink() {
@@ -104,8 +108,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Generate a invitation link failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Generate a invitation link failed',
+            err.response.status
+          )
         })
     },
   },

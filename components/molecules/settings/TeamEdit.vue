@@ -154,8 +154,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Add new member failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Add new member failed',
+            err.response.status
+          )
         })
     },
     getMembers() {
@@ -175,10 +179,13 @@ export default Vue.extend({
           this.memberPaging.data = member.concat(res.data.members ?? [])
         })
         .catch(err => {
-          const status = err.response.status
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Get member failed', status)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Get member failed',
+            err.response.status
+          )
         })
     },
     getUsers(name: string) {
@@ -207,8 +214,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Search user failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Search user failed',
+            err.response.status
+          )
         })
         .finally(() => {
           this.searchPaging.isFetching = false
@@ -233,8 +244,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Change permission failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Change permission failed',
+            err.response.status
+          )
         })
     },
     changedPermComfirm(user: MemberInfoModel, newPerm: number) {
@@ -265,8 +280,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Delete team failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Delete team failed',
+            err.response.status
+          )
         })
     },
     deleteTeamConfirm() {

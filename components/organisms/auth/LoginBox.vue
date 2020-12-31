@@ -70,10 +70,10 @@ export default Vue.extend({
           }
           this.$router.push('/folder/')
         })
-        .catch(() => {
+        .catch(err => {
           this.isError = true
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Login failed', 2)
+          this.failureToast(this.$buefy, 'Login failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

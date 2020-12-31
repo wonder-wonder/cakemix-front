@@ -56,9 +56,9 @@ export default Vue.extend({
           )
           this.$router.push('/')
         })
-        .catch(() => {
+        .catch(err => {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Request failed', 2)
+          this.failureToast(this.$buefy, 'Request failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false
