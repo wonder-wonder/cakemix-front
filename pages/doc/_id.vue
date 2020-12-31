@@ -21,6 +21,7 @@ import Vue from 'vue'
 import DocPreviewEditor from '@/components/molecules/document/DocPreviewEditor.vue'
 import DocHeader from '@/components/organisms/document/DocHeader.vue'
 import { DocumentApi, checkAuthWithStatus } from '@/scripts/api/index'
+import { failureToast } from '@/scripts/utils/toast'
 
 type DataType = {
   isLoaded: boolean
@@ -55,11 +56,17 @@ export default Vue.extend({
       })
       .catch(err => {
         this.checkAuthWithStatus(this, err.response.status)
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Auth failed', err.response.status)
+        this.failureToast(
+          // @ts-ignore
+          this.$buefy,
+          'Unable to open this document',
+          err.response.status
+        )
+        this.toParentFolder()
       })
   },
   methods: {
+    failureToast,
     checkAuthWithStatus,
     toParentFolder() {
       this.$router.push(`/folder/${this.parentFolderId}`)
