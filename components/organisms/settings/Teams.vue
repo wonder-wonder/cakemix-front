@@ -152,12 +152,12 @@ export default Vue.extend({
     flex-flow: row wrap;
     justify-content: center;
     width: 100%;
-    max-width: 800px;
+    max-width: 798px;
     margin: 0 auto;
 
     .border-title {
       width: 100%;
-      margin: 20px 0;
+      margin: 20px 8px;
     }
 
     .teams-item-box {
@@ -165,10 +165,9 @@ export default Vue.extend({
       flex-flow: row wrap;
       justify-content: flex-start;
       width: 100%;
-      // max-width: 800px;
 
       .user-cell {
-        margin: 16px 16px 0 0;
+        margin: 8px;
       }
 
       .update-button {

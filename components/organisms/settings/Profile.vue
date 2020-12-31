@@ -164,7 +164,7 @@ export default Vue.extend({
 
     .update-button {
       width: 120px;
-      margin-top: 16px;
+      margin: 16px 0px;
       font-weight: bold;
     }
   }

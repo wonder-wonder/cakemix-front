@@ -14,16 +14,8 @@
         @infinite-scroll="getUsers"
         @select="selectUser"
       >
-        <template slot-scope="props">
-          <div class="user-search-cell-container">
-            <div class="icon-box">
-              <i v-if="!teamHasImage" class="fa fa-user" />
-              <b-image v-if="teamHasImage" :src="props.option.icon_uri" />
-            </div>
-            <div class="name">
-              {{ props.option.name }}
-            </div>
-          </div>
+        <template v-slot="props">
+          <UserSearchWideCell :user="props.option" />
         </template>
       </b-autocomplete>
     </b-field>
@@ -60,6 +52,7 @@
 import Vue, { PropType } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import TeamMemberWideCell from '@/components/molecules/settings/cell/TeamMemberWideCell.vue'
+import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
@@ -90,6 +83,7 @@ export default Vue.extend({
   components: {
     Input,
     TeamMemberWideCell,
+    UserSearchWideCell,
   },
   props: {
     team: {
@@ -194,7 +188,7 @@ export default Vue.extend({
         this.searchPaging.page = 1
       }
       this.searchName = name
-      if (this.searchPaging.total < this.searchPaging.page) {
+      if (this.searchPaging.total < this.searchPaging.page || name === '') {
         return
       }
       this.searchPaging.isFetching = true
@@ -335,17 +329,6 @@ export default Vue.extend({
     width: 100%;
     height: 280px;
     overflow: scroll;
-  }
-
-  .user-search-cell-container {
-    display: flex;
-    flex-flow: row wrap;
-
-    .icon-box {
-      height: 100%;
-      margin-right: 16px;
-      color: black;
-    }
   }
 
   .pagination {
