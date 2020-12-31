@@ -11,7 +11,7 @@
         :loading="searchPaging.isFetching"
         :check-infinite-scroll="true"
         @typing="getUsers"
-        @infinite-scroll="getUsers"
+        @infinite-scroll="getMoreUsers"
         @select="selectUser"
       >
         <template v-slot="props">
@@ -41,6 +41,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { debounce } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import TeamMemberWideCell from '@/components/molecules/settings/cell/TeamMemberWideCell.vue'
 import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
@@ -97,7 +98,7 @@ export default Vue.extend({
         data: [] as ProfileModel[],
         total: 0,
         page: 1,
-        PER_PAGE: 20,
+        PER_PAGE: 10,
         isFetching: false,
       } as PagingModel,
       userSearchInput: '',
@@ -189,7 +190,7 @@ export default Vue.extend({
           )
         })
     },
-    getUsers(name: string) {
+    getUsers: debounce(function (this: any, name: string) {
       if (this.searchName !== name) {
         this.searchPaging.data = []
         this.searchPaging.total = 999
@@ -202,7 +203,7 @@ export default Vue.extend({
       this.searchPaging.isFetching = true
       new SearchApi(this.$store.getters['auth/config'])
         .getSearchUser(
-          name,
+          this.searchName,
           this.searchPaging.PER_PAGE,
           (this.searchPaging.page - 1) * this.searchPaging.PER_PAGE
         )
@@ -210,6 +211,7 @@ export default Vue.extend({
           this.searchPaging.total = Math.ceil(
             (res.data.total ?? 0) / this.searchPaging.PER_PAGE
           )
+          this.searchPaging.page = this.searchPaging.page + 1
           const users = this.searchPaging.data as ProfileModel[]
           this.searchPaging.data = users.concat(res.data.users ?? [])
         })
@@ -225,6 +227,9 @@ export default Vue.extend({
         .finally(() => {
           this.searchPaging.isFetching = false
         })
+    }, 200),
+    getMoreUsers() {
+      this.getUsers(this.searchName)
     },
     changedPerm(user: MemberInfoModel, newPerm: number) {
       const teamId = this.team.uuid
@@ -239,8 +244,6 @@ export default Vue.extend({
       new TeamApi(this.$store.getters['auth/config'])
         .putTeamTeamidMember(teamId, uModel)
         .then(() => {
-          this.resetMember()
-          this.getMembers()
           // @ts-ignore
           this.successToast(this.$buefy, 'Upgraded permission')
         })
@@ -252,6 +255,8 @@ export default Vue.extend({
             'Change permission failed',
             err.response.status
           )
+        })
+        .finally(() => {
           this.resetMember()
           this.getMembers()
         })
