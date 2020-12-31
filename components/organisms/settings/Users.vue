@@ -28,6 +28,7 @@
         aria-previous-label="Previous page"
         aria-page-label="Page"
         aria-current-label="Current page"
+        @change="getUsers"
       />
     </div>
   </div>
@@ -69,13 +70,8 @@ export default Vue.extend({
       total: 0,
       page: 1,
       generatedLink: '',
-      PER_PAGE: 10,
+      PER_PAGE: 9,
     }
-  },
-  watch: {
-    page() {
-      this.getUsers()
-    },
   },
   created() {
     this.getUsers()
@@ -88,7 +84,7 @@ export default Vue.extend({
         .getSearchUser('', this.PER_PAGE, (this.page - 1) * this.PER_PAGE)
         .then(res => {
           this.total = res.data.total ?? 0
-          this.users = this.users.concat(res.data.users ?? [])
+          this.users = res.data.users ?? []
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
@@ -182,6 +178,9 @@ export default Vue.extend({
 
     .pagination {
       margin: 16px;
+      .pagination-link {
+        color: white;
+      }
     }
   }
 }

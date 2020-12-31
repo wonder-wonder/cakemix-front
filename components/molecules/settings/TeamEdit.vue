@@ -29,6 +29,17 @@
         @remove="removeMember($event)"
       />
     </div>
+    <b-pagination
+      v-model="memberPaging.page"
+      class="pagination"
+      :total="memberPaging.total"
+      :per-page="memberPaging.PER_PAGE"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page"
+      @change="getMembers"
+    />
     <b-button
       type="is-danger"
       class="delete-team-button"
@@ -97,7 +108,7 @@ export default Vue.extend({
         data: [] as ProfileModel[],
         total: 0,
         page: 1,
-        PER_PAGE: 20,
+        PER_PAGE: 10,
         isFetching: false,
       } as PagingModel,
       userSearchInput: '',
