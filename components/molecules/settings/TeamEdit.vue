@@ -26,18 +26,9 @@
         :user="user"
         :own-permission="ownPermission"
         @changed="changedPermComfirm(user, $event)"
+        @remove="removeMember($event)"
       />
     </div>
-    <b-pagination
-      v-model="memberPaging.page"
-      class="pagination"
-      :total="memberPaging.total"
-      :per-page="memberPaging.PER_PAGE"
-      aria-next-label="Next page"
-      aria-previous-label="Previous page"
-      aria-page-label="Page"
-      aria-current-label="Current page"
-    />
     <b-button
       type="is-danger"
       class="delete-team-button"
@@ -135,6 +126,15 @@ export default Vue.extend({
     successToast,
     failureToast,
     checkAuthWithStatus,
+    resetMember() {
+      this.memberPaging = {
+        data: [] as MemberInfoModel[],
+        total: 0,
+        page: 1,
+        PER_PAGE: 5,
+        isFetching: false,
+      } as PagingModel
+    },
     selectUser(user: ProfileModel) {
       const teamId = this.team.uuid
       if (!teamId) {
@@ -148,6 +148,7 @@ export default Vue.extend({
       new TeamApi(this.$store.getters['auth/config'])
         .postTeamTeamidMember(teamId, mModel)
         .then(() => {
+          this.resetMember()
           this.getMembers()
           // @ts-ignore
           this.successToast(this.$buefy, 'Added new member')
@@ -238,6 +239,7 @@ export default Vue.extend({
       new TeamApi(this.$store.getters['auth/config'])
         .putTeamTeamidMember(teamId, uModel)
         .then(() => {
+          this.resetMember()
           this.getMembers()
           // @ts-ignore
           this.successToast(this.$buefy, 'Upgraded permission')
@@ -250,6 +252,8 @@ export default Vue.extend({
             'Change permission failed',
             err.response.status
           )
+          this.resetMember()
+          this.getMembers()
         })
     },
     changedPermComfirm(user: MemberInfoModel, newPerm: number) {
@@ -265,6 +269,31 @@ export default Vue.extend({
           this.getMembers()
         },
       })
+    },
+    removeMember(uuid: string) {
+      const teamId = this.team.uuid
+      if (!teamId) {
+        return
+      }
+      new TeamApi(this.$store.getters['auth/config'])
+        .deleteTeamTeamidMember(teamId, uuid)
+        .then(() => {
+          this.resetMember()
+          this.getMembers()
+          // @ts-ignore
+          this.successToast(this.$buefy, 'Member removed')
+        })
+        .catch(err => {
+          this.checkAuthWithStatus(this, err.response.status)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Unable to remove member',
+            err.response.status
+          )
+          this.resetMember()
+          this.getMembers()
+        })
     },
     deleteTeam() {
       const teamId = this.team.uuid

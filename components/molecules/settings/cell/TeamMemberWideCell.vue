@@ -6,13 +6,23 @@
     </div>
     <div class="title-item" v-text="user.member.name" />
     <div class="detail-item" v-text="user.member.uuid" />
-    <Select
-      :current="current"
-      :select-items="selectItem"
-      class="selection-item"
-      :disabled="!isEditable"
-      @input="changedPerm"
-    />
+    <div class="action-container">
+      <Select
+        :current="current"
+        :select-items="selectItem"
+        class="selection-item"
+        :disabled="!isEditable"
+        @input="changedPerm"
+      />
+      <b-button
+        v-if="deleteable"
+        type="is-danger"
+        class="delete-button"
+        @click="$emit('remove', user.member.uuid)"
+      >
+        <i class="fa fa-trash" />
+      </b-button>
+    </div>
   </div>
 </template>
 
@@ -56,6 +66,9 @@ export default Vue.extend({
       }
       return !(member.icon_uri === '')
     },
+    deleteable(): boolean {
+      return this.isEditable && (this.user.permission ?? 0) < 2
+    },
     selectItem(): string[] {
       if (!this.isEditable) {
         return this.pTable
@@ -69,7 +82,8 @@ export default Vue.extend({
       return (
         this.ownPermission > 0 &&
         this.ownPermission < 3 &&
-        this.ownPermission >= (this.user.permission ?? 0)
+        this.ownPermission >= (this.user.permission ?? 0) &&
+        (this.user.permission ?? 0) < 2
       )
     },
   },
@@ -87,11 +101,11 @@ export default Vue.extend({
 .user-wide-cell-container {
   display: grid;
   grid-template-rows: 20px 20px;
-  grid-template-columns: 40px 16px auto 100px;
+  grid-template-columns: 40px 16px auto 216px;
   align-items: center;
   height: 56px;
   width: 100%;
-  padding: 8px;
+  padding: 8px 4px 8px 8px;
   transition: all 100ms;
   color: black;
 
@@ -132,12 +146,25 @@ export default Vue.extend({
     color: gray;
   }
 
-  .selection-item {
+  .action-container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-end;
     width: 100%;
     grid-row: 1 / 3;
     grid-column: 4 / 5;
     font-size: 12px;
     color: gray;
+
+    .selection-item {
+      width: 100px;
+      margin: 0 4px;
+    }
+    .delete-button {
+      width: 40px;
+      margin: 0 4px;
+    }
   }
 }
 </style>
