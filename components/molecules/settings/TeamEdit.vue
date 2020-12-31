@@ -29,6 +29,17 @@
         @remove="removeMember($event)"
       />
     </div>
+    <b-pagination
+      v-model="memberPaging.page"
+      class="pagination"
+      :total="memberPaging.total"
+      :per-page="memberPaging.PER_PAGE"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page"
+      @change="getMembers"
+    />
     <b-button
       type="is-danger"
       class="delete-team-button"
@@ -336,7 +347,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .team-edit-container {
   display: flex;
   flex-flow: column nowrap;

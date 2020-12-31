@@ -21,6 +21,7 @@
         aria-previous-label="Previous page"
         aria-page-label="Page"
         aria-current-label="Current page"
+        @change="getTeams"
       />
     </div>
     <b-modal v-model="isCreateViewEnable">
@@ -83,7 +84,7 @@ export default Vue.extend({
       generatedLink: '',
       isCreateViewEnable: false,
       isEditViewEnable: false,
-      PER_PAGE: 10,
+      PER_PAGE: 9,
     }
   },
   created() {
@@ -141,7 +142,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .setting-teams-container {
   width: 100%;
   height: 40px;
@@ -183,6 +184,9 @@ export default Vue.extend({
 
     .pagination {
       margin: 32px;
+      .pagination-link {
+        color: white;
+      }
     }
   }
 }
