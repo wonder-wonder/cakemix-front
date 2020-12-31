@@ -18,8 +18,9 @@
         field="Users"
         :loading="searchPaging.isFetching"
         :check-infinite-scroll="true"
+        :max-height="'150px'"
         @typing="get"
-        @infinite-scroll="get"
+        @infinite-scroll="getMore"
         @select="select"
       >
         <template v-slot="props">
@@ -45,6 +46,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { debounce } from 'lodash'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
 import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
 import { v4 as uuidv4 } from 'uuid'
@@ -151,12 +153,15 @@ export default Vue.extend({
     select(user: ProfileModel) {
       this.selectedUser = user
     },
-    get(name: string) {
+    get: debounce(function (this: any, name: string) {
       if (this.currentTab === TAB_TYPE_MODEL.USER) {
         this.getUser(name)
       } else if (this.currentTab === TAB_TYPE_MODEL.TEAM) {
         this.getTeam(name)
       }
+    }, 200),
+    getMore() {
+      this.get(this.searchName)
     },
     getUser(name: string) {
       if (this.searchName !== name) {
@@ -179,6 +184,7 @@ export default Vue.extend({
           this.searchPaging.total = Math.ceil(
             (res.data.total ?? 0) / this.searchPaging.PER_PAGE
           )
+          this.searchPaging.page = this.searchPaging.page + 1
           this.searchPaging.data = this.searchPaging.data.concat(
             res.data.users ?? []
           )
