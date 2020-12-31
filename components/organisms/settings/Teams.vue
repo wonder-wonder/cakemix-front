@@ -106,8 +106,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Search team failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Search team failed',
+            err.response.status
+          )
         })
     },
     createTeam(name: string) {

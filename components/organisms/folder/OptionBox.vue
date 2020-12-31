@@ -263,7 +263,7 @@ export default Vue.extend({
           .catch(err => {
             this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', 3)
+            this.failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else if (this.modelType === 'DOCUMENT') {
         const dModel = this.newModel as DocumentModel
@@ -287,7 +287,7 @@ export default Vue.extend({
           .catch(err => {
             this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', 3)
+            this.failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else {
         // @ts-ignore
@@ -312,7 +312,7 @@ export default Vue.extend({
           .catch(err => {
             this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', 3)
+            this.failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else if (this.modelType === 'DOCUMENT') {
         new DocumentApi(this.$store.getters['auth/config'])
@@ -325,7 +325,7 @@ export default Vue.extend({
           .catch(err => {
             this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', 3)
+            this.failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else {
         // @ts-ignore

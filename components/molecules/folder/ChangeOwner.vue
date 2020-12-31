@@ -198,8 +198,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Search user failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Search user failed',
+            err.response.status
+          )
         })
         .finally(() => {
           this.searchPaging.isFetching = false
@@ -233,8 +237,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Search team failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Search team failed',
+            err.response.status
+          )
         })
         .finally(() => {
           this.searchPaging.isFetching = false

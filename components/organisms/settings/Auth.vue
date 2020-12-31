@@ -69,9 +69,9 @@ export default Vue.extend({
           // @ts-ignore
           this.successToast(this.$buefy, 'Password changed')
         })
-        .catch(() => {
+        .catch(err => {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Request failed', 2)
+          this.failureToast(this.$buefy, 'Request failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

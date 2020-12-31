@@ -186,8 +186,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed to fetch folder', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Failed to fetch folder',
+            err.response.status
+          )
         })
         .finally(() => {
           this.isLoaded = true
@@ -202,8 +206,12 @@ export default Vue.extend({
         .createNewFolder(fId, name)
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed to fetch folder', 2)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Failed to fetch folder',
+            err.response.status
+          )
         })
         .finally(() => {
           this.isCreateViewEnable = false
@@ -219,8 +227,12 @@ export default Vue.extend({
         .createNewDoc(fId, 'Untitled')
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed to fetch folder', 3)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Failed to fetch folder',
+            err.response.status
+          )
         })
         .finally(() => {
           this.fetchFolder()

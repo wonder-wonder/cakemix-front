@@ -38,9 +38,9 @@ export default Vue.extend({
         )
         this.$router.push('/')
       })
-      .catch(() => {
+      .catch(err => {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Signup failed', 2)
+        this.failureToast(this.$buefy, 'Signup failed', err.response.status)
       })
       .finally(() => {
         this.$router.push('/auth/login')

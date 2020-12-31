@@ -85,8 +85,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'folder list request failed', 1)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'folder list request failed',
+            err.response.status
+          )
         })
     },
     transfer() {
@@ -104,9 +108,13 @@ export default Vue.extend({
             this.successToast(this.$buefy, 'Moved folder')
             this.$emit('updated')
           })
-          .catch(() => {
-            // @ts-ignore
-            this.failureToast(this.$buefy, 'Unable to move folder', 2)
+          .catch(err => {
+            this.failureToast(
+              // @ts-ignore
+              this.$buefy,
+              'Unable to move folder',
+              err.response.status
+            )
           })
       } else {
         new DocumentApi(this.$store.getters['auth/config'])
@@ -116,9 +124,13 @@ export default Vue.extend({
             this.successToast(this.$buefy, 'Document moved ')
             this.$emit('updated')
           })
-          .catch(() => {
-            // @ts-ignore
-            this.failureToast(this.$buefy, 'Unable to move document', 2)
+          .catch(err => {
+            this.failureToast(
+              // @ts-ignore
+              this.$buefy,
+              'Unable to move document',
+              err.response.status
+            )
           })
       }
     },

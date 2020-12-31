@@ -47,9 +47,13 @@ export default Vue.extend({
         this.successToast(this.$buefy, 'Token was verified')
         this.isVerified = true
       })
-      .catch(() => {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Token verification failed ', 2)
+      .catch(err => {
+        this.failureToast(
+          // @ts-ignore
+          this.$buefy,
+          'Token verification failed ',
+          err.response.status
+        )
         this.$router.push('/auth/passwd')
       })
   },
