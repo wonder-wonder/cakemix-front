@@ -142,7 +142,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .setting-teams-container {
   width: 100%;
   height: 40px;
