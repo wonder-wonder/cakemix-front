@@ -89,19 +89,16 @@ export default Vue.extend({
   width: 100%;
   height: 40px;
   padding: 0px 32px;
-  color: white;
-  background-color: rgb(32, 32, 32);
-  font-size: 14px;
   font-weight: bold;
-
-  .border-title {
-    width: 100%;
-    margin-bottom: 20px;
-  }
 
   .auth-item-box {
     max-width: 500px;
     width: 100%;
+
+    .border-title {
+      width: 100%;
+      margin-bottom: 20px;
+    }
 
     .label {
       color: white;

@@ -22,23 +22,8 @@
         @infinite-scroll="get"
         @select="select"
       >
-        <template slot-scope="props">
-          <div class="user-search-cell-container">
-            <div class="icon-box">
-              <i
-                v-if="props.option.icon_uri === ''"
-                class="fa"
-                :class="props.option.isteam ? 'fa-users' : 'fa-user'"
-              />
-              <b-image
-                v-if="props.option.icon_uri"
-                :src="props.option.icon_uri"
-              />
-            </div>
-            <div class="name">
-              {{ props.option.name }}
-            </div>
-          </div>
+        <template v-slot="props">
+          <UserSearchWideCell :user="props.option" />
         </template>
       </b-autocomplete>
     </b-field>
@@ -61,6 +46,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
+import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { failureToast } from '@/scripts/utils/toast'
 import {
@@ -121,6 +107,7 @@ const tabs = [
 export default Vue.extend({
   components: {
     UserCell,
+    UserSearchWideCell,
   },
   props: {
     currentOwner: {
@@ -178,7 +165,7 @@ export default Vue.extend({
         this.searchPaging.page = 1
       }
       this.searchName = name
-      if (this.searchPaging.total < this.searchPaging.page) {
+      if (this.searchPaging.total < this.searchPaging.page || name === '') {
         return
       }
       this.searchPaging.isFetching = true
@@ -212,7 +199,7 @@ export default Vue.extend({
         this.searchPaging.page = 1
       }
       this.searchName = name
-      if (this.searchPaging.total < this.searchPaging.page) {
+      if (this.searchPaging.total < this.searchPaging.page || name === '') {
         return
       }
       this.searchPaging.isFetching = true
