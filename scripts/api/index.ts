@@ -20,5 +20,6 @@ export const checkAuthWithStatus = (self: Vue, statusCode: number) => {
   if (statusCode === 401) {
     self.$store.commit("auth/logout")
     self.$router.push({ path: "/auth/login", query: { redirect: self.$route.path } })
+    return
   }
 }
