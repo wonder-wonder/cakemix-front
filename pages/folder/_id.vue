@@ -1,37 +1,44 @@
 <template>
   <div class="folder-container">
-    <div class="sticky-container">
+    <div class="tool-container">
       <NavHeader />
       <ToolBar
-        class="toolbar-item"
-        @create-folder="isCreateViewEnable = true"
+        class="toolbar-box"
+        @create-folder="openCreateFolderView"
         @create-doc="createDoc"
         @search="searchText = $event"
       />
       <Breadcrumb
-        class="breadcrumb-item"
+        class="breadcrumb-box"
         :breadcrumb="breadcrumb"
         @click="goToFolder"
       />
     </div>
-    <div v-if="!isNoItems" class="explore-container">
+    <div
+      v-if="!isNoItems"
+      ref="folder-content-container"
+      class="explore-container"
+    >
       <div class="left-container">
+        <SortBox class="sort-box" @input="sortFunction = $event" />
         <FolderListContainer
           v-if="isFolderAvailable"
           :models="filteredFolder"
           :reset-index="selectedFolderIndex"
+          :calc-width="updateWidth"
           @select="selectedFolderDoc"
         />
         <DocListContainer
           v-if="isDocAvailable"
           :models="filteredDocs"
           :reset-index="selectedDocIndex"
+          :calc-width="updateWidth"
           @select="selectedFolderDoc"
         />
       </div>
       <div class="right-container">
-        <SortBox @input="sortFunction = $event" />
         <OptionBox
+          ref="option-content-box"
           class="option-box"
           :current-folder-id="currentFolderId"
           :model="selectItem"
@@ -40,13 +47,13 @@
         />
       </div>
     </div>
+    <b-button
+      icon-pack="fa"
+      class="floating-option-button is-light"
+      :rounded="true"
+      icon-right="info"
+    />
     <NoList v-if="isNoItems && isLoaded" />
-    <b-modal v-model="isCreateViewEnable">
-      <CreateFolderBox
-        @create="createFolder"
-        @close="isCreateViewEnable = false"
-      />
-    </b-modal>
   </div>
 </template>
 
@@ -83,7 +90,7 @@ export type DataType = {
   selectItem: FolderModel | DocumentModel
   selectedFolderIndex: number
   selectedDocIndex: number
-  isCreateViewEnable: boolean
+  updateWidth: number
   searchText: string
   isLoaded: boolean
 }
@@ -96,20 +103,19 @@ export default Vue.extend({
     OptionBox,
     FolderListContainer,
     DocListContainer,
-    CreateFolderBox,
     NoList,
   },
   data(): DataType {
     return {
-      folders: [],
-      docs: [],
-      breadcrumb: [],
+      folders: [] as FolderModel[],
+      docs: [] as DocumentModel[],
+      breadcrumb: [] as BreadcrumbModel[],
       sortFunction: alphabetSort,
       selectType: 'NONE',
-      selectItem: {},
+      selectItem: {} as FolderModel | DocumentModel,
       selectedFolderIndex: -1,
       selectedDocIndex: -1,
-      isCreateViewEnable: false,
+      updateWidth: -1,
       searchText: '',
       isLoaded: false,
     }
@@ -152,6 +158,9 @@ export default Vue.extend({
       const fId = this.breadcrumb[this.breadcrumb.length - 1].folder_id ?? ''
       return fId
     },
+    hasSelectedItem(): boolean {
+      return !!this.selectItem.uuid
+    },
   },
   created() {
     this.fetchFolder()
@@ -159,7 +168,25 @@ export default Vue.extend({
   methods: {
     failureToast,
     checkAuthWithStatus,
+    openCreateFolderView() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: CreateFolderBox,
+        events: { create: this.createFolder },
+      })
+    },
+    updateHeightAnchor() {
+      const exploreContainer = this.$refs[
+        'folder-content-container'
+      ] as HTMLDivElement
+      const topOffset = exploreContainer.offsetTop
+      const optionBoxEl = (this.$refs['option-content-box'] as Vue)
+        .$el as HTMLElement
+      optionBoxEl.style.top = `${topOffset + 16}px`
+    },
     selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
+      this.updateWidth = Date.now()
       this.selectType = modelType
       this.selectItem = model
       if (modelType === 'FOLDER') {
@@ -195,6 +222,8 @@ export default Vue.extend({
         })
         .finally(() => {
           this.isLoaded = true
+          this.updateWidth = Date.now()
+          this.updateHeightAnchor()
         })
     },
     createFolder(name: string) {
@@ -214,7 +243,6 @@ export default Vue.extend({
           )
         })
         .finally(() => {
-          this.isCreateViewEnable = false
           this.fetchFolder()
         })
     },
@@ -246,49 +274,79 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
+.folder-container .explore-container .left-container .sort-box .control {
+  select {
+    color: white;
+    border-color: gray;
+    background-color: gray;
+  }
+  .select::after {
+    border-color: white;
+  }
 }
+</style>
+
+<style lang="scss" scoped>
 .folder-container {
   display: flex;
   flex-flow: column wrap;
   width: 100vw;
   background-color: rgb(32, 32, 32);
 
-  .sticky-container {
+  .tool-container {
     position: sticky;
-    z-index: 10;
-    background-color: rgb(32, 32, 32);
     top: 0px;
+    z-index: 5;
+    background-color: rgb(32, 32, 32);
     border-bottom: solid 1px whitesmoke;
 
-    .toolbar-item {
-      margin: 8px 0;
+    .toolbar-box {
+      margin: 8px 16px;
     }
-    .breadcrumb-item {
-      margin: 8px 28px;
+    .breadcrumb-box {
+      margin: 8px 12px;
+    }
+
+    @media only screen and (max-width: 800px) {
+      position: relative;
     }
   }
 
   .explore-container {
     display: flex;
     flex-flow: row nowrap;
-    height: auto;
 
     .left-container {
-      height: 100%;
-      width: calc(100vw - 300px);
+      width: 100%;
+      margin-bottom: 28px;
+
+      .sort-box {
+        width: 200px;
+        margin: 16px auto;
+        margin-right: 0px;
+        padding-right: 16px;
+      }
     }
     .right-container {
-      top: 232px;
-      width: 268px;
-      margin: 32px;
+      width: 250px;
+      margin: 16px;
       margin-left: 0;
 
       .option-box {
-        margin: 16px 0;
+        position: sticky;
       }
     }
+  }
+
+  .floating-option-button {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    outline: none;
+    text-decoration: none;
   }
 }
 </style>

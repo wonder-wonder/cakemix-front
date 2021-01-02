@@ -46,7 +46,6 @@ export default Vue.extend({
   justify-content: left;
   min-height: 38px;
   height: auto;
-  width: 100%;
 
   .breadcrumb-cell {
     margin: 4px;

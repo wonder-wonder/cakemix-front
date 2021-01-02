@@ -28,10 +28,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
-}
+<style lang="scss" scoped>
 .index-container {
   display: flex;
   flex-flow: column wrap;

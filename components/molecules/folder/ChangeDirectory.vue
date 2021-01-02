@@ -107,6 +107,7 @@ export default Vue.extend({
             // @ts-ignore
             this.successToast(this.$buefy, 'Moved folder')
             this.$emit('updated')
+            this.$emit('close')
           })
           .catch(err => {
             this.failureToast(

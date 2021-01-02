@@ -243,6 +243,7 @@ export default Vue.extend({
     },
     changeOwner() {
       this.$emit('update-user', this.selectedUser)
+      this.$emit('close')
     },
   },
 })

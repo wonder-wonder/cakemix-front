@@ -44,7 +44,6 @@ export default Vue.extend({
   flex-flow: row wrap;
   align-content: center;
   justify-content: center;
-  padding: 0 32px;
   width: auto;
 
   .search-input {
