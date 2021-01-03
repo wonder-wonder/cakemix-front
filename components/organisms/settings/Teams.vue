@@ -1,7 +1,7 @@
 <template>
   <div class="setting-teams-container">
     <TeamTools @create-team="isCreateViewEnable = true" />
-    <div class="teams-item-container">
+    <div ref="teams-item-container" class="teams-item-container">
       <BorderTitle :title="'Teams'" />
       <div class="teams-item-box">
         <UserCell
@@ -9,7 +9,7 @@
           :key="`user-cell-${uuid}-${index}`"
           class="user-cell"
           :user="user"
-          @dblclick.native="selectTeam(user)"
+          @click.native="selectTeam(user)"
         />
       </div>
       <b-pagination
@@ -90,6 +90,12 @@ export default Vue.extend({
   created() {
     this.getTeams()
   },
+  mounted() {
+    window.addEventListener('resize', this.updateWidth)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth)
+  },
   methods: {
     failureToast,
     successToast,
@@ -113,6 +119,9 @@ export default Vue.extend({
             'Search team failed',
             err.response.status
           )
+        })
+        .finally(() => {
+          this.updateWidth()
         })
     },
     createTeam(name: string) {
@@ -138,6 +147,25 @@ export default Vue.extend({
       this.selectedTeam = team
       this.isEditViewEnable = true
     },
+    updateWidth() {
+      const hMargin = 16
+      const cellWidth = 250
+      const cellWidthWithMargin = cellWidth + hMargin
+      const userCellContainer = this.$refs[
+        'teams-item-container'
+      ] as HTMLElement
+      const listWidth = userCellContainer.clientWidth
+      const minNumCell = Math.floor(listWidth / cellWidthWithMargin)
+      const cellWidthDiff = listWidth - minNumCell * cellWidthWithMargin
+      const eCellWidthWithMargin =
+        cellWidthWithMargin + Math.floor(cellWidthDiff / minNumCell)
+      const eCellWidth = eCellWidthWithMargin - hMargin
+      const userCells = document.getElementsByClassName('user-cell')
+      for (let index = 0; index < userCells.length; index++) {
+        const cell = userCells[index] as HTMLElement
+        cell.style.width = `${eCellWidth}px`
+      }
+    },
   },
 })
 </script>
@@ -145,8 +173,8 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .setting-teams-container {
   width: 100%;
-  height: 40px;
-  padding: 0px 32px;
+  padding: 0px 8px;
+  margin-bottom: 32px;
   color: white;
   background-color: rgb(32, 32, 32);
   font-size: 14px;

@@ -9,7 +9,7 @@
         @click="generateLink"
       />
     </div>
-    <div class="users-item-container">
+    <div ref="users-item-container" class="users-item-container">
       <BorderTitle :title="'Users'" />
       <div class="users-item-box">
         <UserCell
@@ -76,6 +76,12 @@ export default Vue.extend({
   created() {
     this.getUsers()
   },
+  mounted() {
+    window.addEventListener('resize', this.updateWidth)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth)
+  },
   methods: {
     failureToast,
     checkAuthWithStatus,
@@ -95,6 +101,9 @@ export default Vue.extend({
             err.response.status
           )
         })
+        .finally(() => {
+          this.updateWidth()
+        })
     },
     generateLink() {
       new AuthApi(this.$store.getters['auth/config'])
@@ -112,18 +121,42 @@ export default Vue.extend({
           )
         })
     },
+    updateWidth() {
+      const hMargin = 16
+      const cellWidth = 250
+      const cellWidthWithMargin = cellWidth + hMargin
+      const userCellContainer = this.$refs[
+        'users-item-container'
+      ] as HTMLElement
+      const listWidth = userCellContainer.clientWidth
+      const minNumCell = Math.floor(listWidth / cellWidthWithMargin)
+      const cellWidthDiff = listWidth - minNumCell * cellWidthWithMargin
+      const eCellWidthWithMargin =
+        cellWidthWithMargin + Math.floor(cellWidthDiff / minNumCell)
+      const eCellWidth = eCellWidthWithMargin - hMargin
+      const userCells = document.getElementsByClassName('user-cell')
+      for (let index = 0; index < userCells.length; index++) {
+        const cell = userCells[index] as HTMLElement
+        cell.style.width = `${eCellWidth}px`
+      }
+    },
   },
 })
 </script>
+
+<style lang="scss">
+.setting-users-container .users-tool-container label {
+  color: white;
+}
+</style>
 
 <style lang="scss" scoped>
 .setting-users-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  width: 100%;
-  height: 40px;
-  padding: 0px 32px;
+  padding: 0px 8px;
+  margin-bottom: 32px;
   color: white;
   background-color: rgb(32, 32, 32);
   font-size: 14px;
@@ -134,6 +167,7 @@ export default Vue.extend({
     flex-flow: row wrap;
     justify-content: center;
     width: 100%;
+    padding: 0px 8px;
 
     label {
       color: white;
