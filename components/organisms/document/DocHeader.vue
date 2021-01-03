@@ -44,7 +44,7 @@ export default Vue.extend({
   },
   computed: {
     isMobile(): boolean {
-      return this.$store.getters['device/windowWidth'] < 801
+      return this.$store.getters['device/windowWidth'] < 901
     },
   },
 })
