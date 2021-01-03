@@ -230,6 +230,7 @@ export default Vue.extend({
     },
     moved() {
       this.$emit('reload')
+      this.$emit('close')
     },
     update() {
       if (this.newModel.owner === undefined) {
@@ -264,6 +265,7 @@ export default Vue.extend({
           .modifyFolder(fuuid, req)
           .then(() => {
             this.$emit('reload')
+            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -288,6 +290,7 @@ export default Vue.extend({
           .putDocDocId(duuid, req)
           .then(() => {
             this.$emit('reload')
+            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -313,6 +316,7 @@ export default Vue.extend({
           .deleteFolder(fduuid)
           .then(() => {
             this.$emit('reload')
+            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -326,6 +330,7 @@ export default Vue.extend({
           .deleteDoc(fduuid)
           .then(() => {
             this.$emit('reload')
+            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -352,7 +357,6 @@ export default Vue.extend({
   background-color: whitesmoke;
   border-radius: 4px;
   height: auto;
-  width: 250px;
 
   .fa-fw {
     font-size: 80px;

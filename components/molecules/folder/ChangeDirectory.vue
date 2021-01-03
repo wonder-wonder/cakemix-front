@@ -11,7 +11,7 @@
         v-for="(item, index) in folder"
         :key="`folder-cell-${index}`"
         :folder="item"
-        @dblclick.native="getFolder(item.uuid)"
+        @click.native="getFolder(item.uuid)"
       />
     </div>
     <b-button type="is-dark" class="change-directory-button" @click="transfer">
@@ -124,6 +124,7 @@ export default Vue.extend({
             // @ts-ignore
             this.successToast(this.$buefy, 'Document moved ')
             this.$emit('updated')
+            this.$emit('close')
           })
           .catch(err => {
             this.failureToast(

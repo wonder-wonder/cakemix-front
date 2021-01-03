@@ -34,7 +34,7 @@
           @select="selectedFolderDoc"
         />
       </div>
-      <div class="right-container">
+      <div v-if="!isMobile" class="right-container">
         <OptionBox
           ref="option-content-box"
           class="option-box"
@@ -50,6 +50,7 @@
       class="floating-option-button is-light"
       :rounded="true"
       icon-right="info"
+      @click="openOptionView"
     />
     <NoList v-if="isNoItems && isLoaded" />
   </div>
@@ -113,6 +114,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    isMobile(): boolean {
+      return this.$store.getters['device/windowWidth'] < 921
+    },
     sortedFolder(): FolderModel[] {
       return this.sortFunction.folder(this.folders)
     },
@@ -203,14 +207,30 @@ export default Vue.extend({
         events: { create: this.createFolder },
       })
     },
+    openOptionView() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: OptionBox,
+        props: {
+          'current-folder-id': this.currentFolderId,
+          model: this.selectItem,
+          'model-type': this.selectType,
+        },
+        events: { reload: this.fetchFolder },
+      })
+    },
     updateHeightAnchor() {
-      const instance = this.$refs['folder-content-container'] as HTMLElement
-      if (!instance) {
+      const fInstance = this.$refs['folder-content-container'] as HTMLElement
+      if (!fInstance) {
         return
       }
-      const topOffset = instance.offsetTop
-      const optionBoxEl = (this.$refs['option-content-box'] as Vue)
-        .$el as HTMLElement
+      const topOffset = fInstance.offsetTop
+      const oInstance = this.$refs['option-content-box'] as Vue
+      if (!oInstance) {
+        return
+      }
+      const optionBoxEl = oInstance.$el as HTMLElement
       optionBoxEl.style.top = `${topOffset + 16}px`
     },
     selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
@@ -342,10 +362,10 @@ export default Vue.extend({
   .explore-container {
     display: flex;
     flex-flow: row nowrap;
+    margin-bottom: 72px;
 
     .left-container {
       width: 100%;
-      margin-bottom: 28px;
 
       .sort-box {
         width: 200px;
@@ -361,11 +381,13 @@ export default Vue.extend({
 
       .option-box {
         position: sticky;
+        width: 250px;
       }
     }
   }
 
   .floating-option-button {
+    display: none;
     position: fixed;
     right: 16px;
     bottom: 16px;
@@ -374,6 +396,10 @@ export default Vue.extend({
     border-radius: 50%;
     outline: none;
     text-decoration: none;
+
+    @media only screen and (max-width: 800px) {
+      display: inline;
+    }
   }
 }
 </style>
