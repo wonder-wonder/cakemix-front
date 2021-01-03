@@ -1,6 +1,6 @@
 <template>
   <div class="setting-teams-container">
-    <TeamTools @create-team="isCreateViewEnable = true" />
+    <TeamTools @create-team="openCreateTeamBox" />
     <div ref="teams-item-container" class="teams-item-container">
       <BorderTitle :title="'Teams'" />
       <div class="teams-item-box">
@@ -24,16 +24,6 @@
         @change="getTeams"
       />
     </div>
-    <b-modal v-model="isCreateViewEnable">
-      <CreateTeamBox @create="createTeam" @close="isCreateViewEnable = false" />
-    </b-modal>
-    <b-modal v-model="isEditViewEnable">
-      <TeamEdit
-        :team="selectedTeam"
-        @close="isEditViewEnable = false"
-        @reload="reload"
-      />
-    </b-modal>
   </div>
 </template>
 
@@ -47,7 +37,6 @@ import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
 import CreateTeamBox from '@/components/organisms/settings/CreateTeamBox.vue'
 import TeamEdit from '@/components/molecules/settings/TeamEdit.vue'
 import {
-  TeamApi,
   SearchApi,
   checkAuthWithStatus,
   ProfileModel,
@@ -71,8 +60,6 @@ export default Vue.extend({
     BorderTitle,
     TeamTools,
     UserCell,
-    CreateTeamBox,
-    TeamEdit,
   },
   data(): DataType {
     return {
@@ -100,9 +87,24 @@ export default Vue.extend({
     failureToast,
     successToast,
     checkAuthWithStatus,
-    reload() {
-      this.isEditViewEnable = false
-      this.getTeams()
+    openCreateTeamBox() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: CreateTeamBox,
+        events: { created: this.getTeams },
+      })
+    },
+    openTeamEdit() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: TeamEdit,
+        props: {
+          team: this.selectedTeam,
+        },
+        events: { reload: this.getTeams },
+      })
     },
     getTeams() {
       new SearchApi(this.$store.getters['auth/config'])
@@ -124,28 +126,10 @@ export default Vue.extend({
           this.updateWidth()
         })
     },
-    createTeam(name: string) {
-      new TeamApi(this.$store.getters['auth/config'])
-        .postTeam(name)
-        .then(() => {
-          this.isCreateViewEnable = false
-          this.getTeams()
-          // @ts-ignore
-          this.successToast(this.$buefy, 'Success to create new team')
-        })
-        .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
-            // @ts-ignore
-            this.$buefy,
-            'Failed to create',
-            err.response.status
-          )
-        })
-    },
+
     selectTeam(team: ProfileModel) {
       this.selectedTeam = team
-      this.isEditViewEnable = true
+      this.openTeamEdit()
     },
     updateWidth() {
       const hMargin = 16
