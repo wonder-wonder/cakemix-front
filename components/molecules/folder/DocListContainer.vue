@@ -37,28 +37,12 @@ export default Vue.extend({
       type: Array as PropType<DocumentModel[]>,
       default: [],
     },
-    resetIndex: {
-      type: Number,
-      default: -1,
-    },
-    calcWidth: {
-      type: Number,
-      default: -1,
-    },
   },
   data(): DataType {
     return {
       uuid: uuidv4(),
       selectedIndex: -1,
     }
-  },
-  watch: {
-    resetIndex() {
-      this.selectedIndex = -1
-    },
-    calcWidth() {
-      this.updateWidth()
-    },
   },
   mounted() {
     this.updateWidth()
@@ -68,6 +52,9 @@ export default Vue.extend({
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
+    resetIndex() {
+      this.selectedIndex = -1
+    },
     goToDoc(documentId: string) {
       this.$router.push({ path: `/doc/${documentId}` })
     },

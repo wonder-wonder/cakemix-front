@@ -23,16 +23,14 @@
         <SortBox class="sort-box" @input="sortFunction = $event" />
         <FolderListContainer
           v-if="isFolderAvailable"
+          ref="folder-list-container"
           :models="filteredFolder"
-          :reset-index="selectedFolderIndex"
-          :calc-width="updateWidth"
           @select="selectedFolderDoc"
         />
         <DocListContainer
           v-if="isDocAvailable"
+          ref="doc-list-container"
           :models="filteredDocs"
-          :reset-index="selectedDocIndex"
-          :calc-width="updateWidth"
           @select="selectedFolderDoc"
         />
       </div>
@@ -88,9 +86,6 @@ export type DataType = {
   sortFunction: SortModel
   selectType: string
   selectItem: FolderModel | DocumentModel
-  selectedFolderIndex: number
-  selectedDocIndex: number
-  updateWidth: number
   searchText: string
   isLoaded: boolean
 }
@@ -113,9 +108,6 @@ export default Vue.extend({
       sortFunction: alphabetSort,
       selectType: 'NONE',
       selectItem: {} as FolderModel | DocumentModel,
-      selectedFolderIndex: -1,
-      selectedDocIndex: -1,
-      updateWidth: -1,
       searchText: '',
       isLoaded: false,
     }
@@ -155,6 +147,7 @@ export default Vue.extend({
       return !this.isFolderAvailable && !this.isDocAvailable
     },
     currentFolderId(): string {
+      if (this.breadcrumb.length < 1) return ''
       const fId = this.breadcrumb[this.breadcrumb.length - 1].folder_id ?? ''
       return fId
     },
@@ -168,6 +161,40 @@ export default Vue.extend({
   methods: {
     failureToast,
     checkAuthWithStatus,
+    resetFolderIndex() {
+      const instance = this.$refs['folder-list-container'] as InstanceType<
+        typeof FolderListContainer
+      >
+      if (!instance) {
+        return
+      }
+      instance.resetIndex()
+    },
+    resetDocumentIndex() {
+      const instance = this.$refs['doc-list-container'] as InstanceType<
+        typeof DocListContainer
+      >
+      if (!instance) {
+        return
+      }
+      instance.resetIndex()
+    },
+    updateCellWidth() {
+      const fInstance = this.$refs['folder-list-container'] as InstanceType<
+        typeof FolderListContainer
+      >
+      if (!fInstance) {
+        return
+      }
+      fInstance.updateWidth()
+      const dInstance = this.$refs['doc-list-container'] as InstanceType<
+        typeof DocListContainer
+      >
+      if (!dInstance) {
+        return
+      }
+      dInstance.updateWidth()
+    },
     openCreateFolderView() {
       // @ts-ignore
       this.$buefy.modal.open({
@@ -177,29 +204,29 @@ export default Vue.extend({
       })
     },
     updateHeightAnchor() {
-      const exploreContainer = this.$refs[
-        'folder-content-container'
-      ] as HTMLDivElement
-      const topOffset = exploreContainer.offsetTop
+      const instance = this.$refs['folder-content-container'] as HTMLElement
+      if (!instance) {
+        return
+      }
+      const topOffset = instance.offsetTop
       const optionBoxEl = (this.$refs['option-content-box'] as Vue)
         .$el as HTMLElement
       optionBoxEl.style.top = `${topOffset + 16}px`
     },
     selectedFolderDoc(modelType: string, model: FolderModel | DocumentModel) {
-      this.updateWidth = Date.now()
       this.selectType = modelType
       this.selectItem = model
       if (modelType === 'FOLDER') {
-        this.selectedDocIndex = Date.now()
+        this.resetDocumentIndex()
       } else if (modelType === 'DOCUMENT') {
-        this.selectedFolderIndex = Date.now()
+        this.resetFolderIndex()
       }
     },
     resetSelect() {
       this.selectType = ''
       this.selectItem = {}
-      this.selectedFolderIndex = Date.now()
-      this.selectedDocIndex = Date.now()
+      this.resetFolderIndex()
+      this.resetDocumentIndex()
     },
     fetchFolder() {
       this.resetSelect()
@@ -222,7 +249,7 @@ export default Vue.extend({
         })
         .finally(() => {
           this.isLoaded = true
-          this.updateWidth = Date.now()
+          this.updateCellWidth()
           this.updateHeightAnchor()
         })
     },
