@@ -35,6 +35,7 @@ export default Vue.extend({
   align-items: center;
   height: 100vh;
   width: 100vw;
+  padding: 0 16px;
   font-family: 'Righteous';
 
   .image-box {
