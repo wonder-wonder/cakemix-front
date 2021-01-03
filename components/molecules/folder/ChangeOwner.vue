@@ -28,10 +28,10 @@
         </template>
       </b-autocomplete>
     </b-field>
-    <div v-if="isUserSelected" class="users-cell-item-box">
-      <UserCell :user="currentOwner" />
-      <i class="fa fa-arrow-circle-right" />
-      <UserCell :user="selectedUser" />
+    <div v-if="isUserSelected" class="user-cells-box">
+      <UserMinCell class="user-cell" :user="currentOwner" />
+      <i class="fa fa-arrow-right" />
+      <UserMinCell class="user-cell" :user="selectedUser" />
     </div>
     <b-button
       v-if="isUserSelected"
@@ -47,7 +47,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { debounce } from 'lodash'
-import UserCell from '@/components/atoms/cell/UserCell.vue'
+import UserMinCell from '@/components/atoms/cell/UserMinCell.vue'
 import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { failureToast } from '@/scripts/utils/toast'
@@ -108,7 +108,7 @@ const tabs = [
 
 export default Vue.extend({
   components: {
-    UserCell,
+    UserMinCell,
     UserSearchWideCell,
   },
   props: {
@@ -243,12 +243,13 @@ export default Vue.extend({
     },
     changeOwner() {
       this.$emit('update-user', this.selectedUser)
+      this.$emit('close')
     },
   },
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .owner-container {
   display: flex;
   flex-flow: column nowrap;
@@ -284,17 +285,20 @@ export default Vue.extend({
     }
   }
 
-  .users-cell-item-box {
+  .user-cells-box {
     display: flex;
     flex-flow: row wrap;
     align-items: center;
     justify-content: center;
     height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 
+    .user-cell {
+      margin: 4px;
+    }
     .fa {
-      font-size: 40px;
-      margin: 8px;
+      font-size: 32px;
+      margin: 0 8px 32px 8px;
     }
   }
   .change-owner-button {

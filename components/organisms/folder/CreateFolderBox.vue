@@ -40,6 +40,7 @@ export default Vue.extend({
         return
       }
       this.$emit('create', this.name)
+      this.$emit('close')
     },
   },
 })

@@ -11,13 +11,9 @@
     <Button
       v-if="isEditable"
       :button-name="'Change Owner'"
-      @click="isChangeOwnerEnable = true"
+      @click="openOwnerView"
     />
-    <Button
-      v-if="isEditable"
-      :button-name="'Move'"
-      @click="isMoveEnable = true"
-    />
+    <Button v-if="isEditable" :button-name="'Move'" @click="openMoveView" />
     <Input
       v-if="isEditable"
       :label-name="'Name'"
@@ -47,17 +43,6 @@
       @click="del"
       v-text="'Delete'"
     />
-    <b-modal v-model="isChangeOwnerEnable">
-      <ChangeOwner :current-owner="model.owner" @update-user="updateOwner" />
-    </b-modal>
-    <b-modal v-model="isMoveEnable">
-      <ChangeDirectory
-        :current-folder-id="currentFolderId"
-        :item-id="model.uuid"
-        :is-folder="isFolder"
-        @updated="moved"
-      />
-    </b-modal>
   </div>
 </template>
 
@@ -88,8 +73,6 @@ import { successToast, failureToast } from '@/scripts/utils/toast'
 export type DataType = {
   selectModels: Array<string>
   newModel: DocumentModel | FolderModel
-  isChangeOwnerEnable: boolean
-  isMoveEnable: boolean
 }
 
 export default Vue.extend({
@@ -98,8 +81,6 @@ export default Vue.extend({
     OptionInfoCell,
     Select,
     Button,
-    ChangeOwner,
-    ChangeDirectory,
   },
   props: {
     currentFolderId: {
@@ -108,7 +89,7 @@ export default Vue.extend({
     },
     model: {
       type: Object as PropType<FolderModel | DocumentModel>,
-      default: {},
+      default: {} as FolderModel | DocumentModel,
     },
     modelType: {
       type: String,
@@ -119,8 +100,6 @@ export default Vue.extend({
     return {
       selectModels: ['Private', 'Read', 'Read / Write'],
       newModel: {},
-      isChangeOwnerEnable: false,
-      isMoveEnable: false,
     }
   },
   computed: {
@@ -197,15 +176,45 @@ export default Vue.extend({
   },
   watch: {
     model() {
-      // deep copy using clone deep in the lodash
-      this.newModel = CloneDeep(this.model)
+      this.copyToModel()
     },
+  },
+  created() {
+    this.copyToModel()
   },
   methods: {
     successToast,
     failureToast,
     toDate,
     checkAuthWithStatus,
+    openMoveView() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: ChangeDirectory,
+        props: {
+          'current-folder-id': this.currentFolderId,
+          'item-id': this.model.uuid,
+          'is-folder': this.isFolder,
+        },
+        events: { updated: this.moved },
+      })
+    },
+    openOwnerView() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: ChangeOwner,
+        props: {
+          'current-owner': this.model.owner,
+        },
+        events: { 'update-user': this.updateOwner },
+      })
+    },
+    copyToModel() {
+      // deep copy using clone deep in the lodash
+      this.newModel = CloneDeep(this.model)
+    },
     selected(type: string) {
       const perm = this.selectModels.indexOf(type) ?? this.newModel.permission
       this.newModel.permission = perm
@@ -218,11 +227,10 @@ export default Vue.extend({
     },
     updateOwner(newOwner: ProfileModel) {
       this.newModel.owner = newOwner
-      this.isChangeOwnerEnable = false
     },
     moved() {
-      this.isMoveEnable = false
       this.$emit('reload')
+      this.$emit('close')
     },
     update() {
       if (this.newModel.owner === undefined) {
@@ -257,6 +265,7 @@ export default Vue.extend({
           .modifyFolder(fuuid, req)
           .then(() => {
             this.$emit('reload')
+            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -281,6 +290,7 @@ export default Vue.extend({
           .putDocDocId(duuid, req)
           .then(() => {
             this.$emit('reload')
+            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -306,6 +316,7 @@ export default Vue.extend({
           .deleteFolder(fduuid)
           .then(() => {
             this.$emit('reload')
+            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -319,6 +330,7 @@ export default Vue.extend({
           .deleteDoc(fduuid)
           .then(() => {
             this.$emit('reload')
+            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -341,11 +353,10 @@ export default Vue.extend({
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
   background-color: whitesmoke;
   border-radius: 4px;
   height: auto;
-  width: 100%;
 
   .fa-fw {
     font-size: 80px;

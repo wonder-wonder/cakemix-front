@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown aria-role="list">
+  <b-dropdown aria-role="list" :mobile-modal="false">
     <button slot="trigger" slot-scope="{ active }" class="button">
       <span>Menu</span>
       <b-icon :icon="active ? 'menu-up' : 'menu-down'" />

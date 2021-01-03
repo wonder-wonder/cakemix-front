@@ -37,21 +37,12 @@ export default Vue.extend({
       type: Array as PropType<FolderModel[]>,
       default: [],
     },
-    resetIndex: {
-      type: Number,
-      default: -1,
-    },
   },
   data(): DataType {
     return {
       uuid: uuidv4(),
       selectedIndex: -1,
     }
-  },
-  watch: {
-    resetIndex() {
-      this.selectedIndex = -1
-    },
   },
   mounted() {
     this.updateWidth()
@@ -61,6 +52,9 @@ export default Vue.extend({
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
+    resetIndex() {
+      this.selectedIndex = -1
+    },
     goToFolder(folderId: string) {
       this.$router.push({ path: `/folder/${folderId}` })
     },
@@ -69,14 +63,16 @@ export default Vue.extend({
       this.$emit('select', 'FOLDER', model)
     },
     updateWidth() {
-      const cellWidth = 316
-      const hMargin = 8 * 2
+      const hMargin = 16
+      const cellWidth = 288
+      const cellWidthWithMargin = cellWidth + hMargin
       const folderContainer = this.$refs['folder-container'] as HTMLElement
       const listWidth = folderContainer.clientWidth
-      const leastNumCell = Math.floor(listWidth / cellWidth)
-      const listWidthDiff = listWidth - leastNumCell * cellWidth
-      const eCellWidth =
-        cellWidth - hMargin + Math.floor(listWidthDiff / leastNumCell)
+      const minNumCell = Math.floor(listWidth / cellWidthWithMargin)
+      const cellWidthDiff = listWidth - minNumCell * cellWidthWithMargin
+      const eCellWidthWithMargin =
+        cellWidthWithMargin + Math.floor(cellWidthDiff / minNumCell)
+      const eCellWidth = eCellWidthWithMargin - hMargin
       const folderCells = document.getElementsByClassName('folder-cell')
       for (let index = 0; index < folderCells.length; index++) {
         const cell = folderCells[index] as HTMLElement
@@ -119,7 +115,7 @@ export default Vue.extend({
   .item-container {
     display: flex;
     flex-flow: row wrap;
-    margin: 0px 24px;
+    margin: 0 8px;
 
     .folder-box {
       margin: 8px;
@@ -127,10 +123,8 @@ export default Vue.extend({
   }
 
   .border-title {
-    margin-top: 24px;
-    margin-bottom: 24px;
-    padding-left: 32px;
-    padding-right: 32px;
+    margin: 16px 0;
+    padding: 0 16px;
   }
 }
 </style>

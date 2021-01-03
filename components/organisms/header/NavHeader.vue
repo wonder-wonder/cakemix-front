@@ -32,12 +32,9 @@ export default Vue.extend({
 
 <style lang="scss">
 .nav-header-container {
-  position: sticky;
-  top: 0;
   display: flex;
   align-items: center;
   height: 56px;
-  width: 100vw;
   padding: 0 16px;
   background-color: black;
   z-index: 999;
