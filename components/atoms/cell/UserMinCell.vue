@@ -62,12 +62,14 @@ export default Vue.extend({
   }
 
   .username-box {
-    display: flex;
-    justify-content: center;
     height: 40px;
-    overflow: hidden;
     font-size: 13px;
     font-weight: bold;
+    overflow: scroll;
+
+    span {
+      word-wrap: break-word;
+    }
   }
 }
 </style>
