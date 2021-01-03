@@ -50,8 +50,6 @@ type DataType = {
   total: number
   page: number
   generatedLink: string
-  isCreateViewEnable: boolean
-  isEditViewEnable: boolean
   PER_PAGE: number
 }
 
@@ -69,8 +67,6 @@ export default Vue.extend({
       total: 0,
       page: 1,
       generatedLink: '',
-      isCreateViewEnable: false,
-      isEditViewEnable: false,
       PER_PAGE: 9,
     }
   },
