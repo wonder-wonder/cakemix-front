@@ -322,6 +322,7 @@ export default Vue.extend({
           this.$emit('reload')
           // @ts-ignore
           this.successToast(this.$buefy, 'This team was deleted')
+          this.$emit('close')
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
