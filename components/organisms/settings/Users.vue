@@ -116,14 +116,19 @@ export default Vue.extend({
 })
 </script>
 
+<style lang="scss">
+.setting-users-container .users-tool-container label {
+  color: white;
+}
+</style>
+
 <style lang="scss" scoped>
 .setting-users-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  width: 100%;
-  height: 40px;
-  padding: 0px 32px;
+  padding: 0px 8px;
+  margin-bottom: 32px;
   color: white;
   background-color: rgb(32, 32, 32);
   font-size: 14px;
@@ -134,6 +139,7 @@ export default Vue.extend({
     flex-flow: row wrap;
     justify-content: center;
     width: 100%;
+    padding: 0px 8px;
 
     label {
       color: white;

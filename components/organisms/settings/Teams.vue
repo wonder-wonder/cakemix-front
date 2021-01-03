@@ -9,7 +9,7 @@
           :key="`user-cell-${uuid}-${index}`"
           class="user-cell"
           :user="user"
-          @dblclick.native="selectTeam(user)"
+          @click.native="selectTeam(user)"
         />
       </div>
       <b-pagination
@@ -145,8 +145,8 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .setting-teams-container {
   width: 100%;
-  height: 40px;
-  padding: 0px 32px;
+  padding: 0px 8px;
+  margin-bottom: 32px;
   color: white;
   background-color: rgb(32, 32, 32);
   font-size: 14px;

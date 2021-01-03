@@ -143,8 +143,8 @@ export default Vue.extend({
   flex-flow: row wrap;
   justify-content: center;
   width: 100%;
-  height: 40px;
-  padding: 0px 32px;
+  padding: 0px 16px;
+  margin-bottom: 32px;
   color: white;
   background-color: rgb(32, 32, 32);
   font-size: 14px;
