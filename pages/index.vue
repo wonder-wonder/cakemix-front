@@ -1,53 +1,76 @@
 <template>
-  <section class="section">
-    <div class="columns is-mobile">
-      <card
-        title="Free"
-        icon="github"
-      >
-        Open source on <a href="https://github.com/buefy/buefy">
-          GitHub
-        </a>
-      </card>
-
-      <card
-        title="Responsive"
-        icon="cellphone-link"
-      >
-        <b class="has-text-grey">
-          Every
-        </b> component is responsive
-      </card>
-
-      <card
-        title="Modern"
-        icon="alert-decagram"
-      >
-        Built with <a href="https://vuejs.org/">
-          Vue.js
-        </a> and <a href="http://bulma.io/">
-          Bulma
-        </a>
-      </card>
-
-      <card
-        title="Lightweight"
-        icon="arrange-bring-to-front"
-      >
-        No other internal dependency
-      </card>
+  <div class="index-container">
+    <div class="image-box">
+      <img src="@/assets/icon.png" alt="cakemix_icon" />
     </div>
-  </section>
+    <div class="description">
+      <div class="service-name" v-text="'Cakemix'" />
+      <span v-text="'Document management system for all creative team'" />
+      <span v-text="'Real-time edit with multiple users'" />
+      <span v-text="'Open source'" />
+    </div>
+    <b-button rounded @click="gotoLogin">
+      Login
+    </b-button>
+  </div>
 </template>
 
-<script>
-import Card from '~/components/Card'
+<script lang="ts">
+import Vue from 'vue'
 
-export default {
-  name: 'HomePage',
+export default Vue.extend({
+  methods: {
+    gotoLogin() {
+      this.$router.push('/auth/login')
+    },
+  },
+})
+</script>
 
-  components: {
-    Card
+<style lang="scss" scoped>
+.index-container {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  padding: 0 16px;
+  font-family: 'Righteous';
+
+  .image-box {
+    background-color: whitesmoke;
+    border-radius: 182px;
+    height: 80vw;
+    max-height: 300px;
+    width: 80vw;
+    max-width: 300px;
+    padding: 32px;
+  }
+
+  .description {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    font-size: 24px;
+    color: white;
+
+    .service-name {
+      font-size: 60px;
+    }
+  }
+
+  button {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: center;
+    justify-content: center;
+    margin-top: 40px;
+    height: 48px;
+    width: 160px;
+    font-family: 'Righteous';
+    font-size: 24px;
+    border-width: 5px;
   }
 }
-</script>
+</style>

@@ -25,7 +25,9 @@
     },
     "types": [
       "@types/node",
-      "@nuxt/types"
+      "@nuxt/types",
+      "webpack-env",
+      "node"
     ]
   },
   "exclude": [

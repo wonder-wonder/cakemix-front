@@ -1,0 +1,176 @@
+<template>
+  <div class="setting-profile-container">
+    <div class="profile-item-box">
+      <SquareIcon
+        class="icon"
+        :label-name="'Icon'"
+        :src="icon"
+        @upload="uploadImage"
+      />
+      <ValidateInput
+        :label-name="'UserName'"
+        :message="['OK', 'Invalid charactor or already used']"
+        :is-valid="isUnique"
+        :value="userName"
+        :disabled="true"
+        @text="updateUserName"
+      />
+      <Select
+        :label-name="'Language'"
+        :select-items="languageModel"
+        :placeholder="'Select a language'"
+        :current="current"
+        @input="current = $event"
+      />
+      <TextArea :label-name="'Biography'" :value="bio" @text="bio = $event" />
+      <b-button
+        class="update-button is-primary"
+        :loading="isLoading"
+        @click="request"
+        v-text="'Update'"
+      />
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import SquareIcon from '@/components/molecules/image/UploadableImage.vue'
+import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
+import TextArea from '@/components/atoms/input/TextArea.vue'
+import Select from '@/components/atoms/input/Select.vue'
+import { successToast, failureToast } from '@/scripts/utils/toast'
+import {
+  checkAuthWithStatus,
+  SearchApi,
+  ProfileApi,
+  ImageApi,
+  ProfileModel,
+} from '@/scripts/api/index'
+
+type DataType = {
+  current: string
+  icon: string
+  userName: string
+  bio: string
+  isLoading: boolean
+  isUnique: boolean
+  languageModel: string[]
+}
+
+const languageModel = ['English', 'Japanese']
+
+export default Vue.extend({
+  components: {
+    SquareIcon,
+    ValidateInput,
+    TextArea,
+    Select,
+  },
+  data(): DataType {
+    return {
+      current: '',
+      icon: require('@/assets/noimage.png'),
+      userName: '',
+      bio: '',
+      isLoading: false,
+      isUnique: false,
+      languageModel,
+    }
+  },
+  created() {
+    new ProfileApi(this.$store.getters['auth/config'])
+      .getUserProfileUuid(this.$store.getters['auth/uuid'])
+      .then(res => {
+        this.userName = res.data.name
+        this.current = res.data.lang === 'ja' ? 'Japanese' : 'English'
+        this.bio = res.data.bio ?? ''
+        if (res.data.icon_uri) {
+          this.icon = res.data.icon_uri
+        }
+      })
+  },
+  methods: {
+    successToast,
+    failureToast,
+    checkAuthWithStatus,
+    request() {
+      const profile = {
+        uuid: this.$store.getters['auth/uuid'],
+        name: this.userName,
+        bio: this.bio,
+        icon_uri: this.icon,
+        lang: this.current,
+      } as ProfileModel
+      this.isLoading = true
+      new ProfileApi(this.$store.getters['auth/config'])
+        .putUserProfileUuid(this.$store.getters['auth/uuid'], profile)
+        .then(() => {
+          // @ts-ignore
+          this.successToast(this.$buefy, 'Request succeeded')
+        })
+        .catch(err => {
+          // @ts-ignore
+          this.failureToast(this.$buefy, 'Request failed', err.response.status)
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
+    },
+    uploadImage(file: File) {
+      new ImageApi(this.$store.getters['auth/config'])
+        .postImage(file)
+        .then(res => {
+          this.icon = `${process.env.HTTP_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/image/${res.data.id}`
+        })
+    },
+    updateUserName(userName: string) {
+      this.userName = userName
+      new SearchApi(this.$store.getters['auth/config'])
+        .getSearchUser(userName)
+        .then(res => {
+          const users = res.data.users ?? []
+          this.isUnique = users.filter(u => u.name === userName).length === 0
+        })
+    },
+  },
+})
+</script>
+
+<style lang="scss">
+.setting-profile-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 100%;
+  padding: 0px 16px;
+  margin-bottom: 32px;
+  color: white;
+  background-color: rgb(32, 32, 32);
+  font-size: 14px;
+  font-weight: bold;
+
+  .border-title {
+    width: 100%;
+  }
+
+  .profile-item-box {
+    max-width: 500px;
+    width: 100%;
+
+    .label {
+      color: white;
+    }
+
+    .update-button {
+      width: 120px;
+      margin: 16px 0px;
+      font-weight: bold;
+    }
+  }
+
+  .border-title {
+    margin-bottom: 30px;
+  }
+}
+</style>
