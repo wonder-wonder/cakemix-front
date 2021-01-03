@@ -115,7 +115,7 @@ export default Vue.extend({
   },
   computed: {
     isMobile(): boolean {
-      return this.$store.getters['device/windowWidth'] < 921
+      return this.$store.getters['device/windowWidth'] < 901
     },
     sortedFolder(): FolderModel[] {
       return this.sortFunction.folder(this.folders)
