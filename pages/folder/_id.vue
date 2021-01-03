@@ -336,7 +336,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .folder-container {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   width: 100vw;
   background-color: rgb(32, 32, 32);
 

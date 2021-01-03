@@ -35,7 +35,6 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   height: 56px;
-  width: 100vw;
   padding: 0 16px;
   background-color: black;
   z-index: 999;

@@ -64,7 +64,7 @@ export default Vue.extend({
     },
     updateWidth() {
       const hMargin = 16
-      const cellWidth = 300
+      const cellWidth = 288
       const cellWidthWithMargin = cellWidth + hMargin
       const folderContainer = this.$refs['doc-container'] as HTMLElement
       const listWidth = folderContainer.clientWidth
