@@ -1,7 +1,12 @@
 <template>
   <div class="editor-header">
     <DocNav class="doc-nav-box" @toParentFolder="$emit('toParentFolder')" />
-    <DocSwitch v-if="isLoaded" :is-editable="isEditable" />
+    <DocSwitch v-if="isLoaded && !isMobile" :is-editable="isEditable" />
+    <DocSimpleSwitch
+      v-if="isLoaded && isMobile"
+      :is-mobile="isMobile"
+      :is-editable="isEditable"
+    />
     <DocSwitchButton
       v-if="isLoaded"
       :icon-type="'question'"
@@ -17,12 +22,14 @@
 import Vue from 'vue'
 import DocNav from '@/components/molecules/document/DocNav.vue'
 import DocSwitch from '@/components/molecules/document/DocSwitch.vue'
+import DocSimpleSwitch from '@/components/molecules/document/DocSimpleSwitch.vue'
 import DocSwitchButton from '@/components/atoms/document/DocSwitchButton.vue'
 
 export default Vue.extend({
   components: {
     DocNav,
     DocSwitch,
+    DocSimpleSwitch,
     DocSwitchButton,
   },
   props: {
@@ -33,6 +40,11 @@ export default Vue.extend({
     isEditable: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    isMobile(): boolean {
+      return this.$store.getters['device/windowWidth'] < 801
     },
   },
 })
