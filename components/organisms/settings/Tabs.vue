@@ -99,7 +99,7 @@ export default Vue.extend({
   }
 
   .tabs.is-boxed {
-    padding: 0 16px;
+    padding: 0 15px;
     margin: 0 auto;
   }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="setting-teams-container">
     <TeamTools @create-team="isCreateViewEnable = true" />
-    <div class="teams-item-container">
+    <div ref="teams-item-container" class="teams-item-container">
       <BorderTitle :title="'Teams'" />
       <div class="teams-item-box">
         <UserCell
@@ -90,6 +90,12 @@ export default Vue.extend({
   created() {
     this.getTeams()
   },
+  mounted() {
+    window.addEventListener('resize', this.updateWidth)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth)
+  },
   methods: {
     failureToast,
     successToast,
@@ -114,6 +120,9 @@ export default Vue.extend({
             err.response.status
           )
         })
+        .finally(() => {
+          this.updateWidth()
+        })
     },
     createTeam(name: string) {
       new TeamApi(this.$store.getters['auth/config'])
@@ -137,6 +146,25 @@ export default Vue.extend({
     selectTeam(team: ProfileModel) {
       this.selectedTeam = team
       this.isEditViewEnable = true
+    },
+    updateWidth() {
+      const hMargin = 16
+      const cellWidth = 250
+      const cellWidthWithMargin = cellWidth + hMargin
+      const userCellContainer = this.$refs[
+        'teams-item-container'
+      ] as HTMLElement
+      const listWidth = userCellContainer.clientWidth
+      const minNumCell = Math.floor(listWidth / cellWidthWithMargin)
+      const cellWidthDiff = listWidth - minNumCell * cellWidthWithMargin
+      const eCellWidthWithMargin =
+        cellWidthWithMargin + Math.floor(cellWidthDiff / minNumCell)
+      const eCellWidth = eCellWidthWithMargin - hMargin
+      const userCells = document.getElementsByClassName('user-cell')
+      for (let index = 0; index < userCells.length; index++) {
+        const cell = userCells[index] as HTMLElement
+        cell.style.width = `${eCellWidth}px`
+      }
     },
   },
 })

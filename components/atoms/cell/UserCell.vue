@@ -46,7 +46,7 @@ export default Vue.extend({
 <style lang="scss">
 .user-cell-container {
   display: grid;
-  width: 250px;
+  min-width: 250px;
   grid-template-rows: 40px 24px;
   grid-template-columns: 64px 16px 160px;
   border: solid 1px white;

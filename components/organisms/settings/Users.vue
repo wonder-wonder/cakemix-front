@@ -9,7 +9,7 @@
         @click="generateLink"
       />
     </div>
-    <div class="users-item-container">
+    <div ref="users-item-container" class="users-item-container">
       <BorderTitle :title="'Users'" />
       <div class="users-item-box">
         <UserCell
@@ -76,6 +76,12 @@ export default Vue.extend({
   created() {
     this.getUsers()
   },
+  mounted() {
+    window.addEventListener('resize', this.updateWidth)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth)
+  },
   methods: {
     failureToast,
     checkAuthWithStatus,
@@ -95,6 +101,9 @@ export default Vue.extend({
             err.response.status
           )
         })
+        .finally(() => {
+          this.updateWidth()
+        })
     },
     generateLink() {
       new AuthApi(this.$store.getters['auth/config'])
@@ -111,6 +120,25 @@ export default Vue.extend({
             err.response.status
           )
         })
+    },
+    updateWidth() {
+      const hMargin = 16
+      const cellWidth = 250
+      const cellWidthWithMargin = cellWidth + hMargin
+      const userCellContainer = this.$refs[
+        'users-item-container'
+      ] as HTMLElement
+      const listWidth = userCellContainer.clientWidth
+      const minNumCell = Math.floor(listWidth / cellWidthWithMargin)
+      const cellWidthDiff = listWidth - minNumCell * cellWidthWithMargin
+      const eCellWidthWithMargin =
+        cellWidthWithMargin + Math.floor(cellWidthDiff / minNumCell)
+      const eCellWidth = eCellWidthWithMargin - hMargin
+      const userCells = document.getElementsByClassName('user-cell')
+      for (let index = 0; index < userCells.length; index++) {
+        const cell = userCells[index] as HTMLElement
+        cell.style.width = `${eCellWidth}px`
+      }
     },
   },
 })
