@@ -7,13 +7,25 @@
     :active="showToolTip"
   >
     <div class="document-switch-container">
-      <DocSwitchButton :is-selected="selected === 1" @click="updateStatus(1)">
+      <DocSwitchButton
+        v-if="selected === 1"
+        :is-selected="selected === 1"
+        @click="updateStatus()"
+      >
         <i class="fa fa-pencil fa-fw" />
       </DocSwitchButton>
-      <DocSwitchButton :is-selected="selected === 2" @click="updateStatus(2)">
+      <DocSwitchButton
+        v-if="selected === 2"
+        :is-selected="selected === 2"
+        @click="updateStatus()"
+      >
         <i class="fa fa-columns fa-fw" />
       </DocSwitchButton>
-      <DocSwitchButton :is-selected="selected === 3" @click="updateStatus(3)">
+      <DocSwitchButton
+        v-if="selected === 3"
+        :is-selected="selected === 3"
+        @click="updateStatus()"
+      >
         <i class="fa fa-eye fa-fw" />
       </DocSwitchButton>
     </div>
@@ -33,21 +45,29 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    isMobile: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     showToolTip(): boolean {
       return !this.isEditable
     },
-    selected(): boolean {
+    selected(): number {
       return this.$store.getters['editor/displayType']
     },
   },
   created() {
-    this.$store.commit('editor/displayType', this.isEditable ? 2 : 3)
+    const state = this.isEditable ? (this.isMobile ? 1 : 2) : 3
+    this.$store.commit('editor/displayType', state)
   },
   methods: {
-    updateStatus(state: number) {
+    updateStatus() {
       if (this.isEditable) {
+        let state = this.selected + 1
+        state = state === 2 && this.isMobile ? 3 : state
+        state = state > 3 ? 1 : state
         this.$store.commit('editor/displayType', state)
       }
     },
@@ -60,7 +80,5 @@ export default Vue.extend({
   display: inline-flex;
   flex-flow: row nowrap;
   border-radius: 5px;
-  color: white;
-  background-color: gray;
 }
 </style>
