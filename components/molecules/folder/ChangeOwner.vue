@@ -249,6 +249,17 @@ export default Vue.extend({
 })
 </script>
 
+<style lang="scss">
+.owner-container {
+  .b-tabs:not(:last-child) {
+    margin: 0;
+  }
+  .b-tabs .tab-content {
+    padding: 0;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 .owner-container {
   display: flex;
@@ -256,7 +267,7 @@ export default Vue.extend({
   align-items: center;
   width: 100%;
   min-height: 300px;
-  padding: 20px;
+  padding: 16px;
   background-color: white;
   border-radius: 16px;
 
@@ -264,7 +275,7 @@ export default Vue.extend({
     margin: 0;
   }
   .b-tabs .tab-content {
-    padding: 0;
+    padding: 0 !important;
   }
   .field {
     width: 100%;

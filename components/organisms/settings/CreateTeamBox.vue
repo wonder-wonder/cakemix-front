@@ -72,7 +72,7 @@ export default Vue.extend({
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
   background-color: whitesmoke;
   border-radius: 16px;
   height: auto;

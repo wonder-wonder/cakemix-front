@@ -354,7 +354,7 @@ export default Vue.extend({
   flex-flow: column nowrap;
   align-items: center;
   width: 100%;
-  padding: 20px;
+  padding: 16px;
   background-color: white;
   border-radius: 16px;
 
@@ -397,7 +397,8 @@ export default Vue.extend({
   }
 
   .pagination {
-    margin: 8px 0px;
+    margin-top: 8px;
+    margin-bottom: 16px;
   }
 
   .delete-team-button {
