@@ -144,21 +144,22 @@ export default Vue.extend({
 .change-directory-container {
   display: flex;
   flex-flow: column nowrap;
-  align-items: center;
   width: 100%;
-  padding: 20px;
+  padding: 12px;
   background-color: white;
   border-radius: 16px;
 
+  .breadcrumb-box {
+    margin: 0;
+  }
   .folder-cell-container {
-    width: 100%;
-    margin: 8px;
     height: 300px;
+    margin: 8px 4px;
     overflow: scroll;
   }
-
   .change-directory-button {
     width: 250px;
+    margin: 8px auto 4px auto;
   }
 }
 </style>
