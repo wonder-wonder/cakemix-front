@@ -12,6 +12,7 @@
 <script lang="ts">
 import Vue from 'vue'
 const editor = require('@/scripts/editor/editor.ts')
+const utils = require('@/scripts/editor/utils.ts')
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 const ot = require('@/scripts/editor/ot/ot.js')
 const socket = require('@/scripts/editor/ot/websocket.js')
@@ -80,14 +81,11 @@ export default Vue.extend({
       this.cMirror = editor.newEditor(this.$refs.cmeditor)
       this.cMirror.on('change', this.changeEvent)
       this.cMirror.on('scroll', this.scrollEvent)
+      this.cMirror.on('drop', this.dropEvent)
       this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
     },
     makeConnection() {
-      const url =
-        `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/` +
-        this.$route.params.id +
-        '/ws?token=' +
-        this.$store.getters['auth/token']
+      const url = `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/${this.$route.params.id}/ws?token=${this.$store.getters['auth/token']}`
       this.websocket = new socket.SocketConnection(url, !this.isEditable)
       this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
       this.websocket.on('registered', this.registeredEvent)
@@ -110,7 +108,7 @@ export default Vue.extend({
       this.$emit('updatepos', lineNumber + 1)
     },
     dropEvent(data: any, ev: any) {
-      // editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
+      utils.drop(this, data, ev)
     },
     //
     // EventEmitter Event
@@ -138,7 +136,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: 'Do you want to reconnect?',
-        onConfirm: () => this.websocket.reconnect(),
+        onConfirm: () => this.makeConnection(),
         onCancel: () => this.$emit('toParentFolder'),
       })
     },
