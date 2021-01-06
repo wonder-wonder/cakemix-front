@@ -1,4 +1,8 @@
 export default {
+  server: {
+    port: 3000,
+    host: '0.0.0.0',
+  },
   /*
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
@@ -31,6 +35,13 @@ export default {
     bodyAttrs: {
       class: 'body',
     },
+    script: [
+      {
+        src: 'https://cdn.jsdelivr.net/npm/pwacompat',
+        crossorigin: 'anonymous',
+        async: true,
+      },
+    ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
@@ -49,6 +60,17 @@ export default {
       },
     ],
   },
+  /*
+   ** PWA
+   */
+  pwa: {
+    meta: {},
+    manifest: {
+      background_color: '#323232',
+      lang: 'ja',
+    },
+  },
+
   /*
    ** Router
    */
