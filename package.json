@@ -73,6 +73,7 @@
     "jest": "^26.4.0",
     "node-sass": "^4.14.1",
     "prettier": "2.0.5",
+    "pwa-asset-generator": "^4.1.0",
     "sass-loader": "^9.0.3",
     "ts-jest": "^26.2.0",
     "vue-jest": "^3.0.4"
