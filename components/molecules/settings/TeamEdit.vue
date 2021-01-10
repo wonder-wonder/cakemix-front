@@ -188,8 +188,7 @@ export default Vue.extend({
         )
         .then(res => {
           this.memberPaging.total = res.data.total ?? 0
-          const member = this.memberPaging.data as MemberInfoModel[]
-          this.memberPaging.data = member.concat(res.data.members ?? [])
+          this.memberPaging.data = res.data.members ?? []
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
