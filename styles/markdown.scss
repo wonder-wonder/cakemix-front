@@ -403,6 +403,26 @@
   list-style-type: lower-alpha;
 }
 
+.preview-container ul li {
+  list-style-type: disc;
+}
+
+.preview-container ul li ul li {
+  list-style-type: circle;
+}
+
+.preview-container ul li ul li ul li {
+  list-style-type: disc;
+}
+
+.preview-container ul li ul li ul li ul li {
+  list-style-type: circle;
+}
+
+.preview-container ul li ul li ul li ul li ul li {
+  list-style-type: disc;
+}
+
 .preview-container dd {
   margin-left: 0;
 }
