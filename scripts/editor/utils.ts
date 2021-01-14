@@ -14,7 +14,7 @@ export const drop = (self: any, cm: any, ev: any) => {
           const id = res.data.id
           if (id !== undefined) {
             const url = `${process.env.HTTP_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/image/${res.data.id}`
-            insertTextAtCursor(cm, `![${f.name}](${url})`)
+            insertTextAtCursor(cm, `![${f.name}](${url} =500x)`)
           }
         })
     }
