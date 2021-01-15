@@ -50,7 +50,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .editor-header {
   display: flex;
   align-items: center;

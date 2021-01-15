@@ -74,11 +74,12 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .preview-container {
   display: flex;
   justify-content: center;
   overflow: scroll;
+  max-height: calc(100vh - 56px);
 
   .invisible {
     display: none;
@@ -87,7 +88,6 @@ export default Vue.extend({
   .previewer {
     width: 100%;
     max-width: 800px;
-    height: 100%;
     padding: 16px;
   }
 

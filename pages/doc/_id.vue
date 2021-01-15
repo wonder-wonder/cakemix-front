@@ -94,11 +94,14 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 html {
   background-color: rgb(32, 32, 32);
 }
 .document-container {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
   height: 100vh;
 
   .document-header {
