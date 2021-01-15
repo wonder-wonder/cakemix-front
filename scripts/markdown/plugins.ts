@@ -36,7 +36,7 @@ const plantuml = (el: HTMLElement) => {
     const svgObject = document.createElement('object') as HTMLObjectElement
     svgObject.setAttribute(
       'data',
-      'http://www.plantuml.com/plantuml/svg/' + encoded
+      'https://www.plantuml.com/plantuml/svg/' + encoded
     )
     tDom.appendChild(svgObject)
   } catch (error) {
