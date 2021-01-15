@@ -22,7 +22,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .folder-wide-cell-container {
   display: grid;
   grid-template-rows: 20px 20px;

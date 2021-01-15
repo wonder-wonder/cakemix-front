@@ -24,7 +24,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .team-tools-container {
   display: flex;
   flex-flow: row wrap;

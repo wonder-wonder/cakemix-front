@@ -39,10 +39,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
-}
+<style lang="scss" scoped>
 .signup-container {
   height: 100%;
   width: 100vw;

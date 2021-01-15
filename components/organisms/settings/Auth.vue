@@ -82,11 +82,18 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+.setting-auth-container .auth-item-box .label {
+  color: white;
+}
+</style>
+
+<style lang="scss" scoped>
 .setting-auth-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   width: 100%;
+  max-width: 465px;
   padding: 0px 16px;
   font-weight: bold;
 
@@ -97,10 +104,6 @@ export default Vue.extend({
     .border-title {
       width: 100%;
       margin-bottom: 20px;
-    }
-
-    .label {
-      color: white;
     }
 
     .update-button {

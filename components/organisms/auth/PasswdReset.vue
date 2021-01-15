@@ -82,7 +82,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .passwd-reset-box {
   display: flex;
   flex-flow: column nowrap;

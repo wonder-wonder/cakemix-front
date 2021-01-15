@@ -167,6 +167,7 @@ export default Vue.extend({
     flex-flow: row wrap;
     justify-content: center;
     width: 100%;
+    max-width: 450px;
     padding: 0px 8px;
 
     label {

@@ -98,6 +98,12 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+.user-wide-cell-container .icon-box img {
+  border-radius: 4px;
+}
+</style>
+
+<style lang="scss" scoped>
 .user-wide-cell-container {
   display: grid;
   grid-template-rows: 20px 20px;
@@ -125,10 +131,6 @@ export default Vue.extend({
     font-size: 32px;
     border-radius: 4px;
     background-color: black;
-
-    img {
-      border-radius: 4px;
-    }
   }
 
   .title-item {

@@ -348,7 +348,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .option-box-container {
   display: flex;
   flex-flow: column nowrap;

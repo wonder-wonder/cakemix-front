@@ -44,7 +44,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .button-input-container {
   width: 100%;
   .link-button {

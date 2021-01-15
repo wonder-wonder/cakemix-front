@@ -75,7 +75,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .document-switch-container {
   display: inline-flex;
   flex-flow: row nowrap;

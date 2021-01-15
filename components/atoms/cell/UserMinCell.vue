@@ -37,6 +37,12 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+.user-min-cell-container .icon-box img {
+  border-radius: 4px;
+}
+</style>
+
+<style lang="scss" scoped>
 .user-min-cell-container {
   display: flex;
   flex-flow: column nowrap;

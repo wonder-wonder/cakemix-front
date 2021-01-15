@@ -64,10 +64,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
-}
+<style lang="scss" scoped>
 .passwd-verify-container {
   height: 100vh;
   width: 100vw;

@@ -30,7 +30,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .nav-header-container {
   display: flex;
   align-items: center;
