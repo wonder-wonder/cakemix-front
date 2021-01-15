@@ -87,11 +87,12 @@ const update = (base: HTMLElement) => {
 
   for (const el of domList) {
     try {
-      if ((el.firstChild?.firstChild as HTMLElement).tagName === 'svg') {
-        return
+      const tagName = (el.firstChild?.firstChild as HTMLElement).tagName
+      if (tagName === 'svg' || tagName === 'OBJECT') {
+        continue
       }
     } catch (e) {
-      return
+      continue
     }
     const r = el.firstChild as HTMLElement
 
