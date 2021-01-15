@@ -22,6 +22,7 @@ export const newEditor = (taDom: HTMLTextAreaElement) => {
     autoCloseTags: true,
     flattenSpans: true,
     cursorScrollMargin: 20,
+    singleCursorHeightPerLine: false,
   })
 
   cMirror.setOption('extraKeys', {
