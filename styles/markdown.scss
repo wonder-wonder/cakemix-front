@@ -785,9 +785,18 @@
   word-wrap: normal;
 }
 
-.preview-container pre code > svg { 
+.preview-container pre code.language-mermaid,
+.preview-container pre code.language-flowchart,
+.preview-container pre code.language-plantuml { 
   display: flex;
   justify-content: center;
+}
+
+.preview-container pre code.language-abc {
+  padding-bottom: 0 !important;
+  svg {
+    position: relative !important;
+  }
 }
 
 .preview-container .commit-tease-sha {
