@@ -403,6 +403,26 @@
   list-style-type: lower-alpha;
 }
 
+.preview-container ul li {
+  list-style-type: disc;
+}
+
+.preview-container ul li ul li {
+  list-style-type: circle;
+}
+
+.preview-container ul li ul li ul li {
+  list-style-type: disc;
+}
+
+.preview-container ul li ul li ul li ul li {
+  list-style-type: circle;
+}
+
+.preview-container ul li ul li ul li ul li ul li {
+  list-style-type: disc;
+}
+
 .preview-container dd {
   margin-left: 0;
 }
@@ -701,8 +721,6 @@
 .preview-container img {
   background-color: #fff;
   box-sizing: content-box;
-  width: 100%;
-  max-width: 500px;
 }
 
 .preview-container img[align='right'] {
@@ -767,9 +785,18 @@
   word-wrap: normal;
 }
 
-.preview-container pre code > svg { 
+.preview-container pre code.language-mermaid,
+.preview-container pre code.language-flowchart,
+.preview-container pre code.language-plantuml { 
   display: flex;
   justify-content: center;
+}
+
+.preview-container pre code.language-abc {
+  padding-bottom: 0 !important;
+  svg {
+    position: relative !important;
+  }
 }
 
 .preview-container .commit-tease-sha {
