@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Editor } from "@/node_modules/@types/codemirror/index"
 const editor = require('@/scripts/editor/editor.ts')
 const utils = require('@/scripts/editor/utils.ts')
 const ss = require('@/scripts/editor/scrollsyncer.ts')
@@ -97,30 +98,30 @@ export default Vue.extend({
     //
     // CodeMirror Event
     //
-    changeEvent(ev: any) {
+    changeEvent(ev: Editor) {
       this.$emit('input', ev.getValue())
       const checkPoint = ss.analyzeMarkdown(ev.getValue())
       this.$emit('update', checkPoint)
     },
-    scrollEvent(ev: any) {
+    scrollEvent(ev: Editor) {
       const scrollInfo = ev.getScrollInfo()
       const lineNumber = ev.lineAtHeight(scrollInfo.top, 'local')
       this.$emit('updatepos', lineNumber + 1)
     },
-    dropEvent(data: any, ev: any) {
+    dropEvent(data: any, ev: Editor) {
       utils.drop(this, data, ev)
     },
     //
     // EventEmitter Event
     //
-    registeredEvent(clientId: any) {
+    registeredEvent(clientId: string) {
       this.cMirror.setOption('readOnly', !this.isEditable)
       console.log(clientId)
     },
-    joinEvent(ev: any) {
+    joinEvent(ev: Editor) {
       console.log(ev)
     },
-    quitEvent(ev: any) {
+    quitEvent(ev: Editor) {
       console.log(ev)
     },
     docEvent(data: any) {
