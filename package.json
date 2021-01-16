@@ -72,6 +72,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.4.0",
     "node-sass": "^4.14.1",
+    "npm-check-updates": "^10.2.5",
     "prettier": "2.0.5",
     "pwa-asset-generator": "^4.1.0",
     "sass-loader": "^9.0.3",
