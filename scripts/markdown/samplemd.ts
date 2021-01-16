@@ -1,5 +1,12 @@
 module.exports = {
   sample: `###### tags: \`example\`
+
+# Sample Markdown
+
+## Test of plugins
+
+### mermaid
+
 \`\`\`mermaid
 graph TD
 	A[Christmas] -->|Get money| B(Go shopping)
@@ -8,6 +15,8 @@ graph TD
 	C -->|Two| E[iPhone]
 	C -->|Three| F[fa:fa-car Car]
 \`\`\`
+
+### flowchart
 
 \`\`\`flowchart
 st=>start: Start:>http://www.google.com[blank]
@@ -26,6 +35,8 @@ para(path1, bottom)->sub1(right)->op1
 para(path2, top)->op1
 \`\`\`
 
+### abc
+
 \`\`\`abc
 X: 1
 T: Cooley's
@@ -41,11 +52,50 @@ M: 2/2
 eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|
 \`\`\`
 
-  ## Test of Checkbox
+### plantuml
 
-[ ] unchecked
+\`\`\` plantuml
+@startuml
+skinparam handwritten true
 
-[x] checked
+skinparam usecase {
+    BackgroundColor DarkSeaGreen
+    BorderColor DarkSlateGray
+
+    BackgroundColor<< Main >> YellowGreen
+    BorderColor<< Main >> YellowGreen
+
+    ArrowColor Olive
+    ActorBorderColor black
+    ActorFontName Courier
+
+    ActorBackgroundColor<< Human >> Gold
+}
+
+User << Human >>
+:Main Database: as MySql << Application >>
+(Start) << One Shot >>
+(Use the application) as (Use) << Main >>
+
+User -> (Start)
+User --> (Use)
+
+MySql --> (Use)
+
+@enduml
+\`\`\`
+
+## Test of details and summary
+
+<details>
+<summary>すべて展開する</summary>
+これは展開された内容です。
+</details>
+
+## Test of Checkbox
+
+- [ ] unchecked
+- [x] checked
 
 ## Test of Sanitize
 <script>alert('foo!');</script>
@@ -197,7 +247,7 @@ Autoconverted link https://github.com/nodeca/pica (enable linkify to see)
 
 ## Images
 
-![Minion](https://octodex.github.com/images/minion.png)
+![Minion](https://octodex.github.com/images/minion.png =300x)
 ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
 
 Like links, Images also have a footnote style syntax
