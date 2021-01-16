@@ -1,6 +1,4 @@
 const CodeMirror = require('@/scripts/editor/codemirror.js')
-// const CodeMirror = require('codemirror')
-// import utils from "./utils";
 
 export const newEditor = (taDom: HTMLTextAreaElement) => {
   const cMirror = new CodeMirror.fromTextArea(taDom, {
