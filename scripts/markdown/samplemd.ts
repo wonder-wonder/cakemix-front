@@ -1,5 +1,8 @@
 module.exports = {
   sample: `###### tags: \`example\`
+
+## Sample Markdown
+
 \`\`\`mermaid
 graph TD
 	A[Christmas] -->|Get money| B(Go shopping)
@@ -41,11 +44,46 @@ M: 2/2
 eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|
 \`\`\`
 
-  ## Test of Checkbox
+\`\`\` plantuml
+@startuml
+skinparam handwritten true
 
-[ ] unchecked
+skinparam usecase {
+    BackgroundColor DarkSeaGreen
+    BorderColor DarkSlateGray
 
-[x] checked
+    BackgroundColor<< Main >> YellowGreen
+    BorderColor<< Main >> YellowGreen
+
+    ArrowColor Olive
+    ActorBorderColor black
+    ActorFontName Courier
+
+    ActorBackgroundColor<< Human >> Gold
+}
+
+User << Human >>
+:Main Database: as MySql << Application >>
+(Start) << One Shot >>
+(Use the application) as (Use) << Main >>
+
+User -> (Start)
+User --> (Use)
+
+MySql --> (Use)
+
+@enduml
+\`\`\`
+
+<details>
+<summary>すべて展開する</summary>
+これは展開された内容です。
+</details>
+
+## Test of Checkbox
+
+- [ ] unchecked
+- [x] checked
 
 ## Test of Sanitize
 <script>alert('foo!');</script>
@@ -197,7 +235,7 @@ Autoconverted link https://github.com/nodeca/pica (enable linkify to see)
 
 ## Images
 
-![Minion](https://octodex.github.com/images/minion.png)
+![Minion](https://octodex.github.com/images/minion.png =300x)
 ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
 
 Like links, Images also have a footnote style syntax
