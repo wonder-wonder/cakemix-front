@@ -114,7 +114,7 @@ export default Vue.extend({
     //
     // EventEmitter Event
     //
-    registeredEvent(clientId: any) {
+    registeredEvent(clientId: string) {
       this.cMirror.setOption('readOnly', !this.isEditable)
       console.log(clientId)
     },
