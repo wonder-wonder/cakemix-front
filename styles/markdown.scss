@@ -792,6 +792,10 @@
   justify-content: center;
 }
 
+.preview-container pre code.language-plantuml img {
+  background-color: rgba(0, 0, 0, 0);
+}
+
 .preview-container pre code.language-abc {
   padding-bottom: 0 !important;
   svg {

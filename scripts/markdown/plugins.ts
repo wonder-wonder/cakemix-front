@@ -33,9 +33,9 @@ const plantuml = (el: HTMLElement) => {
     const pu = tDom.innerHTML.replace(/&gt;/g, '>').replace(/&lt;/g, '<')
     const encoded = plantumlPlugin.encode(pu)
     tDom.innerHTML = ''
-    const svgObject = document.createElement('object') as HTMLObjectElement
+    const svgObject = document.createElement('img') as HTMLImageElement
     svgObject.setAttribute(
-      'data',
+      'src',
       'https://www.plantuml.com/plantuml/svg/' + encoded
     )
     tDom.appendChild(svgObject)
@@ -88,7 +88,7 @@ const update = (base: HTMLElement) => {
   for (const el of domList) {
     try {
       const tagName = (el.firstChild?.firstChild as HTMLElement).tagName
-      if (tagName === 'svg' || tagName === 'OBJECT') {
+      if (tagName === 'svg' || tagName === 'IMG') {
         continue
       }
     } catch (e) {
