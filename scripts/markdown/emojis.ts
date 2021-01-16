@@ -3566,15 +3566,16 @@ const emojis = {
 
 export type EmojiType = {
   text: string
-  render: Function
+  render: (el: HTMLElement) => {}
 }
 export let emojiList: EmojiType[] = []
 
 for (const key in emojis) {
   emojiList.push({
     text: `${key}:`,
-    render: (el: HTMLElement) => {
-      el.innerHTML = `<img width="15" height="15" src="${emojis.key}" alt="icon" async></img> ${key}`
-    },
+    render: (el) => {
+      // @ts-ignore
+      el.innerHTML = `<img width="20" height="20" src="${emojis[key]}" alt="icon" async></img> ${key}`
+    }
   } as EmojiType)
 }

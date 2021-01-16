@@ -1,5 +1,6 @@
 const CodeMirror = require('codemirror')
 const ContinueList = require('@/scripts/editor/codemirror/continuelist')
+const ShowHint = require('@/scripts/editor/codemirror/show-hint')
 
 CodeMirror.defineMode(
   'markdown',
@@ -618,5 +619,6 @@ CodeMirror.defineMode(
 
 CodeMirror.defineMIME('text/x-markdown', 'markdown')
 ContinueList(CodeMirror)
+ShowHint(CodeMirror)
 
 module.exports = CodeMirror

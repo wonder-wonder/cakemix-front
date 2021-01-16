@@ -1,4 +1,4 @@
-const CodeMirror = require('@/scripts/editor/codemirror/index')
+export const CodeMirror = require('@/scripts/editor/codemirror/index')
 
 export const newEditor = (taDom: HTMLTextAreaElement) => {
   const cMirror = new CodeMirror.fromTextArea(taDom, {
@@ -84,9 +84,4 @@ export const newEditor = (taDom: HTMLTextAreaElement) => {
   })
 
   return cMirror as CodeMirror.Editor
-}
-
-export default {
-  newEditor,
-  // utils
 }
