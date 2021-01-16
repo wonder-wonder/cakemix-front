@@ -86,7 +86,7 @@ export const newEditor = (taDom: HTMLTextAreaElement) => {
   // autocomplete
   // utils.autocomplete(cMirror);
 
-  return cMirror
+  return cMirror as CodeMirror.Editor
 }
 
 export default {
