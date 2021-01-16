@@ -1,4 +1,5 @@
 const CodeMirror = require('codemirror')
+const ContinueList = require('@/scripts/editor/codemirror/continuelist')
 
 CodeMirror.defineMode(
   'markdown',
@@ -616,5 +617,6 @@ CodeMirror.defineMode(
 )
 
 CodeMirror.defineMIME('text/x-markdown', 'markdown')
+ContinueList(CodeMirror)
 
 module.exports = CodeMirror

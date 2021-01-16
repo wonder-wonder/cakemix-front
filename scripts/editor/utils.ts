@@ -1,6 +1,5 @@
 import { ImageApi } from '@/scripts/api/index'
-import { emojis } from '@/scripts/markdown/emojis'
-const CodeMirror = require('@/scripts/editor/codemirror.js')
+import { emojiList, EmojiType } from '@/scripts/markdown/emojis'
 
 export const drop = (self: any, cm: any, ev: any) => {
   const fs = ev.dataTransfer.files
@@ -32,21 +31,7 @@ const insertTextAtCursor = (cm: any, text: string) => {
 //
 // Emoji Auto Complete
 //
-type EmojiType = {
-  text: string
-  render: Function
-}
-const emojiList: EmojiType[] = []
-for (const key in emojis) {
-  emojiList.push({
-    text: `${key}:`,
-    render: (el: HTMLElement) => {
-      el.innerHTML = `<img width="15" height="15" src="${emojis.key}" alt="icon" async></img> ${key}`
-    },
-  } as EmojiType)
-}
-
-export const emojiAC = function (cm: CodeMirror) {
+export const emojiAC = function (cm: any) {
   cm.showHint(
     cm,
     function () {

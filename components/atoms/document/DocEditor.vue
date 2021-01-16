@@ -102,7 +102,7 @@ export default Vue.extend({
       this.$emit('input', ev.getValue())
       const checkPoint = ss.analyzeMarkdown(ev.getValue())
       this.$emit('update', checkPoint)
-      utils.emojiAC(this.cMirror)
+      // utils.emojiAC(this.cMirror)
     },
     scrollEvent(ev: Editor) {
       const scrollInfo = ev.getScrollInfo()

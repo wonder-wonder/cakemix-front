@@ -1,4 +1,4 @@
-export const emojis = {
+const emojis = {
   '+1':
     'https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png?v8',
   '-1':
@@ -3562,4 +3562,19 @@ export const emojis = {
     'https://github.githubassets.com/images/icons/emoji/unicode/1f9df-2640.png?v8',
   zzz:
     'https://github.githubassets.com/images/icons/emoji/unicode/1f4a4.png?v8',
+}
+
+export type EmojiType = {
+  text: string
+  render: Function
+}
+export let emojiList: EmojiType[] = []
+
+for (const key in emojis) {
+  emojiList.push({
+    text: `${key}:`,
+    render: (el: HTMLElement) => {
+      el.innerHTML = `<img width="15" height="15" src="${emojis.key}" alt="icon" async></img> ${key}`
+    },
+  } as EmojiType)
 }
