@@ -1,7 +1,11 @@
 module.exports = {
   sample: `###### tags: \`example\`
 
-## Sample Markdown
+# Sample Markdown
+
+## Test of plugins
+
+### mermaid
 
 \`\`\`mermaid
 graph TD
@@ -11,6 +15,8 @@ graph TD
 	C -->|Two| E[iPhone]
 	C -->|Three| F[fa:fa-car Car]
 \`\`\`
+
+### flowchart
 
 \`\`\`flowchart
 st=>start: Start:>http://www.google.com[blank]
@@ -29,6 +35,8 @@ para(path1, bottom)->sub1(right)->op1
 para(path2, top)->op1
 \`\`\`
 
+### abc
+
 \`\`\`abc
 X: 1
 T: Cooley's
@@ -43,6 +51,8 @@ M: 2/2
 |:gf|eB B2 efge|eB B2 gedB|A2 FA DAFA|A2 FA defg|
 eB B2 eBgB|eB B2 defg|afe^c dBAF|DEFD E2:|
 \`\`\`
+
+### plantuml
 
 \`\`\` plantuml
 @startuml
@@ -74,6 +84,8 @@ MySql --> (Use)
 
 @enduml
 \`\`\`
+
+## Test of details and summary
 
 <details>
 <summary>すべて展開する</summary>
