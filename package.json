@@ -43,7 +43,7 @@
     "markdown-it-ins": "^3.0.0",
     "markdown-it-mark": "^3.0.0",
     "markdown-it-pdf": "^1.0.0",
-    "markdown-it-sanitizer": "^0.4.3",
+    "markdown-it-sanitizer": "github:wonder-wonder/markdown-it-sanitizer",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-video": "^0.6.3",
     "mermaid": "^8.7.0",
