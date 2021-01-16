@@ -145,10 +145,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.editor-container {
-  overflow: scroll;
-}
-
 .CodeMirror {
   font-family: 'Source Code Pro', Consolas, monaco, monospace;
   font-size: 16px;
@@ -180,5 +176,11 @@ input[type='file'] {
 .input-label {
   height: 25px;
   width: 30px;
+}
+</style>
+
+<style lang="scss" scoped>
+.editor-container {
+  overflow: scroll;
 }
 </style>

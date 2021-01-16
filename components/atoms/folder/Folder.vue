@@ -44,7 +44,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .folder-box {
   display: grid;
   min-width: 288px;

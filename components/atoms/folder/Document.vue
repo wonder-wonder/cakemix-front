@@ -56,7 +56,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .document-box {
   display: grid;
   min-width: 288px;

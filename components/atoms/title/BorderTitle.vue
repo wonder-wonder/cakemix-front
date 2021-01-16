@@ -15,7 +15,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .border-title {
   display: flex;
   justify-content: center;

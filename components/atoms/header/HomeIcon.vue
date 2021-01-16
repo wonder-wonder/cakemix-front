@@ -19,10 +19,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
-}
+<style lang="scss" scoped>
 .home-icon-box {
   display: flex;
   flex-flow: row nowrap;

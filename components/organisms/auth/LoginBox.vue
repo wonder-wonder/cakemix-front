@@ -83,7 +83,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-box {
   display: flex;
   flex-flow: column nowrap;

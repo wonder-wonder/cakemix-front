@@ -13,10 +13,7 @@ import Vue from 'vue'
 export default Vue.extend({})
 </script>
 
-<style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
-}
+<style lang="scss" scoped>
 .doc-nav-box {
   display: flex;
   flex-flow: row nowrap;

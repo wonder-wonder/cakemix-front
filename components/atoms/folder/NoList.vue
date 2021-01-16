@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .no-list-box {
   display: flex;
   flex-flow: column nowrap;

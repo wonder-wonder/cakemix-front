@@ -91,9 +91,6 @@ export default Vue.extend({
 
 <style lang="scss">
 .tabs-container {
-  display: flex;
-  flex-flow: row wrap;
-
   .tab-content {
     padding: 0;
   }
@@ -118,5 +115,12 @@ export default Vue.extend({
   .tabs.is-boxed li.is-active a:hover {
     background-color: white;
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.tabs-container {
+  display: flex;
+  flex-flow: row wrap;
 }
 </style>

@@ -1,12 +1,7 @@
 <template>
   <div class="setting-profile-container">
     <div class="profile-item-box">
-      <SquareIcon
-        class="icon"
-        :label-name="'Icon'"
-        :src="icon"
-        @upload="uploadImage"
-      />
+      <SquareIcon :label-name="'Icon'" :src="icon" @upload="uploadImage" />
       <ValidateInput
         :label-name="'UserName'"
         :message="['OK', 'Invalid charactor or already used']"
@@ -138,11 +133,18 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+.setting-profile-container .profile-item-box .label {
+  color: white;
+}
+</style>
+
+<style lang="scss" scoped>
 .setting-profile-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   width: 100%;
+  max-width: 465px;
   padding: 0px 16px;
   margin-bottom: 32px;
   color: white;
@@ -157,10 +159,6 @@ export default Vue.extend({
   .profile-item-box {
     max-width: 500px;
     width: 100%;
-
-    .label {
-      color: white;
-    }
 
     .update-button {
       width: 120px;

@@ -34,7 +34,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .breadcrumb-cell-container {
   display: flex;
   flex-flow: row nowrap;
