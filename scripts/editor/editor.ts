@@ -1,6 +1,4 @@
-const CodeMirror = require('@/scripts/editor/codemirror.js')
-// const CodeMirror = require('codemirror')
-// import utils from "./utils";
+export const CodeMirror = require('@/scripts/editor/codemirror/index')
 
 export const newEditor = (taDom: HTMLTextAreaElement) => {
   const cMirror = new CodeMirror.fromTextArea(taDom, {
@@ -26,10 +24,10 @@ export const newEditor = (taDom: HTMLTextAreaElement) => {
   })
 
   cMirror.setOption('extraKeys', {
-    'Cmd-S'() {
+    'Cmd-S': (cm: any) =>  {
       return false
     },
-    'Ctrl-S'() {
+    'Ctrl-S': (cm: any) =>  {
       return false
     },
     'Cmd-Q': (cm: any) => {
@@ -38,7 +36,9 @@ export const newEditor = (taDom: HTMLTextAreaElement) => {
     'Ctrl-Q': (cm: any) => {
       cm.foldCode(cm.getCursor())
     },
-    // Enter: cm => utils.newlineAndIndentContinueMarkdownList(cm),
+    Enter: (cm: any) => {
+      CodeMirror.commands.newlineAndIndentContinueMarkdownList(cm)
+    },
     Tab: (cm: any) => {
       const tab = '\t'
       const spaces = Array(parseInt(cm.getOption('indentUnit')) + 1).join(' ')
@@ -83,13 +83,5 @@ export const newEditor = (taDom: HTMLTextAreaElement) => {
     },
   })
 
-  // autocomplete
-  // utils.autocomplete(cMirror);
-
   return cMirror as CodeMirror.Editor
-}
-
-export default {
-  newEditor,
-  // utils
 }
