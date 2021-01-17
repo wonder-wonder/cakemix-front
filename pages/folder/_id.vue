@@ -65,8 +65,8 @@ import FolderListContainer from '@/components/molecules/folder/FolderListContain
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
 import SortBox, {
-  alphabetSort,
-  SortModel,
+  newestSort,
+  SortModel
 } from '@/components/organisms/folder/SortBox.vue'
 import CreateFolderBox from '@/components/organisms/folder/CreateFolderBox.vue'
 import NoList from '@/components/atoms/folder/NoList.vue'
@@ -106,7 +106,7 @@ export default Vue.extend({
       folders: [] as FolderModel[],
       docs: [] as DocumentModel[],
       breadcrumb: [] as BreadcrumbModel[],
-      sortFunction: alphabetSort,
+      sortFunction: newestSort,
       selectType: 'NONE',
       selectItem: {} as FolderModel | DocumentModel,
       searchText: '',

@@ -17,20 +17,32 @@ type DataType = {
   selectModel: string[]
 }
 
-const selectModel = ['Alphabet', 'Date']
+const selectModel = ['Newest', 'Oldest', 'Alphabet']
 
 const alphabetFolderSort = (items: FolderModel[]): FolderModel[] => {
-  return items.sort((a, b) => ((a.name ?? '') < (b.name ?? '') ? 1 : -1))
+  return items.sort((a, b) => ((a.name ?? '') > (b.name ?? '') ? 1 : -1))
 }
-const dateFolderSort = (items: FolderModel[]): FolderModel[] => {
+const alphabetDocuementSort = (items: DocumentModel[]): DocumentModel[] => {
+  return items.sort((a, b) => ((a.title ?? '') > (b.title ?? '') ? 1 : -1))
+}
+
+const oldestFolderSort = (items: FolderModel[]): FolderModel[] => {
+  return items.sort((a, b) =>
+    (a.updated_at ?? 0) > (b.updated_at ?? 0) ? 1 : -1
+  )
+}
+const oldestDocuementSort = (items: DocumentModel[]): DocumentModel[] => {
+  return items.sort((a, b) =>
+    (a.updated_at ?? 0) > (b.updated_at ?? 0) ? 1 : -1
+  )
+}
+
+const newestFolderSort = (items: FolderModel[]): FolderModel[] => {
   return items.sort((a, b) =>
     (a.updated_at ?? 0) < (b.updated_at ?? 0) ? 1 : -1
   )
 }
-const alphabetDocuementSort = (items: DocumentModel[]): DocumentModel[] => {
-  return items.sort((a, b) => ((a.title ?? '') < (b.title ?? '') ? 1 : -1))
-}
-const dateDocuementSort = (items: DocumentModel[]): DocumentModel[] => {
+const newestDocuementSort = (items: DocumentModel[]): DocumentModel[] => {
   return items.sort((a, b) =>
     (a.updated_at ?? 0) < (b.updated_at ?? 0) ? 1 : -1
   )
@@ -44,9 +56,14 @@ export const alphabetSort: SortModel = {
   folder: alphabetFolderSort,
   document: alphabetDocuementSort,
 }
-export const dateSort: SortModel = {
-  folder: dateFolderSort,
-  document: dateDocuementSort,
+export const oldestSort: SortModel = {
+  folder: oldestFolderSort,
+  document: oldestDocuementSort,
+}
+
+export const newestSort: SortModel = {
+  folder: newestFolderSort,
+  document: newestDocuementSort,
 }
 
 export default Vue.extend({
@@ -61,10 +78,12 @@ export default Vue.extend({
   },
   methods: {
     selected(s: string) {
-      if (s === 'Alphabet') {
+      if (s === 'Newest') {
+        return this.$emit('input', newestSort)
+      } else if (s === 'Oldest') {
+        return this.$emit('input', oldestSort)
+      } else if (s === 'Alphabet') {
         return this.$emit('input', alphabetSort)
-      } else if (s === 'Date') {
-        return this.$emit('input', dateSort)
       }
     },
   },
