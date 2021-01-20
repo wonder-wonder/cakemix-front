@@ -1,6 +1,6 @@
 <template>
   <div class="option-box-container">
-    <i class="fa fa-fw" :class="imageType" />
+    <fa-icon :icon="imageType" class="icon" />
     <div class="detail-items">
       <OptionInfoCell
         v-for="(mo, index) in options"
@@ -105,10 +105,10 @@ export default Vue.extend({
   computed: {
     imageType(): string {
       return this.modelType === 'FOLDER'
-        ? 'fa-folder'
+        ? 'folder'
         : this.modelType === 'DOCUMENT'
-        ? 'fa-file'
-        : 'fa-minus'
+        ? 'file'
+        : 'minus'
     },
     isSelected(): boolean {
       return 'uuid' in this.newModel
@@ -358,7 +358,8 @@ export default Vue.extend({
   border-radius: 4px;
   height: auto;
 
-  .fa-fw {
+  .icon {
+    height: 80px;
     font-size: 80px;
     color: black;
   }

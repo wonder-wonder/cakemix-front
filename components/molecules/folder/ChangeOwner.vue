@@ -23,14 +23,14 @@
         @infinite-scroll="getMore"
         @select="select"
       >
-        <template v-slot="props">
+        <template #default="props">
           <UserSearchWideCell :user="props.option" />
         </template>
       </b-autocomplete>
     </b-field>
     <div v-if="isUserSelected" class="user-cells-box">
       <UserMinCell class="user-cell" :user="currentOwner" />
-      <i class="fa fa-arrow-right" />
+      <fa-icon class="icon" icon="arrow-right" />
       <UserMinCell class="user-cell" :user="selectedUser" />
     </div>
     <b-button
@@ -307,7 +307,7 @@ export default Vue.extend({
     .user-cell {
       margin: 4px;
     }
-    .fa {
+    .icon {
       font-size: 32px;
       margin: 0 8px 32px 8px;
     }

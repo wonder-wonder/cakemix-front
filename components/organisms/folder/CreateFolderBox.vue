@@ -1,6 +1,6 @@
 <template>
   <form class="create-folder-box" @submit.prevent="createFolder">
-    <i class="fa fa-folder fa-fw" />
+    <fa-icon icon="folder" class="icon" />
     <Input
       :label-name="'Folder Name'"
       :is-password="false"
@@ -56,7 +56,8 @@ export default Vue.extend({
   border-radius: 16px;
   height: auto;
 
-  i {
+  .icon {
+    height: 80px;
     font-size: 80px;
     color: black;
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="user-search-wide-cell-container">
     <div class="icon-box">
-      <i v-if="!hasImage" class="fa" :class="isTeam ? 'fa-users' : 'fa-user'" />
+      <fa-icon v-if="!hasImage" :icon="isTeam ? 'users' : 'user'" />
       <b-image v-if="hasImage" :src="imageUri" />
     </div>
     <div class="name">

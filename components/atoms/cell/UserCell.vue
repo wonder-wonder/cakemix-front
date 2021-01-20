@@ -1,26 +1,26 @@
 <template>
   <b-tooltip type="is-dark is-light" position="is-top" :active="!isTeam">
-    <template v-slot:content>
+    <template #content>
       <div class="tooltip-container">
         <div class="icon-box">
-          <i v-if="!hasImage" class="fa fa-user" />
+          <fa-icon v-if="!hasImage" icon="user" />
           <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded" />
         </div>
         <div class="detail-box">
           <div class="username" v-text="user.name" />
           <div class="detail" v-text="user.bio" />
           <div class="language">
-            <i class="fa fa-globe" />
+            <fa-icon icon="globe-asia" />
             <span v-text="user.lang" />
           </div>
         </div>
         <div class="info-box">
           <div class="team">
-            <i class="fa fa-users" />
+            <fa-icon icon="users" />
             <span v-text="teamDesc" />
           </div>
           <div v-if="isAdmin" class="admin">
-            <i class="fa fa-user" />
+            <fa-icon icon="user" />
             <span v-text="'Admin on this workspace'" />
           </div>
         </div>

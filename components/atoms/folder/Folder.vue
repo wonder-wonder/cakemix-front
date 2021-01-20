@@ -4,7 +4,7 @@
       <span v-text="folder.name" />
     </div>
     <div class="icon-box">
-      <i class="fa fa-folder fa-fw" />
+      <fa-icon icon="folder" />
     </div>
     <div class="desc1-box" :class="selected">
       <span class="desc1-title" v-text="'UPDATER'" />

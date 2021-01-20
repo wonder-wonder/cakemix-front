@@ -1,7 +1,7 @@
 <template>
   <div class="doc-nav-box" @click="$emit('toParentFolder')">
     <div class="image-box">
-      <i class="fa fa-chevron-left" />
+      <fa-icon icon="chevron-left" />
     </div>
     <div class="service-name" v-text="'Cakemix'" />
   </div>
@@ -24,7 +24,7 @@ export default Vue.extend({})
     height: 42px;
     width: 42px;
     border-radius: 50%;
-    padding: 4px 10px;
+    padding: 3px 0px 0px 11px;
     font-size: 24px;
     color: black;
     background-color: whitesmoke;

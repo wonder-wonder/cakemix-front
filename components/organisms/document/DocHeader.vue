@@ -13,7 +13,7 @@
       :is-selected="false"
       @click="$emit('input', 'question')"
     >
-      <i class="fa fa-question-circle" />
+      <fa-icon icon="question-circle" />
     </DocSwitchButton>
   </div>
 </template>

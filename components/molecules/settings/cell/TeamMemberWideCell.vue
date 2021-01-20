@@ -1,7 +1,7 @@
 <template>
   <div class="user-wide-cell-container">
     <div class="icon-box">
-      <i v-if="!hasImage" class="fa fa-user" />
+      <fa-icon v-if="!hasImage" icon="user" />
       <b-image v-if="hasImage" :src="user.member.icon_uri" :rounded="rounded" />
     </div>
     <div class="title-item" v-text="user.member.name" />
@@ -20,7 +20,7 @@
         class="delete-button"
         @click="$emit('remove', user.member.uuid)"
       >
-        <i class="fa fa-trash" />
+        <fa-icon icon="trash" />
       </b-button>
     </div>
   </div>

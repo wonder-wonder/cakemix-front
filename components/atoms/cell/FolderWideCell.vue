@@ -1,7 +1,7 @@
 <template>
   <div class="folder-wide-cell-container">
     <div class="icon-box">
-      <i class="fa fa-folder" />
+      <fa-icon icon="folder" />
     </div>
     <div class="title-item" v-text="folder.name" />
     <div class="detail-item" v-text="folder.uuid" />

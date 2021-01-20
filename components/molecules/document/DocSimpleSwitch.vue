@@ -12,21 +12,21 @@
         :is-selected="selected === 1"
         @click="updateStatus()"
       >
-        <i class="fa fa-pencil fa-fw" />
+        <fa-icon icon="pencil-alt" />
       </DocSwitchButton>
       <DocSwitchButton
         v-if="selected === 2"
         :is-selected="selected === 2"
         @click="updateStatus()"
       >
-        <i class="fa fa-columns fa-fw" />
+        <fa-icon icon="columns" />
       </DocSwitchButton>
       <DocSwitchButton
         v-if="selected === 3"
         :is-selected="selected === 3"
         @click="updateStatus()"
       >
-        <i class="fa fa-eye fa-fw" />
+        <fa-icon icon="eye" />
       </DocSwitchButton>
     </div>
   </b-tooltip>

@@ -6,10 +6,10 @@
     </button>
 
     <b-dropdown-item aria-role="listitem" @click="moveTo('settings')">
-      <span><i class="fa fa-cog title-icon" />Settings</span>
+      <span><fa-icon class="title-icon" icon="cog" />Settings</span>
     </b-dropdown-item>
     <b-dropdown-item aria-role="listitem" @click="moveTo('logout')">
-      <span><i class="fa fa-sign-out title-icon" />Logout</span>
+      <span><fa-icon class="title-icon" icon="sign-out-alt" />Logout</span>
     </b-dropdown-item>
   </b-dropdown>
 </template>
