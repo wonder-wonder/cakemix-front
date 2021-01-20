@@ -49,7 +49,7 @@ export default Vue.extend({
   display: grid;
   min-width: 288px;
   grid-template-rows: 48px 4px 16px 16px;
-  grid-template-columns: 36px 1fr;
+  grid-template-columns: 36px 1fr 32px;
   border: solid 1px white;
   border-radius: 5px;
   color: white;
@@ -69,7 +69,7 @@ export default Vue.extend({
     justify-content: center;
     align-items: center;
     grid-row: 1 / 2;
-    grid-column: 1 / 3;
+    grid-column: 1 / 4;
     font-size: 18px;
     font-weight: bold;
     padding: 0 4px;
