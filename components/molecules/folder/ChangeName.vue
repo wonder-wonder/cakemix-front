@@ -26,10 +26,19 @@ export default Vue.extend({
   components: {
     Input,
   },
+  props: {
+    initial: {
+      type: String,
+      default: '',
+    },
+  },
   data(): DataType {
     return {
       name: '',
     }
+  },
+  created() {
+    this.name = this.initial
   },
   methods: {
     failureToast,

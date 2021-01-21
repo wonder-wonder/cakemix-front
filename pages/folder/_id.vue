@@ -50,12 +50,12 @@
       </div>
     </div>
     <b-button
-      icon-pack="fa"
       class="floating-option-button is-light"
       :rounded="true"
-      icon-right="info"
       @click="openOptionView"
-    />
+    >
+      <fa-icon icon="info" class="icon" />
+    </b-button>
     <NoList v-if="isNoItems && isLoaded" />
   </div>
 </template>

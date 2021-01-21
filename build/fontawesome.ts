@@ -10,6 +10,7 @@ const solid = [
   'faFile',
   'faFolder',
   'faGlobeAsia',
+  'faInfo',
   'faPencilAlt',
   'faUser',
   'faUsers',

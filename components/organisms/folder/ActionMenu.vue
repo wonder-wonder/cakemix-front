@@ -226,6 +226,9 @@ export default Vue.extend({
       this.$buefy.modal.open({
         parent: this.$root,
         component: ChangeName,
+        props: {
+          initial: (this.newModel as FolderModel).name,
+        },
         events: { updated: this.renamed },
       })
     },

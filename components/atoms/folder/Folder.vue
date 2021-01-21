@@ -11,7 +11,7 @@
       <span class="desc1-detail" v-text="folder.updater.name" />
     </div>
     <div class="desc2-box" :class="selected">
-      <span class="desc2-title" v-text="'DATE'" />
+      <span class="desc2-title" v-text="'UPDATE'" />
       <span class="desc2-detail" v-text="toDate(folder.updated_at)" />
     </div>
     <ActionMenu

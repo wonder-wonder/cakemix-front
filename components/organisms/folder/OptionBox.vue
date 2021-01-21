@@ -8,79 +8,24 @@
         :model="mo"
       />
     </div>
-    <Button
-      v-if="isEditable"
-      :button-name="'Change Owner'"
-      @click="openOwnerView"
-    />
-    <Button v-if="isEditable" :button-name="'Move'" @click="openMoveView" />
-    <Input
-      v-if="isEditable"
-      :label-name="'Name'"
-      :is-password="false"
-      :value="title"
-      :disabled="!isNameEditable"
-      @text="updateTitle"
-    />
-    <Select
-      v-if="isEditable"
-      :label-name="'Others Permission'"
-      :current="permission"
-      :select-items="selectModels"
-      @input="selected"
-    />
-    <b-button
-      v-if="isEditable"
-      class="option-button"
-      type="is-success"
-      @click="update"
-      v-text="'Update'"
-    />
-    <b-button
-      v-if="isEditable"
-      class="option-button"
-      type="is-danger"
-      @click="del"
-      v-text="'Delete'"
-    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import CloneDeep from 'lodash/cloneDeep'
-import Input from '@/components/atoms/input/Input.vue'
-import Select from '@/components/atoms/input/Select.vue'
-import Button from '@/components/atoms/button/Button.vue'
-import ChangeOwner from '@/components/molecules/folder/ChangeOwner.vue'
-import ChangeDirectory from '@/components/molecules/folder/ChangeDirectory.vue'
 import OptionInfoCell, {
   OptionInfoModel,
 } from '@/components/atoms/cell/OptionInfoCell.vue'
-import {
-  FolderModel,
-  DocumentModel,
-  ProfileModel,
-  FolderApi,
-  FolderModifyReqModel,
-  DocumentModifyReqModel,
-  DocumentApi,
-  checkAuthWithStatus,
-} from '@/scripts/api/index'
+import { FolderModel, DocumentModel, ProfileModel } from '@/scripts/api/index'
 import { toDate } from '@/scripts/utils/date'
-import { successToast, failureToast } from '@/scripts/utils/toast'
 
 export type DataType = {
   selectModels: Array<string>
-  newModel: DocumentModel | FolderModel
 }
 
 export default Vue.extend({
   components: {
-    Input,
     OptionInfoCell,
-    Select,
-    Button,
   },
   props: {
     currentFolderId: {
@@ -99,7 +44,6 @@ export default Vue.extend({
   data(): DataType {
     return {
       selectModels: ['Private', 'Read', 'Read / Write'],
-      newModel: {},
     }
   },
   computed: {
@@ -111,20 +55,20 @@ export default Vue.extend({
         : 'minus'
     },
     isSelected(): boolean {
-      return 'uuid' in this.newModel
+      return 'uuid' in this.model
     },
     options(): Array<OptionInfoModel> {
       const toDate = (utime: number) => {
         return this.isSelected ? this.toDate(utime) : '---'
       }
 
-      const uuid = this.newModel.uuid !== undefined ? this.newModel.uuid : '---'
-      const owner = this.newModel.owner as ProfileModel
+      const uuid = this.model.uuid !== undefined ? this.model.uuid : '---'
+      const owner = this.model.owner as ProfileModel
       const ownerName = owner !== undefined ? owner.name : '---'
-      const updater = this.newModel.updater as ProfileModel
+      const updater = this.model.updater as ProfileModel
       const updaterName = updater !== undefined ? updater.name : '---'
-      const createdAt = this.newModel.created_at ?? 0
-      const updatedAt = this.newModel.updated_at ?? 0
+      const createdAt = this.model.created_at ?? 0
+      const updatedAt = this.model.updated_at ?? 0
 
       return [
         { title: 'UUID', detail: uuid } as OptionInfoModel,
@@ -135,6 +79,10 @@ export default Vue.extend({
         {
           title: 'Updater',
           detail: updaterName,
+        } as OptionInfoModel,
+        {
+          title: 'Others',
+          detail: this.permission,
         } as OptionInfoModel,
         {
           title: 'Created at',
@@ -149,201 +97,20 @@ export default Vue.extend({
     title(): string {
       const name =
         this.modelType === 'FOLDER'
-          ? (this.newModel as FolderModel).name ?? ''
+          ? (this.model as FolderModel).name ?? ''
           : this.modelType === 'DOCUMENT'
-          ? (this.newModel as DocumentModel).title ?? ''
+          ? (this.model as DocumentModel).title ?? ''
           : ''
       return name
     },
     permission(): string {
-      return this.newModel.permission !== undefined
-        ? this.selectModels[this.newModel.permission]
+      return this.model.permission !== undefined
+        ? this.selectModels[this.model.permission]
         : '---'
     },
-    isNameEditable(): boolean {
-      if (this.modelType === 'DOCUMENT') {
-        return false
-      }
-      return this.isEditable
-    },
-    isEditable(): boolean {
-      const perm: boolean = this.newModel.editable ?? false
-      return perm
-    },
-    isFolder(): Boolean {
-      return this.modelType === 'FOLDER'
-    },
-  },
-  watch: {
-    model() {
-      this.copyToModel()
-    },
-  },
-  created() {
-    this.copyToModel()
   },
   methods: {
-    successToast,
-    failureToast,
     toDate,
-    checkAuthWithStatus,
-    openMoveView() {
-      // @ts-ignore
-      this.$buefy.modal.open({
-        parent: this.$root,
-        component: ChangeDirectory,
-        props: {
-          'current-folder-id': this.currentFolderId,
-          'item-id': this.model.uuid,
-          'is-folder': this.isFolder,
-        },
-        events: { updated: this.moved },
-      })
-    },
-    openOwnerView() {
-      // @ts-ignore
-      this.$buefy.modal.open({
-        parent: this.$root,
-        component: ChangeOwner,
-        props: {
-          'current-owner': this.model.owner,
-        },
-        events: { 'update-user': this.updateOwner },
-      })
-    },
-    copyToModel() {
-      // deep copy using clone deep in the lodash
-      this.newModel = CloneDeep(this.model)
-    },
-    selected(type: string) {
-      const perm = this.selectModels.indexOf(type) ?? this.newModel.permission
-      this.newModel.permission = perm
-    },
-    updateTitle(title: string) {
-      if (this.modelType === 'FOLDER') {
-        const cModel = this.newModel as FolderModel
-        cModel.name = title
-      }
-    },
-    updateOwner(newOwner: ProfileModel) {
-      this.newModel.owner = newOwner
-    },
-    moved() {
-      this.$emit('reload')
-      this.$emit('close')
-    },
-    update() {
-      if (this.newModel.owner === undefined) {
-        return
-      }
-      const uuuid = (this.newModel.owner as ProfileModel).uuid
-      const perm = this.newModel.permission
-      if (uuuid === undefined || perm === undefined) {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Failed', 1)
-        return
-      }
-      if (this.modelType === 'FOLDER') {
-        const fModel = this.newModel as FolderModel
-        if (fModel.name === undefined || fModel.name === '') {
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed', 1)
-          return
-        }
-        const fuuid = fModel.uuid
-        if (fuuid === undefined) {
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed', 1)
-          return
-        }
-        const req = {
-          owneruuid: uuuid,
-          name: fModel.name,
-          permission: perm,
-        } as FolderModifyReqModel
-        new FolderApi(this.$store.getters['auth/config'])
-          .modifyFolder(fuuid, req)
-          .then(() => {
-            this.$emit('reload')
-            this.$emit('close')
-            // @ts-ignore
-            this.successToast(this.$buefy, 'Success')
-          })
-          .catch(err => {
-            this.checkAuthWithStatus(this, err.response.status)
-            // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', err.response.status)
-          })
-      } else if (this.modelType === 'DOCUMENT') {
-        const dModel = this.newModel as DocumentModel
-        const duuid = dModel.uuid
-        if (duuid === undefined) {
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed', 1)
-          return
-        }
-        const req = {
-          owneruuid: uuuid,
-          permission: perm,
-        } as DocumentModifyReqModel
-        new DocumentApi(this.$store.getters['auth/config'])
-          .putDocDocId(duuid, req)
-          .then(() => {
-            this.$emit('reload')
-            this.$emit('close')
-            // @ts-ignore
-            this.successToast(this.$buefy, 'Success')
-          })
-          .catch(err => {
-            this.checkAuthWithStatus(this, err.response.status)
-            // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', err.response.status)
-          })
-      } else {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Failed', 2)
-      }
-    },
-    del() {
-      const fduuid = this.newModel.uuid
-      if (fduuid === undefined) {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Failed', 1)
-        return
-      }
-      if (this.modelType === 'FOLDER') {
-        new FolderApi(this.$store.getters['auth/config'])
-          .deleteFolder(fduuid)
-          .then(() => {
-            this.$emit('reload')
-            this.$emit('close')
-            // @ts-ignore
-            this.successToast(this.$buefy, 'Success')
-          })
-          .catch(err => {
-            this.checkAuthWithStatus(this, err.response.status)
-            // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', err.response.status)
-          })
-      } else if (this.modelType === 'DOCUMENT') {
-        new DocumentApi(this.$store.getters['auth/config'])
-          .deleteDoc(fduuid)
-          .then(() => {
-            this.$emit('reload')
-            this.$emit('close')
-            // @ts-ignore
-            this.successToast(this.$buefy, 'Success')
-          })
-          .catch(err => {
-            this.checkAuthWithStatus(this, err.response.status)
-            // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', err.response.status)
-          })
-      } else {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Failed', 2)
-      }
-    },
   },
 })
 </script>
@@ -359,8 +126,8 @@ export default Vue.extend({
   height: auto;
 
   .icon {
-    height: 80px;
-    font-size: 80px;
+    height: 60px;
+    font-size: 60px;
     color: black;
   }
   .detail-items {
@@ -369,16 +136,7 @@ export default Vue.extend({
     flex-flow: row wrap;
     align-items: center;
     width: 100%;
-    margin: 16px 0;
-  }
-
-  .field {
-    width: 100%;
-  }
-
-  .option-button {
-    width: 100%;
-    margin: 4px;
+    margin-top: 16px;
   }
 }
 </style>

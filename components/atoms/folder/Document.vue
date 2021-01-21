@@ -11,7 +11,7 @@
       <span v-text="doc.updater.name" />
     </div>
     <div class="desc2-box" :class="selected">
-      <span class="desc2-title" v-text="'DATE'" />
+      <span class="desc2-title" v-text="'UPDATE'" />
       <span v-text="toDate(doc.updated_at)" />
     </div>
     <ActionMenu
