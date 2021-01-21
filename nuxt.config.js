@@ -1,3 +1,5 @@
+const fontawesome = require('./build/fontawesome')
+
 export default {
   server: {
     port: 3000,
@@ -41,11 +43,6 @@ export default {
     },
     script: [],
     link: [
-      {
-        rel: 'stylesheet',
-        href:
-          'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
-      },
       {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css?family=Righteous',
@@ -254,7 +251,19 @@ export default {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: ['@nuxt/typescript-build'],
+  buildModules: [
+    '@nuxt/typescript-build',
+    [
+      '@nuxtjs/fontawesome',
+      {
+        component: 'fa',
+        suffix: true,
+        icons: {
+          solid: fontawesome.solid,
+        },
+      },
+    ],
+  ],
   /*
    ** Nuxt.js modules
    */

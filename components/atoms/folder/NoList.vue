@@ -1,6 +1,6 @@
 <template>
   <div class="no-list-box">
-    <i class="fa fa-times-circle fa-fw" />
+    <fa-icon icon="times-circle" class="icon" />
     <div>No items found</div>
   </div>
 </template>
@@ -13,11 +13,13 @@
   align-items: center;
   margin-top: 100px;
   color: whitesmoke;
-  i {
-    font-size: 120px;
+  .icon {
+    height: 100px;
+    font-size: 100px;
   }
   div {
     font-size: 40px;
+    font-weight: bold;
   }
 }
 </style>

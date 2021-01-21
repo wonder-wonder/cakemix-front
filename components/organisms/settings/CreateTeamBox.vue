@@ -1,6 +1,6 @@
 <template>
   <form class="create-team-box" @submit.prevent="create">
-    <i class="fa fa-users fa-fw" />
+    <fa-icon icon="users" class="icon" />
     <Input
       :label-name="'Team Name'"
       :is-password="false"
@@ -77,7 +77,8 @@ export default Vue.extend({
   border-radius: 16px;
   height: auto;
 
-  i {
+  .icon {
+    height: 80px;
     font-size: 80px;
     color: black;
   }

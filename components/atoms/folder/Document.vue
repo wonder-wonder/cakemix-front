@@ -4,7 +4,7 @@
       <span v-text="doc.title" />
     </div>
     <div class="icon-box">
-      <i class="fa fa-file fa-fw" />
+      <fa-icon icon="file" />
     </div>
     <div class="desc1-box" :class="selected">
       <span class="desc1-title" v-text="'UPDATER'" />
