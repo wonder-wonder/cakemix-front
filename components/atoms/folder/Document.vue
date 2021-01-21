@@ -14,7 +14,14 @@
       <span class="desc2-title" v-text="'DATE'" />
       <span v-text="toDate(doc.updated_at)" />
     </div>
-    <ActionMenu class="action-box" :class="selected" />
+    <ActionMenu
+      class="action-box"
+      :class="selected"
+      :current-folder-id="parentFolderId"
+      :model="doc"
+      :model-type="'DOCUMENT'"
+      @reload="$emit('reload')"
+    />
   </div>
 </template>
 
@@ -40,6 +47,9 @@ export default Vue.extend({
   computed: {
     selected() {
       return this.isSelected ? 'selected' : ''
+    },
+    parentFolderId() {
+      return this.doc.parentfolderid ?? ''
     },
   },
   methods: {

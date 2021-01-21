@@ -6,14 +6,16 @@
       :position="'is-top-right'"
     >
       <template #trigger>
-        <div>
+        <div @click="permToSwitch">
           <fa-icon icon="bars" />
         </div>
       </template>
       <b-dropdown-item
+        v-if="isNameEditable"
         aria-role="listitem"
         :class="'row-grid'"
         :paddingless="true"
+        :disabled="!isEditable"
         @click="openOwnerView"
       >
         <div class="icon">
@@ -25,6 +27,7 @@
         aria-role="listitem"
         :class="'row-grid'"
         :paddingless="true"
+        :disabled="!isEditable"
         @click="openOwnerView"
       >
         <div class="icon">
@@ -36,6 +39,7 @@
         aria-role="listitem"
         :class="'row-grid'"
         :paddingless="true"
+        :disabled="!isEditable"
         @click="openMoveView"
       >
         <div class="icon">
@@ -60,12 +64,19 @@
         :custom="true"
         :focusable="false"
         :paddingless="true"
+        :disabled="!isEditable"
       >
         <div class="icon">
           <fa-icon icon="eye" />
         </div>
         <span class="title">Read</span>
-        <b-switch class="switch" size="is-small" />
+        <b-switch
+          v-model="readSwitch"
+          class="switch"
+          size="is-small"
+          :disabled="!isEditable"
+          @input="updateItem"
+        />
       </b-dropdown-item>
       <b-dropdown-item
         aria-role="listitem"
@@ -73,18 +84,26 @@
         :custom="true"
         :focusable="false"
         :paddingless="true"
+        :disabled="!isWriteEnable || !isEditable"
       >
         <div class="icon">
           <fa-icon icon="pencil-alt" />
         </div>
         <span class="title">Write </span>
-        <b-switch class="switch" size="is-small" />
+        <b-switch
+          v-model="writeSwitch"
+          class="switch"
+          size="is-small"
+          :disabled="!isWriteEnable || !isEditable"
+          @input="updateItem"
+        />
       </b-dropdown-item>
       <b-dropdown-item aria-role="listitem" :separator="true" />
       <b-dropdown-item
         aria-role="listitem"
         :class="'row-grid delete-color'"
         :paddingless="true"
+        :disabled="!isEditable"
         @click="deleteItem()"
       >
         <div class="icon">
@@ -98,6 +117,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import CloneDeep from 'lodash/cloneDeep'
+import debounce from 'lodash/debounce'
 import ChangeOwner from '@/components/molecules/folder/ChangeOwner.vue'
 import ChangeDirectory from '@/components/molecules/folder/ChangeDirectory.vue'
 import {
@@ -113,7 +134,9 @@ import {
 import { successToast, failureToast } from '@/scripts/utils/toast'
 
 export type DataType = {
-  selectModels: Array<string>
+  readSwitch: boolean
+  writeSwitch: boolean
+  newModel: DocumentModel | FolderModel
 }
 
 export default Vue.extend({
@@ -133,30 +156,23 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      selectModels: ['Private', 'Read', 'Read / Write'],
+      readSwitch: false,
+      writeSwitch: false,
+      newModel: {},
     }
   },
   computed: {
-    imageType(): string {
-      return this.modelType === 'FOLDER'
-        ? 'fa-folder'
-        : this.modelType === 'DOCUMENT'
-        ? 'fa-file'
-        : 'fa-minus'
+    switchToPerm(): number {
+      if (this.readSwitch && this.writeSwitch) {
+        return 2
+      } else if (this.readSwitch) {
+        return 1
+      } else {
+        return 0
+      }
     },
-    title(): string {
-      const name =
-        this.modelType === 'FOLDER'
-          ? (this.model as FolderModel).name ?? ''
-          : this.modelType === 'DOCUMENT'
-          ? (this.model as DocumentModel).title ?? ''
-          : ''
-      return name
-    },
-    permission(): string {
-      return this.model.permission !== undefined
-        ? this.selectModels[this.model.permission]
-        : '---'
+    isWriteEnable(): boolean {
+      return this.readSwitch
     },
     isNameEditable(): boolean {
       if (this.modelType === 'DOCUMENT') {
@@ -165,17 +181,45 @@ export default Vue.extend({
       return this.isEditable
     },
     isEditable(): boolean {
-      const perm: boolean = this.model.editable ?? false
-      return perm
+      return this.newModel.editable ?? false
     },
     isFolder(): Boolean {
       return this.modelType === 'FOLDER'
     },
   },
+  watch: {
+    readSwitch(sw: boolean) {
+      if (!sw) {
+        this.writeSwitch = false
+      }
+    },
+    switchToPerm(perm: number) {
+      this.newModel.permission = perm
+    },
+  },
+  created() {
+    this.copyToModel()
+  },
   methods: {
     successToast,
     failureToast,
     checkAuthWithStatus,
+    copyToModel() {
+      // deep copy using clone deep in the lodash
+      this.newModel = CloneDeep(this.model)
+    },
+    permToSwitch() {
+      if (this.newModel.permission === 2) {
+        this.readSwitch = true
+        this.writeSwitch = true
+      } else if (this.newModel.permission === 1) {
+        this.readSwitch = true
+        this.writeSwitch = false
+      } else {
+        this.readSwitch = false
+        this.writeSwitch = false
+      }
+    },
     openMoveView() {
       // @ts-ignore
       this.$buefy.modal.open({
@@ -183,7 +227,7 @@ export default Vue.extend({
         component: ChangeDirectory,
         props: {
           'current-folder-id': this.currentFolderId,
-          'item-id': this.model.uuid,
+          'item-id': this.newModel.uuid,
           'is-folder': this.isFolder,
         },
         events: { updated: this.moved },
@@ -195,21 +239,24 @@ export default Vue.extend({
         parent: this.$root,
         component: ChangeOwner,
         props: {
-          'current-owner': this.model.owner,
+          'current-owner': this.newModel.owner,
         },
-        events: { 'update-user': this.moved },
+        events: { 'update-user': this.changedOwner },
       })
     },
     moved() {
       this.$emit('reload')
-      this.$emit('close')
     },
-    updateItem() {
-      if (this.model.owner === undefined) {
+    changedOwner(user: ProfileModel) {
+      this.newModel.owner = user
+      this.updateItem()
+    },
+    updateItem: debounce(function (this: any) {
+      if (this.newModel.owner === undefined) {
         return
       }
-      const uuuid = (this.model.owner as ProfileModel).uuid
-      const perm = this.model.permission
+      const uuuid = (this.newModel.owner as ProfileModel).uuid
+      const perm = this.newModel.permission
       if (uuuid === undefined || perm === undefined) {
         // @ts-ignore
         this.failureToast(this.$buefy, 'Failed', 1)
@@ -236,8 +283,6 @@ export default Vue.extend({
         new FolderApi(this.$store.getters['auth/config'])
           .modifyFolder(fuuid, req)
           .then(() => {
-            this.$emit('reload')
-            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -261,8 +306,6 @@ export default Vue.extend({
         new DocumentApi(this.$store.getters['auth/config'])
           .putDocDocId(duuid, req)
           .then(() => {
-            this.$emit('reload')
-            this.$emit('close')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -275,9 +318,9 @@ export default Vue.extend({
         // @ts-ignore
         this.failureToast(this.$buefy, 'Failed', 2)
       }
-    },
+    }, 500),
     deleteItem() {
-      const fduuid = this.model.uuid
+      const fduuid = this.newModel.uuid
       if (fduuid === undefined) {
         // @ts-ignore
         this.failureToast(this.$buefy, 'Failed', 1)
@@ -327,7 +370,7 @@ export default Vue.extend({
 </style>
 
 <style lang="scss" scoped>
-.fa-fw {
+.icon {
   font-size: 80px;
   color: black;
 }

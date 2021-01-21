@@ -26,12 +26,14 @@
           ref="folder-list-container"
           :models="filteredFolder"
           @select="selectedFolderDoc"
+          @reload="fetchFolder"
         />
         <DocListContainer
           v-if="isDocAvailable"
           ref="doc-list-container"
           :models="filteredDocs"
           @select="selectedFolderDoc"
+          @reload="fetchFolder"
         />
       </div>
       <div v-if="!isMobile" class="right-container">
@@ -66,7 +68,7 @@ import DocListContainer from '@/components/molecules/folder/DocListContainer.vue
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
 import SortBox, {
   newestSort,
-  SortModel
+  SortModel,
 } from '@/components/organisms/folder/SortBox.vue'
 import CreateFolderBox from '@/components/organisms/folder/CreateFolderBox.vue'
 import NoList from '@/components/atoms/folder/NoList.vue'

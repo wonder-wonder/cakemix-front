@@ -10,6 +10,7 @@
         :is-selected="selectedIndex === index"
         @click.native="selected(model, index)"
         @dblclick.native="goToDoc(model.uuid)"
+        @reload="$emit('reload')"
       />
     </div>
   </div>
