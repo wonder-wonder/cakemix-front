@@ -4,9 +4,10 @@
       aria-role="list"
       :mobile-modal="false"
       :position="'is-top-right'"
+      :triggers="['click', 'contextmenu']"
     >
       <template #trigger>
-        <div @click="permToSwitch">
+        <div>
           <fa-icon icon="bars" />
         </div>
       </template>
@@ -200,6 +201,7 @@ export default Vue.extend({
   },
   created() {
     this.copyToModel()
+    this.permToSwitch()
   },
   methods: {
     successToast,
