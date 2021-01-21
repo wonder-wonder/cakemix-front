@@ -25,6 +25,7 @@
           v-if="isFolderAvailable"
           ref="folder-list-container"
           :models="filteredFolder"
+          :current-folder-id="currentFolderId"
           @select="selectedFolderDoc"
           @reload="fetchFolder"
         />
@@ -32,6 +33,7 @@
           v-if="isDocAvailable"
           ref="doc-list-container"
           :models="filteredDocs"
+          :current-folder-id="currentFolderId"
           @select="selectedFolderDoc"
           @reload="fetchFolder"
         />
@@ -102,6 +104,7 @@ export default Vue.extend({
     FolderListContainer,
     DocListContainer,
     NoList,
+    SortBox,
   },
   data(): DataType {
     return {

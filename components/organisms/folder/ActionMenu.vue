@@ -16,12 +16,12 @@
         :class="'row-grid'"
         :paddingless="true"
         :disabled="!isEditable"
-        @click="openOwnerView"
+        @click="openRenameView"
       >
         <div class="icon">
           <fa-icon icon="signature" />
         </div>
-        <span class="title">Change Name</span>
+        <span class="title">Rename</span>
       </b-dropdown-item>
       <b-dropdown-item
         aria-role="listitem"
@@ -119,6 +119,7 @@
 import Vue, { PropType } from 'vue'
 import CloneDeep from 'lodash/cloneDeep'
 import debounce from 'lodash/debounce'
+import ChangeName from '@/components/molecules/folder/ChangeName.vue'
 import ChangeOwner from '@/components/molecules/folder/ChangeOwner.vue'
 import ChangeDirectory from '@/components/molecules/folder/ChangeDirectory.vue'
 import {
@@ -220,6 +221,14 @@ export default Vue.extend({
         this.writeSwitch = false
       }
     },
+    openRenameView() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: ChangeName,
+        events: { updated: this.renamed },
+      })
+    },
     openMoveView() {
       // @ts-ignore
       this.$buefy.modal.open({
@@ -244,6 +253,10 @@ export default Vue.extend({
         events: { 'update-user': this.changedOwner },
       })
     },
+    renamed(name: string) {
+      ;(this.newModel as FolderModel).name = name
+      this.updateItem()
+    },
     moved() {
       this.$emit('reload')
     },
@@ -263,7 +276,7 @@ export default Vue.extend({
         return
       }
       if (this.modelType === 'FOLDER') {
-        const fModel = this.model as FolderModel
+        const fModel = this.newModel as FolderModel
         if (fModel.name === undefined || fModel.name === '') {
           // @ts-ignore
           this.failureToast(this.$buefy, 'Failed', 1)
@@ -283,6 +296,7 @@ export default Vue.extend({
         new FolderApi(this.$store.getters['auth/config'])
           .modifyFolder(fuuid, req)
           .then(() => {
+            this.$emit('reload')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
@@ -292,7 +306,7 @@ export default Vue.extend({
             this.failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else if (this.modelType === 'DOCUMENT') {
-        const dModel = this.model as DocumentModel
+        const dModel = this.newModel as DocumentModel
         const duuid = dModel.uuid
         if (duuid === undefined) {
           // @ts-ignore
@@ -306,6 +320,7 @@ export default Vue.extend({
         new DocumentApi(this.$store.getters['auth/config'])
           .putDocDocId(duuid, req)
           .then(() => {
+            this.$emit('reload')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })

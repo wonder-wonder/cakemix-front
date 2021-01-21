@@ -8,8 +8,10 @@
         class="folder-cell"
         :folder="model"
         :is-selected="selectedIndex === index"
+        :current-folder-id="currentFolderId"
         @click.native="selected(model, index)"
         @dblclick.native="goToFolder(model.uuid)"
+        @reload="$emit('reload')"
       />
     </div>
   </div>
@@ -36,6 +38,10 @@ export default Vue.extend({
     models: {
       type: Array as PropType<FolderModel[]>,
       default: [],
+    },
+    currentFolderId: {
+      type: String,
+      default: '',
     },
   },
   data(): DataType {

@@ -17,7 +17,7 @@
     <ActionMenu
       class="action-box"
       :class="selected"
-      :current-folder-id="parentFolderId"
+      :current-folder-id="currentFolderId"
       :model="doc"
       :model-type="'DOCUMENT'"
       @reload="$emit('reload')"
@@ -43,13 +43,14 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    currentFolderId: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     selected() {
       return this.isSelected ? 'selected' : ''
-    },
-    parentFolderId() {
-      return this.doc.parentfolderid ?? ''
     },
   },
   methods: {

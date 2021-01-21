@@ -14,6 +14,14 @@
       <span class="desc2-title" v-text="'DATE'" />
       <span class="desc2-detail" v-text="toDate(folder.updated_at)" />
     </div>
+    <ActionMenu
+      class="action-box"
+      :class="selected"
+      :current-folder-id="currentFolderId"
+      :model="folder"
+      :model-type="'FOLDER'"
+      @reload="$emit('reload')"
+    />
   </div>
 </template>
 
@@ -31,6 +39,10 @@ export default Vue.extend({
     isSelected: {
       type: Boolean,
       default: false,
+    },
+    currentFolderId: {
+      type: String,
+      default: '',
     },
   },
   computed: {
@@ -134,6 +146,20 @@ export default Vue.extend({
       font-size: 10px;
       font-weight: bold;
     }
+
+    &.selected {
+      background-color: rgb(120, 120, 120);
+    }
+  }
+
+  .action-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: 3 / 5;
+    grid-column: 3 / 4;
+    background-color: rgb(50, 50, 50);
+    font-size: 16px;
 
     &.selected {
       background-color: rgb(120, 120, 120);
