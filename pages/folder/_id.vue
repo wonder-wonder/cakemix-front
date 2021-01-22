@@ -25,13 +25,17 @@
           v-if="isFolderAvailable"
           ref="folder-list-container"
           :models="filteredFolder"
+          :current-folder-id="currentFolderId"
           @select="selectedFolderDoc"
+          @reload="fetchFolder"
         />
         <DocListContainer
           v-if="isDocAvailable"
           ref="doc-list-container"
           :models="filteredDocs"
+          :current-folder-id="currentFolderId"
           @select="selectedFolderDoc"
+          @reload="fetchFolder"
         />
       </div>
       <div v-if="!isMobile" class="right-container">
@@ -46,12 +50,12 @@
       </div>
     </div>
     <b-button
-      icon-pack="fa"
       class="floating-option-button is-light"
       :rounded="true"
-      icon-right="info"
       @click="openOptionView"
-    />
+    >
+      <fa-icon icon="info" class="icon" />
+    </b-button>
     <NoList v-if="isNoItems && isLoaded" />
   </div>
 </template>
@@ -66,7 +70,7 @@ import DocListContainer from '@/components/molecules/folder/DocListContainer.vue
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
 import SortBox, {
   newestSort,
-  SortModel
+  SortModel,
 } from '@/components/organisms/folder/SortBox.vue'
 import CreateFolderBox from '@/components/organisms/folder/CreateFolderBox.vue'
 import NoList from '@/components/atoms/folder/NoList.vue'
@@ -100,6 +104,7 @@ export default Vue.extend({
     FolderListContainer,
     DocListContainer,
     NoList,
+    SortBox,
   },
   data(): DataType {
     return {

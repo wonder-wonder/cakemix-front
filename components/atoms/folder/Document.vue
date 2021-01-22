@@ -11,17 +11,29 @@
       <span v-text="doc.updater.name" />
     </div>
     <div class="desc2-box" :class="selected">
-      <span class="desc2-title" v-text="'DATE'" />
+      <span class="desc2-title" v-text="'UPDATE'" />
       <span v-text="toDate(doc.updated_at)" />
     </div>
+    <ActionMenu
+      class="action-box"
+      :class="selected"
+      :current-folder-id="currentFolderId"
+      :model="doc"
+      :model-type="'DOCUMENT'"
+      @reload="$emit('reload')"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import ActionMenu from '@/components/organisms/folder/ActionMenu.vue'
 import { DocumentModel } from '@/scripts/api/index'
 
 export default Vue.extend({
+  components: {
+    ActionMenu,
+  },
   props: {
     doc: {
       type: Object as PropType<DocumentModel>,
@@ -30,6 +42,10 @@ export default Vue.extend({
     isSelected: {
       type: Boolean,
       default: false,
+    },
+    currentFolderId: {
+      type: String,
+      default: '',
     },
   },
   computed: {
@@ -61,7 +77,7 @@ export default Vue.extend({
   display: grid;
   min-width: 288px;
   grid-template-rows: 48px 4px 16px 16px;
-  grid-template-columns: 36px 1fr;
+  grid-template-columns: 36px 1fr 32px;
   border: solid 1px white;
   border-radius: 5px;
   color: white;
@@ -81,7 +97,7 @@ export default Vue.extend({
     justify-content: center;
     align-items: center;
     grid-row: 1 / 2;
-    grid-column: 1 / 3;
+    grid-column: 1 / 4;
     font-size: 16px;
     font-weight: bold;
     padding: 0 4px;
@@ -145,6 +161,20 @@ export default Vue.extend({
       font-size: 10px;
       font-weight: bold;
     }
+
+    &.selected {
+      background-color: rgb(120, 120, 120);
+    }
+  }
+
+  .action-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: 3 / 5;
+    grid-column: 3 / 4;
+    background-color: rgb(50, 50, 50);
+    font-size: 16px;
 
     &.selected {
       background-color: rgb(120, 120, 120);

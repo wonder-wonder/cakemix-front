@@ -28,23 +28,23 @@ const alphabetDocuementSort = (items: DocumentModel[]): DocumentModel[] => {
 
 const oldestFolderSort = (items: FolderModel[]): FolderModel[] => {
   return items.sort((a, b) =>
-    (a.updated_at ?? 0) > (b.updated_at ?? 0) ? 1 : -1
+    (a.created_at ?? 0) > (b.created_at ?? 0) ? 1 : -1
   )
 }
 const oldestDocuementSort = (items: DocumentModel[]): DocumentModel[] => {
   return items.sort((a, b) =>
-    (a.updated_at ?? 0) > (b.updated_at ?? 0) ? 1 : -1
+    (a.created_at ?? 0) > (b.created_at ?? 0) ? 1 : -1
   )
 }
 
 const newestFolderSort = (items: FolderModel[]): FolderModel[] => {
   return items.sort((a, b) =>
-    (a.updated_at ?? 0) < (b.updated_at ?? 0) ? 1 : -1
+    (a.created_at ?? 0) < (b.created_at ?? 0) ? 1 : -1
   )
 }
 const newestDocuementSort = (items: DocumentModel[]): DocumentModel[] => {
   return items.sort((a, b) =>
-    (a.updated_at ?? 0) < (b.updated_at ?? 0) ? 1 : -1
+    (a.created_at ?? 0) < (b.created_at ?? 0) ? 1 : -1
   )
 }
 
