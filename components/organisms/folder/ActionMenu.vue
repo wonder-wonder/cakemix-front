@@ -105,7 +105,7 @@
         :class="'row-grid delete-color'"
         :paddingless="true"
         :disabled="!isEditable"
-        @click="deleteItem()"
+        @click="deleteItemConfirm()"
       >
         <div class="icon">
           <fa-icon class="icon delete-color" icon="trash" />
@@ -190,6 +190,10 @@ export default Vue.extend({
     },
   },
   watch: {
+    model() {
+      this.copyToModel()
+      this.permToSwitch()
+    },
     readSwitch(sw: boolean) {
       if (!sw) {
         this.writeSwitch = false
@@ -339,6 +343,14 @@ export default Vue.extend({
         this.failureToast(this.$buefy, 'Failed', 2)
       }
     }, 500),
+    deleteItemConfirm() {
+      // @ts-ignore
+      this.$buefy.dialog.confirm({
+        message: 'Do you want to delete this item?',
+        onConfirm: () => this.deleteItem(),
+        onCancel: () => {},
+      })
+    },
     deleteItem() {
       const fduuid = this.newModel.uuid
       if (fduuid === undefined) {
