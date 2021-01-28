@@ -17,7 +17,8 @@ import { Configuration } from "./configuration";
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 
-export const BASE_PATH = `${process.env.HTTP_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}`;
+const DOMAIN = process.env.NODE_ENV === "development" ? process.env.DOMAIN : location.hostname
+export const BASE_PATH = `${process.env.HTTP_SCHEME}://${DOMAIN}${process.env.BASE_PATH}`;
 
 /**
  *
