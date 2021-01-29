@@ -124,6 +124,8 @@ export default Vue.extend({
   background-color: whitesmoke;
   border-radius: 4px;
   height: auto;
+  width: 400px;
+  max-width: 100vw;
 
   .icon {
     height: 60px;

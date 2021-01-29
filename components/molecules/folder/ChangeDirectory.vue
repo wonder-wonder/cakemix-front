@@ -144,7 +144,8 @@ export default Vue.extend({
 .change-directory-container {
   display: flex;
   flex-flow: column nowrap;
-  width: 100%;
+  width: 700px;
+  max-width: 100vw;
   padding: 12px;
   background-color: white;
   border-radius: 16px;

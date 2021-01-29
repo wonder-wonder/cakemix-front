@@ -265,7 +265,8 @@ export default Vue.extend({
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  width: 100%;
+  width: 700px;
+  max-width: 100vw;
   min-height: 300px;
   padding: 16px;
   background-color: white;

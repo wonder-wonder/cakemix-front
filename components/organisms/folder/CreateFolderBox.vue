@@ -2,6 +2,7 @@
   <form class="create-folder-box" @submit.prevent="createFolder">
     <fa-icon icon="folder" class="icon" />
     <Input
+      class="field-input"
       :label-name="'Folder Name'"
       :is-password="false"
       :value="name"
@@ -9,7 +10,6 @@
       @text="name = $event"
     />
     <b-button type="is-success" :native-type="'submit'" v-text="'Create'" />
-    <b-button type="is-danger" @click="$emit('close')" v-text="'Cancel'" />
   </form>
 </template>
 
@@ -55,7 +55,13 @@ export default Vue.extend({
   background-color: whitesmoke;
   border-radius: 16px;
   height: auto;
+  width: 400px;
+  max-width: 100vw;
 
+  .field-input {
+    width: 100%;
+    max-width: 400px;
+  }
   .icon {
     height: 80px;
     font-size: 80px;

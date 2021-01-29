@@ -14,7 +14,7 @@
         @infinite-scroll="getMoreUsers"
         @select="selectUser"
       >
-        <template v-slot="props">
+        <template #default="props">
           <UserSearchWideCell :user="props.option" />
         </template>
       </b-autocomplete>
@@ -352,7 +352,8 @@ export default Vue.extend({
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  width: 100%;
+  width: 958px;
+  max-width: 100vw;
   padding: 16px;
   background-color: white;
   border-radius: 16px;
