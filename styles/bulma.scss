@@ -25,3 +25,22 @@ $colors: (
 .modal {
   z-index: 99;
 }
+
+.animation-content, .modal-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal .modal-content {
+  width: auto;
+}
+
+.modal-card-body.is-titleless {
+  width: 100%;
+}
+
+.modal-card-foot {
+  width: 100%; 
+  padding: 12px 20px;
+}
