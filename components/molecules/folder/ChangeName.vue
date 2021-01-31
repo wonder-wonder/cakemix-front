@@ -3,13 +3,20 @@
     <fa-icon icon="signature" class="icon" />
     <Input
       class="field-input"
-      :label-name="'Name'"
+      :label-name="'Folder Name'"
       :is-password="false"
       :value="name"
       :autofocus="true"
       @text="name = $event"
     />
-    <b-button type="is-success" :native-type="'submit'" v-text="'Rename'" />
+    <div class="button-container">
+      <b-button
+        type="is-danger is-light"
+        @click="$emit('close')"
+        v-text="'Cancel'"
+      />
+      <b-button type="is-success" :native-type="'submit'" v-text="'Rename'" />
+    </div>
   </form>
 </template>
 
@@ -76,9 +83,14 @@ export default Vue.extend({
     font-size: 80px;
     color: black;
   }
-  button {
-    width: 190px;
-    margin: 4px;
+  .button-container {
+    display: flex;
+    flex-flow: row wrap;
+
+    button {
+      width: 120px;
+      margin: 4px;
+    }
   }
 }
 </style>

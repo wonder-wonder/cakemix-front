@@ -50,6 +50,11 @@ export default Vue.extend({
       selectedIndex: -1,
     }
   },
+  watch: {
+    models() {
+      setTimeout(this.updateWidth, 10)
+    },
+  },
   mounted() {
     this.updateWidth()
     window.addEventListener('resize', this.updateWidth)
