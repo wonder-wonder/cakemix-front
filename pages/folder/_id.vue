@@ -132,18 +132,20 @@ export default Vue.extend({
       if (this.searchText === '') {
         return this.sortedFolder
       }
+      const lowerSearchText = this.searchText.toLowerCase()
       return this.sortedFolder.filter(f => {
         const name = f.name ?? ''
-        return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
+        return name.toLowerCase().match(RegExp(`^(?=.*${lowerSearchText}).*$`))
       })
     },
     filteredDocs(): DocumentModel[] {
       if (this.searchText === '') {
         return this.sortedDocs
       }
+      const lowerSearchText = this.searchText.toLowerCase()
       return this.sortedDocs.filter(f => {
         const name = f.title ?? ''
-        return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
+        return name.toLowerCase().match(RegExp(`^(?=.*${lowerSearchText}).*$`))
       })
     },
     isFolderAvailable(): boolean {
