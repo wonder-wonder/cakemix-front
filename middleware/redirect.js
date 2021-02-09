@@ -7,5 +7,5 @@ export default function ({ route, store, redirect }) {
     return
   }
   if (route.path === '/' || route.path.match(/^\/auth\/.*/)) return
-  redirect('/auth/login')
+  redirect(`/auth/login?redirect=${route.path}`)
 }
