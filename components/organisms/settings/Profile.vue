@@ -1,8 +1,10 @@
 <template>
   <div class="setting-profile-container">
     <div class="profile-item-box">
+      <BorderTitle :title="'Profile'" />
       <SquareIcon :label-name="'Icon'" :src="icon" @upload="uploadImage" />
       <ValidateInput
+        class="maximum-width"
         :label-name="'UserName'"
         :message="['OK', 'Invalid charactor or already used']"
         :is-valid="isUnique"
@@ -11,6 +13,7 @@
         @text="updateUserName"
       />
       <Select
+        class="maximum-width"
         :label-name="'Language'"
         :select-items="languageModel"
         :placeholder="'Select a language'"
@@ -19,7 +22,7 @@
       />
       <TextArea :label-name="'Biography'" :value="bio" @text="bio = $event" />
       <b-button
-        class="update-button is-primary"
+        class="update-button is-success"
         :loading="isLoading"
         @click="request"
         v-text="'Update'"
@@ -144,7 +147,7 @@ export default Vue.extend({
   flex-flow: row wrap;
   justify-content: center;
   width: 100%;
-  max-width: 465px;
+  max-width: 798px;
   padding: 0px 16px;
   margin-bottom: 32px;
   color: white;
@@ -154,15 +157,18 @@ export default Vue.extend({
 
   .border-title {
     width: 100%;
+    margin: 16px 0;
   }
 
   .profile-item-box {
-    max-width: 500px;
     width: 100%;
 
+    .maximum-width {
+      max-width: 375px;
+    }
     .update-button {
-      width: 120px;
-      margin: 16px 0px;
+      width: 144px;
+      margin: 16px 0;
       font-weight: bold;
     }
   }
