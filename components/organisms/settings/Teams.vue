@@ -1,8 +1,11 @@
 <template>
   <div class="setting-teams-container">
-    <TeamTools @create-team="openCreateTeamBox" />
     <div ref="teams-item-container" class="teams-item-container">
       <BorderTitle :title="'Teams'" />
+      <TeamTools
+        class="team-tools-container"
+        @create-team="openCreateTeamBox"
+      />
       <div class="teams-item-box">
         <UserCell
           v-for="(user, index) in users"
@@ -168,11 +171,13 @@ export default Vue.extend({
     max-width: 798px;
     margin: 0 auto;
 
+    .team-tools-container {
+      margin-bottom: 16px;
+    }
     .border-title {
       width: 100%;
-      margin: 20px 8px;
+      margin: 16px 8px;
     }
-
     .teams-item-box {
       display: flex;
       flex-flow: row wrap;

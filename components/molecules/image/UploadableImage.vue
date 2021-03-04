@@ -9,15 +9,13 @@
         :rounded="rounded"
         :placeholder="placeholder"
       />
-    </b-field>
-    <b-field class="file is-primary file-button-box">
       <b-upload class="file-label" @input="$emit('upload', $event)">
         <span class="file-cta">
           <b-icon class="file-icon" icon="upload" />
-          <span class="file-label">Click to upload</span>
         </span>
       </b-upload>
     </b-field>
+    <b-field class="file is-primary file-button-box" />
   </div>
 </template>
 
@@ -60,12 +58,19 @@ export default Vue.extend({
   width: auto;
 
   .image-box {
-    width: 216px;
-    height: 216px;
+    width: 192px;
+    height: 192px;
   }
-
-  .file-button-box {
-    margin-bottom: 12px;
+  .b-image-wrapper /deep/ img {
+    border-radius: 8px;
+  }
+  .file-label .file-cta {
+    width: 48px !important;
+    height: 192px !important;
+    color: white;
+    border-width: 0;
+    background-color: #48c774;
+    margin: 0 8px;
   }
 }
 </style>

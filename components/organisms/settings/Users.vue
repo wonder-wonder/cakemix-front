@@ -1,16 +1,16 @@
 <template>
   <div class="setting-users-container">
-    <div class="users-tool-container">
-      <ButtonInput
-        class="button-input"
-        :button-name="'Generate link'"
-        :label-name="'Invitation Link'"
-        :value="generatedLink"
-        @click="generateLink"
-      />
-    </div>
     <div ref="users-item-container" class="users-item-container">
       <BorderTitle :title="'Users'" />
+      <div class="users-tool-container">
+        <ButtonInput
+          class="button-input"
+          :button-name="'Generate link'"
+          :label-name="'Invitation Link'"
+          :value="generatedLink"
+          @click="generateLink"
+        />
+      </div>
       <div class="users-item-box">
         <UserCell
           v-for="(user, index) in users"
@@ -169,6 +169,7 @@ export default Vue.extend({
     width: 100%;
     max-width: 450px;
     padding: 0px 8px;
+    margin-bottom: 16px;
 
     label {
       color: white;
@@ -190,7 +191,7 @@ export default Vue.extend({
 
     .border-title {
       width: 100%;
-      margin: 20px 8px;
+      margin: 16px 8px;
     }
 
     .users-item-box {
