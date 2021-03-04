@@ -10,7 +10,7 @@
     >
       <div class="sidebar-container">
         <b-menu>
-          <b-menu-list label="SETTINGS">
+          <b-menu-list label="MENU">
             <b-menu-item
               v-for="model in tabModels"
               :key="model.id"
