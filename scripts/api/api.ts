@@ -20,6 +20,119 @@ import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
+ * 
+ * @export
+ * @interface AuthLogLoginModel
+ */
+export interface AuthLogLoginModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthLogLoginModel
+     */
+    sessionid?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthLogLoginModel
+     */
+    ipaddr?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthLogLoginModel
+     */
+    devinfo?: string;
+}
+/**
+ * 
+ * @export
+ * @interface AuthLogModel
+ */
+export interface AuthLogModel {
+    /**
+     * 
+     * @type {ProfileModel}
+     * @memberof AuthLogModel
+     */
+    user: ProfileModel;
+    /**
+     * 
+     * @type {number}
+     * @memberof AuthLogModel
+     */
+    date: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthLogModel
+     */
+    type: string;
+    /**
+     * 
+     * @type {AuthLogLoginModel | AuthLogPassResetModel | AuthLogPassChangeModel}
+     * @memberof AuthLogModel
+     */
+    data?: AuthLogLoginModel | AuthLogPassResetModel | AuthLogPassChangeModel;
+}
+/**
+ * 
+ * @export
+ * @interface AuthLogPassChangeModel
+ */
+export interface AuthLogPassChangeModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthLogPassChangeModel
+     */
+    sessionid?: string;
+}
+/**
+ * 
+ * @export
+ * @interface AuthLogPassResetModel
+ */
+export interface AuthLogPassResetModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthLogPassResetModel
+     */
+    ipaddr?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthLogPassResetModel
+     */
+    devinfo?: string;
+}
+/**
+ * 
+ * @export
+ * @interface AuthLogResModel
+ */
+export interface AuthLogResModel {
+    /**
+     * 
+     * @type {number}
+     * @memberof AuthLogResModel
+     */
+    offset: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AuthLogResModel
+     */
+    len: number;
+    /**
+     * 
+     * @type {Array<AuthLogModel>}
+     * @memberof AuthLogResModel
+     */
+    logs: Array<AuthLogModel>;
+}
+/**
  * Request model for /auth/login
  * @export
  * @interface AuthLoginReqModel
@@ -122,6 +235,49 @@ export interface AuthRegistReqModel {
     password: string;
 }
 /**
+ * Session info
+ * @export
+ * @interface AuthSessionModel
+ */
+export interface AuthSessionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthSessionModel
+     */
+    sessionid?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AuthSessionModel
+     */
+    lastlogin?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AuthSessionModel
+     */
+    lastused?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthSessionModel
+     */
+    ipaddr?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthSessionModel
+     */
+    devinfo?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AuthSessionModel
+     */
+    iscurrent?: boolean;
+}
+/**
  * Breadcrumb
  * @export
  * @interface BreadcrumbModel
@@ -206,6 +362,12 @@ export interface DocumentModel {
      * @memberof DocumentModel
      */
     parentfolderid?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DocumentModel
+     */
+    revision?: number;
 }
 /**
  * Document modify request model
@@ -583,6 +745,58 @@ export interface ProfileModel {
 export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Revoke session
+         * @summary Revoke session
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAuthSession: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteAuthSession.');
+            }
+            const localVarPath = `/auth/session/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Check username is not taken by other
          * @summary Check username
          * @param {string} token 
@@ -632,6 +846,72 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * Get log list
+         * @summary Get logs
+         * @param {string} [targetid] target team/userUUID
+         * @param {number} [offset] Offset
+         * @param {number} [limit] Limit
+         * @param {string} [type] target log type
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthLog: async (targetid?: string, offset?: number, limit?: number, type?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auth/log`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+            if (targetid !== undefined) {
+                localVarQueryParameter['targetid'] = targetid;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Request to verify invitation link
          * @param {string} token Verification token for registration.
          * @param {*} [options] Override http request option.
@@ -654,6 +934,52 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get session list
+         * @summary Get session list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthSession: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auth/session`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
 
 
     
@@ -1163,6 +1489,20 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 export const AuthApiFp = function(configuration?: Configuration) {
     return {
         /**
+         * Revoke session
+         * @summary Revoke session
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteAuthSession(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).deleteAuthSession(id, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
          * Check username is not taken by other
          * @summary Check username
          * @param {string} token 
@@ -1178,6 +1518,23 @@ export const AuthApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * Get log list
+         * @summary Get logs
+         * @param {string} [targetid] target team/userUUID
+         * @param {number} [offset] Offset
+         * @param {number} [limit] Limit
+         * @param {string} [type] target log type
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAuthLog(targetid?: string, offset?: number, limit?: number, type?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthLogResModel>> {
+            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthLog(targetid, offset, limit, type, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
          * Request to verify invitation link
          * @param {string} token Verification token for registration.
          * @param {*} [options] Override http request option.
@@ -1185,6 +1542,19 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getAuthRegistPreToken(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthRegistPreToken(token, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * Get session list
+         * @summary Get session list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAuthSession(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AuthSessionModel>>> {
+            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthSession(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1339,6 +1709,16 @@ export const AuthApiFp = function(configuration?: Configuration) {
 export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
+         * Revoke session
+         * @summary Revoke session
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAuthSession(id: string, options?: any): AxiosPromise<void> {
+            return AuthApiFp(configuration).deleteAuthSession(id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Check username is not taken by other
          * @summary Check username
          * @param {string} token 
@@ -1350,6 +1730,19 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
             return AuthApiFp(configuration).getAuthCheckUserUsername(token, userName, options).then((request) => request(axios, basePath));
         },
         /**
+         * Get log list
+         * @summary Get logs
+         * @param {string} [targetid] target team/userUUID
+         * @param {number} [offset] Offset
+         * @param {number} [limit] Limit
+         * @param {string} [type] target log type
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthLog(targetid?: string, offset?: number, limit?: number, type?: string, options?: any): AxiosPromise<AuthLogResModel> {
+            return AuthApiFp(configuration).getAuthLog(targetid, offset, limit, type, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Request to verify invitation link
          * @param {string} token Verification token for registration.
          * @param {*} [options] Override http request option.
@@ -1357,6 +1750,15 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          */
         getAuthRegistPreToken(token: string, options?: any): AxiosPromise<void> {
             return AuthApiFp(configuration).getAuthRegistPreToken(token, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get session list
+         * @summary Get session list
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthSession(options?: any): AxiosPromise<Array<AuthSessionModel>> {
+            return AuthApiFp(configuration).getAuthSession(options).then((request) => request(axios, basePath));
         },
         /**
          * Checks JWT token is valid.
@@ -1468,6 +1870,18 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
  */
 export class AuthApi extends BaseAPI {
     /**
+     * Revoke session
+     * @summary Revoke session
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public deleteAuthSession(id: string, options?: any) {
+        return AuthApiFp(this.configuration).deleteAuthSession(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Check username is not taken by other
      * @summary Check username
      * @param {string} token 
@@ -1481,6 +1895,21 @@ export class AuthApi extends BaseAPI {
     }
 
     /**
+     * Get log list
+     * @summary Get logs
+     * @param {string} [targetid] target team/userUUID
+     * @param {number} [offset] Offset
+     * @param {number} [limit] Limit
+     * @param {string} [type] target log type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public getAuthLog(targetid?: string, offset?: number, limit?: number, type?: string, options?: any) {
+        return AuthApiFp(this.configuration).getAuthLog(targetid, offset, limit, type, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Request to verify invitation link
      * @param {string} token Verification token for registration.
      * @param {*} [options] Override http request option.
@@ -1489,6 +1918,17 @@ export class AuthApi extends BaseAPI {
      */
     public getAuthRegistPreToken(token: string, options?: any) {
         return AuthApiFp(this.configuration).getAuthRegistPreToken(token, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get session list
+     * @summary Get session list
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public getAuthSession(options?: any) {
+        return AuthApiFp(this.configuration).getAuthSession(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3521,10 +3961,11 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {string} teamid 
          * @param {number} [limit] member limit
          * @param {number} [offset] member offset
+         * @param {string} [uuid] uuid
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeamTeamidMember: async (teamid: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
+        getTeamTeamidMember: async (teamid: string, limit?: number, offset?: number, uuid?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamid' is not null or undefined
             if (teamid === null || teamid === undefined) {
                 throw new RequiredError('teamid','Required parameter teamid was null or undefined when calling getTeamTeamidMember.');
@@ -3557,6 +3998,10 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (offset !== undefined) {
                 localVarQueryParameter['offset'] = offset;
+            }
+
+            if (uuid !== undefined) {
+                localVarQueryParameter['uuid'] = uuid;
             }
 
 
@@ -3800,11 +4245,12 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @param {string} teamid 
          * @param {number} [limit] member limit
          * @param {number} [offset] member offset
+         * @param {string} [uuid] uuid
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).getTeamTeamidMember(teamid, limit, offset, options);
+        async getTeamTeamidMember(teamid: string, limit?: number, offset?: number, uuid?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
+            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).getTeamTeamidMember(teamid, limit, offset, uuid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -3890,11 +4336,12 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @param {string} teamid 
          * @param {number} [limit] member limit
          * @param {number} [offset] member offset
+         * @param {string} [uuid] uuid
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse200> {
-            return TeamApiFp(configuration).getTeamTeamidMember(teamid, limit, offset, options).then((request) => request(axios, basePath));
+        getTeamTeamidMember(teamid: string, limit?: number, offset?: number, uuid?: string, options?: any): AxiosPromise<InlineResponse200> {
+            return TeamApiFp(configuration).getTeamTeamidMember(teamid, limit, offset, uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Create new team.
@@ -3969,12 +4416,13 @@ export class TeamApi extends BaseAPI {
      * @param {string} teamid 
      * @param {number} [limit] member limit
      * @param {number} [offset] member offset
+     * @param {string} [uuid] uuid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TeamApi
      */
-    public getTeamTeamidMember(teamid: string, limit?: number, offset?: number, options?: any) {
-        return TeamApiFp(this.configuration).getTeamTeamidMember(teamid, limit, offset, options).then((request) => request(this.axios, this.basePath));
+    public getTeamTeamidMember(teamid: string, limit?: number, offset?: number, uuid?: string, options?: any) {
+        return TeamApiFp(this.configuration).getTeamTeamidMember(teamid, limit, offset, uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
