@@ -10,13 +10,13 @@
     >
       <div class="sidebar-container">
         <b-menu>
-          <b-menu-list label="MENU">
+          <b-menu-list label="SETTINGS">
             <b-menu-item
               v-for="model in tabModels"
               :key="model.id"
               :icon="model.icon"
               :label="model.label"
-              @click="$router.push(`/settings/${model.route}`)"
+              @click="$router.push(`/settings/${model.id}`)"
             />
           </b-menu-list>
         </b-menu>
@@ -33,13 +33,13 @@ export const TAB_TYPE_MODEL = {
   AUTH: 'auth',
   USERS: 'users',
   TEAMS: 'teams',
+  SECURITYLOG: 'security-log',
 } as const
 
 export type TabModel = {
   id: string
   label: string
   icon: string
-  route: string
 }
 
 export const tabModels = [
@@ -47,25 +47,26 @@ export const tabModels = [
     id: TAB_TYPE_MODEL.PROFILE,
     label: 'Profile',
     icon: 'badge-account-horizontal-outline',
-    route: 'profile',
   } as TabModel,
   {
     id: TAB_TYPE_MODEL.AUTH,
     label: 'Authentication',
     icon: 'lock-reset',
-    route: 'auth',
   } as TabModel,
   {
     id: TAB_TYPE_MODEL.USERS,
     label: 'Users',
     icon: 'account',
-    route: 'users',
   } as TabModel,
   {
     id: TAB_TYPE_MODEL.TEAMS,
     label: 'Teams',
     icon: 'account-group',
-    route: 'teams',
+  } as TabModel,
+  {
+    id: TAB_TYPE_MODEL.SECURITYLOG,
+    label: 'Security log',
+    icon: 'file-chart',
   } as TabModel,
 ] as TabModel[]
 

@@ -66,20 +66,20 @@ import {
   MemberInfoModel,
 } from '@/scripts/api/index'
 
-type DataType = {
-  uuid: string
-  searchName: string
-  memberPaging: PagingModel
-  searchPaging: PagingModel
-  userSearchInput: string
-}
-
 type PagingModel = {
   data: ProfileModel[] | MemberInfoModel[]
   total: number
   page: number
   PER_PAGE: number
   isFetching: boolean
+}
+
+type DataType = {
+  uuid: string
+  searchName: string
+  memberPaging: PagingModel
+  searchPaging: PagingModel
+  userSearchInput: string
 }
 
 export default Vue.extend({

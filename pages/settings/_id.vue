@@ -5,13 +5,13 @@
       <div class="settings-left-container">
         <div class="sidebar-container">
           <b-menu>
-            <b-menu-list label="MENU">
+            <b-menu-list label="SETTINGS">
               <b-menu-item
                 v-for="model in tabModels"
                 :key="model.id"
                 :icon="model.icon"
                 :label="model.label"
-                @click="$router.push(`/settings/${model.route}`)"
+                @click="$router.push(`/settings/${model.id}`)"
               />
             </b-menu-list>
           </b-menu>
@@ -27,6 +27,7 @@
           <Auth v-if="viewName === TAB_TYPE_MODEL.AUTH" />
           <Users v-if="viewName === TAB_TYPE_MODEL.USERS" />
           <Teams v-if="viewName === TAB_TYPE_MODEL.TEAMS" />
+          <SecurityLog v-if="viewName === TAB_TYPE_MODEL.SECURITYLOG" />
         </div>
       </div>
       <SideBar :open.sync="open" />
@@ -46,6 +47,7 @@ import Profile from '@/components/organisms/settings/Profile.vue'
 import Auth from '@/components/organisms/settings/Auth.vue'
 import Users from '@/components/organisms/settings/Users.vue'
 import Teams from '@/components/organisms/settings/Teams.vue'
+import SecurityLog from '@/components/organisms/settings/SecurityLog.vue'
 
 type DataType = {
   TAB_TYPE_MODEL: typeof TAB_TYPE_MODEL
@@ -60,6 +62,7 @@ export default Vue.extend({
     Auth,
     Users,
     Teams,
+    SecurityLog,
     SideBar,
   },
   data(): DataType {
@@ -108,7 +111,6 @@ export default Vue.extend({
     .settings-right-container {
       display: flex;
       flex-flow: column nowrap;
-      justify-content: center;
       width: 100%;
 
       .settings-menu {
@@ -124,6 +126,7 @@ export default Vue.extend({
           border-top-right-radius: 20px;
           border-bottom-right-radius: 20px;
           border: 0;
+          background-color: whitesmoke;
           .icon {
             margin-right: 4px;
             font-size: 28px;

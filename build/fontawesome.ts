@@ -11,6 +11,7 @@ const solid = [
   'faFolder',
   'faGlobeAsia',
   'faInfo',
+  'faKey',
   'faPencilAlt',
   'faUser',
   'faUsers',
