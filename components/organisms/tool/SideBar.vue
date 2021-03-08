@@ -34,6 +34,7 @@ export const TAB_TYPE_MODEL = {
   USERS: 'users',
   TEAMS: 'teams',
   SECURITYLOG: 'security-log',
+  SESSION: 'session',
 } as const
 
 export type TabModel = {
@@ -67,6 +68,11 @@ export const tabModels = [
     id: TAB_TYPE_MODEL.SECURITYLOG,
     label: 'Security log',
     icon: 'file-chart',
+  } as TabModel,
+  {
+    id: TAB_TYPE_MODEL.SESSION,
+    label: 'Session',
+    icon: 'cellphone-link',
   } as TabModel,
 ] as TabModel[]
 
