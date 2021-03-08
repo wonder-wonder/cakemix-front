@@ -64,12 +64,12 @@ export default Vue.extend({
     fetch() {
       const offset = (this.logPaging.page - 1) * this.logPaging.PER_PAGE
       new AuthApi(this.$store.getters['auth/config'])
-        .getAuthLog(undefined, offset, this.logPaging.PER_PAGE + 1)
+        .getAuthLog(undefined, offset, this.logPaging.PER_PAGE)
         .then(res => {
-          if (res.data.logs.length > this.logPaging.PER_PAGE) {
-            this.logPaging.total = res.data.logs.length + offset
+          if (res.data.has_next) {
+            this.logPaging.total = offset + this.logPaging.PER_PAGE * 2
           }
-          this.logPaging.data = res.data.logs.slice(0, this.logPaging.PER_PAGE)
+          this.logPaging.data = res.data.logs
         })
         .catch(err => {
           this.checkAuthWithStatus(this, err.response.status)
