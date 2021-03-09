@@ -87,6 +87,12 @@ export interface AuthLogPassChangeModel {
      * @memberof AuthLogPassChangeModel
      */
     sessionid?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthLogPassChangeModel
+     */
+    ipaddr?: string;
 }
 /**
  * 
@@ -131,6 +137,12 @@ export interface AuthLogResModel {
      * @memberof AuthLogResModel
      */
     logs: Array<AuthLogModel>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AuthLogResModel
+     */
+    has_next: boolean;
 }
 /**
  * Request model for /auth/login
