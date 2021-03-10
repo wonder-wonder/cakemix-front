@@ -136,7 +136,6 @@ export default Vue.extend({
     padding: 0 4px;
     color: white;
     background-color: rgb(50, 50, 50);
-    border-bottom-right-radius: 5px;
 
     .desc2-title {
       display: flex;
@@ -160,6 +159,7 @@ export default Vue.extend({
     grid-column: 3 / 4;
     background-color: rgb(50, 50, 50);
     font-size: 16px;
+    border-bottom-right-radius: 4px;
 
     &.selected {
       background-color: rgb(120, 120, 120);
