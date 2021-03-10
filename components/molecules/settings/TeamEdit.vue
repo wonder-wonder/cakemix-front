@@ -80,6 +80,7 @@ type DataType = {
   memberPaging: PagingModel
   searchPaging: PagingModel
   userSearchInput: string
+  ownPermission: number
 }
 
 export default Vue.extend({
@@ -113,25 +114,16 @@ export default Vue.extend({
         isFetching: false,
       } as PagingModel,
       userSearchInput: '',
+      ownPermission: 0,
     }
   },
   computed: {
     teamHasImage(): boolean {
       return !(this.team.icon_uri === undefined || this.team.icon_uri === '')
     },
-    ownPermission(): number {
-      const members = this.memberPaging.data as MemberInfoModel[]
-      const own = members.filter(mm => {
-        const uuid = (mm.member as ProfileModel).uuid
-        return uuid === this.$store.getters['auth/uuid']
-      })
-      if (own.length === 0) {
-        return 3
-      }
-      return own[0].permission ?? 0
-    },
   },
   created() {
+    this.getOwnPermission()
     this.getMembers()
   },
   methods: {
@@ -171,6 +163,41 @@ export default Vue.extend({
             // @ts-ignore
             this.$buefy,
             'Add new member failed',
+            err.response.status
+          )
+        })
+    },
+    getOwnPermission() {
+      const teamId = this.team.uuid
+      if (!teamId) {
+        return
+      }
+      new TeamApi(this.$store.getters['auth/config'])
+        .getTeamTeamidMember(
+          teamId,
+          this.memberPaging.PER_PAGE,
+          (this.memberPaging.page - 1) * this.memberPaging.PER_PAGE,
+          this.$store.getters['auth/uuid']
+        )
+        .then(res => {
+          const total = res.data.total ?? 0
+          const members = res.data.members ?? []
+          if (total < 1 || members.length < 1) {
+            this.failureToast(
+              // @ts-ignore
+              this.$buefy,
+              'Get own permission failed',
+              400
+            )
+          }
+          this.ownPermission = members[0].permission ?? 0
+        })
+        .catch(err => {
+          this.checkAuthWithStatus(this, err.response.status)
+          this.failureToast(
+            // @ts-ignore
+            this.$buefy,
+            'Get own permission failed',
             err.response.status
           )
         })
