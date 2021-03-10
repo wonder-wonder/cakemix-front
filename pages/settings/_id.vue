@@ -28,6 +28,7 @@
           <Users v-if="viewName === TAB_TYPE_MODEL.USERS" />
           <Teams v-if="viewName === TAB_TYPE_MODEL.TEAMS" />
           <SecurityLog v-if="viewName === TAB_TYPE_MODEL.SECURITYLOG" />
+          <Session v-if="viewName === TAB_TYPE_MODEL.SESSION" />
         </div>
       </div>
       <SideBar :open.sync="open" />
@@ -48,6 +49,7 @@ import Auth from '@/components/organisms/settings/Auth.vue'
 import Users from '@/components/organisms/settings/Users.vue'
 import Teams from '@/components/organisms/settings/Teams.vue'
 import SecurityLog from '@/components/organisms/settings/SecurityLog.vue'
+import Session from '@/components/organisms/settings/Session.vue'
 
 type DataType = {
   TAB_TYPE_MODEL: typeof TAB_TYPE_MODEL
@@ -63,6 +65,7 @@ export default Vue.extend({
     Users,
     Teams,
     SecurityLog,
+    Session,
     SideBar,
   },
   data(): DataType {

@@ -6,7 +6,7 @@
     <div class="log-info-container">
       <div class="log-user-container">
         <img
-          v-if="userIcon !== ''"
+          v-if="hasUserIcon"
           class="user-icon-item"
           :src="userIcon"
           alt="user_profile_icon"
@@ -59,6 +59,9 @@ export default Vue.extend({
       }
       return this.logModel.user.icon_uri
     },
+    hasUserIcon(): boolean {
+      return this.userIcon !== ''
+    },
     userName(): string {
       if (this.logModel.user === undefined) {
         return ''
@@ -107,13 +110,6 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss">
-.tooltip-content {
-  padding: 4px !important;
-  white-space: normal !important;
-}
-</style>
 
 <style lang="scss" scoped>
 .log-cell-container {

@@ -5,6 +5,7 @@ const solid = [
   'faChevronRight',
   'faChevronLeft',
   'faColumns',
+  'faDesktop',
   'faEye',
   'faFolderOpen',
   'faFile',
