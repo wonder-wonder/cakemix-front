@@ -15,10 +15,10 @@
       <Select
         class="maximum-width"
         :label-name="'Language'"
-        :select-items="languageModel"
+        :select-items="languageList"
         :placeholder="'Select a language'"
-        :current="current"
-        @input="current = $event"
+        :current="languageFullName"
+        @input="current = getAbbreviation($event)"
       />
       <TextArea :label-name="'Biography'" :value="bio" @text="bio = $event" />
       <b-button
@@ -39,6 +39,11 @@ import TextArea from '@/components/atoms/input/TextArea.vue'
 import Select from '@/components/atoms/input/Select.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
+  getLanguageList,
+  getFullName,
+  getAbbreviation,
+} from '@/scripts/model/language/language'
+import {
   checkAuthWithStatus,
   SearchApi,
   ProfileApi,
@@ -53,10 +58,7 @@ type DataType = {
   bio: string
   isLoading: boolean
   isUnique: boolean
-  languageModel: string[]
 }
-
-const languageModel = ['English', 'Japanese']
 
 export default Vue.extend({
   components: {
@@ -73,15 +75,22 @@ export default Vue.extend({
       bio: '',
       isLoading: false,
       isUnique: false,
-      languageModel,
     }
+  },
+  computed: {
+    languageFullName(): string {
+      return getFullName(this.current)
+    },
+    languageList(): string[] {
+      return getLanguageList()
+    },
   },
   created() {
     new ProfileApi(this.$store.getters['auth/config'])
       .getUserProfileUuid(this.$store.getters['auth/uuid'])
       .then(res => {
         this.userName = res.data.name
-        this.current = res.data.lang === 'ja' ? 'Japanese' : 'English'
+        this.current = res.data.lang ?? ''
         this.bio = res.data.bio ?? ''
         if (res.data.icon_uri) {
           this.icon = res.data.icon_uri
@@ -91,6 +100,9 @@ export default Vue.extend({
   methods: {
     successToast,
     failureToast,
+    getLanguageList,
+    getFullName,
+    getAbbreviation,
     checkAuthWithStatus,
     request() {
       const profile = {
