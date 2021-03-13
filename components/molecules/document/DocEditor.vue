@@ -117,15 +117,16 @@ export default Vue.extend({
     //
     registeredEvent(clientId: string) {
       this.cMirror.setOption('readOnly', !this.isEditable)
-      console.log(clientId)
+      console.log('registered', clientId)
     },
     joinEvent(cm: Editor) {
-      console.log(cm)
+      console.log('join', cm)
     },
     quitEvent(cm: Editor) {
-      console.log(cm)
+      console.log('quit', cm)
     },
     docEvent(data: any) {
+      console.log('doc', data.clients)
       this.cMirror.setValue(data.document)
       this.otClient = new ot.EditorClient(
         data.revision,

@@ -7,43 +7,75 @@
       @input="onClicked"
       @toParentFolder="toParentFolder"
     />
-    <DocPreviewEditor
-      v-if="isLoaded"
-      :is-editable="isEditable"
-      class="document-preview-editor"
-      @toParentFolder="toParentFolder"
-    />
+    <div
+      class="document-preview-editor-container"
+      :class="displayType == 2 ? 'split' : 'editor'"
+    >
+      <DocEditor
+        v-show="displayType !== 3"
+        :p-markdown="markdown"
+        :current-pos="editorPosition"
+        :is-editable="isEditable"
+        @input="onChangedEditorText"
+        @update="onChangedEditorPoints"
+        @updatepos="onUpdatedEditorPosition"
+        @toParentFolder="$emit('toParentFolder')"
+      />
+      <DocPreview
+        v-show="displayType !== 1"
+        :p-markdown="markdown"
+        :current-pos="previewPosition"
+        @update="onChangedPreviewPoints"
+        @updatepos="onUpdatedPreviewPosition"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import DocPreviewEditor from '@/components/molecules/document/DocPreviewEditor.vue'
+import DocEditor from '@/components/molecules/document/DocEditor.vue'
+import DocPreview from '@/components/molecules/document/DocPreview.vue'
 import DocHeader from '@/components/organisms/document/DocHeader.vue'
 import { DocumentApi, checkAuthWithStatus } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
+const ss = require('@/scripts/editor/scrollsyncer.ts')
 
 type DataType = {
   isLoaded: boolean
   parentFolderId: string
   isEditable: boolean
+  markdown: String | null
+  editorPoints: Object[]
+  previewPoints: Object[]
+  editorPosition: Number
+  previewPosition: Number
 }
 
 export default Vue.extend({
   components: {
     DocHeader,
-    DocPreviewEditor,
+    DocEditor,
+    DocPreview,
   },
   data(): DataType {
     return {
       isLoaded: false,
       parentFolderId: '',
       isEditable: false,
+      markdown: '',
+      editorPoints: [],
+      previewPoints: [],
+      editorPosition: 0,
+      previewPosition: 0,
     }
   },
   computed: {
     docId(): string {
       return this.$route.params.id
+    },
+    displayType() {
+      return this.$store.getters['editor/displayType']
     },
   },
   created() {
@@ -90,14 +122,48 @@ export default Vue.extend({
       document.addEventListener('copy', listener)
       document.execCommand('copy')
     },
+    onChangedEditorText(text: string) {
+      this.markdown = text
+    },
+    onChangedEditorPoints(points: object[]) {
+      this.editorPoints = points
+    },
+    onChangedPreviewPoints(points: object[]) {
+      this.previewPoints = points
+    },
+    onUpdatedEditorPosition(position: number) {
+      if (this.editorPosition === position) {
+        return
+      }
+      this.editorPosition = position
+      this.editorToPreview(position)
+    },
+    onUpdatedPreviewPosition(position: number) {
+      if (this.previewPosition === position) {
+        return
+      }
+      this.previewPosition = position
+      // this.previewToEditor(position)
+    },
+    editorToPreview(position: number) {
+      this.previewPosition = ss.e2p(
+        position,
+        this.editorPoints,
+        this.previewPoints
+      )
+    },
+    // previewToEditor(position: number) {
+    //   this.editorPosition = ss.p2e(
+    //     position,
+    //     this.editorPoints,
+    //     this.previewPoints
+    //   )
+    // },
   },
 })
 </script>
 
 <style lang="scss" scoped>
-html {
-  background-color: rgb(32, 32, 32);
-}
 .document-container {
   position: fixed;
   top: 0px;
@@ -108,8 +174,14 @@ html {
     height: 56px;
   }
 
-  .document-preview-editor {
+  .document-preview-editor-container {
     height: calc(100vh - 56px);
+    display: grid;
+    background-color: white;
+
+    &.split {
+      grid-template-columns: repeat(2, 50%);
+    }
   }
 }
 </style>
