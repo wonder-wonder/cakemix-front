@@ -4,6 +4,7 @@
       class="document-header"
       :is-loaded="isLoaded"
       :is-editable="isEditable"
+      :users="onlineUsers"
       @input="onClicked"
       @toParentFolder="toParentFolder"
     />
@@ -20,6 +21,8 @@
         @update="onChangedEditorPoints"
         @updatepos="onUpdatedEditorPosition"
         @toParentFolder="$emit('toParentFolder')"
+        @addUser="addUser"
+        @delUser="delUser"
       />
       <DocPreview
         v-show="displayType !== 1"
@@ -39,7 +42,8 @@ import DocPreview from '@/components/molecules/document/DocPreview.vue'
 import DocHeader from '@/components/organisms/document/DocHeader.vue'
 import { DocumentApi, checkAuthWithStatus } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-const ss = require('@/scripts/editor/scrollsyncer.ts')
+import { UserManager, UserModel } from '@/scripts/model/user/manager'
+const ss = require('@/scripts/editor/scrollsyncer')
 
 type DataType = {
   isLoaded: boolean
@@ -50,6 +54,7 @@ type DataType = {
   previewPoints: Object[]
   editorPosition: Number
   previewPosition: Number
+  userManager: UserManager
 }
 
 export default Vue.extend({
@@ -68,14 +73,18 @@ export default Vue.extend({
       previewPoints: [],
       editorPosition: 0,
       previewPosition: 0,
+      userManager: new UserManager(),
     }
   },
   computed: {
     docId(): string {
       return this.$route.params.id
     },
-    displayType() {
+    displayType(): number {
       return this.$store.getters['editor/displayType']
+    },
+    onlineUsers(): UserModel[] {
+      return this.userManager.getUsers()
     },
   },
   created() {
@@ -159,6 +168,12 @@ export default Vue.extend({
     //     this.previewPoints
     //   )
     // },
+    addUser(us: UserModel[]) {
+      this.userManager.addUser(us)
+    },
+    delUser(id: string) {
+      this.userManager.deleteUser(id)
+    },
   },
 })
 </script>

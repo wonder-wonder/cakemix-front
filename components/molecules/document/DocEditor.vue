@@ -12,6 +12,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Editor } from '@/node_modules/@types/codemirror/index'
+import { UserModel } from '@/scripts/model/user/manager'
 const editor = require('@/scripts/editor/editor.ts')
 const utils = require('@/scripts/editor/utils.ts')
 const ss = require('@/scripts/editor/scrollsyncer.ts')
@@ -64,7 +65,6 @@ export default Vue.extend({
   },
   beforeDestroy() {
     if (this.websocket) {
-      this.websocket.off('registered', this.registeredEvent)
       this.websocket.off('join', this.joinEvent)
       this.websocket.off('quit', this.quitEvent)
       this.websocket.off('doc', this.docEvent)
@@ -89,7 +89,6 @@ export default Vue.extend({
       const url = `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/${this.$route.params.id}/ws?token=${this.$store.getters['auth/token']}`
       this.websocket = new socket.SocketConnection(url, !this.isEditable)
       this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
-      this.websocket.on('registered', this.registeredEvent)
       this.websocket.on('join', this.joinEvent)
       this.websocket.on('quit', this.quitEvent)
       this.websocket.on('doc', this.docEvent)
@@ -115,18 +114,31 @@ export default Vue.extend({
     //
     // EventEmitter Event
     //
-    registeredEvent(clientId: string) {
-      this.cMirror.setOption('readOnly', !this.isEditable)
-      console.log('registered', clientId)
+    joinEvent(user: any) {
+      const u = {
+        id: user.id,
+        uuid: user.uuid,
+        name: user.name,
+        icon: user.icon_uri,
+      } as UserModel
+      this.$emit('addUser', [u])
     },
-    joinEvent(cm: Editor) {
-      console.log('join', cm)
-    },
-    quitEvent(cm: Editor) {
-      console.log('quit', cm)
+    quitEvent(id: string) {
+      this.$emit('delUser', id)
     },
     docEvent(data: any) {
-      console.log('doc', data.clients)
+      const us: UserModel[] = []
+      for (const [k, v] of Object.entries(data.clients)) {
+        const u = v as any
+        us.push({
+          id: k,
+          uuid: u.uuid,
+          name: u.name,
+          icon: u.icon_uri,
+        } as UserModel)
+      }
+      this.$emit('addUser', us)
+
       this.cMirror.setValue(data.document)
       this.otClient = new ot.EditorClient(
         data.revision,

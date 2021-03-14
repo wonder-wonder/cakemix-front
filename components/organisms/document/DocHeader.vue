@@ -15,15 +15,19 @@
     >
       <fa-icon icon="question-circle" />
     </DocSwitchButton>
+    <div class="spacing" />
+    <DocRealtimeCounter :users="users" />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import DocNav from '@/components/molecules/document/DocNav.vue'
 import DocSwitch from '@/components/molecules/document/DocSwitch.vue'
 import DocSimpleSwitch from '@/components/molecules/document/DocSimpleSwitch.vue'
 import DocSwitchButton from '@/components/atoms/document/DocSwitchButton.vue'
+import DocRealtimeCounter from '@/components/molecules/document/DocRealtimeCounter.vue'
+import { UserModel } from '@/scripts/model/user/manager'
 
 export default Vue.extend({
   components: {
@@ -31,6 +35,7 @@ export default Vue.extend({
     DocSwitch,
     DocSimpleSwitch,
     DocSwitchButton,
+    DocRealtimeCounter,
   },
   props: {
     isLoaded: {
@@ -40,6 +45,10 @@ export default Vue.extend({
     isEditable: {
       type: Boolean,
       default: false,
+    },
+    users: {
+      type: Array as PropType<UserModel[]>,
+      default: [],
     },
   },
   computed: {
@@ -61,6 +70,9 @@ export default Vue.extend({
 
   .home-icon-box {
     margin-right: 16px;
+  }
+  .spacing {
+    width: 100%;
   }
 }
 </style>
