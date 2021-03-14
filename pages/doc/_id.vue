@@ -9,6 +9,7 @@
       @toParentFolder="toParentFolder"
     />
     <div
+      v-if="isLoaded"
       class="document-preview-editor-container"
       :class="displayType == 2 ? 'split' : 'editor'"
     >
