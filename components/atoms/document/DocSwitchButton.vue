@@ -28,7 +28,7 @@ export default Vue.extend({
   width: 54px;
   padding: 5px 16px;
   font-size: 20px;
-  border-radius: 5px;
+  border-radius: 8px;
 
   &.active {
     background-color: white;

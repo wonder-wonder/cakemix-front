@@ -1,6 +1,7 @@
 const solid = [
   'faArrowRight',
   'faBars',
+  'faCat',
   'faCog',
   'faChevronRight',
   'faChevronLeft',
@@ -14,6 +15,7 @@ const solid = [
   'faInfo',
   'faKey',
   'faPencilAlt',
+  'faPlus',
   'faUser',
   'faUsers',
   'faSignature',

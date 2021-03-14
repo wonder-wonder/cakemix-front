@@ -59,7 +59,7 @@ export default Vue.extend({
 .document-switch-container {
   display: inline-flex;
   flex-flow: row nowrap;
-  border-radius: 5px;
+  border-radius: 8px;
   color: white;
   background-color: gray;
 }

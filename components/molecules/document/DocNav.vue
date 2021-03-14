@@ -3,14 +3,21 @@
     <div class="image-box">
       <fa-icon icon="chevron-left" />
     </div>
-    <div class="service-name" v-text="'Cakemix'" />
+    <div v-if="isSmallWidth" class="spacing" />
+    <div v-if="!isSmallWidth" class="service-name" v-text="'Cakemix'" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+export default Vue.extend({
+  computed: {
+    isSmallWidth(): boolean {
+      return this.$store.getters['device/isSmallWidth']
+    },
+  },
+})
 </script>
 
 <style lang="scss" scoped>
@@ -20,6 +27,9 @@ export default Vue.extend({})
   align-items: center;
   justify-content: center;
 
+  .spacing {
+    padding: 0 12px;
+  }
   .image-box {
     height: 42px;
     width: 42px;
@@ -29,7 +39,6 @@ export default Vue.extend({})
     color: black;
     background-color: whitesmoke;
   }
-
   .service-name {
     font-family: 'Righteous';
     font-size: 24px;
