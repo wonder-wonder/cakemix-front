@@ -22,7 +22,7 @@
       <fa-icon v-if="moreThanThree" class="has-additional-user" icon="plus" />
     </div>
     <div class="realtime-counter-list-container">
-      <input id="realtime-button" type="checkbox" name="realtime-button" >
+      <input id="realtime-button" type="checkbox" name="realtime-button">
       <label
         for="realtime-button"
         class="realtime-counter-button"
