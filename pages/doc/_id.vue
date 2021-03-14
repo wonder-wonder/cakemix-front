@@ -55,6 +55,7 @@ type DataType = {
   editorPosition: Number
   previewPosition: Number
   userManager: UserManager
+  me: UserModel
 }
 
 export default Vue.extend({
@@ -74,6 +75,7 @@ export default Vue.extend({
       editorPosition: 0,
       previewPosition: 0,
       userManager: new UserManager(),
+      me: {} as UserModel,
     }
   },
   computed: {

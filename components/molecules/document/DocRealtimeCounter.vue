@@ -22,13 +22,14 @@
       <fa-icon v-if="moreThanThree" class="has-additional-user" icon="plus" />
     </div>
     <div class="realtime-counter-list-container">
-      <input id="realtime-button" type="checkbox" name="realtime-button">
+      <input id="realtime-button" type="checkbox" name="realtime-button" >
       <label
         for="realtime-button"
         class="realtime-counter-button"
-        v-text="numOfUsers"
+        v-text="numOfUsersWithMe"
       />
       <div class="users-list-container">
+        <div class="user-box myself" v-text="wordsOfList" />
         <div v-for="(v, k) in users" :key="`rt-user-${k}`" class="user-box">
           <img
             v-if="v.icon !== ''"
@@ -64,11 +65,26 @@ export default Vue.extend({
       const us = this.users.map(u => ({ ...u }))
       return us.reverse().slice(0, 3)
     },
+    numOfUsersWithMe(): number {
+      return this.users.length + 1
+    },
     numOfUsers(): number {
       return this.users.length
     },
     moreThanThree(): boolean {
       return this.numOfUsers > 3
+    },
+    wordsOfList(): string {
+      let words = ''
+      if (this.numOfUsers === 1) {
+        words += `You and 1 user`
+      } else if (this.numOfUsers > 1) {
+        words += `You and ${this.numOfUsers} users`
+      } else {
+        words += 'Only you'
+      }
+      words += ' are online'
+      return words
     },
     isSmallWidth(): boolean {
       return this.$store.getters['device/isSmallWidth']
@@ -173,11 +189,12 @@ export default Vue.extend({
       display: flex;
       flex-flow: row wrap;
       visibility: hidden;
-      height: 200px;
-      width: 208px;
+      height: auto;
+      max-height: 200px;
+      width: 224px;
       padding: 8px;
       top: 52px;
-      left: -160px;
+      left: -172px;
       background-color: white;
       border-radius: 8px;
       z-index: 999;
@@ -210,6 +227,16 @@ export default Vue.extend({
           font-size: 14px;
           font-weight: bold;
         }
+      }
+      .myself {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        height: 24px;
+        width: 100%;
+        padding: 4px;
+        font-size: 12px;
+        font-weight: bold;
       }
     }
     #realtime-button:checked {
