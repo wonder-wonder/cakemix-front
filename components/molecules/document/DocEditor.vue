@@ -41,6 +41,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    willDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   data(): DataType {
     return {
@@ -127,6 +131,14 @@ export default Vue.extend({
       this.$emit('delUser', id)
     },
     docEvent(data: any) {
+      this.cMirror.setValue(data.document)
+      this.otClient = new ot.EditorClient(
+        data.revision,
+        data.clients,
+        this.serverAdapter,
+        this.editorAdapter
+      )
+
       const us: UserModel[] = []
       for (const [k, v] of Object.entries(data.clients)) {
         const u = v as any
@@ -138,16 +150,11 @@ export default Vue.extend({
         } as UserModel)
       }
       this.$emit('addUser', us)
-
-      this.cMirror.setValue(data.document)
-      this.otClient = new ot.EditorClient(
-        data.revision,
-        data.clients,
-        this.serverAdapter,
-        this.editorAdapter
-      )
     },
     closeEvent() {
+      if (this.willDelete) {
+        return
+      }
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: 'Do you want to reconnect?',

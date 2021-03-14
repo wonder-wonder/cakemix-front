@@ -21,7 +21,9 @@
       :model="doc"
       :model-type="'DOCUMENT'"
       @reload="$emit('reload')"
-    />
+    >
+      <fa-icon icon="bars" />
+    </ActionMenu>
   </div>
 </template>
 

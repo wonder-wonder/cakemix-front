@@ -7,15 +7,21 @@
       :is-mobile="isMobile"
       :is-editable="isEditable"
     />
-    <DocSwitchButton
-      v-if="isLoaded"
-      :icon-type="'question'"
-      :is-selected="false"
-      @click="$emit('input', 'question')"
-    >
-      <fa-icon icon="question-circle" />
-    </DocSwitchButton>
     <div class="spacing" />
+
+    <ActionMenu
+      :position="'is-bottom-left'"
+      :current-folder-id="currentFolderId"
+      :model="document"
+      :model-type="'DOCUMENT'"
+      @deleted="$emit('toParentFolder')"
+      @willDelete="$emit('willDelete')"
+      @cannotDelete="$emit('cannotDelete')"
+    >
+      <DocSwitchButton>
+        <fa-icon icon="bars" class="action-menu" />
+      </DocSwitchButton>
+    </ActionMenu>
     <DocRealtimeCounter :users="users" />
   </div>
 </template>
@@ -28,6 +34,7 @@ import DocSimpleSwitch from '@/components/molecules/document/DocSimpleSwitch.vue
 import DocSwitchButton from '@/components/atoms/document/DocSwitchButton.vue'
 import DocRealtimeCounter from '@/components/molecules/document/DocRealtimeCounter.vue'
 import { UserModel } from '@/scripts/model/user/manager'
+import { DocumentModel } from '@/scripts/api/index'
 
 export default Vue.extend({
   components: {
@@ -49,6 +56,14 @@ export default Vue.extend({
     users: {
       type: Array as PropType<UserModel[]>,
       default: [],
+    },
+    document: {
+      type: Object as PropType<DocumentModel>,
+      default: {} as DocumentModel,
+    },
+    currentFolderId: {
+      type: String,
+      default: '',
     },
   },
   computed: {
@@ -73,6 +88,9 @@ export default Vue.extend({
   }
   .spacing {
     width: 100%;
+  }
+  .action-menu {
+    color: white;
   }
 }
 </style>

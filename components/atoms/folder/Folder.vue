@@ -21,7 +21,9 @@
       :model="folder"
       :model-type="'FOLDER'"
       @reload="$emit('reload')"
-    />
+    >
+      <fa-icon icon="bars" />
+    </ActionMenu>
   </div>
 </template>
 
