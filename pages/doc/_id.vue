@@ -5,8 +5,11 @@
       :is-loaded="isLoaded"
       :is-editable="isEditable"
       :users="onlineUsers"
-      @input="onClicked"
+      :document="document"
+      :current-folder-id="parentFolderId"
       @toParentFolder="toParentFolder"
+      @willDelete="willDelete = true"
+      @cannotDelete="willDelete = false"
     />
     <div
       v-if="isLoaded"
@@ -18,6 +21,7 @@
         :p-markdown="markdown"
         :current-pos="editorPosition"
         :is-editable="isEditable"
+        :will-delete="willDelete"
         @input="onChangedEditorText"
         @update="onChangedEditorPoints"
         @updatepos="onUpdatedEditorPosition"
@@ -41,7 +45,11 @@ import Vue from 'vue'
 import DocEditor from '@/components/molecules/document/DocEditor.vue'
 import DocPreview from '@/components/molecules/document/DocPreview.vue'
 import DocHeader from '@/components/organisms/document/DocHeader.vue'
-import { DocumentApi, checkAuthWithStatus } from '@/scripts/api/index'
+import {
+  DocumentApi,
+  checkAuthWithStatus,
+  DocumentModel,
+} from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
 import { UserManager, UserModel } from '@/scripts/model/user/manager'
 const ss = require('@/scripts/editor/scrollsyncer')
@@ -50,13 +58,14 @@ type DataType = {
   isLoaded: boolean
   parentFolderId: string
   isEditable: boolean
+  willDelete: boolean
   markdown: String | null
   editorPoints: Object[]
   previewPoints: Object[]
   editorPosition: Number
   previewPosition: Number
   userManager: UserManager
-  me: UserModel
+  document: DocumentModel
 }
 
 export default Vue.extend({
@@ -70,13 +79,14 @@ export default Vue.extend({
       isLoaded: false,
       parentFolderId: '',
       isEditable: false,
+      willDelete: false,
       markdown: '',
       editorPoints: [],
       previewPoints: [],
       editorPosition: 0,
       previewPosition: 0,
       userManager: new UserManager(),
-      me: {} as UserModel,
+      document: {} as DocumentModel,
     }
   },
   computed: {
@@ -95,6 +105,7 @@ export default Vue.extend({
       .getDocDocId(this.docId)
       .then(res => {
         this.isLoaded = true
+        this.document = res.data
         this.parentFolderId = res.data.parentfolderid ?? ''
         this.isEditable = res.data.editable ?? false
       })
@@ -114,25 +125,6 @@ export default Vue.extend({
     checkAuthWithStatus,
     toParentFolder() {
       this.$router.push(`/folder/${this.parentFolderId}`)
-    },
-    onClicked(ref: string) {
-      switch (ref) {
-        case 'question':
-          this.copyToClip()
-          break
-        default:
-          break
-      }
-    },
-    copyToClip() {
-      const str = require('@/scripts/markdown/samplemd').sample
-      const listener = function (e: any) {
-        e.clipboardData.setData('text/plain', str)
-        e.preventDefault()
-        document.removeEventListener('copy', listener)
-      }
-      document.addEventListener('copy', listener)
-      document.execCommand('copy')
     },
     onChangedEditorText(text: string) {
       this.markdown = text

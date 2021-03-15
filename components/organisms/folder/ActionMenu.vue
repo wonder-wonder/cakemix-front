@@ -3,13 +3,11 @@
     <b-dropdown
       aria-role="list"
       :mobile-modal="false"
-      :position="'is-top-right'"
+      :position="position"
       :triggers="['click', 'contextmenu']"
     >
       <template #trigger>
-        <div>
-          <fa-icon icon="bars" />
-        </div>
+        <slot />
       </template>
       <b-dropdown-item
         v-if="isNameEditable"
@@ -154,6 +152,10 @@ export default Vue.extend({
     modelType: {
       type: String,
       default: 'NONE',
+    },
+    position: {
+      type: String,
+      default: 'is-top-right',
     },
   },
   data(): DataType {
@@ -358,16 +360,19 @@ export default Vue.extend({
         this.failureToast(this.$buefy, 'Failed', 1)
         return
       }
+      this.$emit('willDelete')
       if (this.modelType === 'FOLDER') {
         new FolderApi(this.$store.getters['auth/config'])
           .deleteFolder(fduuid)
           .then(() => {
             this.$emit('reload')
             this.$emit('close')
+            this.$emit('deleted')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
           .catch(err => {
+            this.$emit('cannotDelete')
             this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
             this.failureToast(this.$buefy, 'Failed', err.response.status)
@@ -378,10 +383,12 @@ export default Vue.extend({
           .then(() => {
             this.$emit('reload')
             this.$emit('close')
+            this.$emit('deleted')
             // @ts-ignore
             this.successToast(this.$buefy, 'Success')
           })
           .catch(err => {
+            this.$emit('cannotDelete')
             this.checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
             this.failureToast(this.$buefy, 'Failed', err.response.status)
