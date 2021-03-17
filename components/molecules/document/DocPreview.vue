@@ -6,12 +6,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { debounce } from 'lodash'
 import vdom from '@/scripts/markdown/vdom.ts'
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 
 export type DataType = {
   baseDom: HTMLElement | null
   scrollDom: HTMLElement | null
+  updater: number
 }
 
 export default Vue.extend({
@@ -29,6 +31,7 @@ export default Vue.extend({
     return {
       baseDom: null,
       scrollDom: null,
+      updater: 0,
     }
   },
   watch: {
@@ -51,9 +54,16 @@ export default Vue.extend({
     this.baseDom = this.$refs.previewer as HTMLElement
     // this.scrollDom = this.$refs.previewerc as HTMLElement
     // this.scrollDom.addEventListener('scroll', this.scrolled)
+    this.updater = window.setInterval(this.autoUpdatePoint, 10000)
+  },
+  beforeDestroy() {
+    window.clearInterval(this.updater)
   },
   methods: {
-    updatePoint() {
+    updatePoint: debounce(function (this: any) {
+      this.autoUpdatePoint()
+    }, 500),
+    autoUpdatePoint() {
       if (!this.baseDom) {
         return
       }
