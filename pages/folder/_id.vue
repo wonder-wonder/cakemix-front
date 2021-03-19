@@ -177,11 +177,11 @@ export default Vue.extend({
     },
     folderTitle(): string {
       if (this.breadcrumb.length < 1) {
-        return 'Untitled'
+        return ''
       } else if (this.breadcrumb.length === 1) {
         return 'Home'
       }
-      return this.breadcrumb[this.breadcrumb.length - 1].title ?? 'Untitled'
+      return this.breadcrumb[this.breadcrumb.length - 1].title ?? ''
     },
   },
   created() {

@@ -104,7 +104,7 @@ export default Vue.extend({
       return this.$route.params.id
     },
     docTitle(): string {
-      return this.document.title ?? 'Untitled'
+      return this.document.title ?? ''
     },
     displayType(): number {
       return this.$store.getters['editor/displayType']
