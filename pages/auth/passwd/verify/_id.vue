@@ -13,6 +13,7 @@ import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import PasswdReset from '@/components/organisms/auth/PasswdReset.vue'
 import { AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export type DataType = {
   isVerified: boolean
@@ -27,6 +28,9 @@ export default Vue.extend({
     return {
       isVerified: false,
     }
+  },
+  head: {
+    title: getTitle(PAGES.VERIFY_TOKEN),
   },
   computed: {
     passwdToken() {

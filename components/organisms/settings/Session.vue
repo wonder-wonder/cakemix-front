@@ -23,6 +23,7 @@ import {
   AuthApi,
   AuthSessionModel,
 } from '@/scripts/api/index'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type DataType = {
   sessions: AuthSessionModel[]
@@ -36,6 +37,9 @@ export default Vue.extend({
     return {
       sessions: [],
     }
+  },
+  head: {
+    title: getTitle(PAGES.SESSION),
   },
   created() {
     this.fetch()

@@ -52,6 +52,7 @@ import {
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
 import { UserManager, UserModel } from '@/scripts/model/user/manager'
+import { getDocumentTitle } from '@/scripts/model/head/index'
 const ss = require('@/scripts/editor/scrollsyncer')
 
 type DataType = {
@@ -66,6 +67,10 @@ type DataType = {
   previewPosition: Number
   userManager: UserManager
   document: DocumentModel
+}
+
+type HeadType = {
+  title: string
 }
 
 export default Vue.extend({
@@ -89,9 +94,17 @@ export default Vue.extend({
       document: {} as DocumentModel,
     }
   },
+  head(): HeadType {
+    return {
+      title: getDocumentTitle(this.docTitle),
+    }
+  },
   computed: {
     docId(): string {
       return this.$route.params.id
+    },
+    docTitle(): string {
+      return this.document.title ?? 'Untitled'
     },
     displayType(): number {
       return this.$store.getters['editor/displayType']

@@ -83,6 +83,7 @@ import {
   checkAuthWithStatus,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
+import { getFolderTitle } from '@/scripts/model/head/index'
 
 export type DataType = {
   folders: FolderModel[]
@@ -93,6 +94,10 @@ export type DataType = {
   selectItem: FolderModel | DocumentModel
   searchText: string
   isLoaded: boolean
+}
+
+type HeadType = {
+  title: string
 }
 
 export default Vue.extend({
@@ -116,6 +121,12 @@ export default Vue.extend({
       selectItem: {} as FolderModel | DocumentModel,
       searchText: '',
       isLoaded: false,
+    }
+  },
+  head(): HeadType {
+    return {
+      // @ts-ignore
+      title: getFolderTitle(this.folderTitle),
     }
   },
   computed: {
@@ -164,6 +175,14 @@ export default Vue.extend({
     },
     hasSelectedItem(): boolean {
       return !!this.selectItem.uuid
+    },
+    folderTitle(): string {
+      if (this.breadcrumb.length < 1) {
+        return 'Untitled'
+      } else if (this.breadcrumb.length === 1) {
+        return 'Home'
+      }
+      return this.breadcrumb[this.breadcrumb.length - 1].title ?? 'Untitled'
     },
   },
   created() {
