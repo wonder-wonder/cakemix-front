@@ -125,7 +125,6 @@ export default Vue.extend({
   },
   head(): HeadType {
     return {
-      // @ts-ignore
       title: getFolderTitle(this.folderTitle),
     }
   },

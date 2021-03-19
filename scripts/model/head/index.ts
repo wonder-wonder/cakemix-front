@@ -67,5 +67,8 @@ const getDocumentTitle = (docName: string): string => {
 const getFolderTitle = (folderName: string): string => {
   return `${folderName} | ${siteName}`
 }
+const getEditTeamTitle = (teamName: string): string => {
+  return `Edit ${teamName} Team | ${siteName}`
+}
 
-export { PAGES, getTitle, getDocumentTitle, getFolderTitle }
+export { PAGES, getTitle, getDocumentTitle, getFolderTitle, getEditTeamTitle }

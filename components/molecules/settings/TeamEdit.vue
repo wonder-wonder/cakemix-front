@@ -65,6 +65,7 @@ import {
   ProfileModel,
   MemberInfoModel,
 } from '@/scripts/api/index'
+import { getEditTeamTitle } from '@/scripts/model/head/index'
 
 type PagingModel = {
   data: ProfileModel[] | MemberInfoModel[]
@@ -81,6 +82,10 @@ type DataType = {
   searchPaging: PagingModel
   userSearchInput: string
   ownPermission: number
+}
+
+type HeadType = {
+  title: string
 }
 
 export default Vue.extend({
@@ -117,9 +122,17 @@ export default Vue.extend({
       ownPermission: 0,
     }
   },
+  head(): HeadType {
+    return {
+      title: getEditTeamTitle(this.teamName),
+    }
+  },
   computed: {
     teamHasImage(): boolean {
       return !(this.team.icon_uri === undefined || this.team.icon_uri === '')
+    },
+    teamName(): string {
+      return this.team.name ?? 'Unknown'
     },
   },
   created() {
