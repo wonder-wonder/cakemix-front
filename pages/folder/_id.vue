@@ -75,12 +75,12 @@ import SortBox, {
 import CreateFolderBox from '@/components/organisms/folder/CreateFolderBox.vue'
 import NoList from '@/components/atoms/folder/NoList.vue'
 import {
+  checkAuthWithStatus,
   FolderApi,
   DocumentApi,
   FolderModel,
   DocumentModel,
   BreadcrumbModel,
-  checkAuthWithStatus,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
 import { getFolderTitle } from '@/scripts/model/head/index'
@@ -188,8 +188,6 @@ export default Vue.extend({
     this.fetchFolder()
   },
   methods: {
-    failureToast,
-    checkAuthWithStatus,
     resetFolderIndex() {
       const instance = this.$refs['folder-list-container'] as InstanceType<
         typeof FolderListContainer
@@ -284,8 +282,8 @@ export default Vue.extend({
           this.breadcrumb = res.data.path ?? []
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Failed to fetch folder',
@@ -306,8 +304,8 @@ export default Vue.extend({
       new FolderApi(this.$store.getters['auth/config'])
         .createNewFolder(fId, name)
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Failed to fetch folder',
@@ -326,8 +324,8 @@ export default Vue.extend({
       new DocumentApi(this.$store.getters['auth/config'])
         .createNewDoc(fId, 'Untitled')
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Failed to fetch folder',

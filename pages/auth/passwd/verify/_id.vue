@@ -40,7 +40,7 @@ export default Vue.extend({
   created() {
     if (this.passwdToken === '') {
       // @ts-ignore
-      this.failureToast(this.$buefy, 'Token verification failed ', 1)
+      failureToast(this.$buefy, 'Token verification failed ', 1)
       this.$router.push('/auth/passwd')
       return
     }
@@ -48,11 +48,11 @@ export default Vue.extend({
       .getPassResetVerify(this.passwdToken)
       .then(() => {
         // @ts-ignore
-        this.successToast(this.$buefy, 'Token was verified')
+        successToast(this.$buefy, 'Token was verified')
         this.isVerified = true
       })
       .catch(err => {
-        this.failureToast(
+        failureToast(
           // @ts-ignore
           this.$buefy,
           'Token verification failed ',
@@ -61,10 +61,7 @@ export default Vue.extend({
         this.$router.push('/auth/passwd')
       })
   },
-  methods: {
-    successToast,
-    failureToast,
-  },
+  methods: {},
 })
 </script>
 

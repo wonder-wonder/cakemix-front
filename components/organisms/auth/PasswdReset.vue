@@ -15,9 +15,9 @@
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import {
+  checkAuthWithStatus,
   AuthPassChangeReqModel,
   AuthApi,
-  checkAuthWithStatus,
 } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import { passwordValidator } from '@/scripts/utils/validator'
@@ -45,14 +45,10 @@ export default Vue.extend({
     },
   },
   methods: {
-    checkAuthWithStatus,
-    successToast,
-    failureToast,
-    passwordValidator,
     request() {
-      if (!this.passwordValidator(this.password)) {
+      if (!passwordValidator(this.password)) {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Signup failed', 1)
+        failureToast(this.$buefy, 'Signup failed', 1)
         return
       }
       this.isLoading = true
@@ -62,7 +58,7 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postPassResetVerify(this.passwdResetToken, model)
         .then(() => {
-          this.successToast(
+          successToast(
             // @ts-ignore
             this.$buefy,
             'Signup requested, a varification url will be sent'
@@ -70,9 +66,9 @@ export default Vue.extend({
           this.$router.push('/auth/login')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
+          checkAuthWithStatus(this, err.response.status)
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Signup failed', err.response.status)
+          failureToast(this.$buefy, 'Signup failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

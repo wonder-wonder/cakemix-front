@@ -57,10 +57,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    successToast,
-    failureToast,
     emailValidator,
-    passwordValidator,
+
     updateUserName(userName: string) {
       this.userName = userName
       new AuthApi()
@@ -80,7 +78,7 @@ export default Vue.extend({
         this.signupToken === ''
       ) {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Signup Failed', 1)
+        failureToast(this.$buefy, 'Signup Failed', 1)
         return
       }
       this.isLoading = true
@@ -92,7 +90,7 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postRegist(this.signupToken, model)
         .then(() => {
-          this.successToast(
+          successToast(
             // @ts-ignore
             this.$buefy,
             'Signup requested, a varification url will be sent'
@@ -101,7 +99,7 @@ export default Vue.extend({
         })
         .catch(err => {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Signup Failed', err.response.status)
+          failureToast(this.$buefy, 'Signup Failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

@@ -28,14 +28,14 @@ export default Vue.extend({
   created() {
     if (this.signupToken === '') {
       // @ts-ignore
-      this.failureToast(this.$buefy, 'Signup failed', 1)
+      failureToast(this.$buefy, 'Signup failed', 1)
       this.$router.push('/auth/login')
       return
     }
     new AuthApi(this.$store.getters['auth/config'])
       .postRegistVerify(this.signupToken)
       .then(() => {
-        this.successToast(
+        successToast(
           // @ts-ignore
           this.$buefy,
           'Signup requested, a varification url will be sent'
@@ -44,16 +44,13 @@ export default Vue.extend({
       })
       .catch(err => {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Signup failed', err.response.status)
+        failureToast(this.$buefy, 'Signup failed', err.response.status)
       })
       .finally(() => {
         this.$router.push('/auth/login')
       })
   },
-  methods: {
-    successToast,
-    failureToast,
-  },
+  methods: {},
 })
 </script>
 

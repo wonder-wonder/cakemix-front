@@ -17,7 +17,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import SessionCell from '@/components/atoms/cell/SessionCell.vue'
-import { failureToast, successToast } from '@/scripts/utils/toast'
+import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
   checkAuthWithStatus,
   AuthApi,
@@ -45,9 +45,6 @@ export default Vue.extend({
     this.fetch()
   },
   methods: {
-    successToast,
-    failureToast,
-    checkAuthWithStatus,
     fetch() {
       new AuthApi(this.$store.getters['auth/config'])
         .getAuthSession()
@@ -58,8 +55,8 @@ export default Vue.extend({
           )
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'fetch session info failed',
@@ -80,15 +77,15 @@ export default Vue.extend({
         .deleteAuthSession(sessionID)
         .then(() => {
           this.fetch()
-          this.successToast(
+          successToast(
             // @ts-ignore
             this.$buefy,
             `session(${sessionID}) was deleted`
           )
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'delete session failed',

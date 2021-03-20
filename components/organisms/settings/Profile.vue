@@ -44,7 +44,6 @@ import {
   getAbbreviation,
 } from '@/scripts/model/language/language'
 import {
-  checkAuthWithStatus,
   SearchApi,
   ProfileApi,
   ImageApi,
@@ -102,12 +101,10 @@ export default Vue.extend({
       })
   },
   methods: {
-    successToast,
-    failureToast,
     getLanguageList,
     getFullName,
     getAbbreviation,
-    checkAuthWithStatus,
+
     request() {
       const profile = {
         uuid: this.$store.getters['auth/uuid'],
@@ -121,11 +118,11 @@ export default Vue.extend({
         .putUserProfileUuid(this.$store.getters['auth/uuid'], profile)
         .then(() => {
           // @ts-ignore
-          this.successToast(this.$buefy, 'Request succeeded')
+          successToast(this.$buefy, 'Request succeeded')
         })
         .catch(err => {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Request failed', err.response.status)
+          failureToast(this.$buefy, 'Request failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

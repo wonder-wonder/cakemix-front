@@ -28,7 +28,7 @@ export default Vue.extend({
   },
   created() {
     new AuthApi().getAuthRegistPreToken(this.signupToken).catch(err => {
-      this.failureToast(
+      failureToast(
         // @ts-ignore
         this.$buefy,
         'Signup token is invalid',
@@ -37,9 +37,7 @@ export default Vue.extend({
       this.$router.push('/')
     })
   },
-  methods: {
-    failureToast,
-  },
+  methods: {},
 })
 </script>
 

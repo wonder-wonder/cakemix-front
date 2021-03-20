@@ -40,13 +40,10 @@ export default Vue.extend({
     }
   },
   methods: {
-    successToast,
-    failureToast,
-    checkAuthWithStatus,
     create() {
       if (this.name === '') {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Need to set team name', 1)
+        failureToast(this.$buefy, 'Need to set team name', 1)
         return
       }
       this.createTeam(this.name)
@@ -57,12 +54,12 @@ export default Vue.extend({
         .then(() => {
           this.$emit('created')
           // @ts-ignore
-          this.successToast(this.$buefy, 'Success to create new team')
+          successToast(this.$buefy, 'Success to create new team')
           this.$emit('close')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Failed to create',

@@ -46,8 +46,8 @@ import DocEditor from '@/components/molecules/document/DocEditor.vue'
 import DocPreview from '@/components/molecules/document/DocPreview.vue'
 import DocHeader from '@/components/organisms/document/DocHeader.vue'
 import {
-  DocumentApi,
   checkAuthWithStatus,
+  DocumentApi,
   DocumentModel,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
@@ -123,8 +123,8 @@ export default Vue.extend({
         this.isEditable = res.data.editable ?? false
       })
       .catch(err => {
-        this.checkAuthWithStatus(this, err.response.status)
-        this.failureToast(
+        checkAuthWithStatus(this, err.response.status)
+        failureToast(
           // @ts-ignore
           this.$buefy,
           'Unable to open this document',
@@ -134,8 +134,6 @@ export default Vue.extend({
       })
   },
   methods: {
-    failureToast,
-    checkAuthWithStatus,
     toParentFolder() {
       this.$router.push(`/folder/${this.parentFolderId}`)
     },

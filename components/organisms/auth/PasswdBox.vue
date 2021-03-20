@@ -33,13 +33,11 @@ export default Vue.extend({
     }
   },
   methods: {
-    successToast,
-    failureToast,
     emailValidator,
     request() {
       if (!this.emailValidator(this.email)) {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Request failed', 1)
+        failureToast(this.$buefy, 'Request failed', 1)
         return
       }
       this.isLoading = true
@@ -49,7 +47,7 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postPassReset(model)
         .then(() => {
-          this.successToast(
+          successToast(
             // @ts-ignore
             this.$buefy,
             'Password reset requested, a varification url will be sent'
@@ -58,7 +56,7 @@ export default Vue.extend({
         })
         .catch(err => {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Request failed', err.response.status)
+          failureToast(this.$buefy, 'Request failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

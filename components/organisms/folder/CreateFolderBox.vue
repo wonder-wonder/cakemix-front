@@ -39,11 +39,10 @@ export default Vue.extend({
     }
   },
   methods: {
-    failureToast,
     createFolder() {
       if (this.name === '') {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Need to set folder name', 1)
+        failureToast(this.$buefy, 'Need to set folder name', 1)
         return
       }
       this.$emit('create', this.name)

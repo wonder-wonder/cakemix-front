@@ -74,9 +74,6 @@ export default Vue.extend({
     this.getFolder(this.currentFolderId)
   },
   methods: {
-    failureToast,
-    successToast,
-    checkAuthWithStatus,
     getFolder(id: string) {
       new FolderApi(this.$store.getters['auth/config'])
         .getList(id, 'folder')
@@ -84,8 +81,8 @@ export default Vue.extend({
           this.folderList = res.data
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'folder list request failed',
@@ -97,7 +94,7 @@ export default Vue.extend({
       const tId = this.breadcrumb[this.breadcrumb.length - 1].folder_id ?? ''
       if (!tId || tId === this.itemId) {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Unable to move folder or document', 1)
+        failureToast(this.$buefy, 'Unable to move folder or document', 1)
         return
       }
       if (this.isFolder) {
@@ -105,12 +102,12 @@ export default Vue.extend({
           .moveFolder(this.itemId, tId)
           .then(() => {
             // @ts-ignore
-            this.successToast(this.$buefy, 'Moved folder')
+            successToast(this.$buefy, 'Moved folder')
             this.$emit('updated')
             this.$emit('close')
           })
           .catch(err => {
-            this.failureToast(
+            failureToast(
               // @ts-ignore
               this.$buefy,
               'Unable to move folder',
@@ -122,12 +119,12 @@ export default Vue.extend({
           .moveDoc(this.itemId, tId)
           .then(() => {
             // @ts-ignore
-            this.successToast(this.$buefy, 'Document moved ')
+            successToast(this.$buefy, 'Document moved ')
             this.$emit('updated')
             this.$emit('close')
           })
           .catch(err => {
-            this.failureToast(
+            failureToast(
               // @ts-ignore
               this.$buefy,
               'Unable to move document',

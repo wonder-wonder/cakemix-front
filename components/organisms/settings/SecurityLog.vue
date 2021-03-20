@@ -63,8 +63,6 @@ export default Vue.extend({
     this.fetch()
   },
   methods: {
-    failureToast,
-    checkAuthWithStatus,
     fetch() {
       const offset = (this.logPaging.page - 1) * this.logPaging.PER_PAGE
       new AuthApi(this.$store.getters['auth/config'])
@@ -76,8 +74,8 @@ export default Vue.extend({
           this.logPaging.data = res.data.logs
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'fetch security log failed',
