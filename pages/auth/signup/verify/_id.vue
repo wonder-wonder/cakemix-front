@@ -11,10 +11,14 @@ import Vue from 'vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import { AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export default Vue.extend({
   components: {
     NavHeader,
+  },
+  head: {
+    title: getTitle(PAGES.VERIFY_TOKEN),
   },
   computed: {
     signupToken() {

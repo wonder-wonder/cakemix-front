@@ -27,6 +27,7 @@ import Vue from 'vue'
 import LogCell from '@/components/atoms/cell/LogCell.vue'
 import { failureToast } from '@/scripts/utils/toast'
 import { checkAuthWithStatus, AuthApi, AuthLogModel } from '@/scripts/api/index'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type PagingModel = {
   data: AuthLogModel[]
@@ -54,6 +55,9 @@ export default Vue.extend({
         isFetching: false,
       } as PagingModel,
     }
+  },
+  head: {
+    title: getTitle(PAGES.SECURITY_LOG),
   },
   created() {
     this.fetch()

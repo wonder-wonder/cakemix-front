@@ -36,7 +36,6 @@ import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import TeamTools from '@/components/molecules/settings/TeamTools.vue'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
-import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
 import CreateTeamBox from '@/components/organisms/settings/CreateTeamBox.vue'
 import TeamEdit from '@/components/molecules/settings/TeamEdit.vue'
 import {
@@ -45,6 +44,7 @@ import {
   ProfileModel,
 } from '@/scripts/api/index'
 import { failureToast, successToast } from '@/scripts/utils/toast'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type DataType = {
   uuid: string
@@ -72,6 +72,9 @@ export default Vue.extend({
       generatedLink: '',
       PER_PAGE: 9,
     }
+  },
+  head: {
+    title: getTitle(PAGES.TEAMS),
   },
   created() {
     this.getTeams()

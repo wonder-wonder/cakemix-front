@@ -34,6 +34,7 @@ import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import { passwordValidator } from '@/scripts/utils/validator'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export default Vue.extend({
   components: {
@@ -47,6 +48,9 @@ export default Vue.extend({
       newPassword: '',
       isLoading: false,
     }
+  },
+  head: {
+    title: getTitle(PAGES.AUTH),
   },
   methods: {
     successToast,

@@ -47,6 +47,7 @@ import {
   ProfileModel,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type DataType = {
   uuid: string
@@ -72,6 +73,9 @@ export default Vue.extend({
       generatedLink: '',
       PER_PAGE: 9,
     }
+  },
+  head: {
+    title: getTitle(PAGES.USERS),
   },
   created() {
     this.getUsers()

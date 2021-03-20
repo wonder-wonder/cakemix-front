@@ -50,6 +50,7 @@ import {
   ImageApi,
   ProfileModel,
 } from '@/scripts/api/index'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type DataType = {
   current: string
@@ -76,6 +77,9 @@ export default Vue.extend({
       isLoading: false,
       isUnique: false,
     }
+  },
+  head: {
+    title: getTitle(PAGES.PROFILE),
   },
   computed: {
     languageFullName(): string {
