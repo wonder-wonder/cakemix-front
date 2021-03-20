@@ -12,7 +12,7 @@
     </div>
     <div class="desc2-box" :class="selected">
       <span class="desc2-title" v-text="'UPDATE'" />
-      <span class="desc2-detail" v-text="toDate(folder.updated_at)" />
+      <span class="desc2-detail" v-text="strUpdatedDate" />
     </div>
     <ActionMenu
       class="action-box"
@@ -36,7 +36,7 @@ export default Vue.extend({
   props: {
     folder: {
       type: Object as PropType<FolderModel>,
-      default: Object as FolderModel,
+      default: {} as FolderModel,
     },
     isSelected: {
       type: Boolean,
@@ -51,9 +51,10 @@ export default Vue.extend({
     selected() {
       return this.isSelected ? 'selected' : ''
     },
-  },
-  methods: {
-    toDate,
+    strUpdatedDate(): string {
+      // @ts-ignore
+      return toDate(this.folder.updated_at ?? 0)
+    },
   },
 })
 </script>

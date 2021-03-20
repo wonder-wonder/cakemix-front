@@ -122,6 +122,7 @@ import ChangeName from '@/components/molecules/folder/ChangeName.vue'
 import ChangeOwner from '@/components/molecules/folder/ChangeOwner.vue'
 import ChangeDirectory from '@/components/molecules/folder/ChangeDirectory.vue'
 import {
+  checkAuthWithStatus,
   FolderModel,
   DocumentModel,
   ProfileModel,
@@ -129,7 +130,6 @@ import {
   FolderModifyReqModel,
   DocumentModifyReqModel,
   DocumentApi,
-  checkAuthWithStatus,
 } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 
@@ -210,9 +210,6 @@ export default Vue.extend({
     this.permToSwitch()
   },
   methods: {
-    successToast,
-    failureToast,
-    checkAuthWithStatus,
     copyToModel() {
       // deep copy using clone deep in the lodash
       this.newModel = CloneDeep(this.model)
@@ -283,20 +280,20 @@ export default Vue.extend({
       const perm = this.newModel.permission
       if (uuuid === undefined || perm === undefined) {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Failed', 1)
+        failureToast(this.$buefy, 'Failed', 1)
         return
       }
       if (this.modelType === 'FOLDER') {
         const fModel = this.newModel as FolderModel
         if (fModel.name === undefined || fModel.name === '') {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed', 1)
+          failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const fuuid = fModel.uuid
         if (fuuid === undefined) {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed', 1)
+          failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const req = {
@@ -309,19 +306,19 @@ export default Vue.extend({
           .then(() => {
             this.$emit('reload')
             // @ts-ignore
-            this.successToast(this.$buefy, 'Success')
+            successToast(this.$buefy, 'Success')
           })
           .catch(err => {
-            this.checkAuthWithStatus(this, err.response.status)
+            checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', err.response.status)
+            failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else if (this.modelType === 'DOCUMENT') {
         const dModel = this.newModel as DocumentModel
         const duuid = dModel.uuid
         if (duuid === undefined) {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Failed', 1)
+          failureToast(this.$buefy, 'Failed', 1)
           return
         }
         const req = {
@@ -333,16 +330,16 @@ export default Vue.extend({
           .then(() => {
             this.$emit('reload')
             // @ts-ignore
-            this.successToast(this.$buefy, 'Success')
+            successToast(this.$buefy, 'Success')
           })
           .catch(err => {
-            this.checkAuthWithStatus(this, err.response.status)
+            checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', err.response.status)
+            failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Failed', 2)
+        failureToast(this.$buefy, 'Failed', 2)
       }
     }, 500),
     deleteItemConfirm() {
@@ -357,7 +354,7 @@ export default Vue.extend({
       const fduuid = this.newModel.uuid
       if (fduuid === undefined) {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Failed', 1)
+        failureToast(this.$buefy, 'Failed', 1)
         return
       }
       this.$emit('willDelete')
@@ -369,13 +366,13 @@ export default Vue.extend({
             this.$emit('close')
             this.$emit('deleted')
             // @ts-ignore
-            this.successToast(this.$buefy, 'Success')
+            successToast(this.$buefy, 'Success')
           })
           .catch(err => {
             this.$emit('cannotDelete')
-            this.checkAuthWithStatus(this, err.response.status)
+            checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', err.response.status)
+            failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else if (this.modelType === 'DOCUMENT') {
         new DocumentApi(this.$store.getters['auth/config'])
@@ -385,17 +382,17 @@ export default Vue.extend({
             this.$emit('close')
             this.$emit('deleted')
             // @ts-ignore
-            this.successToast(this.$buefy, 'Success')
+            successToast(this.$buefy, 'Success')
           })
           .catch(err => {
             this.$emit('cannotDelete')
-            this.checkAuthWithStatus(this, err.response.status)
+            checkAuthWithStatus(this, err.response.status)
             // @ts-ignore
-            this.failureToast(this.$buefy, 'Failed', err.response.status)
+            failureToast(this.$buefy, 'Failed', err.response.status)
           })
       } else {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Failed', 2)
+        failureToast(this.$buefy, 'Failed', 2)
       }
     },
   },

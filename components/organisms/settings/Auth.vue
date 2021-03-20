@@ -53,15 +53,11 @@ export default Vue.extend({
     title: getTitle(PAGES.AUTH),
   },
   methods: {
-    successToast,
-    failureToast,
     passwordValidator,
     request() {
-      if (
-        !(this.oldPassword !== '' && this.passwordValidator(this.newPassword))
-      ) {
+      if (!(this.oldPassword !== '' && passwordValidator(this.newPassword))) {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Request failed', 1)
+        failureToast(this.$buefy, 'Request failed', 1)
         return
       }
       this.isLoading = true
@@ -73,11 +69,11 @@ export default Vue.extend({
         .postPassChange(model)
         .then(() => {
           // @ts-ignore
-          this.successToast(this.$buefy, 'Password changed')
+          successToast(this.$buefy, 'Password changed')
         })
         .catch(err => {
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Request failed', err.response.status)
+          failureToast(this.$buefy, 'Request failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

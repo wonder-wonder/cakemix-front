@@ -58,16 +58,6 @@ import {
   MemberInfoModel,
 } from '@/scripts/api/index'
 
-type DataType = {
-  uuid: string
-  searchName: string
-  searchPaging: SearchPagingModel
-  members: MemberInfoModel[]
-  tabs: TabModel[]
-  currentTab: string
-  selectedUser: ProfileModel
-}
-
 type SearchPagingModel = {
   data: ProfileModel[]
   total: number
@@ -82,6 +72,16 @@ type TabModel = {
   admin: boolean
   label: string
   icon: string
+}
+
+type DataType = {
+  uuid: string
+  searchName: string
+  searchPaging: SearchPagingModel
+  members: MemberInfoModel[]
+  tabs: TabModel[]
+  currentTab: string
+  selectedUser: ProfileModel
 }
 
 const TAB_TYPE_MODEL = {
@@ -148,8 +148,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    failureToast,
-    checkAuthWithStatus,
     select(user: ProfileModel) {
       this.selectedUser = user
     },
@@ -190,8 +188,8 @@ export default Vue.extend({
           )
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Search user failed',
@@ -229,8 +227,8 @@ export default Vue.extend({
           )
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Search team failed',

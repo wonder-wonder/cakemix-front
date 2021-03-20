@@ -140,9 +140,6 @@ export default Vue.extend({
     this.getMembers()
   },
   methods: {
-    successToast,
-    failureToast,
-    checkAuthWithStatus,
     resetMember() {
       this.memberPaging = {
         data: [] as MemberInfoModel[],
@@ -168,11 +165,11 @@ export default Vue.extend({
           this.resetMember()
           this.getMembers()
           // @ts-ignore
-          this.successToast(this.$buefy, 'Added new member')
+          successToast(this.$buefy, 'Added new member')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Add new member failed',
@@ -196,7 +193,7 @@ export default Vue.extend({
           const total = res.data.total ?? 0
           const members = res.data.members ?? []
           if (total < 1 || members.length < 1) {
-            this.failureToast(
+            failureToast(
               // @ts-ignore
               this.$buefy,
               'Get own permission failed',
@@ -206,8 +203,8 @@ export default Vue.extend({
           this.ownPermission = members[0].permission ?? 0
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Get own permission failed',
@@ -231,8 +228,8 @@ export default Vue.extend({
           this.memberPaging.data = res.data.members ?? []
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Get member failed',
@@ -266,8 +263,8 @@ export default Vue.extend({
           this.searchPaging.data = users.concat(res.data.users ?? [])
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Search user failed',
@@ -295,11 +292,11 @@ export default Vue.extend({
         .putTeamTeamidMember(teamId, uModel)
         .then(() => {
           // @ts-ignore
-          this.successToast(this.$buefy, 'Upgraded permission')
+          successToast(this.$buefy, 'Upgraded permission')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Change permission failed',
@@ -336,11 +333,11 @@ export default Vue.extend({
           this.resetMember()
           this.getMembers()
           // @ts-ignore
-          this.successToast(this.$buefy, 'Member removed')
+          successToast(this.$buefy, 'Member removed')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Unable to remove member',
@@ -360,12 +357,12 @@ export default Vue.extend({
         .then(() => {
           this.$emit('reload')
           // @ts-ignore
-          this.successToast(this.$buefy, 'This team was deleted')
+          successToast(this.$buefy, 'This team was deleted')
           this.$emit('close')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Delete team failed',

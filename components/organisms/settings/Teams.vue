@@ -39,11 +39,11 @@ import UserCell from '@/components/atoms/cell/UserCell.vue'
 import CreateTeamBox from '@/components/organisms/settings/CreateTeamBox.vue'
 import TeamEdit from '@/components/molecules/settings/TeamEdit.vue'
 import {
-  SearchApi,
   checkAuthWithStatus,
+  SearchApi,
   ProfileModel,
 } from '@/scripts/api/index'
-import { failureToast, successToast } from '@/scripts/utils/toast'
+import { failureToast } from '@/scripts/utils/toast'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type DataType = {
@@ -86,9 +86,6 @@ export default Vue.extend({
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
-    failureToast,
-    successToast,
-    checkAuthWithStatus,
     openCreateTeamBox() {
       // @ts-ignore
       this.$buefy.modal.open({
@@ -116,8 +113,8 @@ export default Vue.extend({
           this.users = res.data.teams ?? []
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
             'Search team failed',

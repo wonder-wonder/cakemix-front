@@ -42,8 +42,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    successToast,
-    failureToast,
     forgotPassword() {
       this.$router.push('/auth/passwd')
     },
@@ -51,7 +49,7 @@ export default Vue.extend({
       if (this.username === '' || this.password === '') {
         this.isError = true
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Login failed', 1)
+        failureToast(this.$buefy, 'Login failed', 1)
         return
       }
       this.isLoading = true
@@ -73,7 +71,7 @@ export default Vue.extend({
         .catch(err => {
           this.isError = true
           // @ts-ignore
-          this.failureToast(this.$buefy, 'Login failed', err.response.status)
+          failureToast(this.$buefy, 'Login failed', err.response.status)
         })
         .finally(() => {
           this.isLoading = false

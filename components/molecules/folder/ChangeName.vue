@@ -48,11 +48,10 @@ export default Vue.extend({
     this.name = this.initial
   },
   methods: {
-    failureToast,
     rename() {
       if (this.name === '') {
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Need to set name')
+        failureToast(this.$buefy, 'Need to set name')
         return
       }
       this.$emit('updated', this.name)
