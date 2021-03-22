@@ -38,6 +38,7 @@ import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import TextArea from '@/components/atoms/input/TextArea.vue'
 import Select from '@/components/atoms/input/Select.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import {
   getLanguageList,
   getFullName,
@@ -117,12 +118,19 @@ export default Vue.extend({
       new ProfileApi(this.$store.getters['auth/config'])
         .putUserProfileUuid(this.$store.getters['auth/uuid'], profile)
         .then(() => {
-          // @ts-ignore
-          successToast(this.$buefy, 'Request succeeded')
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.UPDATE_PROFILE).success
+          )
         })
         .catch(err => {
-          // @ts-ignore
-          failureToast(this.$buefy, 'Request failed', err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.UPDATE_PROFILE).failure,
+            err.response.status
+          )
         })
         .finally(() => {
           this.isLoading = false

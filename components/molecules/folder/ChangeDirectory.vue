@@ -25,6 +25,7 @@ import Vue from 'vue'
 import FolderWideCell from '@/components/atoms/cell/FolderWideCell.vue'
 import Breadcrumb from '@/components/molecules/folder/Breadcrumb.vue'
 import { failureToast, successToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import {
   checkAuthWithStatus,
   DocumentApi,
@@ -85,7 +86,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            'folder list request failed',
+            getToastDesc(TOAST_TYPE.GET_FOLDER).failure,
             err.response.status
           )
         })
@@ -93,16 +94,23 @@ export default Vue.extend({
     transfer() {
       const tId = this.breadcrumb[this.breadcrumb.length - 1].folder_id ?? ''
       if (!tId || tId === this.itemId) {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Unable to move folder or document', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
+          1
+        )
         return
       }
       if (this.isFolder) {
         new FolderApi(this.$store.getters['auth/config'])
           .moveFolder(this.itemId, tId)
           .then(() => {
-            // @ts-ignore
-            successToast(this.$buefy, 'Moved folder')
+            successToast(
+              // @ts-ignore
+              this.$buefy,
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).success
+            )
             this.$emit('updated')
             this.$emit('close')
           })
@@ -110,7 +118,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              'Unable to move folder',
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })
@@ -119,7 +127,11 @@ export default Vue.extend({
           .moveDoc(this.itemId, tId)
           .then(() => {
             // @ts-ignore
-            successToast(this.$buefy, 'Document moved ')
+            successToast(
+              // @ts-ignore
+              this.$buefy,
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).success
+            )
             this.$emit('updated')
             this.$emit('close')
           })
@@ -127,7 +139,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              'Unable to move document',
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })

@@ -13,6 +13,7 @@
 import Vue from 'vue'
 import { Editor } from '@/node_modules/@types/codemirror/index'
 import { UserModel } from '@/scripts/model/user/manager'
+import { getModalDesc, MODAL_TYPE } from '@/scripts/model/toast'
 const editor = require('@/scripts/editor/editor.ts')
 const utils = require('@/scripts/editor/utils.ts')
 const ss = require('@/scripts/editor/scrollsyncer.ts')
@@ -157,7 +158,7 @@ export default Vue.extend({
       }
       // @ts-ignore
       this.$buefy.dialog.confirm({
-        message: 'Do you want to reconnect?',
+        message: getModalDesc(MODAL_TYPE.CLOSE_DOCUMENT_SESSION),
         onConfirm: () => this.makeConnection(),
         onCancel: () => this.$emit('toParentFolder'),
       })

@@ -24,6 +24,7 @@
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 
 type DataType = {
   name: string
@@ -51,7 +52,7 @@ export default Vue.extend({
     rename() {
       if (this.name === '') {
         // @ts-ignore
-        failureToast(this.$buefy, 'Need to set name')
+        failureToast(this.$buefy, getToastDesc(TOAST_TYPE.SET_NAME).failure)
         return
       }
       this.$emit('updated', this.name)

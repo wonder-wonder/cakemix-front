@@ -25,6 +25,7 @@ import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { TeamApi, checkAuthWithStatus } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 
 type DataType = {
   name: string
@@ -42,8 +43,12 @@ export default Vue.extend({
   methods: {
     create() {
       if (this.name === '') {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Need to set team name', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.SET_TEAM_NAME).failure,
+          1
+        )
         return
       }
       this.createTeam(this.name)
@@ -53,8 +58,11 @@ export default Vue.extend({
         .postTeam(name)
         .then(() => {
           this.$emit('created')
-          // @ts-ignore
-          successToast(this.$buefy, 'Success to create new team')
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CREATE_NEW_TEAM).success
+          )
           this.$emit('close')
         })
         .catch(err => {
@@ -62,7 +70,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            'Failed to create',
+            getToastDesc(TOAST_TYPE.CREATE_NEW_TEAM).failure,
             err.response.status
           )
         })

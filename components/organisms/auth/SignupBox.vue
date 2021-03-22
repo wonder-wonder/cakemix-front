@@ -28,6 +28,7 @@ import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthRegistReqModel, AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { emailValidator, passwordValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
@@ -58,7 +59,7 @@ export default Vue.extend({
   },
   methods: {
     emailValidator,
-
+    passwordValidator,
     updateUserName(userName: string) {
       this.userName = userName
       new AuthApi()
@@ -78,7 +79,7 @@ export default Vue.extend({
         this.signupToken === ''
       ) {
         // @ts-ignore
-        failureToast(this.$buefy, 'Signup Failed', 1)
+        failureToast(this.$buefy, getToastDesc(TOAST_TYPE.SIGNUP).failure, 1)
         return
       }
       this.isLoading = true
@@ -93,13 +94,17 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            'Signup requested, a varification url will be sent'
+            getToastDesc(TOAST_TYPE.SIGNUP).success
           )
           this.$router.push('/auth/login')
         })
         .catch(err => {
-          // @ts-ignore
-          failureToast(this.$buefy, 'Signup Failed', err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.SIGNUP).failure,
+            err.response.status
+          )
         })
         .finally(() => {
           this.isLoading = false

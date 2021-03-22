@@ -20,6 +20,7 @@ import {
   AuthApi,
 } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { passwordValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
@@ -45,10 +46,15 @@ export default Vue.extend({
     },
   },
   methods: {
+    passwordValidator,
     request() {
       if (!passwordValidator(this.password)) {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Signup failed', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+          1
+        )
         return
       }
       this.isLoading = true
@@ -61,14 +67,18 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            'Signup requested, a varification url will be sent'
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).success
           )
           this.$router.push('/auth/login')
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          failureToast(this.$buefy, 'Signup failed', err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+            err.response.status
+          )
         })
         .finally(() => {
           this.isLoading = false
