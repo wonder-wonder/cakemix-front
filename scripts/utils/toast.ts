@@ -1,6 +1,6 @@
 export const successToast = (buefy: any, msg: string) => {
   buefy.toast.open({
-    duration: 1000,
+    duration: 2000,
     queue: false,
     message: msg,
     position: 'is-bottom-right',
@@ -10,7 +10,7 @@ export const successToast = (buefy: any, msg: string) => {
 
 export const failureToast = (buefy: any, msg: string, err: number = -1) => {
   buefy.toast.open({
-    duration: 2000,
+    duration: 3000,
     queue: false,
     position: 'is-bottom-right',
     message: `${msg} ${err === -1 ? '' : `[ Error : ${err} ]`}`,
