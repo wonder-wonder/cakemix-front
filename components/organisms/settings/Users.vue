@@ -115,8 +115,8 @@ export default Vue.extend({
           const DOMAIN =
             process.env.NODE_ENV === 'development'
               ? process.env.DOMAIN
-              : location.hostname
-          this.generatedLink = `${process.env.HTTP_SCHEME}://${location.hostname}:${process.env.PORT}/auth/signup/${res.data.token}`
+              : location.host
+          this.generatedLink = `${process.env.HTTP_SCHEME}://${DOMAIN}/auth/signup/${res.data.token}`
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)
