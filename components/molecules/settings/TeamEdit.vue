@@ -303,7 +303,7 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            getToastDesc(TOAST_TYPE.UPGRADE_PERMISSION).success
+            getToastDesc(TOAST_TYPE.CHANGE_PERMISSION).success
           )
         })
         .catch(err => {
@@ -311,7 +311,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getToastDesc(TOAST_TYPE.UPGRADE_PERMISSION).failure,
+            getToastDesc(TOAST_TYPE.CHANGE_PERMISSION).failure,
             err.response.status
           )
         })

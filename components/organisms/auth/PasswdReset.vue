@@ -49,8 +49,12 @@ export default Vue.extend({
     passwordValidator,
     request() {
       if (!passwordValidator(this.password)) {
-        // @ts-ignore
-        failureToast(this.$buefy, getToastDesc(TOAST_TYPE.SIGNUP).failure, 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+          1
+        )
         return
       }
       this.isLoading = true
@@ -63,7 +67,7 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            getToastDesc(TOAST_TYPE.SIGNUP).success
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).success
           )
           this.$router.push('/auth/login')
         })
@@ -72,7 +76,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getToastDesc(TOAST_TYPE.SIGNUP).failure,
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
             err.response.status
           )
         })

@@ -28,8 +28,12 @@ export default Vue.extend({
   },
   created() {
     if (this.signupToken === '') {
-      // @ts-ignore
-      failureToast(this.$buefy, getToastDesc(TOAST_TYPE.SIGNUP).failure, 1)
+      failureToast(
+        // @ts-ignore
+        this.$buefy,
+        getToastDesc(TOAST_TYPE.VERITY_TOKEN).failure,
+        1
+      )
       this.$router.push('/auth/login')
       return
     }
@@ -39,7 +43,7 @@ export default Vue.extend({
         successToast(
           // @ts-ignore
           this.$buefy,
-          getToastDesc(TOAST_TYPE.SIGNUP).success
+          getToastDesc(TOAST_TYPE.VERITY_TOKEN).success
         )
         this.$router.push('/')
       })
@@ -47,7 +51,7 @@ export default Vue.extend({
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getToastDesc(TOAST_TYPE.SIGNUP).failure,
+          getToastDesc(TOAST_TYPE.VERITY_TOKEN).failure,
           err.response.status
         )
       })

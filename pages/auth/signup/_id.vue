@@ -32,7 +32,7 @@ export default Vue.extend({
       failureToast(
         // @ts-ignore
         this.$buefy,
-        getToastDesc(TOAST_TYPE.TOKEN_VERITY).failure,
+        getToastDesc(TOAST_TYPE.VERITY_TOKEN).failure,
         err.response.status
       )
       this.$router.push('/')

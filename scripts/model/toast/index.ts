@@ -3,7 +3,7 @@ const TOAST_TYPE = {
   RESET_PASSWD: 'reset_passwd',
   CHANGE_PASSWD: 'change_passed',
   SIGNUP: 'signup',
-  TOKEN_VERITY: 'token_verify',
+  VERITY_TOKEN: 'verify_token',
   GET_FOLDER: 'get_folder',
   MOVE_FOLDER_DOCUMENT: 'move_folder_document',
   SET_NAME: 'set_name',
@@ -11,7 +11,7 @@ const TOAST_TYPE = {
   ADD_NEW_MEMBER: 'add_new_member',
   REMOVE_MEMBER: 'remove_member',
   GET_PERMISSION: 'get_permission',
-  UPGRADE_PERMISSION: 'upgrade_permission',
+  CHANGE_PERMISSION: 'change_permission',
   GET_MEMBER: 'get_member',
   DELETE_TEAM: 'delete_team',
   UPDATE_FOLDER_DOCUMENT: 'update_folder_document',
@@ -39,31 +39,31 @@ type descModel = {
 const toastDescriptions: { [key: string]: descModel } = {
   login: {
     success: '',
-    failure: 'Login failed',
+    failure: 'Failed to login',
   } as descModel,
   reset_passwd: {
-    success: 'Reset password requested, verification URL will be sent',
-    failure: 'Unable to reset password',
+    success: 'Password reset requested. Confirmation mail will be sent',
+    failure: 'Failed to reset password',
   } as descModel,
   change_passed: {
     success: 'Password changed',
-    failure: 'Unable to change password',
+    failure: 'Failed to change password',
   } as descModel,
   signup: {
-    success: 'Signup requested, verification URL will be sent',
-    failure: 'Signup failed',
+    success: 'Signup requested. Confirmation mail will be sent',
+    failure: 'Failed to signup',
   } as descModel,
-  token_verify: {
+  verify_token: {
     success: 'Token verified',
-    failure: 'Token verification failed',
+    failure: 'Failed to verify token',
   } as descModel,
   get_folder: {
     success: '',
-    failure: 'Unable to get folder list',
+    failure: 'Failed to get folder list',
   } as descModel,
   move_folder_document: {
     success: 'Moved',
-    failure: 'Unable to move',
+    failure: 'Failed to move',
   } as descModel,
   set_name: {
     success: '',
@@ -71,39 +71,39 @@ const toastDescriptions: { [key: string]: descModel } = {
   } as descModel,
   search: {
     success: '',
-    failure: 'Unable to search',
+    failure: 'Failed to search',
   } as descModel,
   add_new_member: {
     success: 'Member added',
-    failure: 'Unable to add a member',
+    failure: 'Failed to add member',
   } as descModel,
   remove_member: {
     success: 'Member removed',
-    failure: 'Unable to remove member',
+    failure: 'Failed to remove member',
   } as descModel,
   get_member: {
     success: '',
-    failure: 'Unable to get member',
+    failure: 'Failed to get member',
   } as descModel,
   get_permission: {
     success: '',
-    failure: 'Unable to get own permission',
+    failure: 'Failed to get permission',
   } as descModel,
-  upgrade_permission: {
+  change_permission: {
     success: 'Permission changed',
-    failure: 'Unable to change permission',
+    failure: 'Failed to change permission',
   } as descModel,
   delete_team: {
     success: 'Team deleted',
-    failure: 'Unable to delete team',
+    failure: 'Failed to delete team',
   } as descModel,
   update_folder_document: {
     success: 'Updated',
-    failure: 'Unable to update',
+    failure: 'Failed to update',
   } as descModel,
   delete_folder_document: {
     success: 'Deleted',
-    failure: 'Unable to delete',
+    failure: 'Failed to delete',
   } as descModel,
   set_folder_name: {
     success: '',
@@ -114,40 +114,40 @@ const toastDescriptions: { [key: string]: descModel } = {
     failure: 'Need to set team name',
   } as descModel,
   create_new_team: {
-    success: 'New team created',
-    failure: 'Unable to create team',
+    success: 'Team created',
+    failure: 'Failed to create team',
   } as descModel,
   update_profile: {
     success: 'Profile updated',
-    failure: 'Unable to update profile',
+    failure: 'Failed to update profile',
   } as descModel,
   get_auth_log: {
     success: '',
-    failure: 'Unable to get security log',
+    failure: 'Failed to get security log',
   } as descModel,
   get_session: {
     success: '',
-    failure: 'Unable to get session',
+    failure: 'Failed to get session',
   } as descModel,
   delete_session: {
     success: 'Selected session deleted',
-    failure: 'Unable to delete session',
+    failure: 'Failed to delete session',
   } as descModel,
   generate_new_link: {
     success: '',
-    failure: 'Unable to generate invitation link',
+    failure: 'Failed to generate invitation link',
   } as descModel,
   open_document: {
     success: '',
-    failure: 'Unable to open this document',
+    failure: 'Failed to open document',
   } as descModel,
   create_folder: {
     success: '',
-    failure: 'Unable to create new folder',
+    failure: 'Failed to create folder',
   } as descModel,
   create_document: {
     success: '',
-    failure: 'Unable to create new document',
+    failure: 'Failed to create document',
   } as descModel,
   unknown: {
     success: 'Success',

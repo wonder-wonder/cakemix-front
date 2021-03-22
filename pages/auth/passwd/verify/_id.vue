@@ -43,7 +43,7 @@ export default Vue.extend({
       failureToast(
         // @ts-ignore
         this.$buefy,
-        getToastDesc(TOAST_TYPE.TOKEN_VERITY).failure,
+        getToastDesc(TOAST_TYPE.VERITY_TOKEN).failure,
         1
       )
       this.$router.push('/auth/passwd')
@@ -53,14 +53,14 @@ export default Vue.extend({
       .getPassResetVerify(this.passwdToken)
       .then(() => {
         // @ts-ignore
-        successToast(this.$buefy, getToastDesc(TOAST_TYPE.TOKEN_VERITY).success)
+        successToast(this.$buefy, getToastDesc(TOAST_TYPE.VERITY_TOKEN).success)
         this.isVerified = true
       })
       .catch(err => {
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getToastDesc(TOAST_TYPE.TOKEN_VERITY).failure,
+          getToastDesc(TOAST_TYPE.VERITY_TOKEN).failure,
           err.response.status
         )
         this.$router.push('/auth/passwd')
