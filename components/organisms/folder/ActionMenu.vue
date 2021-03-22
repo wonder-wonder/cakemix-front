@@ -134,7 +134,7 @@ import {
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
   TOAST_TYPE,
-  getDesc,
+  getToastDesc,
   getModalDesc,
   MODAL_TYPE,
 } from '@/scripts/model/toast'
@@ -288,7 +288,7 @@ export default Vue.extend({
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+          getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
           1
         )
         return
@@ -299,7 +299,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+            getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
             1
           )
           return
@@ -309,7 +309,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+            getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
             1
           )
           return
@@ -326,7 +326,7 @@ export default Vue.extend({
             successToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).success
+              getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).success
             )
           })
           .catch(err => {
@@ -334,7 +334,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+              getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })
@@ -345,7 +345,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+            getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
             1
           )
           return
@@ -361,7 +361,7 @@ export default Vue.extend({
             successToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).success
+              getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).success
             )
           })
           .catch(err => {
@@ -369,7 +369,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+              getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })
@@ -377,7 +377,7 @@ export default Vue.extend({
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+          getToastDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
           2
         )
       }
@@ -396,7 +396,7 @@ export default Vue.extend({
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
+          getToastDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
           1
         )
         return
@@ -412,7 +412,7 @@ export default Vue.extend({
             successToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).success
+              getToastDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).success
             )
           })
           .catch(err => {
@@ -421,7 +421,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
+              getToastDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })
@@ -435,7 +435,7 @@ export default Vue.extend({
             successToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).success
+              getToastDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).success
             )
           })
           .catch(err => {
@@ -444,7 +444,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
+              getToastDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })
@@ -452,7 +452,7 @@ export default Vue.extend({
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
+          getToastDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
           2
         )
       }

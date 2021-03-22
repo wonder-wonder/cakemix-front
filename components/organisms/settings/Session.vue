@@ -20,7 +20,7 @@ import SessionCell from '@/components/atoms/cell/SessionCell.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
   TOAST_TYPE,
-  getDesc,
+  getToastDesc,
   getModalDesc,
   MODAL_TYPE,
 } from '@/scripts/model/toast'
@@ -65,7 +65,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.GET_SESSION).failure,
+            getToastDesc(TOAST_TYPE.GET_SESSION).failure,
             err.response.status
           )
         })
@@ -86,7 +86,7 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.DELETE_SESSION).success
+            getToastDesc(TOAST_TYPE.DELETE_SESSION).success
           )
         })
         .catch(err => {
@@ -94,7 +94,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.DELETE_SESSION).failure,
+            getToastDesc(TOAST_TYPE.DELETE_SESSION).failure,
             err.response.status
           )
         })

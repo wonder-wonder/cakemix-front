@@ -83,7 +83,7 @@ import {
   BreadcrumbModel,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { getFolderTitle } from '@/scripts/model/head/index'
 
 export type DataType = {
@@ -287,7 +287,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.GET_FOLDER).failure,
+            getToastDesc(TOAST_TYPE.GET_FOLDER).failure,
             err.response.status
           )
         })
@@ -309,7 +309,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.CREATE_FOLDER).failure,
+            getToastDesc(TOAST_TYPE.CREATE_FOLDER).failure,
             err.response.status
           )
         })
@@ -329,7 +329,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.CREATE_DOCUMENT).failure,
+            getToastDesc(TOAST_TYPE.CREATE_DOCUMENT).failure,
             err.response.status
           )
         })

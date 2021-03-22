@@ -21,7 +21,7 @@ import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { AuthLoginReqModel, AuthApi } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 
 export type DataType = {
   username: string
@@ -50,7 +50,7 @@ export default Vue.extend({
       if (this.username === '' || this.password === '') {
         this.isError = true
         // @ts-ignore
-        failureToast(this.$buefy, getDesc(TOAST_TYPE.LOGIN).failure, 1)
+        failureToast(this.$buefy, getToastDesc(TOAST_TYPE.LOGIN).failure, 1)
         return
       }
       this.isLoading = true
@@ -74,7 +74,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.LOGIN).failure,
+            getToastDesc(TOAST_TYPE.LOGIN).failure,
             err.response.status
           )
         })

@@ -24,7 +24,7 @@
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 
 type DataType = {
   name: string
@@ -45,7 +45,7 @@ export default Vue.extend({
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getDesc(TOAST_TYPE.SET_FOLDER_NAME).failure,
+          getToastDesc(TOAST_TYPE.SET_FOLDER_NAME).failure,
           1
         )
         return

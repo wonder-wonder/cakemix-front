@@ -47,7 +47,7 @@ import {
   ProfileModel,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type DataType = {
@@ -100,7 +100,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.SEARCH).failure,
+            getToastDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })
@@ -119,7 +119,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.GENERATE_NEW_LINK).failure,
+            getToastDesc(TOAST_TYPE.GENERATE_NEW_LINK).failure,
             err.response.status
           )
         })

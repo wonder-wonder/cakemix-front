@@ -25,7 +25,7 @@ import Vue from 'vue'
 import FolderWideCell from '@/components/atoms/cell/FolderWideCell.vue'
 import Breadcrumb from '@/components/molecules/folder/Breadcrumb.vue'
 import { failureToast, successToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import {
   checkAuthWithStatus,
   DocumentApi,
@@ -86,7 +86,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.GET_FOLDER).failure,
+            getToastDesc(TOAST_TYPE.GET_FOLDER).failure,
             err.response.status
           )
         })
@@ -97,7 +97,7 @@ export default Vue.extend({
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
+          getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
           1
         )
         return
@@ -109,7 +109,7 @@ export default Vue.extend({
             successToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).success
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).success
             )
             this.$emit('updated')
             this.$emit('close')
@@ -118,7 +118,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })
@@ -130,7 +130,7 @@ export default Vue.extend({
             successToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).success
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).success
             )
             this.$emit('updated')
             this.$emit('close')
@@ -139,7 +139,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })

@@ -61,7 +61,7 @@ import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
   TOAST_TYPE,
   MODAL_TYPE,
-  getDesc,
+  getToastDesc,
   getModalDesc,
 } from '@/scripts/model/toast'
 import {
@@ -170,15 +170,18 @@ export default Vue.extend({
         .then(() => {
           this.resetMember()
           this.getMembers()
-          // @ts-ignore
-          successToast(this.$buefy, getDesc(TOAST_TYPE.ADD_NEW_MEMBER).success)
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.ADD_NEW_MEMBER).success
+          )
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.ADD_NEW_MEMBER).failure,
+            getToastDesc(TOAST_TYPE.ADD_NEW_MEMBER).failure,
             err.response.status
           )
         })
@@ -202,7 +205,7 @@ export default Vue.extend({
             failureToast(
               // @ts-ignore
               this.$buefy,
-              getDesc(TOAST_TYPE.GET_PERMISSION).failure,
+              getToastDesc(TOAST_TYPE.GET_PERMISSION).failure,
               400
             )
           }
@@ -213,7 +216,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.GET_PERMISSION).failure,
+            getToastDesc(TOAST_TYPE.GET_PERMISSION).failure,
             err.response.status
           )
         })
@@ -238,7 +241,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.GET_MEMBER).failure,
+            getToastDesc(TOAST_TYPE.GET_MEMBER).failure,
             err.response.status
           )
         })
@@ -273,7 +276,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.SEARCH).failure,
+            getToastDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })
@@ -300,7 +303,7 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.UPGRADE_PERMISSION).success
+            getToastDesc(TOAST_TYPE.UPGRADE_PERMISSION).success
           )
         })
         .catch(err => {
@@ -308,7 +311,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.UPGRADE_PERMISSION).failure,
+            getToastDesc(TOAST_TYPE.UPGRADE_PERMISSION).failure,
             err.response.status
           )
         })
@@ -341,15 +344,18 @@ export default Vue.extend({
         .then(() => {
           this.resetMember()
           this.getMembers()
-          // @ts-ignore
-          successToast(this.$buefy, getDesc(TOAST_TYPE.REMOVE_MEMBER).success)
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.REMOVE_MEMBER).success
+          )
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.REMOVE_MEMBER).failure,
+            getToastDesc(TOAST_TYPE.REMOVE_MEMBER).failure,
             err.response.status
           )
           this.resetMember()
@@ -365,8 +371,11 @@ export default Vue.extend({
         .deleteTeamTeamid(teamId)
         .then(() => {
           this.$emit('reload')
-          // @ts-ignore
-          successToast(this.$buefy, getDesc(TOAST_TYPE.DELETE_TEAM).success)
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.DELETE_TEAM).success
+          )
           this.$emit('close')
         })
         .catch(err => {
@@ -374,7 +383,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.DELETE_TEAM).failure,
+            getToastDesc(TOAST_TYPE.DELETE_TEAM).failure,
             err.response.status
           )
         })

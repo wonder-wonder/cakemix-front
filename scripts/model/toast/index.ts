@@ -174,7 +174,7 @@ const modalDescriptions: { [key: string]: string } = {
   unknown: 'Are you sure?',
 }
 
-const getDesc = (key: ToastType): descModel => {
+const getToastDesc = (key: ToastType): descModel => {
   if (toastDescriptions[key] === undefined) {
     return toastDescriptions[TOAST_TYPE.UNKNOWN]
   }
@@ -188,4 +188,4 @@ const getModalDesc = (key: ModalType): string => {
   return modalDescriptions[key]
 }
 
-export { TOAST_TYPE, MODAL_TYPE, getDesc, getModalDesc }
+export { TOAST_TYPE, MODAL_TYPE, getToastDesc, getModalDesc }

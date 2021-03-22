@@ -51,7 +51,7 @@ import {
   DocumentModel,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { UserManager, UserModel } from '@/scripts/model/user/manager'
 import { getDocumentTitle } from '@/scripts/model/head/index'
 const ss = require('@/scripts/editor/scrollsyncer')
@@ -128,7 +128,7 @@ export default Vue.extend({
         failureToast(
           // @ts-ignore
           this.$buefy,
-          getDesc(TOAST_TYPE.OPEN_DOCUMENT).failure,
+          getToastDesc(TOAST_TYPE.OPEN_DOCUMENT).failure,
           err.response.status
         )
         this.toParentFolder()

@@ -26,7 +26,7 @@
 import Vue from 'vue'
 import LogCell from '@/components/atoms/cell/LogCell.vue'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { checkAuthWithStatus, AuthApi, AuthLogModel } from '@/scripts/api/index'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
@@ -79,7 +79,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.GET_AUTH_LOG).failure,
+            getToastDesc(TOAST_TYPE.GET_AUTH_LOG).failure,
             err.response.status
           )
         })

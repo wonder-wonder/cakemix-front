@@ -15,7 +15,7 @@ import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassResetReqModel, AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { emailValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
@@ -37,8 +37,12 @@ export default Vue.extend({
     emailValidator,
     request() {
       if (!this.emailValidator(this.email)) {
-        // @ts-ignore
-        failureToast(this.$buefy, getDesc(TOAST_TYPE.RESET_PASSWD).failure, 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.RESET_PASSWD).failure,
+          1
+        )
         return
       }
       this.isLoading = true
@@ -51,7 +55,7 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.RESET_PASSWD).success
+            getToastDesc(TOAST_TYPE.RESET_PASSWD).success
           )
           this.$router.push('/')
         })
@@ -59,7 +63,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.RESET_PASSWD).failure,
+            getToastDesc(TOAST_TYPE.RESET_PASSWD).failure,
             err.response.status
           )
         })

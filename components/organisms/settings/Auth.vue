@@ -33,7 +33,7 @@ import Input from '@/components/atoms/input/Input.vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { passwordValidator } from '@/scripts/utils/validator'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
@@ -57,8 +57,12 @@ export default Vue.extend({
     passwordValidator,
     request() {
       if (!(this.oldPassword !== '' && passwordValidator(this.newPassword))) {
-        // @ts-ignore
-        failureToast(this.$buefy, getDesc(TOAST_TYPE.CHANGE_PASSWD).failure, 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+          1
+        )
         return
       }
       this.isLoading = true
@@ -69,14 +73,17 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postPassChange(model)
         .then(() => {
-          // @ts-ignore
-          successToast(this.$buefy, getDesc(TOAST_TYPE.CHANGE_PASSWD).success)
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).success
+          )
         })
         .catch(err => {
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
             err.response.status
           )
         })
