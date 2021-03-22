@@ -21,7 +21,7 @@ import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { AuthLoginReqModel, AuthApi } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
 
 export type DataType = {
   username: string

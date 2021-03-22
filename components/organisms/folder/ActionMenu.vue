@@ -137,7 +137,7 @@ import {
   getDesc,
   getModalDesc,
   MODAL_TYPE,
-} from '@/scripts/model/toast/index'
+} from '@/scripts/model/toast'
 
 export type DataType = {
   readSwitch: boolean

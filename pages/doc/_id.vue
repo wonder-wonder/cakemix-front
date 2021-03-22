@@ -51,7 +51,7 @@ import {
   DocumentModel,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
 import { UserManager, UserModel } from '@/scripts/model/user/manager'
 import { getDocumentTitle } from '@/scripts/model/head/index'
 const ss = require('@/scripts/editor/scrollsyncer')

@@ -63,7 +63,7 @@ import {
   MODAL_TYPE,
   getDesc,
   getModalDesc,
-} from '@/scripts/model/toast/index'
+} from '@/scripts/model/toast'
 import {
   checkAuthWithStatus,
   TeamApi,

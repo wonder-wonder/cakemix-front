@@ -33,7 +33,7 @@ import Input from '@/components/atoms/input/Input.vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
 import { passwordValidator } from '@/scripts/utils/validator'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 

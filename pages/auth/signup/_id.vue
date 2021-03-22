@@ -11,7 +11,7 @@ import SignupBox from '@/components/organisms/auth/SignupBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import { AuthApi } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export default Vue.extend({

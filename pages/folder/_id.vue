@@ -83,7 +83,7 @@ import {
   BreadcrumbModel,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
 import { getFolderTitle } from '@/scripts/model/head/index'
 
 export type DataType = {

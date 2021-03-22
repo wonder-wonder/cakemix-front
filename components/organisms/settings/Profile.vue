@@ -38,7 +38,7 @@ import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import TextArea from '@/components/atoms/input/TextArea.vue'
 import Select from '@/components/atoms/input/Select.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
 import {
   getLanguageList,
   getFullName,

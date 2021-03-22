@@ -25,7 +25,7 @@ import Vue from 'vue'
 import FolderWideCell from '@/components/atoms/cell/FolderWideCell.vue'
 import Breadcrumb from '@/components/molecules/folder/Breadcrumb.vue'
 import { failureToast, successToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
 import {
   checkAuthWithStatus,
   DocumentApi,

@@ -15,7 +15,7 @@ import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassResetReqModel, AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast'
 import { emailValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
