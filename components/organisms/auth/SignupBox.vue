@@ -58,7 +58,7 @@ export default Vue.extend({
   },
   methods: {
     emailValidator,
-
+    passwordValidator,
     updateUserName(userName: string) {
       this.userName = userName
       new AuthApi()

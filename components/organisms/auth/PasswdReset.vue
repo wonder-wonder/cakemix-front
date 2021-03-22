@@ -45,6 +45,7 @@ export default Vue.extend({
     },
   },
   methods: {
+    passwordValidator,
     request() {
       if (!passwordValidator(this.password)) {
         // @ts-ignore
