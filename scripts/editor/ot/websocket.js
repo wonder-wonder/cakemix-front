@@ -59,8 +59,8 @@ class SocketConnectionAdapter {
     })
 
     this.conn.on('join', data => {
-      const clientId = data.client_id
-      const name = data.username
+      const clientId = data.id
+      const name = data.name
       this.trigger('set_name', clientId, name)
     })
 

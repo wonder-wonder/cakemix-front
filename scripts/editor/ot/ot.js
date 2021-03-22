@@ -1573,12 +1573,10 @@ ot.EditorClient = (function () {
       return
     }
     this.name = name
-
     this.li.textContent = name
     if (!this.li.parentNode) {
       this.listEl.appendChild(this.li)
     }
-
     this.setColor(hueFromName(name))
   }
 
