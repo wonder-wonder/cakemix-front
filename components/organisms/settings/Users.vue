@@ -112,7 +112,11 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .getNewTokenRegist()
         .then(res => {
-          this.generatedLink = `${process.env.HTTP_SCHEME}://${process.env.DOMAIN}/auth/signup/${res.data.token}`
+          const DOMAIN =
+            process.env.NODE_ENV === 'development'
+              ? process.env.DOMAIN
+              : location.hostname
+          this.generatedLink = `${process.env.HTTP_SCHEME}://${location.hostname}:${process.env.PORT}/auth/signup/${res.data.token}`
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)

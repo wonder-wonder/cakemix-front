@@ -91,7 +91,11 @@ export default Vue.extend({
       this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
     },
     makeConnection() {
-      const url = `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/${this.$route.params.id}/ws?token=${this.$store.getters['auth/token']}`
+      const DOMAIN =
+        process.env.NODE_ENV === 'development'
+          ? process.env.DOMAIN
+          : location.host
+      const url = `${process.env.WS_SCHEME}://${DOMAIN}${process.env.BASE_PATH}/doc/${this.$route.params.id}/ws?token=${this.$store.getters['auth/token']}`
       this.websocket = new socket.SocketConnection(url, !this.isEditable)
       this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
       this.websocket.on('join', this.joinEvent)
