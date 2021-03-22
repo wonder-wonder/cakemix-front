@@ -132,6 +132,12 @@ import {
   DocumentApi,
 } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import {
+  TOAST_TYPE,
+  getDesc,
+  getModalDesc,
+  MODAL_TYPE,
+} from '@/scripts/model/toast/index'
 
 export type DataType = {
   readSwitch: boolean
@@ -279,21 +285,33 @@ export default Vue.extend({
       const uuuid = (this.newModel.owner as ProfileModel).uuid
       const perm = this.newModel.permission
       if (uuuid === undefined || perm === undefined) {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Failed', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+          1
+        )
         return
       }
       if (this.modelType === 'FOLDER') {
         const fModel = this.newModel as FolderModel
         if (fModel.name === undefined || fModel.name === '') {
-          // @ts-ignore
-          failureToast(this.$buefy, 'Failed', 1)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+            1
+          )
           return
         }
         const fuuid = fModel.uuid
         if (fuuid === undefined) {
-          // @ts-ignore
-          failureToast(this.$buefy, 'Failed', 1)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+            1
+          )
           return
         }
         const req = {
@@ -305,20 +323,31 @@ export default Vue.extend({
           .modifyFolder(fuuid, req)
           .then(() => {
             this.$emit('reload')
-            // @ts-ignore
-            successToast(this.$buefy, 'Success')
+            successToast(
+              // @ts-ignore
+              this.$buefy,
+              getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).success
+            )
           })
           .catch(err => {
             checkAuthWithStatus(this, err.response.status)
-            // @ts-ignore
-            failureToast(this.$buefy, 'Failed', err.response.status)
+            failureToast(
+              // @ts-ignore
+              this.$buefy,
+              getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+              err.response.status
+            )
           })
       } else if (this.modelType === 'DOCUMENT') {
         const dModel = this.newModel as DocumentModel
         const duuid = dModel.uuid
         if (duuid === undefined) {
-          // @ts-ignore
-          failureToast(this.$buefy, 'Failed', 1)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+            1
+          )
           return
         }
         const req = {
@@ -329,23 +358,34 @@ export default Vue.extend({
           .putDocDocId(duuid, req)
           .then(() => {
             this.$emit('reload')
-            // @ts-ignore
-            successToast(this.$buefy, 'Success')
+            successToast(
+              // @ts-ignore
+              this.$buefy,
+              getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).success
+            )
           })
           .catch(err => {
             checkAuthWithStatus(this, err.response.status)
-            // @ts-ignore
-            failureToast(this.$buefy, 'Failed', err.response.status)
+            failureToast(
+              // @ts-ignore
+              this.$buefy,
+              getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+              err.response.status
+            )
           })
       } else {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Failed', 2)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getDesc(TOAST_TYPE.UPDATE_FOLDER_DOCUMENT).failure,
+          2
+        )
       }
     }, 500),
     deleteItemConfirm() {
       // @ts-ignore
       this.$buefy.dialog.confirm({
-        message: 'Do you want to delete this item?',
+        message: getModalDesc(MODAL_TYPE.DELETE_CONFIRM),
         onConfirm: () => this.deleteItem(),
         onCancel: () => {},
       })
@@ -353,8 +393,12 @@ export default Vue.extend({
     deleteItem() {
       const fduuid = this.newModel.uuid
       if (fduuid === undefined) {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Failed', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
+          1
+        )
         return
       }
       this.$emit('willDelete')
@@ -365,14 +409,21 @@ export default Vue.extend({
             this.$emit('reload')
             this.$emit('close')
             this.$emit('deleted')
-            // @ts-ignore
-            successToast(this.$buefy, 'Success')
+            successToast(
+              // @ts-ignore
+              this.$buefy,
+              getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).success
+            )
           })
           .catch(err => {
             this.$emit('cannotDelete')
             checkAuthWithStatus(this, err.response.status)
-            // @ts-ignore
-            failureToast(this.$buefy, 'Failed', err.response.status)
+            failureToast(
+              // @ts-ignore
+              this.$buefy,
+              getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
+              err.response.status
+            )
           })
       } else if (this.modelType === 'DOCUMENT') {
         new DocumentApi(this.$store.getters['auth/config'])
@@ -381,18 +432,29 @@ export default Vue.extend({
             this.$emit('reload')
             this.$emit('close')
             this.$emit('deleted')
-            // @ts-ignore
-            successToast(this.$buefy, 'Success')
+            successToast(
+              // @ts-ignore
+              this.$buefy,
+              getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).success
+            )
           })
           .catch(err => {
             this.$emit('cannotDelete')
             checkAuthWithStatus(this, err.response.status)
-            // @ts-ignore
-            failureToast(this.$buefy, 'Failed', err.response.status)
+            failureToast(
+              // @ts-ignore
+              this.$buefy,
+              getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
+              err.response.status
+            )
           })
       } else {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Failed', 2)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getDesc(TOAST_TYPE.DELETE_FOLDER_DOCUMENT).failure,
+          2
+        )
       }
     },
   },

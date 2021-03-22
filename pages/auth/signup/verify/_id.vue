@@ -11,6 +11,7 @@ import Vue from 'vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import { AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export default Vue.extend({
@@ -28,7 +29,7 @@ export default Vue.extend({
   created() {
     if (this.signupToken === '') {
       // @ts-ignore
-      failureToast(this.$buefy, 'Signup failed', 1)
+      failureToast(this.$buefy, getDesc(TOAST_TYPE.SIGNUP).failure, 1)
       this.$router.push('/auth/login')
       return
     }
@@ -38,13 +39,17 @@ export default Vue.extend({
         successToast(
           // @ts-ignore
           this.$buefy,
-          'Signup requested, a varification url will be sent'
+          getDesc(TOAST_TYPE.SIGNUP).success
         )
         this.$router.push('/')
       })
       .catch(err => {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Signup failed', err.response.status)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getDesc(TOAST_TYPE.SIGNUP).failure,
+          err.response.status
+        )
       })
       .finally(() => {
         this.$router.push('/auth/login')

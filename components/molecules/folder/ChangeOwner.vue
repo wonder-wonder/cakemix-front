@@ -51,6 +51,7 @@ import UserMinCell from '@/components/atoms/cell/UserMinCell.vue'
 import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
 import {
   checkAuthWithStatus,
   SearchApi,
@@ -192,7 +193,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            'Search user failed',
+            getDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })
@@ -231,7 +232,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            'Search team failed',
+            getDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })

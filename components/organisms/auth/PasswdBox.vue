@@ -15,6 +15,7 @@ import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassResetReqModel, AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
 import { emailValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
@@ -37,7 +38,7 @@ export default Vue.extend({
     request() {
       if (!this.emailValidator(this.email)) {
         // @ts-ignore
-        failureToast(this.$buefy, 'Request failed', 1)
+        failureToast(this.$buefy, getDesc(TOAST_TYPE.RESET_PASSWD).failure, 1)
         return
       }
       this.isLoading = true
@@ -50,13 +51,17 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            'Password reset requested, a varification url will be sent'
+            getDesc(TOAST_TYPE.RESET_PASSWD).success
           )
           this.$router.push('/')
         })
         .catch(err => {
-          // @ts-ignore
-          failureToast(this.$buefy, 'Request failed', err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getDesc(TOAST_TYPE.RESET_PASSWD).failure,
+            err.response.status
+          )
         })
         .finally(() => {
           this.isLoading = false

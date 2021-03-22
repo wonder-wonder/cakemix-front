@@ -13,6 +13,7 @@ import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import PasswdReset from '@/components/organisms/auth/PasswdReset.vue'
 import { AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export type DataType = {
@@ -40,7 +41,7 @@ export default Vue.extend({
   created() {
     if (this.passwdToken === '') {
       // @ts-ignore
-      failureToast(this.$buefy, 'Token verification failed ', 1)
+      failureToast(this.$buefy, getDesc(TOAST_TYPE.TOKEN_VERITY).failure, 1)
       this.$router.push('/auth/passwd')
       return
     }
@@ -48,14 +49,14 @@ export default Vue.extend({
       .getPassResetVerify(this.passwdToken)
       .then(() => {
         // @ts-ignore
-        successToast(this.$buefy, 'Token was verified')
+        successToast(this.$buefy, getDesc(TOAST_TYPE.TOKEN_VERITY).success)
         this.isVerified = true
       })
       .catch(err => {
         failureToast(
           // @ts-ignore
           this.$buefy,
-          'Token verification failed ',
+          getDesc(TOAST_TYPE.TOKEN_VERITY).failure,
           err.response.status
         )
         this.$router.push('/auth/passwd')

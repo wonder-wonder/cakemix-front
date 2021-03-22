@@ -24,6 +24,7 @@
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getDesc } from '@/scripts/model/toast/index'
 
 type DataType = {
   name: string
@@ -41,8 +42,12 @@ export default Vue.extend({
   methods: {
     createFolder() {
       if (this.name === '') {
-        // @ts-ignore
-        failureToast(this.$buefy, 'Need to set folder name', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getDesc(TOAST_TYPE.SET_FOLDER_NAME).failure,
+          1
+        )
         return
       }
       this.$emit('create', this.name)

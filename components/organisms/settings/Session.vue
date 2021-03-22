@@ -19,6 +19,12 @@ import Vue from 'vue'
 import SessionCell from '@/components/atoms/cell/SessionCell.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
+  TOAST_TYPE,
+  getDesc,
+  getModalDesc,
+  MODAL_TYPE,
+} from '@/scripts/model/toast/index'
+import {
   checkAuthWithStatus,
   AuthApi,
   AuthSessionModel,
@@ -59,7 +65,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            'fetch session info failed',
+            getDesc(TOAST_TYPE.GET_SESSION).failure,
             err.response.status
           )
         })
@@ -67,7 +73,7 @@ export default Vue.extend({
     deleteConfirm(sessionID: string) {
       // @ts-ignore
       this.$buefy.dialog.confirm({
-        message: 'Do you want to delete this session?',
+        message: getModalDesc(MODAL_TYPE.DELETE_SESSION_CONFIRM),
         onConfirm: () => this.delete(sessionID),
         onCancel: () => {},
       })
@@ -80,7 +86,7 @@ export default Vue.extend({
           successToast(
             // @ts-ignore
             this.$buefy,
-            `session(${sessionID}) was deleted`
+            getDesc(TOAST_TYPE.DELETE_SESSION).success
           )
         })
         .catch(err => {
@@ -88,7 +94,7 @@ export default Vue.extend({
           failureToast(
             // @ts-ignore
             this.$buefy,
-            'delete session failed',
+            getDesc(TOAST_TYPE.DELETE_SESSION).failure,
             err.response.status
           )
         })
