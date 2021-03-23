@@ -19,6 +19,7 @@ const utils = require('@/scripts/editor/utils.ts')
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 const ot = require('@/scripts/editor/ot/ot.js')
 const socket = require('@/scripts/editor/ot/websocket.js')
+const colormaker = require('@/scripts/editor/colormaker.js')
 
 export type DataType = {
   websocket: any
@@ -129,6 +130,7 @@ export default Vue.extend({
         uuid: user.uuid,
         name: user.name,
         icon: user.icon_uri,
+        color: colormaker.hsl2hex(colormaker.hueFromName(user.name), 0.75, 0.5),
       } as UserModel
       this.$emit('addUser', [u])
     },
@@ -152,6 +154,7 @@ export default Vue.extend({
           uuid: u.uuid,
           name: u.name,
           icon: u.icon_uri,
+          color: colormaker.hsl2hex(colormaker.hueFromName(u.name), 0.75, 0.5),
         } as UserModel)
       }
       this.$emit('addUser', us)

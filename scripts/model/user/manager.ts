@@ -4,6 +4,7 @@ export type UserModel = {
   uuid: string
   name: string
   icon: string
+  color: string
 }
 
 export class UserManager {
