@@ -140,7 +140,11 @@ export default Vue.extend({
       new ImageApi(this.$store.getters['auth/config'])
         .postImage(file)
         .then(res => {
-          this.icon = `${process.env.HTTP_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/image/${res.data.id}`
+          const DOMAIN =
+            process.env.NODE_ENV === 'development'
+              ? process.env.DOMAIN
+              : location.host
+          this.icon = `${process.env.HTTP_SCHEME}://${DOMAIN}${process.env.BASE_PATH}/image/${res.data.id}`
         })
     },
     updateUserName(userName: string) {
