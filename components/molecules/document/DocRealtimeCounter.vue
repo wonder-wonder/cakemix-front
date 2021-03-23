@@ -5,13 +5,14 @@
         v-for="(v, k) in topThreeUsers"
         :key="`rt-user-icon-${k}`"
         class="user-icon-box tooltip"
+        :style="`background-color: ${v.color}`"
       >
         <img
           v-if="v.icon !== ''"
           :src="v.icon"
           alt="user_icon"
           class="user-icon"
-        >
+        />
         <fa-icon
           v-if="v.icon === ''"
           class="user-icon svg-icon-padding"
@@ -22,7 +23,7 @@
       <fa-icon v-if="moreThanThree" class="has-additional-user" icon="plus" />
     </div>
     <div class="realtime-counter-list-container">
-      <input id="realtime-button" type="checkbox" name="realtime-button" >
+      <input id="realtime-button" type="checkbox" name="realtime-button" />
       <label
         for="realtime-button"
         class="realtime-counter-button"
@@ -31,17 +32,19 @@
       <div class="users-list-container">
         <div class="user-box myself" v-text="wordsOfList" />
         <div v-for="(v, k) in users" :key="`rt-user-${k}`" class="user-box">
-          <img
-            v-if="v.icon !== ''"
-            :src="v.icon"
-            alt="user_icon"
-            class="user-icon"
-          >
-          <fa-icon
-            v-if="v.icon === ''"
-            class="user-icon svg-icon-padding"
-            icon="cat"
-          />
+          <div class="user-icon-box" :style="`background-color: ${v.color}`">
+            <img
+              v-if="v.icon !== ''"
+              :src="v.icon"
+              alt="user_icon"
+              class="user-icon"
+            />
+            <fa-icon
+              v-if="v.icon === ''"
+              class="user-icon svg-icon-padding"
+              icon="cat"
+            />
+          </div>
           <span class="user-name" v-text="v.name" />
         </div>
       </div>
@@ -155,6 +158,8 @@ export default Vue.extend({
         width: 28px;
         border-radius: 14px;
         pointer-events: none;
+        font-size: 34px;
+        color: white;
       }
       .svg-icon-padding {
         padding: 4px;
@@ -207,14 +212,26 @@ export default Vue.extend({
         height: 48px;
         width: 100%;
         padding: 4px;
-        .user-icon {
-          height: 36px;
-          width: 36px;
+        .user-icon-box {
+          position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 40px;
+          width: 40px;
           border-radius: 20px;
-          pointer-events: none;
-        }
-        .svg-icon-padding {
-          padding: 4px;
+          background-color: whitesmoke;
+          .user-icon {
+            height: 34x;
+            width: 34px;
+            border-radius: 17px;
+            font-size: 34px;
+            pointer-events: none;
+            color: white;
+          }
+          .svg-icon-padding {
+            padding: 4px;
+          }
         }
         .user-name {
           display: flex;
