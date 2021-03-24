@@ -1396,6 +1396,19 @@ ot.CodeMirrorAdapter = (function (global) {
     nameEl.style.paddingRight = '2px'
     nameEl.style.marginTop = '-4px'
     nameEl.style.marginLeft = '-2px'
+    /// hover area element
+    const hoverEl = document.createElement('span')
+    hoverEl.style.position = 'absolute'
+    hoverEl.style.background = 'rgba(0,0,0,0)'
+    hoverEl.style.height = '100%'
+    hoverEl.style.width = '24px'
+    hoverEl.style.marginLeft = '-12px'
+    hoverEl.onmouseenter = () => {
+      nameEl.style.visibility = 'visible'
+    }
+    hoverEl.onmouseleave = () => {
+      nameEl.style.visibility = 'hidden'
+    }
     /// cursor element
     const cursorEl = document.createElement('span')
     cursorEl.className = 'other-client'
@@ -1409,13 +1422,8 @@ ot.CodeMirrorAdapter = (function (global) {
       (cursorCoords.bottom - cursorCoords.top) * 0.9 + 'px'
     cursorEl.style.zIndex = 0
     cursorEl.setAttribute('data-clientid', clientId)
+    cursorEl.appendChild(hoverEl)
     cursorEl.appendChild(nameEl)
-    cursorEl.onmouseenter = () => {
-      nameEl.style.visibility = 'visible'
-    }
-    cursorEl.onmouseleave = () => {
-      nameEl.style.visibility = 'hidden'
-    }
     return this.cm.setBookmark(cursorPos, {
       widget: cursorEl,
       insertLeft: true,
