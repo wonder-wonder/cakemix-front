@@ -17,7 +17,7 @@ You can make a small team, folder and document on the Cakemix, also write a docu
 - [x] Make small team
 - [x] Security
 - [x] Support PWA
-- [x] Supprot Mobile-Friendly Design
+- [x] Support Mobile-Friendly Design
 
 # How to use
 
