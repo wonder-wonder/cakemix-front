@@ -36,7 +36,7 @@ You need to make `config` directory in root of repository, and you also need to 
     |- .env.prod
 ```
 
-after that, write these env in the env file.  
+After that, write these env in the env file.  
 **Example of env dir and file are located at root (config.example)**
 
 ```
@@ -48,7 +48,7 @@ BASE_PATH=/v1 (see server's API path)
 
 ## Installation
 
-All step is following Nuxt.js step.  
+All step is following Nuxt.js build step.  
 First of all, you need to install dependencies.
 
 ```bash
