@@ -1,13 +1,15 @@
 <template>
   <div class="setting-auth-container">
     <div class="auth-item-box">
-      <BorderTitle :title="'Change Password'" />
+      <BorderTitle :title="'Authentication'" />
       <Input
+        class="maximum-width"
         :label-name="'Current Password'"
         :is-password="true"
         @text="oldPassword = $event"
       />
       <ValidateInput
+        class="maximum-width"
         :label-name="'New Password'"
         :is-password="true"
         :message="['OK', 'Needs 8 or more characters']"
@@ -15,7 +17,7 @@
         @text="newPassword = $event"
       />
       <b-button
-        class="update-button is-primary"
+        class="update-button is-success"
         :loading="isLoading"
         @click="request"
         v-text="'Change'"
@@ -31,7 +33,9 @@ import Input from '@/components/atoms/input/Input.vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import { AuthPassChangeReqModel, AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { passwordValidator } from '@/scripts/utils/validator'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export default Vue.extend({
   components: {
@@ -46,16 +50,19 @@ export default Vue.extend({
       isLoading: false,
     }
   },
+  head: {
+    title: getTitle(PAGES.AUTH),
+  },
   methods: {
-    successToast,
-    failureToast,
     passwordValidator,
     request() {
-      if (
-        !(this.oldPassword !== '' && this.passwordValidator(this.newPassword))
-      ) {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Request failed', 1)
+      if (!(this.oldPassword !== '' && passwordValidator(this.newPassword))) {
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+          1
+        )
         return
       }
       this.isLoading = true
@@ -66,12 +73,19 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postPassChange(model)
         .then(() => {
-          // @ts-ignore
-          this.successToast(this.$buefy, 'Password changed')
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).success
+          )
         })
         .catch(err => {
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Request failed', err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+            err.response.status
+          )
         })
         .finally(() => {
           this.isLoading = false
@@ -82,29 +96,34 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+.setting-auth-container .auth-item-box .label {
+  color: white;
+}
+</style>
+
+<style lang="scss" scoped>
 .setting-auth-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   width: 100%;
+  max-width: 798px;
   padding: 0px 16px;
   font-weight: bold;
 
   .auth-item-box {
-    max-width: 500px;
     width: 100%;
 
+    .maximum-width {
+      max-width: 375px;
+    }
     .border-title {
       width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .label {
-      color: white;
+      margin: 16px 0;
     }
 
     .update-button {
-      width: 120px;
+      width: 144px;
       margin-top: 16px;
       font-weight: bold;
     }

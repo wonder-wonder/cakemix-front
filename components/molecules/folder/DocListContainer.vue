@@ -8,8 +8,10 @@
         class="doc-cell"
         :doc="model"
         :is-selected="selectedIndex === index"
+        :current-folder-id="currentFolderId"
         @click.native="selected(model, index)"
         @dblclick.native="goToDoc(model.uuid)"
+        @reload="$emit('reload')"
       />
     </div>
   </div>
@@ -24,7 +26,7 @@ import { DocumentModel } from '~/scripts/api'
 
 export type DataType = {
   uuid: string
-  selectedIndex: Number
+  selectedIndex: number
 }
 
 export default Vue.extend({
@@ -37,12 +39,21 @@ export default Vue.extend({
       type: Array as PropType<DocumentModel[]>,
       default: [],
     },
+    currentFolderId: {
+      type: String,
+      default: '',
+    },
   },
   data(): DataType {
     return {
       uuid: uuidv4(),
       selectedIndex: -1,
     }
+  },
+  watch: {
+    models() {
+      setTimeout(this.updateWidth, 10)
+    },
   },
   mounted() {
     this.updateWidth()
@@ -58,7 +69,7 @@ export default Vue.extend({
     goToDoc(documentId: string) {
       this.$router.push({ path: `/doc/${documentId}` })
     },
-    selected(model: DocumentModel, index: Number) {
+    selected(model: DocumentModel, index: number) {
       this.selectedIndex = index
       this.$emit('select', 'DOCUMENT', model)
     },
@@ -83,7 +94,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .list-container {
   .title {
     display: flex;

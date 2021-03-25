@@ -15,11 +15,12 @@
 import Vue from 'vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import {
+  checkAuthWithStatus,
   AuthPassChangeReqModel,
   AuthApi,
-  checkAuthWithStatus,
 } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { passwordValidator } from '@/scripts/utils/validator'
 
 export type DataType = {
@@ -45,14 +46,15 @@ export default Vue.extend({
     },
   },
   methods: {
-    checkAuthWithStatus,
-    successToast,
-    failureToast,
     passwordValidator,
     request() {
-      if (!this.passwordValidator(this.password)) {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Signup failed', 1)
+      if (!passwordValidator(this.password)) {
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+          1
+        )
         return
       }
       this.isLoading = true
@@ -62,17 +64,21 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .postPassResetVerify(this.passwdResetToken, model)
         .then(() => {
-          this.successToast(
+          successToast(
             // @ts-ignore
             this.$buefy,
-            'Signup requested, a varification url will be sent'
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).success
           )
           this.$router.push('/auth/login')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Signup failed', err.response.status)
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CHANGE_PASSWD).failure,
+            err.response.status
+          )
         })
         .finally(() => {
           this.isLoading = false
@@ -82,7 +88,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .passwd-reset-box {
   display: flex;
   flex-flow: column nowrap;

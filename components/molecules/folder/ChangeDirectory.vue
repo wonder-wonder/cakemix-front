@@ -25,6 +25,7 @@ import Vue from 'vue'
 import FolderWideCell from '@/components/atoms/cell/FolderWideCell.vue'
 import Breadcrumb from '@/components/molecules/folder/Breadcrumb.vue'
 import { failureToast, successToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import {
   checkAuthWithStatus,
   DocumentApi,
@@ -74,9 +75,6 @@ export default Vue.extend({
     this.getFolder(this.currentFolderId)
   },
   methods: {
-    failureToast,
-    successToast,
-    checkAuthWithStatus,
     getFolder(id: string) {
       new FolderApi(this.$store.getters['auth/config'])
         .getList(id, 'folder')
@@ -84,11 +82,11 @@ export default Vue.extend({
           this.folderList = res.data
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'folder list request failed',
+            getToastDesc(TOAST_TYPE.GET_FOLDER).failure,
             err.response.status
           )
         })
@@ -96,24 +94,31 @@ export default Vue.extend({
     transfer() {
       const tId = this.breadcrumb[this.breadcrumb.length - 1].folder_id ?? ''
       if (!tId || tId === this.itemId) {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Unable to move folder or document', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
+          1
+        )
         return
       }
       if (this.isFolder) {
         new FolderApi(this.$store.getters['auth/config'])
           .moveFolder(this.itemId, tId)
           .then(() => {
-            // @ts-ignore
-            this.successToast(this.$buefy, 'Moved folder')
+            successToast(
+              // @ts-ignore
+              this.$buefy,
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).success
+            )
             this.$emit('updated')
             this.$emit('close')
           })
           .catch(err => {
-            this.failureToast(
+            failureToast(
               // @ts-ignore
               this.$buefy,
-              'Unable to move folder',
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })
@@ -122,15 +127,19 @@ export default Vue.extend({
           .moveDoc(this.itemId, tId)
           .then(() => {
             // @ts-ignore
-            this.successToast(this.$buefy, 'Document moved ')
+            successToast(
+              // @ts-ignore
+              this.$buefy,
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).success
+            )
             this.$emit('updated')
             this.$emit('close')
           })
           .catch(err => {
-            this.failureToast(
+            failureToast(
               // @ts-ignore
               this.$buefy,
-              'Unable to move document',
+              getToastDesc(TOAST_TYPE.MOVE_FOLDER_DOCUMENT).failure,
               err.response.status
             )
           })
@@ -140,25 +149,27 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .change-directory-container {
   display: flex;
   flex-flow: column nowrap;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
+  width: 700px;
+  max-width: 100vw;
+  padding: 12px;
   background-color: white;
   border-radius: 16px;
 
+  .breadcrumb-box {
+    margin: 0;
+  }
   .folder-cell-container {
-    width: 100%;
-    margin: 8px;
     height: 300px;
+    margin: 8px 4px;
     overflow: scroll;
   }
-
   .change-directory-button {
     width: 250px;
+    margin: 8px auto 4px auto;
   }
 }
 </style>

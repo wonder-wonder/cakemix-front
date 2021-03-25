@@ -1,15 +1,22 @@
 <template>
   <form class="create-team-box" @submit.prevent="create">
-    <i class="fa fa-users fa-fw" />
+    <fa-icon icon="users" class="icon" />
     <Input
+      class="field-input"
       :label-name="'Team Name'"
       :is-password="false"
       :value="name"
       :autofocus="true"
       @text="name = $event"
     />
-    <b-button type="is-success" :native-type="'submit'" v-text="'Create'" />
-    <b-button type="is-danger" @click="$emit('close')" v-text="'Cancel'" />
+    <div class="button-container">
+      <b-button
+        type="is-danger is-light"
+        @click="$emit('close')"
+        v-text="'Cancel'"
+      />
+      <b-button type="is-success" :native-type="'submit'" v-text="'Create'" />
+    </div>
   </form>
 </template>
 
@@ -18,6 +25,7 @@ import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { TeamApi, checkAuthWithStatus } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 
 type DataType = {
   name: string
@@ -33,13 +41,14 @@ export default Vue.extend({
     }
   },
   methods: {
-    successToast,
-    failureToast,
-    checkAuthWithStatus,
     create() {
       if (this.name === '') {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Need to set team name', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.SET_TEAM_NAME).failure,
+          1
+        )
         return
       }
       this.createTeam(this.name)
@@ -49,16 +58,19 @@ export default Vue.extend({
         .postTeam(name)
         .then(() => {
           this.$emit('created')
-          // @ts-ignore
-          this.successToast(this.$buefy, 'Success to create new team')
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CREATE_NEW_TEAM).success
+          )
           this.$emit('close')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Failed to create',
+            getToastDesc(TOAST_TYPE.CREATE_NEW_TEAM).failure,
             err.response.status
           )
         })
@@ -67,26 +79,38 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .create-team-box {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
   background-color: whitesmoke;
   border-radius: 16px;
   height: auto;
+  width: 400px;
+  max-width: 100vw;
 
-  i {
+  .field-input {
+    width: 100%;
+    max-width: 400px;
+  }
+  .icon {
+    height: 80px;
     font-size: 80px;
     color: black;
   }
-  button {
-    width: 190px;
-    margin: 4px;
-  }
   label {
     color: black;
+  }
+  .button-container {
+    display: flex;
+    flex-flow: row wrap;
+
+    button {
+      width: 120px;
+      margin: 4px;
+    }
   }
 }
 </style>

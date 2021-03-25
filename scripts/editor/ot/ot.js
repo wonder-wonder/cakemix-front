@@ -7,6 +7,7 @@
  *    \/ ot may be freely distributed under the MIT license.
  */
 
+const colormaker = require('../colormaker')
 const ot = {}
 
 ot.TextOperation = (function () {
@@ -1378,13 +1379,40 @@ ot.CodeMirrorAdapter = (function (global) {
   CodeMirrorAdapter.prototype.setOtherCursor = function (
     position,
     color,
-    clientId
+    clientId,
+    name
   ) {
     const cursorPos = this.cm.posFromIndex(position)
     const cursorCoords = this.cm.cursorCoords(cursorPos)
+    /// name element
+    const nameEl = document.createElement('span')
+    nameEl.textContent = name
+    nameEl.style.visibility = 'hidden'
+    nameEl.style.position = 'absolute'
+    nameEl.style.borderLeftStyle = 'solid'
+    nameEl.style.background = color
+    nameEl.style.borderLeftColor = color
+    nameEl.style.fontSize = '10px'
+    nameEl.style.paddingRight = '2px'
+    nameEl.style.marginTop = '-4px'
+    nameEl.style.marginLeft = '-2px'
+    /// hover area element
+    const hoverEl = document.createElement('span')
+    hoverEl.style.position = 'absolute'
+    hoverEl.style.background = 'rgba(0,0,0,0)'
+    hoverEl.style.height = '100%'
+    hoverEl.style.width = '24px'
+    hoverEl.style.marginLeft = '-12px'
+    hoverEl.onmouseenter = () => {
+      nameEl.style.visibility = 'visible'
+    }
+    hoverEl.onmouseleave = () => {
+      nameEl.style.visibility = 'hidden'
+    }
+    /// cursor element
     const cursorEl = document.createElement('span')
     cursorEl.className = 'other-client'
-    cursorEl.style.display = 'inline-block'
+    cursorEl.style.display = 'inline'
     cursorEl.style.padding = '0'
     cursorEl.style.marginLeft = cursorEl.style.marginRight = '-1px'
     cursorEl.style.borderLeftWidth = '2px'
@@ -1394,6 +1422,8 @@ ot.CodeMirrorAdapter = (function (global) {
       (cursorCoords.bottom - cursorCoords.top) * 0.9 + 'px'
     cursorEl.style.zIndex = 0
     cursorEl.setAttribute('data-clientid', clientId)
+    cursorEl.appendChild(hoverEl)
+    cursorEl.appendChild(nameEl)
     return this.cm.setBookmark(cursorPos, {
       widget: cursorEl,
       insertLeft: true,
@@ -1426,13 +1456,19 @@ ot.CodeMirrorAdapter = (function (global) {
   CodeMirrorAdapter.prototype.setOtherSelection = function (
     selection,
     color,
-    clientId
+    clientId,
+    name
   ) {
     const selectionObjects = []
     for (let i = 0; i < selection.ranges.length; i++) {
       const range = selection.ranges[i]
       if (range.isEmpty()) {
-        selectionObjects[i] = this.setOtherCursor(range.head, color, clientId)
+        selectionObjects[i] = this.setOtherCursor(
+          range.head,
+          color,
+          clientId,
+          name
+        )
       } else {
         selectionObjects[i] = this.setOtherSelectionRange(
           range,
@@ -1553,7 +1589,7 @@ ot.EditorClient = (function () {
       this.listEl.appendChild(this.li)
     }
 
-    this.setColor(name ? hueFromName(name) : Math.random())
+    this.setColor(name ? colormaker.hueFromName(name) : Math.random())
     if (selection) {
       this.updateSelection(selection)
     }
@@ -1561,8 +1597,8 @@ ot.EditorClient = (function () {
 
   OtherClient.prototype.setColor = function (hue) {
     this.hue = hue
-    this.color = hsl2hex(hue, 0.75, 0.5)
-    this.lightColor = hsl2hex(hue, 0.5, 0.9)
+    this.color = colormaker.hsl2hex(hue, 0.75, 0.5)
+    this.lightColor = colormaker.hsl2hex(hue, 0.5, 0.9)
     if (this.li) {
       this.li.style.color = this.color
     }
@@ -1573,13 +1609,11 @@ ot.EditorClient = (function () {
       return
     }
     this.name = name
-
     this.li.textContent = name
     if (!this.li.parentNode) {
       this.listEl.appendChild(this.li)
     }
-
-    this.setColor(hueFromName(name))
+    this.setColor(colormaker.hueFromName(name))
   }
 
   OtherClient.prototype.updateSelection = function (selection) {
@@ -1590,7 +1624,8 @@ ot.EditorClient = (function () {
       selection.position === selection.selectionEnd
         ? this.color
         : this.lightColor,
-      this.id
+      this.id,
+      this.name
     )
   }
 
@@ -1731,7 +1766,6 @@ ot.EditorClient = (function () {
   }
 
   EditorClient.prototype.onClientLeft = function (clientId) {
-    console.log('User disconnected: ' + clientId)
     const client = this.clients[clientId]
     if (!client) {
       return
@@ -1825,49 +1859,6 @@ ot.EditorClient = (function () {
     this.editorAdapter.applyOperation(operation)
     this.updateSelection()
     this.undoManager.transform(new WrappedOperation(operation, null))
-  }
-
-  function rgb2hex(r, g, b) {
-    function digits(n) {
-      const m = Math.round(255 * n).toString(16)
-      return m.length === 1 ? '0' + m : m
-    }
-    return '#' + digits(r) + digits(g) + digits(b)
-  }
-
-  function hsl2hex(h, s, l) {
-    if (s === 0) {
-      return rgb2hex(l, l, l)
-    }
-    const var2 = l < 0.5 ? l * (1 + s) : l + s - s * l
-    const var1 = 2 * l - var2
-    const hue2rgb = function (hue) {
-      if (hue < 0) {
-        hue += 1
-      }
-      if (hue > 1) {
-        hue -= 1
-      }
-      if (6 * hue < 1) {
-        return var1 + (var2 - var1) * 6 * hue
-      }
-      if (2 * hue < 1) {
-        return var2
-      }
-      if (3 * hue < 2) {
-        return var1 + (var2 - var1) * 6 * (2 / 3 - hue)
-      }
-      return var1
-    }
-    return rgb2hex(hue2rgb(h + 1 / 3), hue2rgb(h), hue2rgb(h - 1 / 3))
-  }
-
-  function hueFromName(name) {
-    let a = 1
-    for (let i = 0; i < name.length; i++) {
-      a = (17 * (a + name.charCodeAt(i))) % 360
-    }
-    return a / 360
   }
 
   // Set Const.prototype.__proto__ to Super.prototype

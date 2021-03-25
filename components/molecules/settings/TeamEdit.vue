@@ -14,7 +14,7 @@
         @infinite-scroll="getMoreUsers"
         @select="selectUser"
       >
-        <template v-slot="props">
+        <template #default="props">
           <UserSearchWideCell :user="props.option" />
         </template>
       </b-autocomplete>
@@ -59,20 +59,19 @@ import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
+  TOAST_TYPE,
+  MODAL_TYPE,
+  getToastDesc,
+  getModalDesc,
+} from '@/scripts/model/toast'
+import {
   checkAuthWithStatus,
   TeamApi,
   SearchApi,
   ProfileModel,
   MemberInfoModel,
 } from '@/scripts/api/index'
-
-type DataType = {
-  uuid: string
-  searchName: string
-  memberPaging: PagingModel
-  searchPaging: PagingModel
-  userSearchInput: string
-}
+import { getEditTeamTitle } from '@/scripts/model/head/index'
 
 type PagingModel = {
   data: ProfileModel[] | MemberInfoModel[]
@@ -80,6 +79,19 @@ type PagingModel = {
   page: number
   PER_PAGE: number
   isFetching: boolean
+}
+
+type DataType = {
+  uuid: string
+  searchName: string
+  memberPaging: PagingModel
+  searchPaging: PagingModel
+  userSearchInput: string
+  ownPermission: number
+}
+
+type HeadType = {
+  title: string
 }
 
 export default Vue.extend({
@@ -113,31 +125,27 @@ export default Vue.extend({
         isFetching: false,
       } as PagingModel,
       userSearchInput: '',
+      ownPermission: 0,
+    }
+  },
+  head(): HeadType {
+    return {
+      title: getEditTeamTitle(this.teamName),
     }
   },
   computed: {
     teamHasImage(): boolean {
       return !(this.team.icon_uri === undefined || this.team.icon_uri === '')
     },
-    ownPermission(): number {
-      const members = this.memberPaging.data as MemberInfoModel[]
-      const own = members.filter(mm => {
-        const uuid = (mm.member as ProfileModel).uuid
-        return uuid === this.$store.getters['auth/uuid']
-      })
-      if (own.length === 0) {
-        return 3
-      }
-      return own[0].permission ?? 0
+    teamName(): string {
+      return this.team.name ?? 'Unknown'
     },
   },
   created() {
+    this.getOwnPermission()
     this.getMembers()
   },
   methods: {
-    successToast,
-    failureToast,
-    checkAuthWithStatus,
     resetMember() {
       this.memberPaging = {
         data: [] as MemberInfoModel[],
@@ -162,15 +170,53 @@ export default Vue.extend({
         .then(() => {
           this.resetMember()
           this.getMembers()
-          // @ts-ignore
-          this.successToast(this.$buefy, 'Added new member')
-        })
-        .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          successToast(
             // @ts-ignore
             this.$buefy,
-            'Add new member failed',
+            getToastDesc(TOAST_TYPE.ADD_NEW_MEMBER).success
+          )
+        })
+        .catch(err => {
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.ADD_NEW_MEMBER).failure,
+            err.response.status
+          )
+        })
+    },
+    getOwnPermission() {
+      const teamId = this.team.uuid
+      if (!teamId) {
+        return
+      }
+      new TeamApi(this.$store.getters['auth/config'])
+        .getTeamTeamidMember(
+          teamId,
+          this.memberPaging.PER_PAGE,
+          (this.memberPaging.page - 1) * this.memberPaging.PER_PAGE,
+          this.$store.getters['auth/uuid']
+        )
+        .then(res => {
+          const total = res.data.total ?? 0
+          const members = res.data.members ?? []
+          if (total < 1 || members.length < 1) {
+            failureToast(
+              // @ts-ignore
+              this.$buefy,
+              getToastDesc(TOAST_TYPE.GET_PERMISSION).failure,
+              400
+            )
+          }
+          this.ownPermission = members[0].permission ?? 0
+        })
+        .catch(err => {
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.GET_PERMISSION).failure,
             err.response.status
           )
         })
@@ -188,15 +234,14 @@ export default Vue.extend({
         )
         .then(res => {
           this.memberPaging.total = res.data.total ?? 0
-          const member = this.memberPaging.data as MemberInfoModel[]
-          this.memberPaging.data = member.concat(res.data.members ?? [])
+          this.memberPaging.data = res.data.members ?? []
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Get member failed',
+            getToastDesc(TOAST_TYPE.GET_MEMBER).failure,
             err.response.status
           )
         })
@@ -227,11 +272,11 @@ export default Vue.extend({
           this.searchPaging.data = users.concat(res.data.users ?? [])
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Search user failed',
+            getToastDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })
@@ -255,15 +300,18 @@ export default Vue.extend({
       new TeamApi(this.$store.getters['auth/config'])
         .putTeamTeamidMember(teamId, uModel)
         .then(() => {
-          // @ts-ignore
-          this.successToast(this.$buefy, 'Upgraded permission')
-        })
-        .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          successToast(
             // @ts-ignore
             this.$buefy,
-            'Change permission failed',
+            getToastDesc(TOAST_TYPE.CHANGE_PERMISSION).success
+          )
+        })
+        .catch(err => {
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CHANGE_PERMISSION).failure,
             err.response.status
           )
         })
@@ -279,7 +327,7 @@ export default Vue.extend({
       }
       // @ts-ignore
       this.$buefy.dialog.confirm({
-        message: 'Owner will be transferred to other, are you sure?',
+        message: getModalDesc(MODAL_TYPE.OWNER_TRANSFER),
         onConfirm: () => this.changedPerm(user, newPerm),
         onCancel: () => {
           this.getMembers()
@@ -296,15 +344,18 @@ export default Vue.extend({
         .then(() => {
           this.resetMember()
           this.getMembers()
-          // @ts-ignore
-          this.successToast(this.$buefy, 'Member removed')
-        })
-        .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          successToast(
             // @ts-ignore
             this.$buefy,
-            'Unable to remove member',
+            getToastDesc(TOAST_TYPE.REMOVE_MEMBER).success
+          )
+        })
+        .catch(err => {
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.REMOVE_MEMBER).failure,
             err.response.status
           )
           this.resetMember()
@@ -320,16 +371,19 @@ export default Vue.extend({
         .deleteTeamTeamid(teamId)
         .then(() => {
           this.$emit('reload')
-          // @ts-ignore
-          this.successToast(this.$buefy, 'This team was deleted')
+          successToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.DELETE_TEAM).success
+          )
           this.$emit('close')
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Delete team failed',
+            getToastDesc(TOAST_TYPE.DELETE_TEAM).failure,
             err.response.status
           )
         })
@@ -337,7 +391,7 @@ export default Vue.extend({
     deleteTeamConfirm() {
       // @ts-ignore
       this.$buefy.dialog.confirm({
-        message: 'Do you want to delete this team?',
+        message: getModalDesc(MODAL_TYPE.DELETE_TEAM),
         onConfirm: () => this.deleteTeam(),
         onCancel: () => {
           this.getMembers()
@@ -353,8 +407,9 @@ export default Vue.extend({
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  width: 100%;
-  padding: 20px;
+  width: 958px;
+  max-width: 100vw;
+  padding: 16px;
   background-color: white;
   border-radius: 16px;
 
@@ -397,7 +452,8 @@ export default Vue.extend({
   }
 
   .pagination {
-    margin: 8px 0px;
+    margin-top: 8px;
+    margin-bottom: 16px;
   }
 
   .delete-team-button {

@@ -13,6 +13,8 @@ import NavHeader from '@/components/organisms/header/NavHeader.vue'
 import PasswdReset from '@/components/organisms/auth/PasswdReset.vue'
 import { AuthApi } from '@/scripts/api/index'
 import { successToast, failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export type DataType = {
   isVerified: boolean
@@ -28,6 +30,9 @@ export default Vue.extend({
       isVerified: false,
     }
   },
+  head: {
+    title: getTitle(PAGES.VERIFY_TOKEN),
+  },
   computed: {
     passwdToken() {
       return this.$route.params.id
@@ -35,8 +40,12 @@ export default Vue.extend({
   },
   created() {
     if (this.passwdToken === '') {
-      // @ts-ignore
-      this.failureToast(this.$buefy, 'Token verification failed ', 1)
+      failureToast(
+        // @ts-ignore
+        this.$buefy,
+        getToastDesc(TOAST_TYPE.VERITY_TOKEN).failure,
+        1
+      )
       this.$router.push('/auth/passwd')
       return
     }
@@ -44,30 +53,24 @@ export default Vue.extend({
       .getPassResetVerify(this.passwdToken)
       .then(() => {
         // @ts-ignore
-        this.successToast(this.$buefy, 'Token was verified')
+        successToast(this.$buefy, getToastDesc(TOAST_TYPE.VERITY_TOKEN).success)
         this.isVerified = true
       })
       .catch(err => {
-        this.failureToast(
+        failureToast(
           // @ts-ignore
           this.$buefy,
-          'Token verification failed ',
+          getToastDesc(TOAST_TYPE.VERITY_TOKEN).failure,
           err.response.status
         )
         this.$router.push('/auth/passwd')
       })
   },
-  methods: {
-    successToast,
-    failureToast,
-  },
+  methods: {},
 })
 </script>
 
-<style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
-}
+<style lang="scss" scoped>
 .passwd-verify-container {
   height: 100vh;
   width: 100vw;

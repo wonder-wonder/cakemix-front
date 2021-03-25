@@ -1,8 +1,11 @@
 <template>
   <div class="setting-teams-container">
-    <TeamTools @create-team="openCreateTeamBox" />
     <div ref="teams-item-container" class="teams-item-container">
       <BorderTitle :title="'Teams'" />
+      <TeamTools
+        class="team-tools-container"
+        @create-team="openCreateTeamBox"
+      />
       <div class="teams-item-box">
         <UserCell
           v-for="(user, index) in users"
@@ -33,15 +36,16 @@ import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import TeamTools from '@/components/molecules/settings/TeamTools.vue'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
-import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
 import CreateTeamBox from '@/components/organisms/settings/CreateTeamBox.vue'
 import TeamEdit from '@/components/molecules/settings/TeamEdit.vue'
 import {
-  SearchApi,
   checkAuthWithStatus,
+  SearchApi,
   ProfileModel,
 } from '@/scripts/api/index'
-import { failureToast, successToast } from '@/scripts/utils/toast'
+import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type DataType = {
   uuid: string
@@ -70,6 +74,9 @@ export default Vue.extend({
       PER_PAGE: 9,
     }
   },
+  head: {
+    title: getTitle(PAGES.TEAMS),
+  },
   created() {
     this.getTeams()
   },
@@ -80,9 +87,6 @@ export default Vue.extend({
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
-    failureToast,
-    successToast,
-    checkAuthWithStatus,
     openCreateTeamBox() {
       // @ts-ignore
       this.$buefy.modal.open({
@@ -110,11 +114,11 @@ export default Vue.extend({
           this.users = res.data.teams ?? []
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Search team failed',
+            getToastDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })
@@ -168,11 +172,13 @@ export default Vue.extend({
     max-width: 798px;
     margin: 0 auto;
 
+    .team-tools-container {
+      margin-bottom: 16px;
+    }
     .border-title {
       width: 100%;
-      margin: 20px 8px;
+      margin: 16px 8px;
     }
-
     .teams-item-box {
       display: flex;
       flex-flow: row wrap;

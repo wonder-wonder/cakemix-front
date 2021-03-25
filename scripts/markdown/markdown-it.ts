@@ -20,7 +20,7 @@ const parser = new markdownIt('default', {
 })
 
 parser.use(require('markdown-it-emoji'))
-parser.use(require('markdown-it-checkbox'))
+parser.use(require('markdown-it-task-checkbox'))
 parser.use(require('markdown-it-sanitizer'))
 parser.use(require('markdown-it-imsize'))
 parser.use(require('markdown-it-sub'))

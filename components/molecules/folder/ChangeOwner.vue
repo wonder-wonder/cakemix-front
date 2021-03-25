@@ -23,14 +23,14 @@
         @infinite-scroll="getMore"
         @select="select"
       >
-        <template v-slot="props">
+        <template #default="props">
           <UserSearchWideCell :user="props.option" />
         </template>
       </b-autocomplete>
     </b-field>
     <div v-if="isUserSelected" class="user-cells-box">
       <UserMinCell class="user-cell" :user="currentOwner" />
-      <i class="fa fa-arrow-right" />
+      <fa-icon class="icon" icon="arrow-right" />
       <UserMinCell class="user-cell" :user="selectedUser" />
     </div>
     <b-button
@@ -51,22 +51,13 @@ import UserMinCell from '@/components/atoms/cell/UserMinCell.vue'
 import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import {
   checkAuthWithStatus,
   SearchApi,
   ProfileModel,
   MemberInfoModel,
 } from '@/scripts/api/index'
-
-type DataType = {
-  uuid: string
-  searchName: string
-  searchPaging: SearchPagingModel
-  members: MemberInfoModel[]
-  tabs: TabModel[]
-  currentTab: string
-  selectedUser: ProfileModel
-}
 
 type SearchPagingModel = {
   data: ProfileModel[]
@@ -82,6 +73,16 @@ type TabModel = {
   admin: boolean
   label: string
   icon: string
+}
+
+type DataType = {
+  uuid: string
+  searchName: string
+  searchPaging: SearchPagingModel
+  members: MemberInfoModel[]
+  tabs: TabModel[]
+  currentTab: string
+  selectedUser: ProfileModel
 }
 
 const TAB_TYPE_MODEL = {
@@ -148,8 +149,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    failureToast,
-    checkAuthWithStatus,
     select(user: ProfileModel) {
       this.selectedUser = user
     },
@@ -190,11 +189,11 @@ export default Vue.extend({
           )
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Search user failed',
+            getToastDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })
@@ -229,11 +228,11 @@ export default Vue.extend({
           )
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Search team failed',
+            getToastDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })
@@ -249,14 +248,26 @@ export default Vue.extend({
 })
 </script>
 
+<style lang="scss">
+.owner-container {
+  .b-tabs:not(:last-child) {
+    margin: 0;
+  }
+  .b-tabs .tab-content {
+    padding: 0;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 .owner-container {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  width: 100%;
+  width: 700px;
+  max-width: 100vw;
   min-height: 300px;
-  padding: 20px;
+  padding: 16px;
   background-color: white;
   border-radius: 16px;
 
@@ -264,7 +275,7 @@ export default Vue.extend({
     margin: 0;
   }
   .b-tabs .tab-content {
-    padding: 0;
+    padding: 0 !important;
   }
   .field {
     width: 100%;
@@ -296,7 +307,7 @@ export default Vue.extend({
     .user-cell {
       margin: 4px;
     }
-    .fa {
+    .icon {
       font-size: 32px;
       margin: 0 8px 32px 8px;
     }

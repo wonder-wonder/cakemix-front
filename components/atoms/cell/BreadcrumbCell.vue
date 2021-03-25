@@ -5,8 +5,8 @@
       @click="$emit('click', folderId)"
       v-text="title"
     />
-    <i
-      class="fa fa-chevron-right"
+    <fa-icon
+      icon="chevron-right"
       :class="dark ? 'white-triangle' : 'black-triangle'"
     />
   </div>
@@ -34,7 +34,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .breadcrumb-cell-container {
   display: flex;
   flex-flow: row nowrap;
@@ -75,7 +75,6 @@ export default Vue.extend({
 
   .triangle {
     font-size: 24px;
-    margin-top: 2px;
   }
 
   .black-triangle {

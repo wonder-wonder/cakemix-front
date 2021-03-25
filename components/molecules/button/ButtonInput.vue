@@ -1,7 +1,7 @@
 <template>
   <b-field :label="labelName" class="button-input-container">
     <button
-      class="button link-button is-primary"
+      class="button link-button is-success"
       @click="$emit('click')"
       v-text="buttonName"
     />
@@ -44,7 +44,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .button-input-container {
   width: 100%;
   .link-button {

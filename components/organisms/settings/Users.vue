@@ -1,16 +1,16 @@
 <template>
   <div class="setting-users-container">
-    <div class="users-tool-container">
-      <ButtonInput
-        class="button-input"
-        :button-name="'Generate link'"
-        :label-name="'Invitation Link'"
-        :value="generatedLink"
-        @click="generateLink"
-      />
-    </div>
     <div ref="users-item-container" class="users-item-container">
       <BorderTitle :title="'Users'" />
+      <div class="users-tool-container">
+        <ButtonInput
+          class="button-input"
+          :button-name="'Generate link'"
+          :label-name="'Invitation Link'"
+          :value="generatedLink"
+          @click="generateLink"
+        />
+      </div>
       <div class="users-item-box">
         <UserCell
           v-for="(user, index) in users"
@@ -41,12 +41,14 @@ import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
 import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
 import {
-  AuthApi,
   checkAuthWithStatus,
+  AuthApi,
   SearchApi,
   ProfileModel,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type DataType = {
   uuid: string
@@ -73,6 +75,9 @@ export default Vue.extend({
       PER_PAGE: 9,
     }
   },
+  head: {
+    title: getTitle(PAGES.USERS),
+  },
   created() {
     this.getUsers()
   },
@@ -83,8 +88,6 @@ export default Vue.extend({
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
-    failureToast,
-    checkAuthWithStatus,
     getUsers() {
       new SearchApi(this.$store.getters['auth/config'])
         .getSearchUser('', this.PER_PAGE, (this.page - 1) * this.PER_PAGE)
@@ -93,11 +96,11 @@ export default Vue.extend({
           this.users = res.data.users ?? []
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Search user failed',
+            getToastDesc(TOAST_TYPE.SEARCH).failure,
             err.response.status
           )
         })
@@ -109,14 +112,18 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .getNewTokenRegist()
         .then(res => {
-          this.generatedLink = `${process.env.HTTP_SCHEME}://${process.env.DOMAIN}/auth/signup/${res.data.token}`
+          const DOMAIN =
+            process.env.NODE_ENV === 'development'
+              ? process.env.DOMAIN
+              : location.host
+          this.generatedLink = `${process.env.HTTP_SCHEME}://${DOMAIN}/auth/signup/${res.data.token}`
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Generate a invitation link failed',
+            getToastDesc(TOAST_TYPE.GENERATE_NEW_LINK).failure,
             err.response.status
           )
         })
@@ -167,7 +174,9 @@ export default Vue.extend({
     flex-flow: row wrap;
     justify-content: center;
     width: 100%;
+    max-width: 450px;
     padding: 0px 8px;
+    margin-bottom: 16px;
 
     label {
       color: white;
@@ -189,7 +198,7 @@ export default Vue.extend({
 
     .border-title {
       width: 100%;
-      margin: 20px 8px;
+      margin: 16px 8px;
     }
 
     .users-item-box {

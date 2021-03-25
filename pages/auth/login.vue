@@ -9,11 +9,15 @@
 import Vue from 'vue'
 import LoginBox from '@/components/organisms/auth/LoginBox.vue'
 import NavHeader from '@/components/organisms/header/NavHeader.vue'
+import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 export default Vue.extend({
   components: {
     NavHeader,
     LoginBox,
+  },
+  head: {
+    title: getTitle(PAGES.LOGIN),
   },
   beforeCreate() {
     // TODO: need to refactor this routing
@@ -25,10 +29,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
-}
+<style lang="scss" scoped>
 .login-container {
   height: 100vh;
   width: 100vw;

@@ -25,13 +25,17 @@
           v-if="isFolderAvailable"
           ref="folder-list-container"
           :models="filteredFolder"
+          :current-folder-id="currentFolderId"
           @select="selectedFolderDoc"
+          @reload="fetchFolder"
         />
         <DocListContainer
           v-if="isDocAvailable"
           ref="doc-list-container"
           :models="filteredDocs"
+          :current-folder-id="currentFolderId"
           @select="selectedFolderDoc"
+          @reload="fetchFolder"
         />
       </div>
       <div v-if="!isMobile" class="right-container">
@@ -46,12 +50,12 @@
       </div>
     </div>
     <b-button
-      icon-pack="fa"
       class="floating-option-button is-light"
       :rounded="true"
-      icon-right="info"
       @click="openOptionView"
-    />
+    >
+      <fa-icon icon="info" class="icon" />
+    </b-button>
     <NoList v-if="isNoItems && isLoaded" />
   </div>
 </template>
@@ -65,20 +69,22 @@ import FolderListContainer from '@/components/molecules/folder/FolderListContain
 import DocListContainer from '@/components/molecules/folder/DocListContainer.vue'
 import OptionBox from '@/components/organisms/folder/OptionBox.vue'
 import SortBox, {
-  alphabetSort,
+  newestSort,
   SortModel,
 } from '@/components/organisms/folder/SortBox.vue'
 import CreateFolderBox from '@/components/organisms/folder/CreateFolderBox.vue'
 import NoList from '@/components/atoms/folder/NoList.vue'
 import {
+  checkAuthWithStatus,
   FolderApi,
   DocumentApi,
   FolderModel,
   DocumentModel,
   BreadcrumbModel,
-  checkAuthWithStatus,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
+import { getFolderTitle } from '@/scripts/model/head/index'
 
 export type DataType = {
   folders: FolderModel[]
@@ -91,6 +97,10 @@ export type DataType = {
   isLoaded: boolean
 }
 
+type HeadType = {
+  title: string
+}
+
 export default Vue.extend({
   components: {
     NavHeader,
@@ -100,17 +110,23 @@ export default Vue.extend({
     FolderListContainer,
     DocListContainer,
     NoList,
+    SortBox,
   },
   data(): DataType {
     return {
       folders: [] as FolderModel[],
       docs: [] as DocumentModel[],
       breadcrumb: [] as BreadcrumbModel[],
-      sortFunction: alphabetSort,
+      sortFunction: newestSort,
       selectType: 'NONE',
       selectItem: {} as FolderModel | DocumentModel,
       searchText: '',
       isLoaded: false,
+    }
+  },
+  head(): HeadType {
+    return {
+      title: getFolderTitle(this.folderTitle),
     }
   },
   computed: {
@@ -127,18 +143,20 @@ export default Vue.extend({
       if (this.searchText === '') {
         return this.sortedFolder
       }
+      const lowerSearchText = this.searchText.toLowerCase()
       return this.sortedFolder.filter(f => {
         const name = f.name ?? ''
-        return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
+        return name.toLowerCase().match(RegExp(`^(?=.*${lowerSearchText}).*$`))
       })
     },
     filteredDocs(): DocumentModel[] {
       if (this.searchText === '') {
         return this.sortedDocs
       }
+      const lowerSearchText = this.searchText.toLowerCase()
       return this.sortedDocs.filter(f => {
         const name = f.title ?? ''
-        return name.toLowerCase().match(RegExp(`^(?=.*${this.searchText}).*$`))
+        return name.toLowerCase().match(RegExp(`^(?=.*${lowerSearchText}).*$`))
       })
     },
     isFolderAvailable(): boolean {
@@ -158,13 +176,19 @@ export default Vue.extend({
     hasSelectedItem(): boolean {
       return !!this.selectItem.uuid
     },
+    folderTitle(): string {
+      if (this.breadcrumb.length < 1) {
+        return ''
+      } else if (this.breadcrumb.length === 1) {
+        return 'Home'
+      }
+      return this.breadcrumb[this.breadcrumb.length - 1].title ?? ''
+    },
   },
   created() {
     this.fetchFolder()
   },
   methods: {
-    failureToast,
-    checkAuthWithStatus,
     resetFolderIndex() {
       const instance = this.$refs['folder-list-container'] as InstanceType<
         typeof FolderListContainer
@@ -259,11 +283,11 @@ export default Vue.extend({
           this.breadcrumb = res.data.path ?? []
         })
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Failed to fetch folder',
+            getToastDesc(TOAST_TYPE.GET_FOLDER).failure,
             err.response.status
           )
         })
@@ -281,11 +305,11 @@ export default Vue.extend({
       new FolderApi(this.$store.getters['auth/config'])
         .createNewFolder(fId, name)
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Failed to fetch folder',
+            getToastDesc(TOAST_TYPE.CREATE_FOLDER).failure,
             err.response.status
           )
         })
@@ -301,11 +325,11 @@ export default Vue.extend({
       new DocumentApi(this.$store.getters['auth/config'])
         .createNewDoc(fId, 'Untitled')
         .catch(err => {
-          this.checkAuthWithStatus(this, err.response.status)
-          this.failureToast(
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
             // @ts-ignore
             this.$buefy,
-            'Failed to fetch folder',
+            getToastDesc(TOAST_TYPE.CREATE_DOCUMENT).failure,
             err.response.status
           )
         })

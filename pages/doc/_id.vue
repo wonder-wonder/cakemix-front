@@ -4,46 +4,114 @@
       class="document-header"
       :is-loaded="isLoaded"
       :is-editable="isEditable"
-      @input="onClicked"
+      :users="onlineUsers"
+      :document="document"
+      :current-folder-id="parentFolderId"
       @toParentFolder="toParentFolder"
+      @willDelete="willDelete = true"
+      @cannotDelete="willDelete = false"
     />
-    <DocPreviewEditor
+    <div
       v-if="isLoaded"
-      :is-editable="isEditable"
-      class="document-preview-editor"
-      @toParentFolder="toParentFolder"
-    />
+      class="document-preview-editor-container"
+      :class="displayType == 2 ? 'split' : 'editor'"
+    >
+      <DocEditor
+        v-show="displayType !== 3"
+        :p-markdown="markdown"
+        :current-pos="editorPosition"
+        :is-editable="isEditable"
+        :will-delete="willDelete"
+        @input="onChangedEditorText"
+        @update="onChangedEditorPoints"
+        @updatepos="onUpdatedEditorPosition"
+        @toParentFolder="$emit('toParentFolder')"
+        @addUser="addUser"
+        @delUser="delUser"
+      />
+      <DocPreview
+        v-show="displayType !== 1"
+        :p-markdown="markdown"
+        :current-pos="previewPosition"
+        @update="onChangedPreviewPoints"
+        @updatepos="onUpdatedPreviewPosition"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import DocPreviewEditor from '@/components/molecules/document/DocPreviewEditor.vue'
+import DocEditor from '@/components/molecules/document/DocEditor.vue'
+import DocPreview from '@/components/molecules/document/DocPreview.vue'
 import DocHeader from '@/components/organisms/document/DocHeader.vue'
-import { DocumentApi, checkAuthWithStatus } from '@/scripts/api/index'
+import {
+  checkAuthWithStatus,
+  DocumentApi,
+  DocumentModel,
+} from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
+import { UserManager, UserModel } from '@/scripts/model/user/manager'
+import { getDocumentTitle } from '@/scripts/model/head/index'
+const ss = require('@/scripts/editor/scrollsyncer')
 
 type DataType = {
   isLoaded: boolean
   parentFolderId: string
   isEditable: boolean
+  willDelete: boolean
+  markdown: String | null
+  editorPoints: Object[]
+  previewPoints: Object[]
+  editorPosition: Number
+  previewPosition: Number
+  userManager: UserManager
+  document: DocumentModel
+}
+
+type HeadType = {
+  title: string
 }
 
 export default Vue.extend({
   components: {
     DocHeader,
-    DocPreviewEditor,
+    DocEditor,
+    DocPreview,
   },
   data(): DataType {
     return {
       isLoaded: false,
       parentFolderId: '',
       isEditable: false,
+      willDelete: false,
+      markdown: '',
+      editorPoints: [],
+      previewPoints: [],
+      editorPosition: 0,
+      previewPosition: 0,
+      userManager: new UserManager(),
+      document: {} as DocumentModel,
+    }
+  },
+  head(): HeadType {
+    return {
+      title: getDocumentTitle(this.docTitle),
     }
   },
   computed: {
     docId(): string {
       return this.$route.params.id
+    },
+    docTitle(): string {
+      return this.document.title ?? ''
+    },
+    displayType(): number {
+      return this.$store.getters['editor/displayType']
+    },
+    onlineUsers(): UserModel[] {
+      return this.userManager.getUsers()
     },
   },
   created() {
@@ -51,62 +119,91 @@ export default Vue.extend({
       .getDocDocId(this.docId)
       .then(res => {
         this.isLoaded = true
+        this.document = res.data
         this.parentFolderId = res.data.parentfolderid ?? ''
         this.isEditable = res.data.editable ?? false
       })
       .catch(err => {
-        this.checkAuthWithStatus(this, err.response.status)
-        this.failureToast(
+        checkAuthWithStatus(this, err.response.status)
+        failureToast(
           // @ts-ignore
           this.$buefy,
-          'Unable to open this document',
+          getToastDesc(TOAST_TYPE.OPEN_DOCUMENT).failure,
           err.response.status
         )
         this.toParentFolder()
       })
   },
   methods: {
-    failureToast,
-    checkAuthWithStatus,
     toParentFolder() {
       this.$router.push(`/folder/${this.parentFolderId}`)
     },
-    onClicked(ref: string) {
-      switch (ref) {
-        case 'question':
-          this.copyToClip()
-          break
-        default:
-          break
-      }
+    onChangedEditorText(text: string) {
+      this.markdown = text
     },
-    copyToClip() {
-      const str = require('@/scripts/markdown/samplemd').sample
-      const listener = function (e: any) {
-        e.clipboardData.setData('text/plain', str)
-        e.preventDefault()
-        document.removeEventListener('copy', listener)
+    onChangedEditorPoints(points: object[]) {
+      this.editorPoints = points
+    },
+    onChangedPreviewPoints(points: object[]) {
+      this.previewPoints = points
+    },
+    onUpdatedEditorPosition(position: number) {
+      if (this.editorPosition === position) {
+        return
       }
-      document.addEventListener('copy', listener)
-      document.execCommand('copy')
+      this.editorPosition = position
+      this.editorToPreview(position)
+    },
+    onUpdatedPreviewPosition(position: number) {
+      if (this.previewPosition === position) {
+        return
+      }
+      this.previewPosition = position
+      // this.previewToEditor(position)
+    },
+    editorToPreview(position: number) {
+      this.previewPosition = ss.e2p(
+        position,
+        this.editorPoints,
+        this.previewPoints
+      )
+    },
+    // previewToEditor(position: number) {
+    //   this.editorPosition = ss.p2e(
+    //     position,
+    //     this.editorPoints,
+    //     this.previewPoints
+    //   )
+    // },
+    addUser(us: UserModel[]) {
+      this.userManager.addUser(us)
+    },
+    delUser(id: string) {
+      this.userManager.deleteUser(id)
     },
   },
 })
 </script>
 
-<style lang="scss">
-html {
-  background-color: rgb(32, 32, 32);
-}
+<style lang="scss" scoped>
 .document-container {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
   height: 100vh;
 
   .document-header {
     height: 56px;
   }
 
-  .document-preview-editor {
+  .document-preview-editor-container {
     height: calc(100vh - 56px);
+    display: grid;
+    background-color: white;
+
+    &.split {
+      grid-template-columns: repeat(2, 50%);
+    }
   }
 }
 </style>

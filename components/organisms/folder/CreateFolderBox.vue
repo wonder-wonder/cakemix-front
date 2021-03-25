@@ -1,15 +1,22 @@
 <template>
   <form class="create-folder-box" @submit.prevent="createFolder">
-    <i class="fa fa-folder fa-fw" />
+    <fa-icon icon="folder" class="icon" />
     <Input
+      class="field-input"
       :label-name="'Folder Name'"
       :is-password="false"
       :value="name"
       :autofocus="true"
       @text="name = $event"
     />
-    <b-button type="is-success" :native-type="'submit'" v-text="'Create'" />
-    <b-button type="is-danger" @click="$emit('close')" v-text="'Cancel'" />
+    <div class="button-container">
+      <b-button
+        type="is-danger is-light"
+        @click="$emit('close')"
+        v-text="'Cancel'"
+      />
+      <b-button type="is-success" :native-type="'submit'" v-text="'Create'" />
+    </div>
   </form>
 </template>
 
@@ -17,6 +24,7 @@
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 
 type DataType = {
   name: string
@@ -32,11 +40,14 @@ export default Vue.extend({
     }
   },
   methods: {
-    failureToast,
     createFolder() {
       if (this.name === '') {
-        // @ts-ignore
-        this.failureToast(this.$buefy, 'Need to set folder name', 1)
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.SET_FOLDER_NAME).failure,
+          1
+        )
         return
       }
       this.$emit('create', this.name)
@@ -46,23 +57,35 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .create-folder-box {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
   background-color: whitesmoke;
   border-radius: 16px;
   height: auto;
+  width: 400px;
+  max-width: 100vw;
 
-  i {
+  .field-input {
+    width: 100%;
+    max-width: 400px;
+  }
+  .icon {
+    height: 80px;
     font-size: 80px;
     color: black;
   }
-  button {
-    width: 190px;
-    margin: 4px;
+  .button-container {
+    display: flex;
+    flex-flow: row wrap;
+
+    button {
+      width: 120px;
+      margin: 4px;
+    }
   }
 }
 </style>

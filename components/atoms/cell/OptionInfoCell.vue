@@ -33,7 +33,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .option-info-cell {
   display: flex;
   flex-flow: row nowrap;

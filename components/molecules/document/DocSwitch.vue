@@ -8,13 +8,13 @@
   >
     <div class="document-switch-container">
       <DocSwitchButton :is-selected="selected === 1" @click="updateStatus(1)">
-        <i class="fa fa-pencil fa-fw" />
+        <fa-icon icon="pencil-alt" />
       </DocSwitchButton>
       <DocSwitchButton :is-selected="selected === 2" @click="updateStatus(2)">
-        <i class="fa fa-columns fa-fw" />
+        <fa-icon icon="columns" />
       </DocSwitchButton>
       <DocSwitchButton :is-selected="selected === 3" @click="updateStatus(3)">
-        <i class="fa fa-eye fa-fw" />
+        <fa-icon icon="eye" />
       </DocSwitchButton>
     </div>
   </b-tooltip>
@@ -55,11 +55,11 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .document-switch-container {
   display: inline-flex;
   flex-flow: row nowrap;
-  border-radius: 5px;
+  border-radius: 8px;
   color: white;
   background-color: gray;
 }

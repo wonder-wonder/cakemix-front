@@ -1,7 +1,7 @@
 <template>
   <div class="user-search-wide-cell-container">
     <div class="icon-box">
-      <i v-if="!hasImage" class="fa" :class="isTeam ? 'fa-users' : 'fa-user'" />
+      <fa-icon v-if="!hasImage" :icon="isTeam ? 'users' : 'user'" />
       <b-image v-if="hasImage" :src="imageUri" />
     </div>
     <div class="name">
@@ -37,8 +37,12 @@ export default Vue.extend({
   },
 })
 </script>
-
 <style lang="scss">
+.user-search-wide-cell-container .icon-box img {
+  border-radius: 4px;
+}
+</style>
+<style lang="scss" scoped>
 .user-search-wide-cell-container {
   display: flex;
   flex-flow: row wrap;
@@ -48,10 +52,6 @@ export default Vue.extend({
     width: 20px;
     margin-right: 16px;
     color: black;
-
-    img {
-      border-radius: 4px;
-    }
   }
 }
 </style>

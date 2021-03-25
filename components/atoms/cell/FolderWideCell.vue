@@ -1,7 +1,7 @@
 <template>
   <div class="folder-wide-cell-container">
     <div class="icon-box">
-      <i class="fa fa-folder" />
+      <fa-icon icon="folder" />
     </div>
     <div class="title-item" v-text="folder.name" />
     <div class="detail-item" v-text="folder.uuid" />
@@ -22,7 +22,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .folder-wide-cell-container {
   display: grid;
   grid-template-rows: 20px 20px;
@@ -48,7 +48,6 @@ export default Vue.extend({
     height: 40px;
     width: 40px;
     font-size: 32px;
-    padding: 2px 0 0 1px;
     border-radius: 8px;
     background-color: black;
   }

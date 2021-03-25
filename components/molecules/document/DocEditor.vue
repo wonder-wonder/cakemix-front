@@ -11,10 +11,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Editor } from '@/node_modules/@types/codemirror/index'
+import { UserModel } from '@/scripts/model/user/manager'
+import { getModalDesc, MODAL_TYPE } from '@/scripts/model/toast'
 const editor = require('@/scripts/editor/editor.ts')
+const utils = require('@/scripts/editor/utils.ts')
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 const ot = require('@/scripts/editor/ot/ot.js')
 const socket = require('@/scripts/editor/ot/websocket.js')
+const colormaker = require('@/scripts/editor/colormaker.js')
 
 export type DataType = {
   websocket: any
@@ -35,6 +40,10 @@ export default Vue.extend({
       default: 0,
     },
     isEditable: {
+      type: Boolean,
+      default: false,
+    },
+    willDelete: {
       type: Boolean,
       default: false,
     },
@@ -62,7 +71,6 @@ export default Vue.extend({
   },
   beforeDestroy() {
     if (this.websocket) {
-      this.websocket.off('registered', this.registeredEvent)
       this.websocket.off('join', this.joinEvent)
       this.websocket.off('quit', this.quitEvent)
       this.websocket.off('doc', this.docEvent)
@@ -80,17 +88,17 @@ export default Vue.extend({
       this.cMirror = editor.newEditor(this.$refs.cmeditor)
       this.cMirror.on('change', this.changeEvent)
       this.cMirror.on('scroll', this.scrollEvent)
+      this.cMirror.on('drop', this.dropEvent)
       this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
     },
     makeConnection() {
-      const url =
-        `${process.env.WS_SCHEME}://${process.env.DOMAIN}${process.env.BASE_PATH}/doc/` +
-        this.$route.params.id +
-        '/ws?token=' +
-        this.$store.getters['auth/token']
+      const DOMAIN =
+        process.env.NODE_ENV === 'development'
+          ? process.env.DOMAIN
+          : location.host
+      const url = `${process.env.WS_SCHEME}://${DOMAIN}${process.env.BASE_PATH}/doc/${this.$route.params.id}/ws?token=${this.$store.getters['auth/token']}`
       this.websocket = new socket.SocketConnection(url, !this.isEditable)
       this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
-      this.websocket.on('registered', this.registeredEvent)
       this.websocket.on('join', this.joinEvent)
       this.websocket.on('quit', this.quitEvent)
       this.websocket.on('doc', this.docEvent)
@@ -99,31 +107,35 @@ export default Vue.extend({
     //
     // CodeMirror Event
     //
-    changeEvent(ev: any) {
-      this.$emit('input', ev.getValue())
-      const checkPoint = ss.analyzeMarkdown(ev.getValue())
+    changeEvent(cm: Editor) {
+      this.$emit('input', cm.getValue())
+      const checkPoint = ss.analyzeMarkdown(cm.getValue())
       this.$emit('update', checkPoint)
+      utils.emojiAC(editor.CodeMirror, cm)
     },
-    scrollEvent(ev: any) {
-      const scrollInfo = ev.getScrollInfo()
-      const lineNumber = ev.lineAtHeight(scrollInfo.top, 'local')
+    scrollEvent(cm: Editor) {
+      const scrollInfo = cm.getScrollInfo()
+      const lineNumber = cm.lineAtHeight(scrollInfo.top, 'local')
       this.$emit('updatepos', lineNumber + 1)
     },
-    dropEvent(data: any, ev: any) {
-      // editor.utils.drop(this.cMirror, ev, 'geekers-user-comment-image')
+    dropEvent(data: any, cm: Editor) {
+      utils.drop(this, data, cm)
     },
     //
     // EventEmitter Event
     //
-    registeredEvent(clientId: any) {
-      this.cMirror.setOption('readOnly', !this.isEditable)
-      console.log(clientId)
+    joinEvent(user: any) {
+      const u = {
+        id: user.id,
+        uuid: user.uuid,
+        name: user.name,
+        icon: user.icon_uri,
+        color: colormaker.hsl2hex(colormaker.hueFromName(user.name), 0.75, 0.5),
+      } as UserModel
+      this.$emit('addUser', [u])
     },
-    joinEvent(ev: any) {
-      console.log(ev)
-    },
-    quitEvent(ev: any) {
-      console.log(ev)
+    quitEvent(id: string) {
+      this.$emit('delUser', id)
     },
     docEvent(data: any) {
       this.cMirror.setValue(data.document)
@@ -133,12 +145,28 @@ export default Vue.extend({
         this.serverAdapter,
         this.editorAdapter
       )
+
+      const us: UserModel[] = []
+      for (const [k, v] of Object.entries(data.clients)) {
+        const u = v as any
+        us.push({
+          id: k,
+          uuid: u.uuid,
+          name: u.name,
+          icon: u.icon_uri,
+          color: colormaker.hsl2hex(colormaker.hueFromName(u.name), 0.75, 0.5),
+        } as UserModel)
+      }
+      this.$emit('addUser', us)
     },
     closeEvent() {
+      if (this.willDelete) {
+        return
+      }
       // @ts-ignore
       this.$buefy.dialog.confirm({
-        message: 'Do you want to reconnect?',
-        onConfirm: () => this.websocket.reconnect(),
+        message: getModalDesc(MODAL_TYPE.CLOSE_DOCUMENT_SESSION),
+        onConfirm: () => this.makeConnection(),
         onCancel: () => this.$emit('toParentFolder'),
       })
     },
@@ -147,10 +175,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.editor-container {
-  overflow: scroll;
-}
-
 .CodeMirror {
   font-family: 'Source Code Pro', Consolas, monaco, monospace;
   font-size: 16px;
@@ -182,5 +206,11 @@ input[type='file'] {
 .input-label {
   height: 25px;
   width: 30px;
+}
+</style>
+
+<style lang="scss" scoped>
+.editor-container {
+  overflow: scroll;
 }
 </style>

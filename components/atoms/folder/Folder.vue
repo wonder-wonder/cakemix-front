@@ -4,16 +4,26 @@
       <span v-text="folder.name" />
     </div>
     <div class="icon-box">
-      <i class="fa fa-folder fa-fw" />
+      <fa-icon icon="folder" />
     </div>
     <div class="desc1-box" :class="selected">
       <span class="desc1-title" v-text="'UPDATER'" />
       <span class="desc1-detail" v-text="folder.updater.name" />
     </div>
     <div class="desc2-box" :class="selected">
-      <span class="desc2-title" v-text="'DATE'" />
-      <span class="desc2-detail" v-text="toDate(folder.updated_at)" />
+      <span class="desc2-title" v-text="'UPDATE'" />
+      <span class="desc2-detail" v-text="strUpdatedDate" />
     </div>
+    <ActionMenu
+      class="action-box"
+      :class="selected"
+      :current-folder-id="currentFolderId"
+      :model="folder"
+      :model-type="'FOLDER'"
+      @reload="$emit('reload')"
+    >
+      <fa-icon icon="bars" />
+    </ActionMenu>
   </div>
 </template>
 
@@ -26,30 +36,35 @@ export default Vue.extend({
   props: {
     folder: {
       type: Object as PropType<FolderModel>,
-      default: Object as FolderModel,
+      default: {} as FolderModel,
     },
     isSelected: {
       type: Boolean,
       default: false,
+    },
+    currentFolderId: {
+      type: String,
+      default: '',
     },
   },
   computed: {
     selected() {
       return this.isSelected ? 'selected' : ''
     },
-  },
-  methods: {
-    toDate,
+    strUpdatedDate(): string {
+      // @ts-ignore
+      return toDate(this.folder.updated_at ?? 0)
+    },
   },
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .folder-box {
   display: grid;
   min-width: 288px;
   grid-template-rows: 48px 4px 16px 16px;
-  grid-template-columns: 36px 1fr;
+  grid-template-columns: 36px 1fr 32px;
   border: solid 1px white;
   border-radius: 5px;
   color: white;
@@ -69,7 +84,7 @@ export default Vue.extend({
     justify-content: center;
     align-items: center;
     grid-row: 1 / 2;
-    grid-column: 1 / 3;
+    grid-column: 1 / 4;
     font-size: 18px;
     font-weight: bold;
     padding: 0 4px;
@@ -124,7 +139,6 @@ export default Vue.extend({
     padding: 0 4px;
     color: white;
     background-color: rgb(50, 50, 50);
-    border-bottom-right-radius: 5px;
 
     .desc2-title {
       display: flex;
@@ -134,6 +148,21 @@ export default Vue.extend({
       font-size: 10px;
       font-weight: bold;
     }
+
+    &.selected {
+      background-color: rgb(120, 120, 120);
+    }
+  }
+
+  .action-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: 3 / 5;
+    grid-column: 3 / 4;
+    background-color: rgb(50, 50, 50);
+    font-size: 16px;
+    border-bottom-right-radius: 4px;
 
     &.selected {
       background-color: rgb(120, 120, 120);

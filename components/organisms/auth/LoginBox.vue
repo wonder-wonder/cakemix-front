@@ -20,7 +20,8 @@
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
 import { AuthLoginReqModel, AuthApi } from '@/scripts/api/index'
-import { successToast, failureToast } from '@/scripts/utils/toast'
+import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 
 export type DataType = {
   username: string
@@ -42,8 +43,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    successToast,
-    failureToast,
     forgotPassword() {
       this.$router.push('/auth/passwd')
     },
@@ -51,7 +50,7 @@ export default Vue.extend({
       if (this.username === '' || this.password === '') {
         this.isError = true
         // @ts-ignore
-        this.failureToast(this.$buefy, 'Login failed', 1)
+        failureToast(this.$buefy, getToastDesc(TOAST_TYPE.LOGIN).failure, 1)
         return
       }
       this.isLoading = true
@@ -72,8 +71,12 @@ export default Vue.extend({
         })
         .catch(err => {
           this.isError = true
-          // @ts-ignore
-          this.failureToast(this.$buefy, 'Login failed', err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.LOGIN).failure,
+            err.response.status
+          )
         })
         .finally(() => {
           this.isLoading = false
@@ -83,7 +86,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-box {
   display: flex;
   flex-flow: column nowrap;
