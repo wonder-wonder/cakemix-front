@@ -2,7 +2,11 @@
 
 ![Cakemix](banner.png)
 
-Cakemix is opensource document management system for all creative team. You can make small team, folder and document on the Cakemix, also write document with markdown, and edit with multiple users in realtime.  
+![Version](https://img.shields.io/github/v/tag/wonder-wonder/cakemix-front)
+[![License](https://img.shields.io/github/license/wonder-wonder/cakemix-server)](LICENSE)
+
+Cakemix is opensource document management system for all creative team.  
+You can make a small team, folder and document on the Cakemix, also write a document with markdown, and edit with multiple users in realtime.  
 
 # Features
 
@@ -11,8 +15,9 @@ Cakemix is opensource document management system for all creative team. You can 
 - [x] Edit document with multiple users in realtime
 - [x] Make document folder
 - [x] Make small team
-- [x] View security log
-- [x] Manage device session
+- [x] Security
+- [x] Support PWA
+- [x] Supprot Mobile-Friendly Design
 
 # How to use
 
@@ -100,4 +105,4 @@ hotfix/x                         x
 
 # License
 
-**Released under the MIT license**
+**Released under the [MIT license](LICENSE)**
