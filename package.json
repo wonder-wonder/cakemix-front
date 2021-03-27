@@ -3,7 +3,7 @@
   "short_name": "CM",
   "author": "WonderWonder",
   "description": "Document management system for all creative team. Real-time edit with multiple users",
-  "version": "0.9.1",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "nuxt-ts ",
