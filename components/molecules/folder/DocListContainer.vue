@@ -10,7 +10,7 @@
         :is-selected="selectedIndex === index"
         :current-folder-id="currentFolderId"
         @click.native="selected(model, index)"
-        @dblclick.native="goToDoc(model.uuid)"
+        @dblclick.native="goToDoc(model)"
         @reload="$emit('reload')"
       />
     </div>
@@ -22,6 +22,8 @@ import Vue, { PropType } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import Document from '@/components/atoms/folder/Document.vue'
+import { failureToast } from '@/scripts/utils/toast'
+import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { DocumentModel } from '~/scripts/api'
 
 export type DataType = {
@@ -66,8 +68,17 @@ export default Vue.extend({
     resetIndex() {
       this.selectedIndex = -1
     },
-    goToDoc(documentId: string) {
-      this.$router.push({ path: `/doc/${documentId}` })
+    goToDoc(model: DocumentModel) {
+      if (model.editable === false && model.permission === 0) {
+        failureToast(
+          // @ts-ignore
+          this.$buefy,
+          getToastDesc(TOAST_TYPE.CANNOT_OPEN).failure,
+          -1
+        )
+        return
+      }
+      this.$router.push({ path: `/doc/${model.uuid}` })
     },
     selected(model: DocumentModel, index: number) {
       this.selectedIndex = index
