@@ -123,22 +123,22 @@ CodeMirror.defineMode(
     function blockNormal(stream, state) {
       if (state.list !== false && state.indentationDiff >= 0) {
         // Continued list
-        if (state.indentationDiff < 4) {
+        if (state.indentationDiff < 2) {
           // Only adjust indentation if *not* a code block
           state.indentation -= state.indentationDiff
         }
         state.list = null
       } else if (state.list !== false && state.indentation > 0) {
         state.list = null
-        state.listDepth = Math.floor(state.indentation / 4)
+        state.listDepth = Math.floor(state.indentation / 2)
       } else if (state.list !== false) {
         // No longer a list
         state.list = false
         state.listDepth = 0
       }
 
-      if (state.indentationDiff >= 4) {
-        state.indentation -= 4
+      if (state.indentationDiff >= 2) {
+        state.indentation -= 2
         stream.skipToEnd()
         return code
       } else if (stream.eatSpace()) {
@@ -161,7 +161,7 @@ CodeMirror.defineMode(
       } else if (stream.match(hrRE, true)) {
         return hr
       } else if (stream.match(ulRE, true) || stream.match(olRE, true)) {
-        state.indentation += 4
+        state.indentation += 2
         state.list = true
         state.listDepth++
         if (modeCfg.taskLists && stream.match(taskListRE, false)) {
@@ -599,8 +599,8 @@ CodeMirror.defineMode(
           const indentation = stream
             .match(/^\s*/, true)[0]
             .replace(/\t/g, '    ').length
-          let difference = Math.floor((indentation - state.indentation) / 4) * 4
-          if (difference > 4) difference = 4
+          let difference = Math.floor((indentation - state.indentation) / 2) * 2
+          if (difference > 2) difference = 2
           const adjustedIndentation = state.indentation + difference
           state.indentationDiff = adjustedIndentation - state.indentation
           state.indentation = adjustedIndentation
