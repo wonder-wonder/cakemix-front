@@ -6,8 +6,8 @@ const createView = (title: string, el: HTMLElement) => {
   sub.document.write(
     '<html>' +
       head(title) +
-      style() +
       '<body>' +
+      style() +
       el.outerHTML +
       '</body></html>'
   )
@@ -17,9 +17,10 @@ const head = (title: string): string => {
   return `
     <head>
       <title>${title}</title>
-      <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
       <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/abcjs@5.12.0/abcjs-midi.css" rel="stylesheet">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css'" rel="stylesheet">
     </head>`
 }
 
@@ -1092,8 +1093,6 @@ const style = (): string => {
         height: 100%;
       }
       
-      // Markdown highlighting
-      
       .hljs {
         display: block;
         overflow-x: auto;
@@ -1190,22 +1189,19 @@ const style = (): string => {
       .hljs-emphasis {
         font-style: italic;
       }
-      
-      // PDF Viewer
+
       .pdf-container {
         height: 400px;
       }
       
-      // abcjs
       .abc {
         background-color: #ffecb3;
       }
       
-      // additional
       summary {
         position: relative;
         display: block;
-        padding: 10px 10px 10px 30px;
+        padding: 10px 10px 10px 16px;
         cursor: pointer;
         font-weight: bold;
         background-color: #f6f8fa;
@@ -1229,14 +1225,6 @@ const style = (): string => {
         height: 16px;
         border-radius: 8px;
       }
-      summary:after {
-        left: 6px;
-        width: 5px;
-        height: 5px;
-        border: 4px solid transparent;
-        border-left: 4px solid black;
-        box-sizing: border-box;
-      }
       
       details[open] summary {
         background-color: rgb(200, 200, 200);
@@ -1248,7 +1236,6 @@ const style = (): string => {
         left: 4px;
         top: 5px;
       }
-      
     </style>`
 }
 
