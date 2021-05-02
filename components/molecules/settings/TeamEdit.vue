@@ -202,23 +202,13 @@ export default Vue.extend({
           const total = res.data.total ?? 0
           const members = res.data.members ?? []
           if (total < 1 || members.length < 1) {
-            failureToast(
-              // @ts-ignore
-              this.$buefy,
-              getToastDesc(TOAST_TYPE.GET_PERMISSION).failure,
-              400
-            )
+            this.ownPermission = 0
+            return
           }
           this.ownPermission = members[0].permission ?? 0
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)
-          failureToast(
-            // @ts-ignore
-            this.$buefy,
-            getToastDesc(TOAST_TYPE.GET_PERMISSION).failure,
-            err.response.status
-          )
         })
     },
     getMembers() {

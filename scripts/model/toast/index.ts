@@ -10,7 +10,6 @@ const TOAST_TYPE = {
   SEARCH: 'search',
   ADD_NEW_MEMBER: 'add_new_member',
   REMOVE_MEMBER: 'remove_member',
-  GET_PERMISSION: 'get_permission',
   CHANGE_PERMISSION: 'change_permission',
   GET_MEMBER: 'get_member',
   DELETE_TEAM: 'delete_team',
@@ -85,10 +84,6 @@ const toastDescriptions: { [key: string]: descModel } = {
   get_member: {
     success: '',
     failure: 'Failed to get member',
-  } as descModel,
-  get_permission: {
-    success: '',
-    failure: 'Failed to get permission',
   } as descModel,
   change_permission: {
     success: 'Permission changed',
