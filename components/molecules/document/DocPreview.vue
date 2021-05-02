@@ -1,6 +1,6 @@
 <template>
   <div :ref="`previewerc`" class="preview-container">
-    <div :ref="`previewer`" class="previewer" @click="print" />
+    <div :ref="`previewer`" class="previewer" />
   </div>
 </template>
 
