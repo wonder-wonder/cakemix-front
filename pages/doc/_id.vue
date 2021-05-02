@@ -7,6 +7,7 @@
       :users="onlineUsers"
       :document="document"
       :current-folder-id="parentFolderId"
+      @openPrintView="openPrintView"
       @toParentFolder="toParentFolder"
       @willDelete="willDelete = true"
       @cannotDelete="willDelete = false"
@@ -31,8 +32,10 @@
       />
       <DocPreview
         v-show="displayType !== 1"
+        :open-print-view="openPrintViewEmit"
         :p-markdown="markdown"
         :current-pos="previewPosition"
+        :title="docTitle"
         @update="onChangedPreviewPoints"
         @updatepos="onUpdatedPreviewPosition"
       />
@@ -68,6 +71,7 @@ type DataType = {
   previewPosition: Number
   userManager: UserManager
   document: DocumentModel
+  openPrintViewEmit: Number
 }
 
 type HeadType = {
@@ -93,6 +97,7 @@ export default Vue.extend({
       previewPosition: 0,
       userManager: new UserManager(),
       document: {} as DocumentModel,
+      openPrintViewEmit: 0,
     }
   },
   head(): HeadType {
@@ -180,6 +185,9 @@ export default Vue.extend({
     },
     delUser(id: string) {
       this.userManager.deleteUser(id)
+    },
+    openPrintView() {
+      this.openPrintViewEmit = Date.now()
     },
   },
 })

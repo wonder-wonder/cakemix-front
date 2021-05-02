@@ -1,13 +1,14 @@
 <template>
   <div :ref="`previewerc`" class="preview-container">
-    <div :ref="`previewer`" class="previewer" />
+    <div :ref="`previewer`" class="previewer" @click="print" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import print from '@/scripts/utils/print'
 import { debounce } from 'lodash'
-import vdom from '@/scripts/markdown/vdom.ts'
+import vdom from '@/scripts/markdown/vdom'
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 
 export type DataType = {
@@ -18,6 +19,14 @@ export type DataType = {
 
 export default Vue.extend({
   props: {
+    title: {
+      type: String,
+      default: '',
+    },
+    openPrintView: {
+      type: Number,
+      default: 0,
+    },
     pMarkdown: {
       type: String,
       default: '',
@@ -35,6 +44,12 @@ export default Vue.extend({
     }
   },
   watch: {
+    openPrintView(num: Number) {
+      if (num < 100) {
+        return
+      }
+      this.print()
+    },
     pMarkdown(text: string) {
       if (!this.baseDom) {
         return
@@ -73,6 +88,10 @@ export default Vue.extend({
       }
       const checkPoint = ss.analyzeDom(el)
       this.$emit('update', checkPoint)
+    },
+    print() {
+      const preview: HTMLElement = this.$refs.previewerc as HTMLElement
+      print.createView(this.title, preview)
     },
     // scrolled() {
     //   if (!this.scrollDom) {

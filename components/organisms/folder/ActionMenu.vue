@@ -10,6 +10,23 @@
         <slot />
       </template>
       <b-dropdown-item
+        v-if="isNavHeader"
+        aria-role="listitem"
+        :class="'row-grid'"
+        :paddingless="true"
+        @click="openPrintView()"
+      >
+        <div class="icon">
+          <fa-icon icon="print" />
+        </div>
+        <span class="title">Print Viewer</span>
+      </b-dropdown-item>
+      <b-dropdown-item
+        v-if="isNavHeader"
+        aria-role="listitem"
+        :separator="true"
+      />
+      <b-dropdown-item
         v-if="isNameEditable"
         aria-role="listitem"
         :class="'row-grid'"
@@ -147,6 +164,10 @@ export type DataType = {
 
 export default Vue.extend({
   props: {
+    isNavHeader: {
+      type: Boolean,
+      default: false,
+    },
     currentFolderId: {
       type: String,
       default: '',
@@ -266,6 +287,9 @@ export default Vue.extend({
         },
         events: { 'update-user': this.changedOwner },
       })
+    },
+    openPrintView() {
+      this.$emit('openPrintView')
     },
     renamed(name: string) {
       ;(this.newModel as FolderModel).name = name
