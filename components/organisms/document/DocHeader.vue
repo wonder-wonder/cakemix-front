@@ -14,6 +14,8 @@
       :current-folder-id="currentFolderId"
       :model="document"
       :model-type="'DOCUMENT'"
+      :is-nav-header="true"
+      @openPrintView="$emit('openPrintView')"
       @deleted="$emit('toParentFolder')"
       @willDelete="$emit('willDelete')"
       @cannotDelete="$emit('cannotDelete')"
@@ -29,6 +31,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import DocNav from '@/components/molecules/document/DocNav.vue'
+import ActionMenu from '@/components/organisms/folder/ActionMenu.vue'
 import DocSwitch from '@/components/molecules/document/DocSwitch.vue'
 import DocSimpleSwitch from '@/components/molecules/document/DocSimpleSwitch.vue'
 import DocSwitchButton from '@/components/atoms/document/DocSwitchButton.vue'
@@ -39,6 +42,7 @@ import { DocumentModel } from '@/scripts/api/index'
 export default Vue.extend({
   components: {
     DocNav,
+    ActionMenu,
     DocSwitch,
     DocSimpleSwitch,
     DocSwitchButton,
