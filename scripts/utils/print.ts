@@ -3,6 +3,7 @@ const createView = (title: string, el: HTMLElement) => {
   if (sub === null) {
     return
   }
+  checkbox(el.querySelectorAll('input[type=checkbox]:checked'))
   sub.document.write(
     '<html>' +
       head(title) +
@@ -13,6 +14,12 @@ const createView = (title: string, el: HTMLElement) => {
   )
 }
 
+const checkbox = (els: NodeList) => {
+  els.forEach(el => {
+    ;(el as HTMLInputElement).setAttribute('checked', 'checked')
+  })
+}
+
 const head = (title: string): string => {
   return `
     <head>
@@ -20,7 +27,6 @@ const head = (title: string): string => {
       <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
       <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/abcjs@5.12.0/abcjs-midi.css" rel="stylesheet">
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css'" rel="stylesheet">
     </head>`
 }
 
