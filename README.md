@@ -19,6 +19,11 @@ You can make a small team, folder and document on the Cakemix, also write a docu
 - [x] Support PWA
 - [x] Support Mobile-Friendly Design
 
+# Demo
+
+You can easily use demo of Cakemix. You should try it from here!  
+[DEMO](https://hotcakemix.com)
+
 # How to use
 
 This repository is front side of Cakemix, you need server side ([here](https://github.com/wonder-wonder/cakemix-server)) to use Cakemix.

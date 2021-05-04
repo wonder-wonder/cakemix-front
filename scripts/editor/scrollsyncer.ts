@@ -106,9 +106,10 @@ const e2p = (
     const range: number = pPoints[retain + 1].height - pPoints[retain].height
     const offset: number = range * ratio
     return pPoints[retain].height + offset
-  } else {
-    return pPoints[pPoints.length - 1].height
+  } else if (typeof pPoints[pPoints.length - 1] === 'undefined') {
+    return 0
   }
+  return pPoints[pPoints.length - 1].height
 }
 
 // const p2e = (

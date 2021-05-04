@@ -16,6 +16,7 @@ const solid = [
   'faKey',
   'faPencilAlt',
   'faPlus',
+  'faPrint',
   'faUser',
   'faUsers',
   'faSignature',

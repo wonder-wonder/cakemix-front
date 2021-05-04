@@ -10,7 +10,6 @@ const TOAST_TYPE = {
   SEARCH: 'search',
   ADD_NEW_MEMBER: 'add_new_member',
   REMOVE_MEMBER: 'remove_member',
-  GET_PERMISSION: 'get_permission',
   CHANGE_PERMISSION: 'change_permission',
   GET_MEMBER: 'get_member',
   DELETE_TEAM: 'delete_team',
@@ -27,6 +26,7 @@ const TOAST_TYPE = {
   OPEN_DOCUMENT: 'open_document',
   CREATE_FOLDER: 'create_folder',
   CREATE_DOCUMENT: 'create_document',
+  CANNOT_OPEN: 'cannot_open',
   UNKNOWN: 'unknown',
 } as const
 type ToastType = typeof TOAST_TYPE[keyof typeof TOAST_TYPE]
@@ -84,10 +84,6 @@ const toastDescriptions: { [key: string]: descModel } = {
   get_member: {
     success: '',
     failure: 'Failed to get member',
-  } as descModel,
-  get_permission: {
-    success: '',
-    failure: 'Failed to get permission',
   } as descModel,
   change_permission: {
     success: 'Permission changed',
@@ -148,6 +144,10 @@ const toastDescriptions: { [key: string]: descModel } = {
   create_document: {
     success: '',
     failure: 'Failed to create document',
+  } as descModel,
+  cannot_open: {
+    success: '',
+    failure: "You don't have permission to open",
   } as descModel,
   unknown: {
     success: 'Success',
