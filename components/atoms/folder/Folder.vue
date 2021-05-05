@@ -29,10 +29,14 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import ActionMenu from '@/components/organisms/folder/ActionMenu.vue'
 import { FolderModel } from '@/scripts/api/index'
 import { toDate } from '@/scripts/utils/date'
 
 export default Vue.extend({
+  components: {
+    ActionMenu,
+  },
   props: {
     folder: {
       type: Object as PropType<FolderModel>,
