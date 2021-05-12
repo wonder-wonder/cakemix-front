@@ -44,7 +44,7 @@ jobs:
             ...context.repo,
             head: "main",
             base: "develop",
-            title: "release: ${{ env.newtag }} to develop"
+            title: "chore: ${{ env.newtag }} to develop"
           });
   hotfix:
     runs-on: ubuntu-latest
@@ -87,5 +87,5 @@ jobs:
             ...context.repo,
             head: "main",
             base: "develop",
-            title: "release: ${{ env.newtag }} to develop"
+            title: "chore: ${{ env.newtag }} to develop"
           });
