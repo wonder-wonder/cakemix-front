@@ -17,6 +17,15 @@
           class="search-input"
           @text="changedSearchText"
         />
+        <div class="include-deactive-user-box">
+          <span class="label">Include deactivated user</span>
+          <b-switch
+            v-model="readSwitch"
+            class="switch"
+            size="is-small"
+            @input="updateItem"
+          />
+        </div>
       </div>
       <BorderTitle :title="`${userPaging.total} users`" />
       <div class="users-item-box">
@@ -188,7 +197,7 @@ export default Vue.extend({
 
   .users-tool-container {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
     width: 100%;
     margin: 0 8px;
     padding: 32px;
@@ -207,6 +216,18 @@ export default Vue.extend({
     .search-input {
       max-width: 400px;
       width: 100%;
+    }
+
+    .include-deactive-user-box {
+      display: flex;
+      flex-flow: row wrap;
+      .label {
+        font-size: 14px;
+        margin: 0;
+        margin-right: 8px;
+        width: auto;
+        color: white;
+      }
     }
   }
 
