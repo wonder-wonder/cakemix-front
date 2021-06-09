@@ -103,7 +103,7 @@ export default Vue.extend({
   props: {
     team: {
       type: Object as PropType<ProfileModel>,
-      default: {},
+      default: {} as ProfileModel,
     },
   },
   data(): DataType {

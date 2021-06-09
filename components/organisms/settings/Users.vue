@@ -2,18 +2,26 @@
   <div class="setting-users-container">
     <div ref="users-item-container" class="users-item-container">
       <BorderTitle :title="'Users'" />
+      <b-button
+        class="invitationlink-button"
+        type="is-success"
+        icon-left="plus"
+        @click="openCreateUserBox"
+      >
+        New User
+      </b-button>
       <div class="users-tool-container">
-        <ButtonInput
-          class="button-input"
-          :button-name="'Generate link'"
-          :label-name="'Invitation Link'"
-          :value="generatedLink"
-          @click="generateLink"
+        <Input
+          :label-name="'User Name'"
+          :value="userSearchText"
+          class="search-input"
+          @text="changedSearchText"
         />
       </div>
+      <BorderTitle :title="`${userPaging.total} users`" />
       <div class="users-item-box">
         <UserCell
-          v-for="(user, index) in users"
+          v-for="(user, index) in userPaging.data"
           :key="`user-cell-${uuid}-${index}`"
           class="user-cell"
           :user="user"
@@ -37,12 +45,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import Input from '@/components/atoms/input/Input.vue'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
-import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
+import CreateUserBox from '@/components/organisms/settings/CreateUserBox.vue'
 import {
   checkAuthWithStatus,
-  AuthApi,
   SearchApi,
   ProfileModel,
 } from '@/scripts/api/index'
@@ -50,29 +58,37 @@ import { failureToast } from '@/scripts/utils/toast'
 import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
-type DataType = {
-  uuid: string
-  users: ProfileModel[]
+type PagingModel = {
+  data: ProfileModel[]
   total: number
   page: number
-  generatedLink: string
   PER_PAGE: number
+  isFetching: boolean
+}
+
+type DataType = {
+  uuid: string
+  userSearchText: string
+  userPaging: PagingModel
 }
 
 export default Vue.extend({
   components: {
     BorderTitle,
     UserCell,
-    ButtonInput,
+    Input,
   },
   data(): DataType {
     return {
       uuid: uuidv4(),
-      users: [],
-      total: 0,
-      page: 1,
-      generatedLink: '',
-      PER_PAGE: 9,
+      userSearchText: '',
+      userPaging: {
+        data: [] as ProfileModel[],
+        total: 0,
+        page: 1,
+        PER_PAGE: 9,
+        isFetching: false,
+      } as PagingModel,
     }
   },
   head: {
@@ -88,12 +104,28 @@ export default Vue.extend({
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
+    openCreateUserBox() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: CreateUserBox,
+      })
+    },
+    changedSearchText(text: string) {
+      this.userSearchText = text
+      this.userPaging.page = 1
+      this.getUsers()
+    },
     getUsers() {
       new SearchApi(this.$store.getters['auth/config'])
-        .getSearchUser('', this.PER_PAGE, (this.page - 1) * this.PER_PAGE)
+        .getSearchUser(
+          this.userSearchText,
+          this.userPaging.PER_PAGE,
+          (this.userPaging.page - 1) * this.userPaging.PER_PAGE
+        )
         .then(res => {
-          this.total = res.data.total ?? 0
-          this.users = res.data.users ?? []
+          this.userPaging.total = res.data.total ?? 0
+          this.userPaging.data = res.data.users ?? []
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)
@@ -106,26 +138,6 @@ export default Vue.extend({
         })
         .finally(() => {
           this.updateWidth()
-        })
-    },
-    generateLink() {
-      new AuthApi(this.$store.getters['auth/config'])
-        .getNewTokenRegist()
-        .then(res => {
-          const DOMAIN =
-            process.env.NODE_ENV === 'development'
-              ? process.env.DOMAIN
-              : location.host
-          this.generatedLink = `${process.env.HTTP_SCHEME}://${DOMAIN}/auth/signup/${res.data.token}`
-        })
-        .catch(err => {
-          checkAuthWithStatus(this, err.response.status)
-          failureToast(
-            // @ts-ignore
-            this.$buefy,
-            getToastDesc(TOAST_TYPE.GENERATE_NEW_LINK).failure,
-            err.response.status
-          )
         })
     },
     updateWidth() {
@@ -169,21 +181,31 @@ export default Vue.extend({
   font-size: 14px;
   font-weight: bold;
 
+  .invitationlink-button {
+    margin: 0 8px 16px auto;
+    font-weight: bold;
+  }
+
   .users-tool-container {
     display: flex;
     flex-flow: row wrap;
-    justify-content: center;
     width: 100%;
-    max-width: 450px;
-    padding: 0px 8px;
+    margin: 0 8px;
+    padding: 32px;
     margin-bottom: 16px;
+    background-color: #333333;
+    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.4);
+
+    @media only screen and (max-width: 600px) {
+      padding: 32px 16px;
+    }
 
     label {
       color: white;
     }
 
-    .button-input {
-      max-width: 500px;
+    .search-input {
+      max-width: 400px;
       width: 100%;
     }
   }

@@ -30,12 +30,14 @@ export default Vue.extend({
   flex-flow: row wrap;
   align-content: center;
   justify-content: center;
-  width: auto;
+  width: 100%;
+  padding: 0 8px;
 
   button {
     width: auto;
     font-weight: bold;
-    margin: 4px;
+    margin: 4px 0;
+    margin-left: auto;
   }
 }
 </style>
