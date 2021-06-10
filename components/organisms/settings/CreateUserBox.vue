@@ -1,5 +1,5 @@
 <template>
-  <div class="create-team-box">
+  <div class="create-user-box">
     <Input
       class="field-input"
       :label-name="'Invitation Link'"
@@ -79,7 +79,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.create-team-box {
+.create-user-box {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;

@@ -35,6 +35,7 @@
           class="user-cell"
           :user="user"
           :deactivated="user.is_lock"
+          :lockable="isAdmin"
         />
       </div>
       <b-pagination
@@ -63,6 +64,7 @@ import {
   checkAuthWithStatus,
   SearchApi,
   ProfileModel,
+  ProfileApi,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
 import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
@@ -81,6 +83,7 @@ type DataType = {
   userSearchText: string
   userPaging: PagingModel
   includeDeactivatedUser: boolean
+  isAdmin: boolean
 }
 
 export default Vue.extend({
@@ -101,6 +104,7 @@ export default Vue.extend({
         isFetching: false,
       } as PagingModel,
       includeDeactivatedUser: false,
+      isAdmin: false,
     }
   },
   head: {
@@ -108,6 +112,7 @@ export default Vue.extend({
   },
   created() {
     this.getUsers()
+    this.getOwnPermission()
   },
   mounted() {
     window.addEventListener('resize', this.updateWidth)
@@ -151,6 +156,13 @@ export default Vue.extend({
         })
         .finally(() => {
           this.updateWidth()
+        })
+    },
+    getOwnPermission() {
+      new ProfileApi(this.$store.getters['auth/config'])
+        .getUserProfileUuid(this.$store.getters['auth/uuid'])
+        .then(res => {
+          this.isAdmin = res.data.is_admin ?? false
         })
     },
     updateWidth() {
