@@ -24,6 +24,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import LogCell from '@/components/atoms/cell/LogCell.vue'
 import { failureToast } from '@/scripts/utils/toast'
 import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
@@ -44,6 +45,7 @@ type DataType = {
 
 export default Vue.extend({
   components: {
+    BorderTitle,
     LogCell,
   },
   data(): DataType {

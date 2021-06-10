@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import SessionCell from '@/components/atoms/cell/SessionCell.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import {
@@ -37,6 +38,7 @@ type DataType = {
 
 export default Vue.extend({
   components: {
+    BorderTitle,
     SessionCell,
   },
   data(): DataType {
