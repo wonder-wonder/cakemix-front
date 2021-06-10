@@ -26,7 +26,7 @@
         </div>
       </div>
     </template>
-    <div class="user-cell-container">
+    <div class="user-cell-container" :class="deactivatedClass">
       <div class="icon-box">
         <fa-icon v-if="!hasImage" :icon="isTeam ? 'users' : 'user'" />
         <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded" />
@@ -56,6 +56,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    deactivated: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     hasImage(): boolean {
@@ -75,6 +79,9 @@ export default Vue.extend({
     },
     isAdmin(): boolean {
       return this.user.is_admin ?? false
+    },
+    deactivatedClass(): string {
+      return this.deactivated ? 'deactivated' : ''
     },
   },
   methods: {
@@ -206,5 +213,8 @@ export default Vue.extend({
     grid-column: 3;
     font-size: 12px;
   }
+}
+.deactivated {
+  background-color: rgb(85, 85, 85);
 }
 </style>

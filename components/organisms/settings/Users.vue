@@ -34,6 +34,7 @@
           :key="`user-cell-${uuid}-${index}`"
           class="user-cell"
           :user="user"
+          :deactivated="user.is_lock"
         />
       </div>
       <b-pagination
