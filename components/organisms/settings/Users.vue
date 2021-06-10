@@ -12,7 +12,7 @@
       </b-button>
       <div class="users-tool-container">
         <Input
-          :label-name="'User Name'"
+          :label-name="'Search Name'"
           :value="userSearchText"
           class="search-input"
           @text="changedSearchText"
@@ -20,10 +20,10 @@
         <div class="include-deactive-user-box">
           <span class="label">Include deactivated user</span>
           <b-switch
-            v-model="readSwitch"
+            v-model="includeDeactivatedUser"
             class="switch"
             size="is-small"
-            @input="updateItem"
+            @input="getUsers"
           />
         </div>
       </div>
@@ -37,10 +37,10 @@
         />
       </div>
       <b-pagination
-        v-model="page"
+        v-model="userPaging.page"
         class="pagination"
-        :total="total"
-        :per-page="PER_PAGE"
+        :total="userPaging.total"
+        :per-page="userPaging.PER_PAGE"
         aria-next-label="Next page"
         aria-previous-label="Previous page"
         aria-page-label="Page"
@@ -79,6 +79,7 @@ type DataType = {
   uuid: string
   userSearchText: string
   userPaging: PagingModel
+  includeDeactivatedUser: boolean
 }
 
 export default Vue.extend({
@@ -95,9 +96,10 @@ export default Vue.extend({
         data: [] as ProfileModel[],
         total: 0,
         page: 1,
-        PER_PAGE: 9,
+        PER_PAGE: 15,
         isFetching: false,
       } as PagingModel,
+      includeDeactivatedUser: false,
     }
   },
   head: {
@@ -130,7 +132,8 @@ export default Vue.extend({
         .getSearchUser(
           this.userSearchText,
           this.userPaging.PER_PAGE,
-          (this.userPaging.page - 1) * this.userPaging.PER_PAGE
+          (this.userPaging.page - 1) * this.userPaging.PER_PAGE,
+          this.includeDeactivatedUser ? undefined : 'unlocked'
         )
         .then(res => {
           this.userPaging.total = res.data.total ?? 0
