@@ -26,7 +26,7 @@
         </div>
       </div>
     </template>
-    <div class="user-cell-container" :class="deactivatedColorClass">
+    <div class="user-cell-container" :class="lockedColorClass">
       <div class="icon-box">
         <fa-icon v-if="!hasImage" :icon="isTeam ? 'users' : 'user'" />
         <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded" />
@@ -40,7 +40,7 @@
       <div v-if="lockable" class="option-box" :class="userLockableClass">
         <span
           class="lock-user-item"
-          @click="$emit('lock-user')"
+          @click="$emit(locked ? 'unlock' : 'lock', user.uuid)"
           v-text="user.is_lock ? 'UNLOCK THIS USER' : 'LOCK THIS USER'"
         />
       </div>
@@ -63,7 +63,7 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    deactivated: {
+    locked: {
       type: Boolean,
       default: false,
     },
@@ -91,8 +91,8 @@ export default Vue.extend({
     isAdmin(): boolean {
       return this.user.is_admin ?? false
     },
-    deactivatedColorClass(): string {
-      return this.deactivated ? 'deactivated-color' : ''
+    lockedColorClass(): string {
+      return this.locked ? 'locked-color' : ''
     },
     userLockableClass(): string {
       return this.lockable ? 'user-lockable' : ''
@@ -252,7 +252,7 @@ export default Vue.extend({
     }
   }
 }
-.deactivated-color {
+.locked-color {
   background-color: rgb(85, 85, 85);
 }
 .user-lockable {

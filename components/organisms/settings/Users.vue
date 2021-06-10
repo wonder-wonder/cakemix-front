@@ -17,10 +17,10 @@
           class="search-input"
           @text="changedSearchText"
         />
-        <div class="include-deactive-user-box">
-          <span class="label">Include deactivated user</span>
+        <div class="include-locked-user-box">
+          <span class="label">Include locked user</span>
           <b-switch
-            v-model="includeDeactivatedUser"
+            v-model="includeLockedUser"
             class="switch"
             size="is-small"
             @input="getUsers"
@@ -34,8 +34,10 @@
           :key="`user-cell-${uuid}-${index}`"
           class="user-cell"
           :user="user"
-          :deactivated="user.is_lock"
+          :locked="user.is_lock"
           :lockable="isAdmin"
+          @lock="openLockUserDialog($event)"
+          @unlock="openUnlockUserDialog($event)"
         />
       </div>
       <b-pagination
@@ -65,9 +67,15 @@ import {
   SearchApi,
   ProfileModel,
   ProfileApi,
+  AuthApi,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
+import {
+  TOAST_TYPE,
+  getToastDesc,
+  MODAL_TYPE,
+  getModalDesc,
+} from '@/scripts/model/toast'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
 
 type PagingModel = {
@@ -82,7 +90,7 @@ type DataType = {
   uuid: string
   userSearchText: string
   userPaging: PagingModel
-  includeDeactivatedUser: boolean
+  includeLockedUser: boolean
   isAdmin: boolean
 }
 
@@ -103,7 +111,7 @@ export default Vue.extend({
         PER_PAGE: 15,
         isFetching: false,
       } as PagingModel,
-      includeDeactivatedUser: false,
+      includeLockedUser: false,
       isAdmin: false,
     }
   },
@@ -121,6 +129,22 @@ export default Vue.extend({
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
+    openLockUserDialog(uuid: string) {
+      // @ts-ignore
+      this.$buefy.dialog.confirm({
+        message: getModalDesc(MODAL_TYPE.LOCK_USER_CONFIRM),
+        onConfirm: () => this.lockUser(uuid),
+        onCancel: () => {},
+      })
+    },
+    openUnlockUserDialog(uuid: string) {
+      // @ts-ignore
+      this.$buefy.dialog.confirm({
+        message: getModalDesc(MODAL_TYPE.UNLOCK_USER_CONFIRM),
+        onConfirm: () => this.unlockUser(uuid),
+        onCancel: () => {},
+      })
+    },
     openCreateUserBox() {
       // @ts-ignore
       this.$buefy.modal.open({
@@ -139,7 +163,7 @@ export default Vue.extend({
           this.userSearchText,
           this.userPaging.PER_PAGE,
           (this.userPaging.page - 1) * this.userPaging.PER_PAGE,
-          this.includeDeactivatedUser ? undefined : 'unlocked'
+          this.includeLockedUser ? undefined : 'unlocked'
         )
         .then(res => {
           this.userPaging.total = res.data.total ?? 0
@@ -163,6 +187,38 @@ export default Vue.extend({
         .getUserProfileUuid(this.$store.getters['auth/uuid'])
         .then(res => {
           this.isAdmin = res.data.is_admin ?? false
+        })
+    },
+    lockUser(uuid: string) {
+      new AuthApi(this.$store.getters['auth/config'])
+        .postAuthLock(uuid)
+        .then(() => {
+          this.getUsers()
+        })
+        .catch(err => {
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CANNOT_LOCK).failure,
+            err.response.status
+          )
+        })
+    },
+    unlockUser(uuid: string) {
+      new AuthApi(this.$store.getters['auth/config'])
+        .deleteAuthLock(uuid)
+        .then(() => {
+          this.getUsers()
+        })
+        .catch(err => {
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CANNOT_UNLOCK).failure,
+            err.response.status
+          )
         })
     },
     updateWidth() {
@@ -234,7 +290,7 @@ export default Vue.extend({
       width: 100%;
     }
 
-    .include-deactive-user-box {
+    .include-locked-user-box {
       display: flex;
       flex-flow: row wrap;
       .label {
