@@ -14,6 +14,7 @@ const solid = [
   'faGlobeAsia',
   'faInfo',
   'faKey',
+  'faLock',
   'faPencilAlt',
   'faPlus',
   'faPrint',
