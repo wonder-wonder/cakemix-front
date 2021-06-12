@@ -27,6 +27,8 @@ const TOAST_TYPE = {
   CREATE_FOLDER: 'create_folder',
   CREATE_DOCUMENT: 'create_document',
   CANNOT_OPEN: 'cannot_open',
+  CANNOT_LOCK: 'cannot_lock',
+  CANNOT_UNLOCK: 'cannot_unlock',
   UNKNOWN: 'unknown',
 } as const
 type ToastType = typeof TOAST_TYPE[keyof typeof TOAST_TYPE]
@@ -149,6 +151,14 @@ const toastDescriptions: { [key: string]: descModel } = {
     success: '',
     failure: "You don't have permission to open",
   } as descModel,
+  cannot_lock: {
+    success: '',
+    failure: "You don't have permission to lock user",
+  } as descModel,
+  cannot_unlock: {
+    success: '',
+    failure: "You don't have permission to unlock user",
+  } as descModel,
   unknown: {
     success: 'Success',
     failure: 'Failure',
@@ -161,6 +171,8 @@ const MODAL_TYPE = {
   DELETE_CONFIRM: 'delete_confirm',
   DELETE_SESSION_CONFIRM: 'delete_session_confirm',
   CLOSE_DOCUMENT_SESSION: 'close_document_session',
+  LOCK_USER_CONFIRM: 'lock_user_confirm',
+  UNLOCK_USER_CONFIRM: 'unlock_user_confirm',
   UNKNOWN: 'unknown',
 } as const
 type ModalType = typeof MODAL_TYPE[keyof typeof MODAL_TYPE]
@@ -171,6 +183,8 @@ const modalDescriptions: { [key: string]: string } = {
   delete_confirm: 'Do you want to delete this item?',
   delete_session_confirm: 'Do you want to delete this session?',
   close_document_session: 'Do you want to reconnect?',
+  lock_user_confirm: 'Are you sure you want to lock this account?',
+  unlock_user_confirm: 'Are you sure you want to unlock this account?',
   unknown: 'Are you sure?',
 }
 

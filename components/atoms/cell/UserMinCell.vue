@@ -5,6 +5,7 @@
       <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded" />
     </div>
     <div class="username-box">
+      <fa-icon v-if="isLock" class="lock-icon" icon="lock" />
       <span v-text="user.name" />
     </div>
   </div>
@@ -31,6 +32,9 @@ export default Vue.extend({
     },
     isTeam(): boolean {
       return this.user.is_team
+    },
+    isLock(): boolean {
+      return this.user.is_lock === true
     },
   },
 })
@@ -72,6 +76,14 @@ export default Vue.extend({
     font-size: 13px;
     font-weight: bold;
     overflow: scroll;
+
+    .lock-icon {
+      height: 13px;
+      width: 13px;
+      padding: 2px;
+      background-color: whitesmoke;
+      border-radius: 6.5px;
+    }
 
     span {
       word-wrap: break-word;

@@ -2,28 +2,48 @@
   <div class="setting-users-container">
     <div ref="users-item-container" class="users-item-container">
       <BorderTitle :title="'Users'" />
+      <b-button
+        class="invitationlink-button"
+        type="is-success"
+        icon-left="plus"
+        @click="openCreateUserBox"
+      >
+        New User
+      </b-button>
       <div class="users-tool-container">
-        <ButtonInput
-          class="button-input"
-          :button-name="'Generate link'"
-          :label-name="'Invitation Link'"
-          :value="generatedLink"
-          @click="generateLink"
+        <Input
+          :label-name="'Search Name'"
+          :value="userSearchText"
+          class="search-input"
+          @text="changedSearchText"
         />
+        <div class="include-locked-user-box">
+          <span class="label">Include locked user</span>
+          <b-switch
+            v-model="includeLockedUser"
+            class="switch"
+            size="is-small"
+            @input="getUsers"
+          />
+        </div>
       </div>
+      <BorderTitle :title="`${userPaging.total} users`" />
       <div class="users-item-box">
         <UserCell
-          v-for="(user, index) in users"
+          v-for="(user, index) in userPaging.data"
           :key="`user-cell-${uuid}-${index}`"
           class="user-cell"
           :user="user"
+          :lockable="isAdmin"
+          @lock="openLockUserDialog($event)"
+          @unlock="openUnlockUserDialog($event)"
         />
       </div>
       <b-pagination
-        v-model="page"
+        v-model="userPaging.page"
         class="pagination"
-        :total="total"
-        :per-page="PER_PAGE"
+        :total="userPaging.total"
+        :per-page="userPaging.PER_PAGE"
         aria-next-label="Next page"
         aria-previous-label="Previous page"
         aria-page-label="Page"
@@ -37,42 +57,61 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import Input from '@/components/atoms/input/Input.vue'
 import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import UserCell from '@/components/atoms/cell/UserCell.vue'
-import ButtonInput from '@/components/molecules/button/ButtonInput.vue'
+import CreateUserBox from '@/components/organisms/settings/CreateUserBox.vue'
 import {
   checkAuthWithStatus,
-  AuthApi,
   SearchApi,
   ProfileModel,
+  ProfileApi,
+  AuthApi,
 } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
-import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
+import {
+  TOAST_TYPE,
+  getToastDesc,
+  MODAL_TYPE,
+  getModalDesc,
+} from '@/scripts/model/toast'
 import { getTitle, PAGES } from '@/scripts/model/head/index'
+
+type PagingModel = {
+  data: ProfileModel[]
+  total: number
+  page: number
+  PER_PAGE: number
+  isFetching: boolean
+}
 
 type DataType = {
   uuid: string
-  users: ProfileModel[]
-  total: number
-  page: number
-  generatedLink: string
-  PER_PAGE: number
+  userSearchText: string
+  userPaging: PagingModel
+  includeLockedUser: boolean
+  isAdmin: boolean
 }
 
 export default Vue.extend({
   components: {
     BorderTitle,
     UserCell,
-    ButtonInput,
+    Input,
   },
   data(): DataType {
     return {
       uuid: uuidv4(),
-      users: [],
-      total: 0,
-      page: 1,
-      generatedLink: '',
-      PER_PAGE: 9,
+      userSearchText: '',
+      userPaging: {
+        data: [] as ProfileModel[],
+        total: 0,
+        page: 1,
+        PER_PAGE: 15,
+        isFetching: false,
+      } as PagingModel,
+      includeLockedUser: false,
+      isAdmin: false,
     }
   },
   head: {
@@ -80,6 +119,7 @@ export default Vue.extend({
   },
   created() {
     this.getUsers()
+    this.getOwnPermission()
   },
   mounted() {
     window.addEventListener('resize', this.updateWidth)
@@ -88,12 +128,45 @@ export default Vue.extend({
     window.removeEventListener('resize', this.updateWidth)
   },
   methods: {
+    openLockUserDialog(uuid: string) {
+      // @ts-ignore
+      this.$buefy.dialog.confirm({
+        message: getModalDesc(MODAL_TYPE.LOCK_USER_CONFIRM),
+        onConfirm: () => this.lockUser(uuid),
+        onCancel: () => {},
+      })
+    },
+    openUnlockUserDialog(uuid: string) {
+      // @ts-ignore
+      this.$buefy.dialog.confirm({
+        message: getModalDesc(MODAL_TYPE.UNLOCK_USER_CONFIRM),
+        onConfirm: () => this.unlockUser(uuid),
+        onCancel: () => {},
+      })
+    },
+    openCreateUserBox() {
+      // @ts-ignore
+      this.$buefy.modal.open({
+        parent: this.$root,
+        component: CreateUserBox,
+      })
+    },
+    changedSearchText(text: string) {
+      this.userSearchText = text
+      this.userPaging.page = 1
+      this.getUsers()
+    },
     getUsers() {
       new SearchApi(this.$store.getters['auth/config'])
-        .getSearchUser('', this.PER_PAGE, (this.page - 1) * this.PER_PAGE)
+        .getSearchUser(
+          this.userSearchText,
+          this.userPaging.PER_PAGE,
+          (this.userPaging.page - 1) * this.userPaging.PER_PAGE,
+          this.includeLockedUser ? undefined : 'unlocked'
+        )
         .then(res => {
-          this.total = res.data.total ?? 0
-          this.users = res.data.users ?? []
+          this.userPaging.total = res.data.total ?? 0
+          this.userPaging.data = res.data.users ?? []
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)
@@ -108,22 +181,41 @@ export default Vue.extend({
           this.updateWidth()
         })
     },
-    generateLink() {
-      new AuthApi(this.$store.getters['auth/config'])
-        .getNewTokenRegist()
+    getOwnPermission() {
+      new ProfileApi(this.$store.getters['auth/config'])
+        .getUserProfileUuid(this.$store.getters['auth/uuid'])
         .then(res => {
-          const DOMAIN =
-            process.env.NODE_ENV === 'development'
-              ? process.env.DOMAIN
-              : location.host
-          this.generatedLink = `${process.env.HTTP_SCHEME}://${DOMAIN}/auth/signup/${res.data.token}`
+          this.isAdmin = res.data.is_admin ?? false
+        })
+    },
+    lockUser(uuid: string) {
+      new AuthApi(this.$store.getters['auth/config'])
+        .postAuthLock(uuid)
+        .then(() => {
+          this.getUsers()
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)
           failureToast(
             // @ts-ignore
             this.$buefy,
-            getToastDesc(TOAST_TYPE.GENERATE_NEW_LINK).failure,
+            getToastDesc(TOAST_TYPE.CANNOT_LOCK).failure,
+            err.response.status
+          )
+        })
+    },
+    unlockUser(uuid: string) {
+      new AuthApi(this.$store.getters['auth/config'])
+        .deleteAuthLock(uuid)
+        .then(() => {
+          this.getUsers()
+        })
+        .catch(err => {
+          checkAuthWithStatus(this, err.response.status)
+          failureToast(
+            // @ts-ignore
+            this.$buefy,
+            getToastDesc(TOAST_TYPE.CANNOT_UNLOCK).failure,
             err.response.status
           )
         })
@@ -169,22 +261,44 @@ export default Vue.extend({
   font-size: 14px;
   font-weight: bold;
 
+  .invitationlink-button {
+    margin: 0 8px 16px auto;
+    font-weight: bold;
+  }
+
   .users-tool-container {
     display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
+    flex-flow: column wrap;
     width: 100%;
-    max-width: 450px;
-    padding: 0px 8px;
+    margin: 0 8px;
+    padding: 32px;
     margin-bottom: 16px;
+    background-color: #333333;
+    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.4);
+
+    @media only screen and (max-width: 600px) {
+      padding: 32px 16px;
+    }
 
     label {
       color: white;
     }
 
-    .button-input {
-      max-width: 500px;
+    .search-input {
+      max-width: 400px;
       width: 100%;
+    }
+
+    .include-locked-user-box {
+      display: flex;
+      flex-flow: row wrap;
+      .label {
+        font-size: 14px;
+        margin: 0;
+        margin-right: 8px;
+        width: auto;
+        color: white;
+      }
     }
   }
 

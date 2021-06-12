@@ -1,6 +1,7 @@
 <template>
   <div class="user-wide-cell-container">
     <div class="icon-box">
+      <fa-icon v-if="isLocked" class="lock-icon" icon="lock" />
       <fa-icon v-if="!hasImage" icon="user" />
       <b-image v-if="hasImage" :src="user.member.icon_uri" :rounded="rounded" />
     </div>
@@ -59,6 +60,13 @@ export default Vue.extend({
     }
   },
   computed: {
+    isLocked(): boolean {
+      const member = this.user.member as ProfileModel
+      if (member === undefined) {
+        return false
+      }
+      return member.is_lock === true
+    },
     hasImage(): boolean {
       const member = this.user.member as ProfileModel
       if (member === undefined) {
@@ -120,6 +128,7 @@ export default Vue.extend({
   }
 
   .icon-box {
+    position: relative;
     grid-row: 1 / 3;
     grid-column: 1;
     display: flex;
@@ -131,6 +140,18 @@ export default Vue.extend({
     font-size: 32px;
     border-radius: 4px;
     background-color: black;
+
+    .lock-icon {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      height: 20px;
+      width: 20px;
+      padding: 4px;
+      color: black;
+      background-color: white;
+      border-radius: 10px;
+    }
   }
 
   .title-item {

@@ -33,6 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import BorderTitle from '@/components/atoms/title/BorderTitle.vue'
 import SquareIcon from '@/components/molecules/image/UploadableImage.vue'
 import ValidateInput from '@/components/atoms/input/ValidateInput.vue'
 import TextArea from '@/components/atoms/input/TextArea.vue'
@@ -63,6 +64,7 @@ type DataType = {
 
 export default Vue.extend({
   components: {
+    BorderTitle,
     SquareIcon,
     ValidateInput,
     TextArea,
