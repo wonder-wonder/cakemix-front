@@ -1,9 +1,9 @@
 <template>
   <div class="user-wide-cell-container">
     <div class="icon-box">
-      <fa-icon v-if="isLocked" class="lock-icon" icon="lock" />
       <fa-icon v-if="!hasImage" icon="user" />
       <b-image v-if="hasImage" :src="user.member.icon_uri" :rounded="rounded" />
+      <fa-icon v-if="isLocked" class="lock-icon" icon="lock" />
     </div>
     <div class="title-item" v-text="user.member.name" />
     <div class="detail-item" v-text="user.member.uuid" />
