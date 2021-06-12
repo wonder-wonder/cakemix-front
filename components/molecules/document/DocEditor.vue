@@ -96,13 +96,14 @@ export default Vue.extend({
         process.env.NODE_ENV === 'development'
           ? process.env.DOMAIN
           : location.host
-      const url = `${process.env.WS_SCHEME}://${DOMAIN}${process.env.BASE_PATH}/doc/${this.$route.params.id}/ws?token=${this.$store.getters['auth/token']}`
+      const url = `${process.env.WS_SCHEME}://${DOMAIN}${process.env.BASE_PATH}/doc/${this.$route.params.id}/ws`
       this.websocket = new socket.SocketConnection(url, !this.isEditable)
       this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
       this.websocket.on('join', this.joinEvent)
       this.websocket.on('quit', this.quitEvent)
       this.websocket.on('doc', this.docEvent)
       this.websocket.on('close', this.closeEvent)
+      this.websocket.on('open', this.openEvent)
     },
     //
     // CodeMirror Event
@@ -169,6 +170,9 @@ export default Vue.extend({
         onConfirm: () => this.makeConnection(),
         onCancel: () => this.$emit('toParentFolder'),
       })
+    },
+    openEvent() {
+      this.websocket.send('auth', this.$store.getters['auth/token'])
     },
   },
 })
