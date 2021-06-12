@@ -34,7 +34,6 @@
           :key="`user-cell-${uuid}-${index}`"
           class="user-cell"
           :user="user"
-          :locked="user.is_lock"
           :lockable="isAdmin"
           @lock="openLockUserDialog($event)"
           @unlock="openUnlockUserDialog($event)"

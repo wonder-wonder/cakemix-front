@@ -61,8 +61,6 @@ export default Vue.extend({
   },
   computed: {
     isLocked(): boolean {
-      console.log(this.user.member as ProfileModel)
-
       const member = this.user.member as ProfileModel
       if (member === undefined) {
         return false

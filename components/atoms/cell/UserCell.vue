@@ -40,7 +40,7 @@
       <div v-if="lockable" class="option-box" :class="userLockableClass">
         <span
           class="lock-user-item"
-          @click="$emit(locked ? 'unlock' : 'lock', user.uuid)"
+          @click="$emit(user.is_lock ? 'unlock' : 'lock', user.uuid)"
           v-text="user.is_lock ? 'UNLOCK THIS USER' : 'LOCK THIS USER'"
         />
       </div>
@@ -60,10 +60,6 @@ export default Vue.extend({
       default: {} as ProfileModel,
     },
     rounded: {
-      type: Boolean,
-      default: false,
-    },
-    locked: {
       type: Boolean,
       default: false,
     },
@@ -92,7 +88,7 @@ export default Vue.extend({
       return this.user.is_admin ?? false
     },
     lockedColorClass(): string {
-      return this.locked ? 'locked-color' : ''
+      return this.user.is_lock === true ? 'locked-color' : ''
     },
     userLockableClass(): string {
       return this.lockable ? 'user-lockable' : ''
