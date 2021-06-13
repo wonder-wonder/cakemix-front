@@ -1,9 +1,9 @@
 <template>
   <div class="user-search-wide-cell-container">
     <div class="icon-box">
-      <fa-icon v-if="isLock" class="lock-icon" icon="lock" />
       <fa-icon v-if="!hasImage" :icon="isTeam ? 'users' : 'user'" />
       <b-image v-if="hasImage" :src="imageUri" />
+      <fa-icon v-if="isLock" class="lock-icon" icon="lock" />
     </div>
     <div class="name">
       {{ name }}
