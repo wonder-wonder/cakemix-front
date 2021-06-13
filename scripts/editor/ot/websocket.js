@@ -42,7 +42,7 @@ class SocketConnection extends EventEmitter {
   }
 
   send(eventName, data) {
-    if (this.ws === null || this.readOnly) {
+    if (this.ws === null || (this.readOnly && eventName !== 'auth')) {
       return
     }
     this.ws.send(JSON.stringify({ e: eventName, d: data }))
