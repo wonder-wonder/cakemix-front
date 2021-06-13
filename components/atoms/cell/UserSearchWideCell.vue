@@ -3,6 +3,7 @@
     <div class="icon-box">
       <fa-icon v-if="!hasImage" :icon="isTeam ? 'users' : 'user'" />
       <b-image v-if="hasImage" :src="imageUri" />
+      <fa-icon v-if="isLock" class="lock-icon" icon="lock" />
     </div>
     <div class="name">
       {{ name }}
@@ -34,6 +35,9 @@ export default Vue.extend({
     name(): string {
       return this.user.name
     },
+    isLock(): boolean {
+      return this.user.is_lock === true
+    },
   },
 })
 </script>
@@ -48,10 +52,27 @@ export default Vue.extend({
   flex-flow: row wrap;
 
   .icon-box {
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-content: center;
     height: 20px;
     width: 20px;
     margin-right: 16px;
     color: black;
+    border-radius: 2px;
+
+    .lock-icon {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      height: 12px;
+      width: 12px;
+      padding: 2px;
+      background-color: whitesmoke;
+      border-radius: 6px;
+    }
   }
 }
 </style>

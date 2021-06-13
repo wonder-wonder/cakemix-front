@@ -17,8 +17,23 @@ import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+// @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
+/**
+ * Response model for /auth/lock
+ * @export
+ * @interface AuthLockResModel
+ */
+export interface AuthLockResModel {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AuthLockResModel
+     */
+    status: boolean;
+}
 /**
  * 
  * @export
@@ -748,6 +763,12 @@ export interface ProfileModel {
      * @memberof ProfileModel
      */
     is_admin?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileModel
+     */
+    is_lock?: boolean;
 }
 
 /**
@@ -757,21 +778,19 @@ export interface ProfileModel {
 export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Revoke session
-         * @summary Revoke session
-         * @param {string} id 
+         * 
+         * @summary Unlock user
+         * @param {string} uuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAuthSession: async (id: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteAuthSession.');
-            }
-            const localVarPath = `/auth/session/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        deleteAuthLock: async (uuid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('deleteAuthLock', 'uuid', uuid)
+            const localVarPath = `/auth/lock/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -783,28 +802,54 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Revoke session
+         * @summary Revoke session
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAuthSession: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteAuthSession', 'id', id)
+            const localVarPath = `/auth/session/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -818,18 +863,14 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         getAuthCheckUserUsername: async (token: string, userName: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling getAuthCheckUserUsername.');
-            }
+            assertParamExists('getAuthCheckUserUsername', 'token', token)
             // verify required parameter 'userName' is not null or undefined
-            if (userName === null || userName === undefined) {
-                throw new RequiredError('userName','Required parameter userName was null or undefined when calling getAuthCheckUserUsername.');
-            }
+            assertParamExists('getAuthCheckUserUsername', 'userName', userName)
             const localVarPath = `/auth/check/user/{user_name}/{token}`
                 .replace(`{${"token"}}`, encodeURIComponent(String(token)))
                 .replace(`{${"user_name"}}`, encodeURIComponent(String(userName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -841,19 +882,50 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get user lock status
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthLock: async (uuid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('getAuthLock', 'uuid', uuid)
+            const localVarPath = `/auth/lock/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -870,7 +942,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         getAuthLog: async (targetid?: string, offset?: number, limit?: number, type?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/log`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -882,12 +954,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (targetid !== undefined) {
                 localVarQueryParameter['targetid'] = targetid;
@@ -907,19 +974,12 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -931,13 +991,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         getAuthRegistPreToken: async (token: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling getAuthRegistPreToken.');
-            }
+            assertParamExists('getAuthRegistPreToken', 'token', token)
             const localVarPath = `/auth/regist/pre/{token}`
                 .replace(`{${"token"}}`, encodeURIComponent(String(token)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -949,19 +1007,12 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -974,7 +1025,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         getAuthSession: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/session`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -986,28 +1037,16 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1020,7 +1059,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         getCheckToken: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/check/token`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1032,28 +1071,16 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1066,7 +1093,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         getNewTokenRegist: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/regist/gen/token`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1078,28 +1105,16 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1112,13 +1127,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         getPassResetVerify: async (token: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling getPassResetVerify.');
-            }
+            assertParamExists('getPassResetVerify', 'token', token)
             const localVarPath = `/auth/pass/reset/verify/{token}`
                 .replace(`{${"token"}}`, encodeURIComponent(String(token)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1130,19 +1143,50 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Lock user
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postAuthLock: async (uuid: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'uuid' is not null or undefined
+            assertParamExists('postAuthLock', 'uuid', uuid)
+            const localVarPath = `/auth/lock/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication JWT required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1156,7 +1200,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         postLogin: async (authLoginReqModel?: AuthLoginReqModel, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/login`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1170,26 +1214,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof authLoginReqModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(authLoginReqModel !== undefined ? authLoginReqModel : {})
-                : (authLoginReqModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(authLoginReqModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1202,7 +1233,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         postLogout: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/logout`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1214,28 +1245,16 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1249,7 +1268,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         postPassChange: async (authPassChangeReqModel?: AuthPassChangeReqModel, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/pass/change`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1261,37 +1280,19 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof authPassChangeReqModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(authPassChangeReqModel !== undefined ? authPassChangeReqModel : {})
-                : (authPassChangeReqModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(authPassChangeReqModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1305,7 +1306,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         postPassReset: async (authPassResetReqModel?: AuthPassResetReqModel, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/pass/reset`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1319,26 +1320,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof authPassResetReqModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(authPassResetReqModel !== undefined ? authPassResetReqModel : {})
-                : (authPassResetReqModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(authPassResetReqModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1352,13 +1340,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         postPassResetVerify: async (token: string, authPassChangeReqModel?: AuthPassChangeReqModel, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling postPassResetVerify.');
-            }
+            assertParamExists('postPassResetVerify', 'token', token)
             const localVarPath = `/auth/pass/reset/verify/{token}`
                 .replace(`{${"token"}}`, encodeURIComponent(String(token)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1372,26 +1358,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof authPassChangeReqModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(authPassChangeReqModel !== undefined ? authPassChangeReqModel : {})
-                : (authPassChangeReqModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(authPassChangeReqModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1405,13 +1378,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         postRegist: async (token: string, authRegistReqModel?: AuthRegistReqModel, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling postRegist.');
-            }
+            assertParamExists('postRegist', 'token', token)
             const localVarPath = `/auth/regist/pre/{token}`
                 .replace(`{${"token"}}`, encodeURIComponent(String(token)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1425,26 +1396,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof authRegistReqModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(authRegistReqModel !== undefined ? authRegistReqModel : {})
-                : (authRegistReqModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(authRegistReqModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1457,13 +1415,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         postRegistVerify: async (token: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling postRegistVerify.');
-            }
+            assertParamExists('postRegistVerify', 'token', token)
             const localVarPath = `/auth/regist/verify/{token}`
                 .replace(`{${"token"}}`, encodeURIComponent(String(token)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -1475,19 +1431,12 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1499,7 +1448,19 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
  * @export
  */
 export const AuthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @summary Unlock user
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteAuthLock(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAuthLock(uuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * Revoke session
          * @summary Revoke session
@@ -1508,11 +1469,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async deleteAuthSession(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).deleteAuthSession(id, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAuthSession(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Check username is not taken by other
@@ -1523,11 +1481,19 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getAuthCheckUserUsername(token: string, userName: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthCheckUserUsername(token, userName, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthCheckUserUsername(token, userName, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get user lock status
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAuthLock(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthLockResModel>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthLock(uuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Get log list
@@ -1540,11 +1506,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getAuthLog(targetid?: string, offset?: number, limit?: number, type?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthLogResModel>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthLog(targetid, offset, limit, type, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthLog(targetid, offset, limit, type, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Request to verify invitation link
@@ -1553,11 +1516,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getAuthRegistPreToken(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthRegistPreToken(token, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthRegistPreToken(token, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Get session list
@@ -1566,11 +1526,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getAuthSession(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AuthSessionModel>>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getAuthSession(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthSession(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Checks JWT token is valid.
@@ -1579,11 +1536,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getCheckToken(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getCheckToken(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCheckToken(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Request to generate new key for registering new user.
@@ -1592,11 +1546,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getNewTokenRegist(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthRegistNewTokenResModel>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getNewTokenRegist(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getNewTokenRegist(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Check verification token to reset password. To change password with token, use POST methods.
@@ -1606,11 +1557,19 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getPassResetVerify(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).getPassResetVerify(token, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPassResetVerify(token, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Lock user
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postAuthLock(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postAuthLock(uuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Request login with email and password and returns JWT token.
@@ -1620,11 +1579,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postLogin(authLoginReqModel?: AuthLoginReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthLoginResModel>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).postLogin(authLoginReqModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postLogin(authLoginReqModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Request to logout. Server removes session key.
@@ -1633,11 +1589,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postLogout(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).postLogout(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postLogout(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Request to change password.
@@ -1647,11 +1600,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postPassChange(authPassChangeReqModel?: AuthPassChangeReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).postPassChange(authPassChangeReqModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postPassChange(authPassChangeReqModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Request to reset password. Server sends verification email.
@@ -1661,11 +1611,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postPassReset(authPassResetReqModel?: AuthPassResetReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).postPassReset(authPassResetReqModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postPassReset(authPassResetReqModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Reset password with new one.
@@ -1676,11 +1623,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postPassResetVerify(token: string, authPassChangeReqModel?: AuthPassChangeReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).postPassResetVerify(token, authPassChangeReqModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postPassResetVerify(token, authPassChangeReqModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Request to register new user. Server sends verification email.
@@ -1691,11 +1635,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postRegist(token: string, authRegistReqModel?: AuthRegistReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).postRegist(token, authRegistReqModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postRegist(token, authRegistReqModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Verify registration verification token. After verification, the account is added to user data and activated.
@@ -1705,11 +1646,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postRegistVerify(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).postRegistVerify(token, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postRegistVerify(token, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -1719,7 +1657,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AuthApiFp(configuration)
     return {
+        /**
+         * 
+         * @summary Unlock user
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAuthLock(uuid: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteAuthLock(uuid, options).then((request) => request(axios, basePath));
+        },
         /**
          * Revoke session
          * @summary Revoke session
@@ -1728,7 +1677,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         deleteAuthSession(id: string, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).deleteAuthSession(id, options).then((request) => request(axios, basePath));
+            return localVarFp.deleteAuthSession(id, options).then((request) => request(axios, basePath));
         },
         /**
          * Check username is not taken by other
@@ -1739,7 +1688,17 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         getAuthCheckUserUsername(token: string, userName: string, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).getAuthCheckUserUsername(token, userName, options).then((request) => request(axios, basePath));
+            return localVarFp.getAuthCheckUserUsername(token, userName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get user lock status
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAuthLock(uuid: string, options?: any): AxiosPromise<AuthLockResModel> {
+            return localVarFp.getAuthLock(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Get log list
@@ -1752,7 +1711,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         getAuthLog(targetid?: string, offset?: number, limit?: number, type?: string, options?: any): AxiosPromise<AuthLogResModel> {
-            return AuthApiFp(configuration).getAuthLog(targetid, offset, limit, type, options).then((request) => request(axios, basePath));
+            return localVarFp.getAuthLog(targetid, offset, limit, type, options).then((request) => request(axios, basePath));
         },
         /**
          * Request to verify invitation link
@@ -1761,7 +1720,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         getAuthRegistPreToken(token: string, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).getAuthRegistPreToken(token, options).then((request) => request(axios, basePath));
+            return localVarFp.getAuthRegistPreToken(token, options).then((request) => request(axios, basePath));
         },
         /**
          * Get session list
@@ -1770,7 +1729,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         getAuthSession(options?: any): AxiosPromise<Array<AuthSessionModel>> {
-            return AuthApiFp(configuration).getAuthSession(options).then((request) => request(axios, basePath));
+            return localVarFp.getAuthSession(options).then((request) => request(axios, basePath));
         },
         /**
          * Checks JWT token is valid.
@@ -1779,7 +1738,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         getCheckToken(options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).getCheckToken(options).then((request) => request(axios, basePath));
+            return localVarFp.getCheckToken(options).then((request) => request(axios, basePath));
         },
         /**
          * Request to generate new key for registering new user.
@@ -1788,7 +1747,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         getNewTokenRegist(options?: any): AxiosPromise<AuthRegistNewTokenResModel> {
-            return AuthApiFp(configuration).getNewTokenRegist(options).then((request) => request(axios, basePath));
+            return localVarFp.getNewTokenRegist(options).then((request) => request(axios, basePath));
         },
         /**
          * Check verification token to reset password. To change password with token, use POST methods.
@@ -1798,7 +1757,17 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         getPassResetVerify(token: string, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).getPassResetVerify(token, options).then((request) => request(axios, basePath));
+            return localVarFp.getPassResetVerify(token, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Lock user
+         * @param {string} uuid 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postAuthLock(uuid: string, options?: any): AxiosPromise<void> {
+            return localVarFp.postAuthLock(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Request login with email and password and returns JWT token.
@@ -1808,7 +1777,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postLogin(authLoginReqModel?: AuthLoginReqModel, options?: any): AxiosPromise<AuthLoginResModel> {
-            return AuthApiFp(configuration).postLogin(authLoginReqModel, options).then((request) => request(axios, basePath));
+            return localVarFp.postLogin(authLoginReqModel, options).then((request) => request(axios, basePath));
         },
         /**
          * Request to logout. Server removes session key.
@@ -1817,7 +1786,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postLogout(options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).postLogout(options).then((request) => request(axios, basePath));
+            return localVarFp.postLogout(options).then((request) => request(axios, basePath));
         },
         /**
          * Request to change password.
@@ -1827,7 +1796,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postPassChange(authPassChangeReqModel?: AuthPassChangeReqModel, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).postPassChange(authPassChangeReqModel, options).then((request) => request(axios, basePath));
+            return localVarFp.postPassChange(authPassChangeReqModel, options).then((request) => request(axios, basePath));
         },
         /**
          * Request to reset password. Server sends verification email.
@@ -1837,7 +1806,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postPassReset(authPassResetReqModel?: AuthPassResetReqModel, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).postPassReset(authPassResetReqModel, options).then((request) => request(axios, basePath));
+            return localVarFp.postPassReset(authPassResetReqModel, options).then((request) => request(axios, basePath));
         },
         /**
          * Reset password with new one.
@@ -1848,7 +1817,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postPassResetVerify(token: string, authPassChangeReqModel?: AuthPassChangeReqModel, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).postPassResetVerify(token, authPassChangeReqModel, options).then((request) => request(axios, basePath));
+            return localVarFp.postPassResetVerify(token, authPassChangeReqModel, options).then((request) => request(axios, basePath));
         },
         /**
          * Request to register new user. Server sends verification email.
@@ -1859,7 +1828,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postRegist(token: string, authRegistReqModel?: AuthRegistReqModel, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).postRegist(token, authRegistReqModel, options).then((request) => request(axios, basePath));
+            return localVarFp.postRegist(token, authRegistReqModel, options).then((request) => request(axios, basePath));
         },
         /**
          * Verify registration verification token. After verification, the account is added to user data and activated.
@@ -1869,7 +1838,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postRegistVerify(token: string, options?: any): AxiosPromise<void> {
-            return AuthApiFp(configuration).postRegistVerify(token, options).then((request) => request(axios, basePath));
+            return localVarFp.postRegistVerify(token, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1881,6 +1850,18 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
  * @extends {BaseAPI}
  */
 export class AuthApi extends BaseAPI {
+    /**
+     * 
+     * @summary Unlock user
+     * @param {string} uuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public deleteAuthLock(uuid: string, options?: any) {
+        return AuthApiFp(this.configuration).deleteAuthLock(uuid, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Revoke session
      * @summary Revoke session
@@ -1904,6 +1885,18 @@ export class AuthApi extends BaseAPI {
      */
     public getAuthCheckUserUsername(token: string, userName: string, options?: any) {
         return AuthApiFp(this.configuration).getAuthCheckUserUsername(token, userName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get user lock status
+     * @param {string} uuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public getAuthLock(uuid: string, options?: any) {
+        return AuthApiFp(this.configuration).getAuthLock(uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1975,6 +1968,18 @@ export class AuthApi extends BaseAPI {
      */
     public getPassResetVerify(token: string, options?: any) {
         return AuthApiFp(this.configuration).getPassResetVerify(token, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Lock user
+     * @param {string} uuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public postAuthLock(uuid: string, options?: any) {
+        return AuthApiFp(this.configuration).postAuthLock(uuid, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2079,13 +2084,11 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
          */
         createNewDoc: async (folderId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'folderId' is not null or undefined
-            if (folderId === null || folderId === undefined) {
-                throw new RequiredError('folderId','Required parameter folderId was null or undefined when calling createNewDoc.');
-            }
+            assertParamExists('createNewDoc', 'folderId', folderId)
             const localVarPath = `/doc/{folder_id}`
                 .replace(`{${"folder_id"}}`, encodeURIComponent(String(folderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2097,28 +2100,16 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2131,13 +2122,11 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
          */
         deleteDoc: async (docId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'docId' is not null or undefined
-            if (docId === null || docId === undefined) {
-                throw new RequiredError('docId','Required parameter docId was null or undefined when calling deleteDoc.');
-            }
+            assertParamExists('deleteDoc', 'docId', docId)
             const localVarPath = `/doc/{doc_id}`
                 .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2149,28 +2138,16 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2182,13 +2159,11 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
          */
         getDocDocId: async (docId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'docId' is not null or undefined
-            if (docId === null || docId === undefined) {
-                throw new RequiredError('docId','Required parameter docId was null or undefined when calling getDocDocId.');
-            }
+            assertParamExists('getDocDocId', 'docId', docId)
             const localVarPath = `/doc/{doc_id}`
                 .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2200,28 +2175,16 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2235,17 +2198,13 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
          */
         getDocDocIdWs: async (docId: string, token: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'docId' is not null or undefined
-            if (docId === null || docId === undefined) {
-                throw new RequiredError('docId','Required parameter docId was null or undefined when calling getDocDocIdWs.');
-            }
+            assertParamExists('getDocDocIdWs', 'docId', docId)
             // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling getDocDocIdWs.');
-            }
+            assertParamExists('getDocDocIdWs', 'token', token)
             const localVarPath = `/doc/{doc_id}/ws`
                 .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2261,19 +2220,12 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2287,18 +2239,14 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
          */
         moveDoc: async (docId: string, folderId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'docId' is not null or undefined
-            if (docId === null || docId === undefined) {
-                throw new RequiredError('docId','Required parameter docId was null or undefined when calling moveDoc.');
-            }
+            assertParamExists('moveDoc', 'docId', docId)
             // verify required parameter 'folderId' is not null or undefined
-            if (folderId === null || folderId === undefined) {
-                throw new RequiredError('folderId','Required parameter folderId was null or undefined when calling moveDoc.');
-            }
+            assertParamExists('moveDoc', 'folderId', folderId)
             const localVarPath = `/doc/{doc_id}/move/{folder_id}`
                 .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)))
                 .replace(`{${"folder_id"}}`, encodeURIComponent(String(folderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2310,28 +2258,16 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2345,13 +2281,11 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
          */
         putDocDocId: async (docId: string, documentModifyReqModel?: DocumentModifyReqModel, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'docId' is not null or undefined
-            if (docId === null || docId === undefined) {
-                throw new RequiredError('docId','Required parameter docId was null or undefined when calling putDocDocId.');
-            }
+            assertParamExists('putDocDocId', 'docId', docId)
             const localVarPath = `/doc/{doc_id}`
                 .replace(`{${"doc_id"}}`, encodeURIComponent(String(docId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2363,37 +2297,19 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof documentModifyReqModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(documentModifyReqModel !== undefined ? documentModifyReqModel : {})
-                : (documentModifyReqModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(documentModifyReqModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2405,6 +2321,7 @@ export const DocumentApiAxiosParamCreator = function (configuration?: Configurat
  * @export
  */
 export const DocumentApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DocumentApiAxiosParamCreator(configuration)
     return {
         /**
          * Just create new document and will return document id
@@ -2414,11 +2331,8 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async createNewDoc(folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
-            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).createNewDoc(folderId, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createNewDoc(folderId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2428,11 +2342,8 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async deleteDoc(docId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).deleteDoc(docId, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDoc(docId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2441,11 +2352,8 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getDocDocId(docId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DocumentModel>> {
-            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).getDocDocId(docId, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDocDocId(docId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2456,11 +2364,8 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getDocDocIdWs(docId: string, token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).getDocDocIdWs(docId, token, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDocDocIdWs(docId, token, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2471,11 +2376,8 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async moveDoc(docId: string, folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).moveDoc(docId, folderId, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.moveDoc(docId, folderId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2486,11 +2388,8 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async putDocDocId(docId: string, documentModifyReqModel?: DocumentModifyReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await DocumentApiAxiosParamCreator(configuration).putDocDocId(docId, documentModifyReqModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putDocDocId(docId, documentModifyReqModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -2500,6 +2399,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const DocumentApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DocumentApiFp(configuration)
     return {
         /**
          * Just create new document and will return document id
@@ -2509,7 +2409,7 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          * @throws {RequiredError}
          */
         createNewDoc(folderId: string, options?: any): AxiosPromise<InlineResponse2001> {
-            return DocumentApiFp(configuration).createNewDoc(folderId, options).then((request) => request(axios, basePath));
+            return localVarFp.createNewDoc(folderId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2519,7 +2419,7 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          * @throws {RequiredError}
          */
         deleteDoc(docId: string, options?: any): AxiosPromise<void> {
-            return DocumentApiFp(configuration).deleteDoc(docId, options).then((request) => request(axios, basePath));
+            return localVarFp.deleteDoc(docId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2528,7 +2428,7 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          * @throws {RequiredError}
          */
         getDocDocId(docId: string, options?: any): AxiosPromise<DocumentModel> {
-            return DocumentApiFp(configuration).getDocDocId(docId, options).then((request) => request(axios, basePath));
+            return localVarFp.getDocDocId(docId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2539,7 +2439,7 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          * @throws {RequiredError}
          */
         getDocDocIdWs(docId: string, token: string, options?: any): AxiosPromise<void> {
-            return DocumentApiFp(configuration).getDocDocIdWs(docId, token, options).then((request) => request(axios, basePath));
+            return localVarFp.getDocDocIdWs(docId, token, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2550,7 +2450,7 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          * @throws {RequiredError}
          */
         moveDoc(docId: string, folderId: string, options?: any): AxiosPromise<void> {
-            return DocumentApiFp(configuration).moveDoc(docId, folderId, options).then((request) => request(axios, basePath));
+            return localVarFp.moveDoc(docId, folderId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2561,7 +2461,7 @@ export const DocumentApiFactory = function (configuration?: Configuration, baseP
          * @throws {RequiredError}
          */
         putDocDocId(docId: string, documentModifyReqModel?: DocumentModifyReqModel, options?: any): AxiosPromise<void> {
-            return DocumentApiFp(configuration).putDocDocId(docId, documentModifyReqModel, options).then((request) => request(axios, basePath));
+            return localVarFp.putDocDocId(docId, documentModifyReqModel, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2665,17 +2565,13 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
          */
         createNewFolder: async (folderId: string, name: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'folderId' is not null or undefined
-            if (folderId === null || folderId === undefined) {
-                throw new RequiredError('folderId','Required parameter folderId was null or undefined when calling createNewFolder.');
-            }
+            assertParamExists('createNewFolder', 'folderId', folderId)
             // verify required parameter 'name' is not null or undefined
-            if (name === null || name === undefined) {
-                throw new RequiredError('name','Required parameter name was null or undefined when calling createNewFolder.');
-            }
+            assertParamExists('createNewFolder', 'name', name)
             const localVarPath = `/folder/{folder_id}`
                 .replace(`{${"folder_id"}}`, encodeURIComponent(String(folderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2687,12 +2583,7 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (name !== undefined) {
                 localVarQueryParameter['name'] = name;
@@ -2700,19 +2591,12 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2725,13 +2609,11 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
          */
         deleteFolder: async (folderId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'folderId' is not null or undefined
-            if (folderId === null || folderId === undefined) {
-                throw new RequiredError('folderId','Required parameter folderId was null or undefined when calling deleteFolder.');
-            }
+            assertParamExists('deleteFolder', 'folderId', folderId)
             const localVarPath = `/folder/{folder_id}`
                 .replace(`{${"folder_id"}}`, encodeURIComponent(String(folderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2743,28 +2625,16 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2778,17 +2648,13 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
          */
         getList: async (folderId: string, type: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'folderId' is not null or undefined
-            if (folderId === null || folderId === undefined) {
-                throw new RequiredError('folderId','Required parameter folderId was null or undefined when calling getList.');
-            }
+            assertParamExists('getList', 'folderId', folderId)
             // verify required parameter 'type' is not null or undefined
-            if (type === null || type === undefined) {
-                throw new RequiredError('type','Required parameter type was null or undefined when calling getList.');
-            }
+            assertParamExists('getList', 'type', type)
             const localVarPath = `/folder/{folder_id}`
                 .replace(`{${"folder_id"}}`, encodeURIComponent(String(folderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2800,12 +2666,7 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (type !== undefined) {
                 localVarQueryParameter['type'] = type;
@@ -2813,19 +2674,12 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2839,13 +2693,11 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
          */
         modifyFolder: async (folderId: string, folderModifyReqModel?: FolderModifyReqModel, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'folderId' is not null or undefined
-            if (folderId === null || folderId === undefined) {
-                throw new RequiredError('folderId','Required parameter folderId was null or undefined when calling modifyFolder.');
-            }
+            assertParamExists('modifyFolder', 'folderId', folderId)
             const localVarPath = `/folder/{folder_id}`
                 .replace(`{${"folder_id"}}`, encodeURIComponent(String(folderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2857,37 +2709,19 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof folderModifyReqModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(folderModifyReqModel !== undefined ? folderModifyReqModel : {})
-                : (folderModifyReqModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(folderModifyReqModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2901,18 +2735,14 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
          */
         moveFolder: async (folderId: string, targetFolderId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'folderId' is not null or undefined
-            if (folderId === null || folderId === undefined) {
-                throw new RequiredError('folderId','Required parameter folderId was null or undefined when calling moveFolder.');
-            }
+            assertParamExists('moveFolder', 'folderId', folderId)
             // verify required parameter 'targetFolderId' is not null or undefined
-            if (targetFolderId === null || targetFolderId === undefined) {
-                throw new RequiredError('targetFolderId','Required parameter targetFolderId was null or undefined when calling moveFolder.');
-            }
+            assertParamExists('moveFolder', 'targetFolderId', targetFolderId)
             const localVarPath = `/folder/{folder_id}/move/{target_folder_id}`
                 .replace(`{${"folder_id"}}`, encodeURIComponent(String(folderId)))
                 .replace(`{${"target_folder_id"}}`, encodeURIComponent(String(targetFolderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -2924,28 +2754,16 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2957,6 +2775,7 @@ export const FolderApiAxiosParamCreator = function (configuration?: Configuratio
  * @export
  */
 export const FolderApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = FolderApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -2967,11 +2786,8 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async createNewFolder(folderId: string, name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
-            const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).createNewFolder(folderId, name, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createNewFolder(folderId, name, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2981,11 +2797,8 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async deleteFolder(folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).deleteFolder(folderId, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFolder(folderId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2996,11 +2809,8 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getList(folderId: string, type: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FolderListModel>> {
-            const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).getList(folderId, type, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getList(folderId, type, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -3011,11 +2821,8 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async modifyFolder(folderId: string, folderModifyReqModel?: FolderModifyReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).modifyFolder(folderId, folderModifyReqModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.modifyFolder(folderId, folderModifyReqModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -3026,11 +2833,8 @@ export const FolderApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async moveFolder(folderId: string, targetFolderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await FolderApiAxiosParamCreator(configuration).moveFolder(folderId, targetFolderId, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.moveFolder(folderId, targetFolderId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -3040,6 +2844,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const FolderApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = FolderApiFp(configuration)
     return {
         /**
          * 
@@ -3050,7 +2855,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @throws {RequiredError}
          */
         createNewFolder(folderId: string, name: string, options?: any): AxiosPromise<InlineResponse2002> {
-            return FolderApiFp(configuration).createNewFolder(folderId, name, options).then((request) => request(axios, basePath));
+            return localVarFp.createNewFolder(folderId, name, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3060,7 +2865,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @throws {RequiredError}
          */
         deleteFolder(folderId: string, options?: any): AxiosPromise<void> {
-            return FolderApiFp(configuration).deleteFolder(folderId, options).then((request) => request(axios, basePath));
+            return localVarFp.deleteFolder(folderId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3071,7 +2876,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @throws {RequiredError}
          */
         getList(folderId: string, type: string, options?: any): AxiosPromise<FolderListModel> {
-            return FolderApiFp(configuration).getList(folderId, type, options).then((request) => request(axios, basePath));
+            return localVarFp.getList(folderId, type, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3082,7 +2887,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @throws {RequiredError}
          */
         modifyFolder(folderId: string, folderModifyReqModel?: FolderModifyReqModel, options?: any): AxiosPromise<void> {
-            return FolderApiFp(configuration).modifyFolder(folderId, folderModifyReqModel, options).then((request) => request(axios, basePath));
+            return localVarFp.modifyFolder(folderId, folderModifyReqModel, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3093,7 +2898,7 @@ export const FolderApiFactory = function (configuration?: Configuration, basePat
          * @throws {RequiredError}
          */
         moveFolder(folderId: string, targetFolderId: string, options?: any): AxiosPromise<void> {
-            return FolderApiFp(configuration).moveFolder(folderId, targetFolderId, options).then((request) => request(axios, basePath));
+            return localVarFp.moveFolder(folderId, targetFolderId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3186,13 +2991,11 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
          */
         getImageImgid: async (imgid: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'imgid' is not null or undefined
-            if (imgid === null || imgid === undefined) {
-                throw new RequiredError('imgid','Required parameter imgid was null or undefined when calling getImageImgid.');
-            }
+            assertParamExists('getImageImgid', 'imgid', imgid)
             const localVarPath = `/image/{imgid}`
                 .replace(`{${"imgid"}}`, encodeURIComponent(String(imgid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3204,19 +3007,12 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3229,12 +3025,10 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
          */
         postImage: async (file: any, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
-            if (file === null || file === undefined) {
-                throw new RequiredError('file','Required parameter file was null or undefined when calling postImage.');
-            }
+            assertParamExists('postImage', 'file', file)
             const localVarPath = `/image`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3247,12 +3041,7 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
             if (file !== undefined) { 
@@ -3262,20 +3051,13 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
     
             localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = localVarFormParams;
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3287,6 +3069,7 @@ export const ImageApiAxiosParamCreator = function (configuration?: Configuration
  * @export
  */
 export const ImageApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ImageApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -3296,11 +3079,8 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getImageImgid(imgid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ImageApiAxiosParamCreator(configuration).getImageImgid(imgid, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getImageImgid(imgid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -3310,11 +3090,8 @@ export const ImageApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postImage(file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
-            const localVarAxiosArgs = await ImageApiAxiosParamCreator(configuration).postImage(file, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postImage(file, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -3324,6 +3101,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const ImageApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ImageApiFp(configuration)
     return {
         /**
          * 
@@ -3333,7 +3111,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         getImageImgid(imgid: string, options?: any): AxiosPromise<void> {
-            return ImageApiFp(configuration).getImageImgid(imgid, options).then((request) => request(axios, basePath));
+            return localVarFp.getImageImgid(imgid, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3343,7 +3121,7 @@ export const ImageApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         postImage(file: any, options?: any): AxiosPromise<InlineResponse2005> {
-            return ImageApiFp(configuration).postImage(file, options).then((request) => request(axios, basePath));
+            return localVarFp.postImage(file, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3396,13 +3174,11 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
          */
         getUserProfileUuid: async (uuid: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
-            if (uuid === null || uuid === undefined) {
-                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling getUserProfileUuid.');
-            }
+            assertParamExists('getUserProfileUuid', 'uuid', uuid)
             const localVarPath = `/profile/{uuid}`
                 .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3414,28 +3190,16 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3449,13 +3213,11 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
          */
         putUserProfileUuid: async (uuid: string, profileModel?: ProfileModel, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'uuid' is not null or undefined
-            if (uuid === null || uuid === undefined) {
-                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling putUserProfileUuid.');
-            }
+            assertParamExists('putUserProfileUuid', 'uuid', uuid)
             const localVarPath = `/profile/{uuid}`
                 .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3467,37 +3229,19 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof profileModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(profileModel !== undefined ? profileModel : {})
-                : (profileModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(profileModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3509,6 +3253,7 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
  * @export
  */
 export const ProfileApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ProfileApiAxiosParamCreator(configuration)
     return {
         /**
          * Get profile for user/team.
@@ -3518,11 +3263,8 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getUserProfileUuid(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileModel>> {
-            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).getUserProfileUuid(uuid, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUserProfileUuid(uuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Edit profile
@@ -3533,11 +3275,8 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ProfileApiAxiosParamCreator(configuration).putUserProfileUuid(uuid, profileModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putUserProfileUuid(uuid, profileModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -3547,6 +3286,7 @@ export const ProfileApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const ProfileApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ProfileApiFp(configuration)
     return {
         /**
          * Get profile for user/team.
@@ -3556,7 +3296,7 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         getUserProfileUuid(uuid: string, options?: any): AxiosPromise<ProfileModel> {
-            return ProfileApiFp(configuration).getUserProfileUuid(uuid, options).then((request) => request(axios, basePath));
+            return localVarFp.getUserProfileUuid(uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Edit profile
@@ -3567,7 +3307,7 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any): AxiosPromise<void> {
-            return ProfileApiFp(configuration).putUserProfileUuid(uuid, profileModel, options).then((request) => request(axios, basePath));
+            return localVarFp.putUserProfileUuid(uuid, profileModel, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3624,7 +3364,7 @@ export const SearchApiAxiosParamCreator = function (configuration?: Configuratio
         getSearchTeam: async (q?: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/search/team`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3636,12 +3376,7 @@ export const SearchApiAxiosParamCreator = function (configuration?: Configuratio
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
@@ -3657,19 +3392,12 @@ export const SearchApiAxiosParamCreator = function (configuration?: Configuratio
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3679,13 +3407,14 @@ export const SearchApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {string} [q] search filter
          * @param {number} [limit] search limit
          * @param {number} [offset] search offset
+         * @param {string} [filter] search condition filter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSearchUser: async (q?: string, limit?: number, offset?: number, options: any = {}): Promise<RequestArgs> => {
+        getSearchUser: async (q?: string, limit?: number, offset?: number, filter?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/search/user`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3697,12 +3426,7 @@ export const SearchApiAxiosParamCreator = function (configuration?: Configuratio
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
@@ -3716,21 +3440,18 @@ export const SearchApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['offset'] = offset;
             }
 
+            if (filter !== undefined) {
+                localVarQueryParameter['filter'] = filter;
+            }
+
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3742,6 +3463,7 @@ export const SearchApiAxiosParamCreator = function (configuration?: Configuratio
  * @export
  */
 export const SearchApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SearchApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -3753,11 +3475,8 @@ export const SearchApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
-            const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchTeam(q, limit, offset, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSearchTeam(q, limit, offset, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -3765,15 +3484,13 @@ export const SearchApiFp = function(configuration?: Configuration) {
          * @param {string} [q] search filter
          * @param {number} [limit] search limit
          * @param {number} [offset] search offset
+         * @param {string} [filter] search condition filter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSearchUser(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004>> {
-            const localVarAxiosArgs = await SearchApiAxiosParamCreator(configuration).getSearchUser(q, limit, offset, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+        async getSearchUser(q?: string, limit?: number, offset?: number, filter?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSearchUser(q, limit, offset, filter, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -3783,6 +3500,7 @@ export const SearchApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const SearchApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SearchApiFp(configuration)
     return {
         /**
          * 
@@ -3794,7 +3512,7 @@ export const SearchApiFactory = function (configuration?: Configuration, basePat
          * @throws {RequiredError}
          */
         getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2003> {
-            return SearchApiFp(configuration).getSearchTeam(q, limit, offset, options).then((request) => request(axios, basePath));
+            return localVarFp.getSearchTeam(q, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3802,11 +3520,12 @@ export const SearchApiFactory = function (configuration?: Configuration, basePat
          * @param {string} [q] search filter
          * @param {number} [limit] search limit
          * @param {number} [offset] search offset
+         * @param {string} [filter] search condition filter
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSearchUser(q?: string, limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2004> {
-            return SearchApiFp(configuration).getSearchUser(q, limit, offset, options).then((request) => request(axios, basePath));
+        getSearchUser(q?: string, limit?: number, offset?: number, filter?: string, options?: any): AxiosPromise<InlineResponse2004> {
+            return localVarFp.getSearchUser(q, limit, offset, filter, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3838,12 +3557,13 @@ export class SearchApi extends BaseAPI {
      * @param {string} [q] search filter
      * @param {number} [limit] search limit
      * @param {number} [offset] search offset
+     * @param {string} [filter] search condition filter
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SearchApi
      */
-    public getSearchUser(q?: string, limit?: number, offset?: number, options?: any) {
-        return SearchApiFp(this.configuration).getSearchUser(q, limit, offset, options).then((request) => request(this.axios, this.basePath));
+    public getSearchUser(q?: string, limit?: number, offset?: number, filter?: string, options?: any) {
+        return SearchApiFp(this.configuration).getSearchUser(q, limit, offset, filter, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3863,13 +3583,11 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          */
         deleteTeamTeamid: async (teamid: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamid' is not null or undefined
-            if (teamid === null || teamid === undefined) {
-                throw new RequiredError('teamid','Required parameter teamid was null or undefined when calling deleteTeamTeamid.');
-            }
+            assertParamExists('deleteTeamTeamid', 'teamid', teamid)
             const localVarPath = `/team/{teamid}`
                 .replace(`{${"teamid"}}`, encodeURIComponent(String(teamid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3881,28 +3599,16 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3916,17 +3622,13 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          */
         deleteTeamTeamidMember: async (teamid: string, uuid: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamid' is not null or undefined
-            if (teamid === null || teamid === undefined) {
-                throw new RequiredError('teamid','Required parameter teamid was null or undefined when calling deleteTeamTeamidMember.');
-            }
+            assertParamExists('deleteTeamTeamidMember', 'teamid', teamid)
             // verify required parameter 'uuid' is not null or undefined
-            if (uuid === null || uuid === undefined) {
-                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling deleteTeamTeamidMember.');
-            }
+            assertParamExists('deleteTeamTeamidMember', 'uuid', uuid)
             const localVarPath = `/team/{teamid}/member`
                 .replace(`{${"teamid"}}`, encodeURIComponent(String(teamid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3938,12 +3640,7 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (uuid !== undefined) {
                 localVarQueryParameter['uuid'] = uuid;
@@ -3951,19 +3648,12 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3979,13 +3669,11 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          */
         getTeamTeamidMember: async (teamid: string, limit?: number, offset?: number, uuid?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamid' is not null or undefined
-            if (teamid === null || teamid === undefined) {
-                throw new RequiredError('teamid','Required parameter teamid was null or undefined when calling getTeamTeamidMember.');
-            }
+            assertParamExists('getTeamTeamidMember', 'teamid', teamid)
             const localVarPath = `/team/{teamid}/member`
                 .replace(`{${"teamid"}}`, encodeURIComponent(String(teamid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -3997,12 +3685,7 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (limit !== undefined) {
                 localVarQueryParameter['limit'] = limit;
@@ -4018,19 +3701,12 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -4043,12 +3719,10 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          */
         postTeam: async (name: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'name' is not null or undefined
-            if (name === null || name === undefined) {
-                throw new RequiredError('name','Required parameter name was null or undefined when calling postTeam.');
-            }
+            assertParamExists('postTeam', 'name', name)
             const localVarPath = `/team`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -4060,12 +3734,7 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
             if (name !== undefined) {
                 localVarQueryParameter['name'] = name;
@@ -4073,19 +3742,12 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -4099,13 +3761,11 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          */
         postTeamTeamidMember: async (teamid: string, memberInfoModel?: MemberInfoModel, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamid' is not null or undefined
-            if (teamid === null || teamid === undefined) {
-                throw new RequiredError('teamid','Required parameter teamid was null or undefined when calling postTeamTeamidMember.');
-            }
+            assertParamExists('postTeamTeamidMember', 'teamid', teamid)
             const localVarPath = `/team/{teamid}/member`
                 .replace(`{${"teamid"}}`, encodeURIComponent(String(teamid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -4117,37 +3777,19 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof memberInfoModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(memberInfoModel !== undefined ? memberInfoModel : {})
-                : (memberInfoModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(memberInfoModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -4161,13 +3803,11 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
          */
         putTeamTeamidMember: async (teamid: string, memberInfoModel?: MemberInfoModel, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamid' is not null or undefined
-            if (teamid === null || teamid === undefined) {
-                throw new RequiredError('teamid','Required parameter teamid was null or undefined when calling putTeamTeamidMember.');
-            }
+            assertParamExists('putTeamTeamidMember', 'teamid', teamid)
             const localVarPath = `/team/{teamid}/member`
                 .replace(`{${"teamid"}}`, encodeURIComponent(String(teamid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
@@ -4179,37 +3819,19 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
 
             // authentication JWT required
             // http bearer authentication required
-            if (configuration && configuration.accessToken) {
-                const accessToken = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken()
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const queryParameters = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                queryParameters.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                queryParameters.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof memberInfoModel !== 'string';
-            const needsSerialization = nonString && configuration && configuration.isJsonMime
-                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
-                : nonString;
-            localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(memberInfoModel !== undefined ? memberInfoModel : {})
-                : (memberInfoModel || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(memberInfoModel, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -4221,6 +3843,7 @@ export const TeamApiAxiosParamCreator = function (configuration?: Configuration)
  * @export
  */
 export const TeamApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TeamApiAxiosParamCreator(configuration)
     return {
         /**
          * Remove the team.
@@ -4230,11 +3853,8 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async deleteTeamTeamid(teamid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).deleteTeamTeamid(teamid, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTeamTeamid(teamid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Remove the member from the team.
@@ -4245,11 +3865,8 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async deleteTeamTeamidMember(teamid: string, uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).deleteTeamTeamidMember(teamid, uuid, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTeamTeamidMember(teamid, uuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Get team member list.
@@ -4262,11 +3879,8 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getTeamTeamidMember(teamid: string, limit?: number, offset?: number, uuid?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).getTeamTeamidMember(teamid, limit, offset, uuid, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTeamTeamidMember(teamid, limit, offset, uuid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Create new team.
@@ -4276,11 +3890,8 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postTeam(name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).postTeam(name, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postTeam(name, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Add the member into the team.
@@ -4291,11 +3902,8 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async postTeamTeamidMember(teamid: string, memberInfoModel?: MemberInfoModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).postTeamTeamidMember(teamid, memberInfoModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postTeamTeamidMember(teamid, memberInfoModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Modify member info in the team.
@@ -4306,11 +3914,8 @@ export const TeamApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async putTeamTeamidMember(teamid: string, memberInfoModel?: MemberInfoModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TeamApiAxiosParamCreator(configuration).putTeamTeamidMember(teamid, memberInfoModel, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putTeamTeamidMember(teamid, memberInfoModel, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -4320,6 +3925,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const TeamApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TeamApiFp(configuration)
     return {
         /**
          * Remove the team.
@@ -4329,7 +3935,7 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         deleteTeamTeamid(teamid: string, options?: any): AxiosPromise<void> {
-            return TeamApiFp(configuration).deleteTeamTeamid(teamid, options).then((request) => request(axios, basePath));
+            return localVarFp.deleteTeamTeamid(teamid, options).then((request) => request(axios, basePath));
         },
         /**
          * Remove the member from the team.
@@ -4340,7 +3946,7 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         deleteTeamTeamidMember(teamid: string, uuid: string, options?: any): AxiosPromise<void> {
-            return TeamApiFp(configuration).deleteTeamTeamidMember(teamid, uuid, options).then((request) => request(axios, basePath));
+            return localVarFp.deleteTeamTeamidMember(teamid, uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Get team member list.
@@ -4353,7 +3959,7 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         getTeamTeamidMember(teamid: string, limit?: number, offset?: number, uuid?: string, options?: any): AxiosPromise<InlineResponse200> {
-            return TeamApiFp(configuration).getTeamTeamidMember(teamid, limit, offset, uuid, options).then((request) => request(axios, basePath));
+            return localVarFp.getTeamTeamidMember(teamid, limit, offset, uuid, options).then((request) => request(axios, basePath));
         },
         /**
          * Create new team.
@@ -4363,7 +3969,7 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postTeam(name: string, options?: any): AxiosPromise<void> {
-            return TeamApiFp(configuration).postTeam(name, options).then((request) => request(axios, basePath));
+            return localVarFp.postTeam(name, options).then((request) => request(axios, basePath));
         },
         /**
          * Add the member into the team.
@@ -4374,7 +3980,7 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         postTeamTeamidMember(teamid: string, memberInfoModel?: MemberInfoModel, options?: any): AxiosPromise<void> {
-            return TeamApiFp(configuration).postTeamTeamidMember(teamid, memberInfoModel, options).then((request) => request(axios, basePath));
+            return localVarFp.postTeamTeamidMember(teamid, memberInfoModel, options).then((request) => request(axios, basePath));
         },
         /**
          * Modify member info in the team.
@@ -4385,7 +3991,7 @@ export const TeamApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         putTeamTeamidMember(teamid: string, memberInfoModel?: MemberInfoModel, options?: any): AxiosPromise<void> {
-            return TeamApiFp(configuration).putTeamTeamidMember(teamid, memberInfoModel, options).then((request) => request(axios, basePath));
+            return localVarFp.putTeamTeamidMember(teamid, memberInfoModel, options).then((request) => request(axios, basePath));
         },
     };
 };

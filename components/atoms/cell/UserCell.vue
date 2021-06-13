@@ -26,7 +26,7 @@
         </div>
       </div>
     </template>
-    <div class="user-cell-container">
+    <div class="user-cell-container" :class="lockedColorClass">
       <div class="icon-box">
         <fa-icon v-if="!hasImage" :icon="isTeam ? 'users' : 'user'" />
         <b-image v-if="hasImage" :src="user.icon_uri" :rounded="rounded" />
@@ -36,6 +36,13 @@
       </div>
       <div class="joinedat-box">
         <span v-text="toDate(user.created_at)" />
+      </div>
+      <div v-if="lockable" class="option-box" :class="userLockableClass">
+        <span
+          class="lock-user-item"
+          @click="$emit(user.is_lock ? 'unlock' : 'lock', user.uuid)"
+          v-text="user.is_lock ? 'UNLOCK THIS USER' : 'LOCK THIS USER'"
+        />
       </div>
     </div>
   </b-tooltip>
@@ -53,6 +60,10 @@ export default Vue.extend({
       default: {} as ProfileModel,
     },
     rounded: {
+      type: Boolean,
+      default: false,
+    },
+    lockable: {
       type: Boolean,
       default: false,
     },
@@ -75,6 +86,12 @@ export default Vue.extend({
     },
     isAdmin(): boolean {
       return this.user.is_admin ?? false
+    },
+    lockedColorClass(): string {
+      return this.user.is_lock === true ? 'locked-color' : ''
+    },
+    userLockableClass(): string {
+      return this.lockable ? 'user-lockable' : ''
     },
   },
   methods: {
@@ -206,5 +223,35 @@ export default Vue.extend({
     grid-column: 3;
     font-size: 12px;
   }
+
+  .option-box {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: flex-end;
+    grid-row: 3;
+    grid-column: 1 / 4;
+    padding: 0 4px;
+
+    .lock-user-item {
+      font-size: 10px;
+      background-color: whitesmoke;
+      color: black;
+      padding: 1px 6px;
+      border-radius: 4px;
+      transition: all 200ms;
+
+      &:hover {
+        background-color: salmon;
+        color: white;
+      }
+    }
+  }
+}
+.locked-color {
+  background-color: rgb(85, 85, 85);
+}
+.user-lockable {
+  grid-template-rows: 40px 24px 24px;
 }
 </style>

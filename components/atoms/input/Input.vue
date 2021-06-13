@@ -6,6 +6,7 @@
       :password-reveal="isPassword"
       :value="value"
       :disabled="disabled"
+      :readonly="isReadOnly"
       @input="$emit('text', $event)"
     />
   </b-field>
@@ -41,6 +42,10 @@ export default Vue.extend({
       default: false,
     },
     autofocus: {
+      type: Boolean,
+      default: false,
+    },
+    isReadOnly: {
       type: Boolean,
       default: false,
     },
