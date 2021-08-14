@@ -2,9 +2,9 @@ name: Prerelease
 
 on:
   pull_request:
-    # branches:
-    #   - main
-    # types: [closed]
+    branches:
+      - main
+    types: [closed]
 
 jobs:
   prerelease:
