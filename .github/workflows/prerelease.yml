@@ -1,0 +1,74 @@
+name: Prerelease
+
+on:
+  pull_request:
+    # branches:
+    #   - main
+    # types: [closed]
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: remove old prerelease
+      uses: actions/github-script@v4.0.2
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          try {
+            const release = await github.repos.getReleaseByTag({
+              ...context.repo,
+              tag: "develop-latest",
+            })
+            const res = await github.repos.deleteRelease({
+              ...context.repo,
+              release_id: release.data.id,
+            })
+          } catch {
+            console.log("No prerelease detected. Skipped.")
+          }
+    - name: remove develop-latest tag if exists
+      run: |
+        if git tag|grep "develop-latest";then git tag -d develop-latest && git push origin :develop-latest;fi
+    - name: update tag
+      run: |
+        git checkout develop
+        git tag develop-latest
+        git push --tags
+    - name: create release
+      id: createrelease
+      uses: actions/github-script@v4.0.2
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const cr = await github.repos.createRelease({
+            ...context.repo,
+            draft: false,
+            prerelease: true,
+            tag_name: "develop-latest",
+            name: "Develop Latest",
+            target_commitish: process.env.GITHUB_SHA,
+            body: "This is a beta release."
+          });
+          return cr.data.upload_url
+    - name: setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: install dependencies
+      run: npm ci
+    - name: prepare config
+      run: mv config.example config && sed 's/wss/ws/g;s/https/http/g' -i config/.env.prod
+    - name: build and archive front
+      run: npm run generate && cd dist && tar cvzf ../www.tar.gz ./ && cd ..
+    - name: Convert upload URL
+      run: |
+        echo 'releaseurl=${{steps.createrelease.outputs.result}}' | sed "s/{?name,label}/?name=www.tar.gz/g" >> $GITHUB_ENV
+    - name: upload build
+      run: |
+        curl -X POST -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -T www.tar.gz "${{env.releaseurl}}"
+
