@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { WS_BASE_URL } from '@/scripts/api/base'
 import { Editor } from '@/node_modules/@types/codemirror/index'
 import { UserModel } from '@/scripts/model/user/manager'
 import { getModalDesc, MODAL_TYPE } from '@/scripts/model/toast'
@@ -92,11 +93,7 @@ export default Vue.extend({
       this.editorAdapter = new ot.CodeMirrorAdapter(this.cMirror)
     },
     makeConnection() {
-      const DOMAIN =
-        process.env.NODE_ENV === 'development'
-          ? process.env.DOMAIN
-          : location.host
-      const url = `${process.env.WS_SCHEME}://${DOMAIN}${process.env.BASE_PATH}/doc/${this.$route.params.id}/ws`
+      const url = `${WS_BASE_URL}/doc/${this.$route.params.id}/ws`
       this.websocket = new socket.SocketConnection(url, !this.isEditable)
       this.serverAdapter = new socket.SocketConnectionAdapter(this.websocket)
       this.websocket.on('join', this.joinEvent)

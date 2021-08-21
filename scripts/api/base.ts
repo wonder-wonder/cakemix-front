@@ -17,8 +17,13 @@ import { Configuration } from "./configuration";
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 
-const DOMAIN = process.env.NODE_ENV === "development" ? process.env.DOMAIN : location.host
-export const BASE_PATH = `${process.env.HTTP_SCHEME}://${DOMAIN}${process.env.BASE_PATH}`;
+const HTTP_SCHEME = process.env.HTTP_SCHEME !== undefined && process.env.API_BASE_PATH !== "" ? process.env.HTTP_SCHEME : process.env.NODE_ENV === "development" ? "http" : "https"
+const WS_SCHEME = process.env.WS_SCHEME !== undefined && process.env.WS_SCHEME !== "" ? process.env.WS_SCHEME : process.env.NODE_ENV === "development" ? "ws" : "wss"
+export const DOMAIN = process.env.DOMAIN !== undefined && process.env.DOMAIN !== "" ? process.env.DOMAIN : process.env.NODE_ENV === "development" ? "localhost:8081" : location.host
+export const WEB_BASE_URL = `${HTTP_SCHEME}://${DOMAIN}`;
+const API_BASE_PATH = process.env.API_BASE_PATH !== undefined ? process.env.API_BASE_PATH : "/v1"
+export const WS_BASE_URL = `${WS_SCHEME}://${DOMAIN}${API_BASE_PATH}`;
+export const API_BASE_URL = `${HTTP_SCHEME}://${DOMAIN}${API_BASE_PATH}`;
 
 /**
  *
@@ -49,7 +54,7 @@ export interface RequestArgs {
 export class BaseAPI {
     protected configuration: Configuration | undefined;
 
-    constructor(configuration?: Configuration, protected basePath: string = BASE_PATH, protected axios: AxiosInstance = globalAxios) {
+    constructor(configuration?: Configuration, protected basePath: string = API_BASE_URL, protected axios: AxiosInstance = globalAxios) {
         if (configuration) {
             this.configuration = configuration;
             this.basePath = configuration.basePath || this.basePath;
