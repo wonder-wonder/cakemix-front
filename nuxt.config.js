@@ -57,7 +57,7 @@ export default {
         href:
           'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css',
       },
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
       {
         rel: 'apple-touch-startup-image',
         href: 'splash/apple-splash-2048-2732.jpg',

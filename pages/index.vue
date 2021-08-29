@@ -1,7 +1,7 @@
 <template>
   <div class="index-container">
     <div class="image-box">
-      <img src="@/assets/icon.png" alt="cakemix_icon" />
+      <img ref="icon" src="@/assets/icon.png" alt="cakemix_icon">
     </div>
     <div class="description">
       <div class="service-name" v-text="'Cakemix'" />
@@ -9,19 +9,56 @@
       <span v-text="'Real-time edit with multiple users'" />
       <span v-text="'Open source'" />
     </div>
-    <b-button rounded @click="gotoLogin">
-      Login
-    </b-button>
+    <b-button rounded @click="gotoLogin"> Login
+</b-button>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
+const CMD_KEYS = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'b',
+  'a',
+]
+
 export default Vue.extend({
+  data() {
+    return {
+      konamiKeysMatch: 0,
+    }
+  },
+  mounted() {
+    document.addEventListener('keydown', this.keyDown)
+  },
+  destroyed() {
+    document.removeEventListener('keydown', this.keyDown)
+  },
   methods: {
     gotoLogin() {
       this.$router.push('/auth/login')
+    },
+    keyDown(e: KeyboardEvent) {
+      if (this.konamiKeysMatch === CMD_KEYS.length) return
+      if (CMD_KEYS[this.konamiKeysMatch] === e.key) {
+        this.konamiKeysMatch += 1
+        if (this.konamiKeysMatch === CMD_KEYS.length) {
+          const icon: any = this.$refs.icon
+          if (icon instanceof HTMLImageElement) {
+            icon.src = require('@/assets/icon_eat.gif')
+          }
+        }
+      } else {
+        this.konamiKeysMatch = 0
+      }
     },
   },
 })
@@ -39,6 +76,9 @@ export default Vue.extend({
   font-family: 'Righteous';
 
   .image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: whitesmoke;
     border-radius: 182px;
     height: 80vw;
