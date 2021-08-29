@@ -1,7 +1,7 @@
 <template>
   <div class="index-container">
     <div class="image-box">
-      <img src="@/assets/icon.png" alt="cakemix_icon">
+      <img ref="icon" src="@/assets/icon.png" alt="cakemix_icon">
     </div>
     <div class="description">
       <div class="service-name" v-text="'Cakemix'" />
@@ -17,10 +17,48 @@
 <script lang="ts">
 import Vue from 'vue'
 
+const CMD_KEYS = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'b',
+  'a',
+]
+
 export default Vue.extend({
+  data() {
+    return {
+      konamiKeysMatch: 0,
+    }
+  },
+  mounted() {
+    document.addEventListener('keydown', this.keyDown)
+  },
+  destroyed() {
+    document.removeEventListener('keydown', this.keyDown)
+  },
   methods: {
     gotoLogin() {
       this.$router.push('/auth/login')
+    },
+    keyDown(e: KeyboardEvent) {
+      if (this.konamiKeysMatch === CMD_KEYS.length) return
+      if (CMD_KEYS[this.konamiKeysMatch] === e.key) {
+        this.konamiKeysMatch += 1
+        if (this.konamiKeysMatch === CMD_KEYS.length) {
+          const icon: any = this.$refs.icon
+          if (icon instanceof HTMLImageElement) {
+            icon.src = require('@/assets/icon_eat.gif')
+          }
+        }
+      } else {
+        this.konamiKeysMatch = 0
+      }
     },
   },
 })
