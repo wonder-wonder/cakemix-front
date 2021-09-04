@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@/scripts/api/base'
 import { ImageApi } from '@/scripts/api/index'
 import { emojiList, EmojiType } from '@/scripts/markdown/emojis'
 import CodeMirror from '@/node_modules/@types/codemirror/index'
@@ -15,11 +16,7 @@ export const drop = (self: any, cm: CodeMirror.Editor, ev: any) => {
         .then(res => {
           const id = res.data.id
           if (id !== undefined) {
-            const DOMAIN =
-              process.env.NODE_ENV === 'development'
-                ? process.env.DOMAIN
-                : location.host
-            const url = `${process.env.HTTP_SCHEME}://${DOMAIN}${process.env.BASE_PATH}/image/${res.data.id}`
+            const url = `${API_BASE_URL}/image/${res.data.id}`
             insertTextAtCursor(cm, `![${f.name}](${url} =500x)`)
           }
         })

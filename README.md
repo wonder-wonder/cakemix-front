@@ -32,7 +32,7 @@ This repository is front side of Cakemix, you need server side ([here](https://g
 
 ## Environment
 
-You need to make `config` directory in root of repository, and you also need to make `.env.dev` `.env.prod` file in the directory.
+You can set your config by putting `.env.dev` and `.env.prod` on `config` directory.  
 
 ```
 .
@@ -41,14 +41,25 @@ You need to make `config` directory in root of repository, and you also need to 
     |- .env.prod
 ```
 
-After that, write these env in the env file.  
-**Example of env dir and file are located at root (config.example)**
+See the sample file in the config.example directory for detailed settings.  
+If you don't set config, these configs will be set as default.  
+
+**development**
 
 ```
-WS_SCHEME=ws or wss
-HTTP_SCHEME=http or https
-DOMAIN=DOMAIN or localhost(:PORT)
-BASE_PATH=/v1 (see server's API path)
+WS_SCHEME=ws
+HTTP_SCHEME=http
+DOMAIN=localhost:8081
+API_BASE_PATH=/v1
+```
+
+**production**
+
+```
+WS_SCHEME=wss
+HTTP_SCHEME=https
+DOMAIN=location.host
+API_BASE_PATH=/v1
 ```
 
 ## Installation
@@ -89,7 +100,9 @@ docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v5.1.1 gener
 - OpenAPI document for the Cakemix is placed at [docs](https://github.com/wonder-wonder/cakemix-server/blob/main/docs) directory in the server-side ([here](https://github.com/wonder-wonder/cakemix-server/blob/main/docs/api.yml)).
 
 ## Cakemix Release Policy
+
 ### Branches
+
 - main
   - latest stable version
 - release/vx.x.x
@@ -114,11 +127,17 @@ hotfix/x                         x
 ```
 
 ### Versioning (Major.Minor.Patch)
+
 #### Major
+
 - will increment when breaking changes occurred
+
 #### Minor
+
 - will increment when new features are added
+
 #### Patch
+
 - will increment when bugs are fixed
 
 # License

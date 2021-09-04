@@ -45,6 +45,7 @@ import {
   getFullName,
   getAbbreviation,
 } from '@/scripts/model/language/language'
+import { API_BASE_URL } from '@/scripts/api/base'
 import {
   SearchApi,
   ProfileApi,
@@ -142,11 +143,7 @@ export default Vue.extend({
       new ImageApi(this.$store.getters['auth/config'])
         .postImage(file)
         .then(res => {
-          const DOMAIN =
-            process.env.NODE_ENV === 'development'
-              ? process.env.DOMAIN
-              : location.host
-          this.icon = `${process.env.HTTP_SCHEME}://${DOMAIN}${process.env.BASE_PATH}/image/${res.data.id}`
+          this.icon = `${API_BASE_URL}/image/${res.data.id}`
         })
     },
     updateUserName(userName: string) {

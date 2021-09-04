@@ -28,6 +28,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Input from '@/components/atoms/input/Input.vue'
+import { WEB_BASE_URL } from '@/scripts/api/base'
 import { AuthApi, checkAuthWithStatus } from '@/scripts/api/index'
 import { failureToast } from '@/scripts/utils/toast'
 import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
@@ -58,11 +59,7 @@ export default Vue.extend({
       new AuthApi(this.$store.getters['auth/config'])
         .getNewTokenRegist()
         .then(res => {
-          const DOMAIN =
-            process.env.NODE_ENV === 'development'
-              ? process.env.DOMAIN
-              : location.host
-          this.generatedLink = `${process.env.HTTP_SCHEME}://${DOMAIN}/auth/signup/${res.data.token}`
+          this.generatedLink = `${WEB_BASE_URL}/auth/signup/${res.data.token}`
         })
         .catch(err => {
           checkAuthWithStatus(this, err.response.status)

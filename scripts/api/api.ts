@@ -19,7 +19,7 @@ import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { API_BASE_URL, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
  * Response model for /auth/lock
@@ -1459,7 +1459,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async deleteAuthLock(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAuthLock(uuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Revoke session
@@ -1470,7 +1470,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async deleteAuthSession(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAuthSession(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Check username is not taken by other
@@ -1482,7 +1482,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getAuthCheckUserUsername(token: string, userName: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthCheckUserUsername(token, userName, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -1493,7 +1493,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getAuthLock(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthLockResModel>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthLock(uuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Get log list
@@ -1507,7 +1507,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getAuthLog(targetid?: string, offset?: number, limit?: number, type?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthLogResModel>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthLog(targetid, offset, limit, type, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Request to verify invitation link
@@ -1517,7 +1517,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getAuthRegistPreToken(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthRegistPreToken(token, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Get session list
@@ -1527,7 +1527,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getAuthSession(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AuthSessionModel>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAuthSession(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Checks JWT token is valid.
@@ -1537,7 +1537,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getCheckToken(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCheckToken(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Request to generate new key for registering new user.
@@ -1547,7 +1547,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getNewTokenRegist(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthRegistNewTokenResModel>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getNewTokenRegist(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Check verification token to reset password. To change password with token, use POST methods.
@@ -1558,7 +1558,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async getPassResetVerify(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPassResetVerify(token, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -1569,7 +1569,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async postAuthLock(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postAuthLock(uuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Request login with email and password and returns JWT token.
@@ -1580,7 +1580,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async postLogin(authLoginReqModel?: AuthLoginReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthLoginResModel>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postLogin(authLoginReqModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Request to logout. Server removes session key.
@@ -1590,7 +1590,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async postLogout(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postLogout(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Request to change password.
@@ -1601,7 +1601,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async postPassChange(authPassChangeReqModel?: AuthPassChangeReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postPassChange(authPassChangeReqModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Request to reset password. Server sends verification email.
@@ -1612,7 +1612,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async postPassReset(authPassResetReqModel?: AuthPassResetReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postPassReset(authPassResetReqModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Reset password with new one.
@@ -1624,7 +1624,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async postPassResetVerify(token: string, authPassChangeReqModel?: AuthPassChangeReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postPassResetVerify(token, authPassChangeReqModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Request to register new user. Server sends verification email.
@@ -1636,7 +1636,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async postRegist(token: string, authRegistReqModel?: AuthRegistReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postRegist(token, authRegistReqModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Verify registration verification token. After verification, the account is added to user data and activated.
@@ -1647,7 +1647,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          */
         async postRegistVerify(token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postRegistVerify(token, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
     }
 };
@@ -2332,7 +2332,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          */
         async createNewDoc(folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createNewDoc(folderId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2343,7 +2343,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          */
         async deleteDoc(docId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDoc(docId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2353,7 +2353,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          */
         async getDocDocId(docId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DocumentModel>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getDocDocId(docId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2365,7 +2365,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          */
         async getDocDocIdWs(docId: string, token: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getDocDocIdWs(docId, token, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2377,7 +2377,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          */
         async moveDoc(docId: string, folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.moveDoc(docId, folderId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2389,7 +2389,7 @@ export const DocumentApiFp = function(configuration?: Configuration) {
          */
         async putDocDocId(docId: string, documentModifyReqModel?: DocumentModifyReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putDocDocId(docId, documentModifyReqModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
     }
 };
@@ -2787,7 +2787,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          */
         async createNewFolder(folderId: string, name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createNewFolder(folderId, name, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2798,7 +2798,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          */
         async deleteFolder(folderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFolder(folderId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2810,7 +2810,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          */
         async getList(folderId: string, type: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FolderListModel>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getList(folderId, type, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2822,7 +2822,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          */
         async modifyFolder(folderId: string, folderModifyReqModel?: FolderModifyReqModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.modifyFolder(folderId, folderModifyReqModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -2834,7 +2834,7 @@ export const FolderApiFp = function(configuration?: Configuration) {
          */
         async moveFolder(folderId: string, targetFolderId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.moveFolder(folderId, targetFolderId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
     }
 };
@@ -3080,7 +3080,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
          */
         async getImageImgid(imgid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getImageImgid(imgid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -3091,7 +3091,7 @@ export const ImageApiFp = function(configuration?: Configuration) {
          */
         async postImage(file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postImage(file, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
     }
 };
@@ -3264,7 +3264,7 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          */
         async getUserProfileUuid(uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileModel>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUserProfileUuid(uuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Edit profile
@@ -3276,7 +3276,7 @@ export const ProfileApiFp = function(configuration?: Configuration) {
          */
         async putUserProfileUuid(uuid: string, profileModel?: ProfileModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putUserProfileUuid(uuid, profileModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
     }
 };
@@ -3476,7 +3476,7 @@ export const SearchApiFp = function(configuration?: Configuration) {
          */
         async getSearchTeam(q?: string, limit?: number, offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSearchTeam(q, limit, offset, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * 
@@ -3490,7 +3490,7 @@ export const SearchApiFp = function(configuration?: Configuration) {
          */
         async getSearchUser(q?: string, limit?: number, offset?: number, filter?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSearchUser(q, limit, offset, filter, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
     }
 };
@@ -3854,7 +3854,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
          */
         async deleteTeamTeamid(teamid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTeamTeamid(teamid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Remove the member from the team.
@@ -3866,7 +3866,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
          */
         async deleteTeamTeamidMember(teamid: string, uuid: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTeamTeamidMember(teamid, uuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Get team member list.
@@ -3880,7 +3880,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
          */
         async getTeamTeamidMember(teamid: string, limit?: number, offset?: number, uuid?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTeamTeamidMember(teamid, limit, offset, uuid, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Create new team.
@@ -3891,7 +3891,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
          */
         async postTeam(name: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postTeam(name, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Add the member into the team.
@@ -3903,7 +3903,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
          */
         async postTeamTeamidMember(teamid: string, memberInfoModel?: MemberInfoModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postTeamTeamidMember(teamid, memberInfoModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
         /**
          * Modify member info in the team.
@@ -3915,7 +3915,7 @@ export const TeamApiFp = function(configuration?: Configuration) {
          */
         async putTeamTeamidMember(teamid: string, memberInfoModel?: MemberInfoModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putTeamTeamidMember(teamid, memberInfoModel, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, API_BASE_URL, configuration);
         },
     }
 };

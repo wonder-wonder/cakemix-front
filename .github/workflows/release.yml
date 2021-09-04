@@ -20,13 +20,30 @@ jobs:
         git checkout main
         git tag ${{ env.newtag }}
         git push --tags
+    - name: setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: use cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          node-
+    - name: install dependencies
+      run: npm ci
+    - name: prepare config
+      run: mv config.example config && sed 's/wss/ws/g;s/https/http/g' -i config/.env.prod
+    - name: build and archive front
+      run: npm run generate && cd dist && tar cvzf ../www.tar.gz ./ && cd ..
     - name: create release
       uses: actions/github-script@v4.0.2
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           const pr = context.payload.pull_request;
-          github.repos.createRelease({
+          const cr = await github.repos.createRelease({
             ...context.repo,
             draft: false,
             tag_name: "${{ env.newtag }}",
@@ -34,6 +51,13 @@ jobs:
             target_commitish: process.env.GITHUB_SHA,
             body: pr.body
           });
+          return cr.data.upload_url
+    - name: Convert upload URL
+      run: |
+        echo "releaseurl=${{steps.createrelease.outputs.result}}" | sed "s/{?name,label}/?name=www.tar.gz/g" >> $GITHUB_ENV
+    - name: upload build
+      run: |
+        curl -X POST -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -T www.tar.gz "${{env.releaseurl}}"
     - name: create PR to develop
       uses: actions/github-script@v4.0.2
       with:
@@ -46,6 +70,7 @@ jobs:
             base: "develop",
             title: "chore: ${{ env.newtag }} to develop"
           });
+
   hotfix:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && startsWith(github.head_ref,'hotfix/')
@@ -63,13 +88,30 @@ jobs:
         git checkout main
         git tag ${{ env.newtag }}
         git push --tags
+    - name: setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: use cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          node-
+    - name: install dependencies
+      run: npm ci
+    - name: prepare config
+      run: mv config.example config && sed 's/wss/ws/g;s/https/http/g' -i config/.env.prod
+    - name: build and archive front
+      run: npm run generate && cd dist && tar cvzf ../www.tar.gz ./ && cd ..
     - name: create release
       uses: actions/github-script@v4.0.2
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           const pr = context.payload.pull_request;
-          github.repos.createRelease({
+          const cr = await github.repos.createRelease({
             ...context.repo,
             draft: false,
             tag_name: "${{ env.newtag }}",
@@ -77,6 +119,13 @@ jobs:
             target_commitish: process.env.GITHUB_SHA,
             body: "This release includes hotfix.\n\n" + pr.body
           });
+          return cr.data.upload_url
+    - name: Convert upload URL
+      run: |
+        echo "releaseurl=${{steps.createrelease.outputs.result}}" | sed "s/{?name,label}/?name=www.tar.gz/g" >> $GITHUB_ENV
+    - name: upload build
+      run: |
+        curl -X POST -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -T www.tar.gz "${{env.releaseurl}}"
     - name: create PR to develop
       uses: actions/github-script@v4.0.2
       with:
@@ -89,3 +138,24 @@ jobs:
             base: "develop",
             title: "chore: ${{ env.newtag }} to develop"
           });
+
+  updatecakemix:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [release, hotfix]
+    steps:
+    - name: update cakemix repo
+      env:
+        CAKEMIX_SSHKEY: ${{secrets.CAKEMIX_SSHKEY}}
+      run: |
+        mkdir ~/.ssh
+        echo "${CAKEMIX_SSHKEY}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        git clone git@github.com:wonder-wonder/cakemix.git
+        cd cakemix
+        git checkout main && git submodule init && git submodule update
+        cd cakemix-server && git checkout main && git pull && cd ..
+        cd cakemix-front && git checkout main && git pull && cd ..
+        git config --global user.email "github@actions"
+        git config --global user.name "github-actions"
+        git add . && git commit -m "Update for main" && git push || echo "Nothing to update. Abort."
