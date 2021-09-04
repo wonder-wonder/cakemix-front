@@ -59,6 +59,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+    - name: use cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          node-
     - name: install dependencies
       run: npm ci
     - name: prepare config
