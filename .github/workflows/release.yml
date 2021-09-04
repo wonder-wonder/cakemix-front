@@ -38,6 +38,7 @@ jobs:
     - name: build and archive front
       run: npm run generate && cd dist && tar cvzf ../www.tar.gz ./ && cd ..
     - name: create release
+      id: createrelease
       uses: actions/github-script@v4.0.2
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
@@ -106,6 +107,7 @@ jobs:
     - name: build and archive front
       run: npm run generate && cd dist && tar cvzf ../www.tar.gz ./ && cd ..
     - name: create release
+      id: createrelease
       uses: actions/github-script@v4.0.2
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
