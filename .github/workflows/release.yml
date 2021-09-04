@@ -55,7 +55,7 @@ jobs:
           return cr.data.upload_url
     - name: Convert upload URL
       run: |
-        echo "releaseurl=${{steps.createrelease.outputs.result}}" | sed "s/{?name,label}/?name=www.tar.gz/g" >> $GITHUB_ENV
+        echo 'releaseurl=${{steps.createrelease.outputs.result}}' | sed "s/{?name,label}/?name=www.tar.gz/g" >> $GITHUB_ENV
     - name: upload build
       run: |
         curl -X POST -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -T www.tar.gz "${{env.releaseurl}}"
@@ -124,7 +124,7 @@ jobs:
           return cr.data.upload_url
     - name: Convert upload URL
       run: |
-        echo "releaseurl=${{steps.createrelease.outputs.result}}" | sed "s/{?name,label}/?name=www.tar.gz/g" >> $GITHUB_ENV
+        echo 'releaseurl=${{steps.createrelease.outputs.result}}' | sed "s/{?name,label}/?name=www.tar.gz/g" >> $GITHUB_ENV
     - name: upload build
       run: |
         curl -X POST -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -T www.tar.gz "${{env.releaseurl}}"
