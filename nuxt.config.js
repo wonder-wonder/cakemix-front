@@ -1,3 +1,4 @@
+import Sass from 'sass'
 const fontawesome = require('./build/fontawesome')
 
 export default {
@@ -299,6 +300,11 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
+    loaders: {
+      scss: {
+        implementation: Sass,
+      },
+    },
     extend(config) {
       config.node = {
         fs: 'empty',
