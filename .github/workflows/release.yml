@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: get new tag
       run: echo "newtag=${GITHUB_HEAD_REF#release/}" >> $GITHUB_ENV
     - name: add tag
