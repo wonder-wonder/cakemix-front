@@ -17,8 +17,8 @@ import { Configuration } from "./configuration";
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 
-const HTTP_SCHEME = process.env.HTTP_SCHEME !== undefined && process.env.API_BASE_PATH !== "" ? process.env.HTTP_SCHEME : process.env.NODE_ENV === "development" ? "http" : "https"
-const WS_SCHEME = process.env.WS_SCHEME !== undefined && process.env.WS_SCHEME !== "" ? process.env.WS_SCHEME : process.env.NODE_ENV === "development" ? "ws" : "wss"
+const HTTP_SCHEME = process.env.HTTP_SCHEME !== undefined && process.env.API_BASE_PATH !== "" ? process.env.HTTP_SCHEME : location.protocol === "http:" ? "http" : "https"
+const WS_SCHEME = process.env.WS_SCHEME !== undefined && process.env.WS_SCHEME !== "" ? process.env.WS_SCHEME : location.protocol === "http:" ? "ws" : "wss"
 export const DOMAIN = process.env.DOMAIN !== undefined && process.env.DOMAIN !== "" ? process.env.DOMAIN : process.env.NODE_ENV === "development" ? "localhost:8081" : location.host
 export const WEB_BASE_URL = `${HTTP_SCHEME}://${DOMAIN}`;
 const API_BASE_PATH = process.env.API_BASE_PATH !== undefined ? process.env.API_BASE_PATH : "/v1"
