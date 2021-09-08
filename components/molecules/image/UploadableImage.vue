@@ -61,7 +61,7 @@ export default Vue.extend({
     width: 192px;
     height: 192px;
   }
-  .b-image-wrapper /deep/ img {
+  .b-image-wrapper ::v-deep img {
     border-radius: 8px;
   }
   .file-label .file-cta {
