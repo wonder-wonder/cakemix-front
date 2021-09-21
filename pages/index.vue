@@ -74,6 +74,7 @@ export default Vue.extend({
   width: 100vw;
   padding: 0 16px;
   font-family: 'Righteous';
+  background-color: $background-color;
 
   .image-box {
     display: flex;

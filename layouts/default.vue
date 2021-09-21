@@ -6,9 +6,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { setTheme } from '@/scripts/colors'
 import { debounce } from 'lodash'
 
 export default Vue.extend({
+  created() {
+    setTheme('dark')
+  },
   mounted() {
     this.updateDisplayWidth()
     window.addEventListener('resize', this.updateDisplayWidth)

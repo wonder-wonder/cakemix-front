@@ -1,3 +1,10 @@
 @import 'markdown';
 @import 'codemirror';
 @import 'color';
+
+:root {
+  font-family: 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial', 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN', YuGothic, 'Yu Gothic', 'Meiryo UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $background-color;
+}
