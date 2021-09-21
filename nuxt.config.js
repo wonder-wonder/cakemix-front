@@ -289,7 +289,11 @@ export default {
             : './config/.env.prod',
       },
     ],
+    '@nuxtjs/style-resources',
   ],
+  styleResources: {
+    scss: ['./styles/foundation.scss'],
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
