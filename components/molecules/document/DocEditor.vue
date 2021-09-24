@@ -176,6 +176,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import '../../../styles/codemirror.scss';
+
 .CodeMirror {
   font-family: 'Source Code Pro', Consolas, monaco, monospace;
   font-size: 16px;

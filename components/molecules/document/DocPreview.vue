@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import print from '@/scripts/utils/print'
 import { debounce } from 'lodash'
+import print from '@/scripts/utils/print'
 import vdom from '@/scripts/markdown/vdom'
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 
@@ -103,7 +103,9 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import '../../../styles/markdown.scss';
+
 .preview-container {
   display: flex;
   justify-content: center;

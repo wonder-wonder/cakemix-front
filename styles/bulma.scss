@@ -2,14 +2,6 @@
 @import '~bulma';
 @import '~buefy/src/scss/buefy';
 
-// Color
-
-$primary: #9748d8;
-$primary-invert: findColorInvert($primary);
-$colors: (
-  "primary": ($primary, $primary-invert)
-);
-
 // Dropdown
 
 .dropdown-menu {
@@ -17,6 +9,18 @@ $colors: (
   right: 0;
   .dropdown-item {
     height: 32px;
+  }
+}
+
+// Field
+
+.field {
+  label {
+    color: $contrast-color;
+  }
+  .input, input, textarea, select {
+    color: $font-color;
+    background-color: $sub-main-color;
   }
 }
 
