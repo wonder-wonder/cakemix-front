@@ -6,7 +6,12 @@
       :is-valid="emailValidator(email)"
       @text="email = $event"
     />
-    <b-button :loading="isLoading" @click="request" v-text="'Reset request'" />
+    <b-button
+      :loading="isLoading"
+      class="passwd-button"
+      @click="request"
+      v-text="'Reset request'"
+    />
   </div>
 </template>
 
@@ -81,14 +86,16 @@ export default Vue.extend({
   flex-flow: column nowrap;
   align-items: center;
   padding: 24px 32px;
-  background-color: white;
+  background-color: $sub-main-color;
 
   .field {
     width: 100%;
   }
 
-  button {
+  .passwd-button {
     width: 50%;
+    color: $font-color;
+    background-color: $sub-main-color;
   }
 }
 </style>

@@ -34,14 +34,14 @@ export default Vue.extend({
     width: 42px;
     border-radius: 50%;
     padding: 8px;
-    background-color: whitesmoke;
+    background-color: $contrast-color;
   }
 
   .service-name {
     font-family: 'Righteous';
     font-size: 24px;
     padding: 0 16px;
-    color: white;
+    color: $font-color;
   }
 }
 </style>

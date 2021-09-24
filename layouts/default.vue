@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { setTheme } from '@/scripts/colors'
 import { debounce } from 'lodash'
+import { setTheme } from '@/scripts/colors'
 
 export default Vue.extend({
   created() {

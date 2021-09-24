@@ -11,7 +11,12 @@
       :is-error="isError"
       @text="password = $event"
     />
-    <b-button :loading="isLoading" :native-type="'submit'" v-text="'Login'" />
+    <b-button
+      :loading="isLoading"
+      :native-type="'submit'"
+      class="login-button"
+      v-text="'Login'"
+    />
     <a class="option" @click="forgotPassword" v-text="'Forgot Password'" />
   </form>
 </template>
@@ -92,20 +97,23 @@ export default Vue.extend({
   flex-flow: column nowrap;
   align-items: center;
   padding: 24px 32px;
-  background-color: white;
+  background-color: $sub-main-color;
 
   .field {
     width: 100%;
   }
 
-  button {
+  .login-button {
     margin-top: 16px;
     width: 50%;
+    color: $font-color;
+    background-color: $sub-main-color;
   }
 
   .option {
     margin-top: 4px;
     font-size: 12px;
+    color: $font-color;
   }
 }
 </style>

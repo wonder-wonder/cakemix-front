@@ -6,5 +6,15 @@
   font-family: 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial', 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN', YuGothic, 'Yu Gothic', 'Meiryo UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $background-color;
+  background-color: $main-color;
+}
+
+.field {
+  label {
+    color: $contrast-color;
+  }
+  input {
+    color: $font-color;
+    background-color: $sub-main-color;
+  }
 }

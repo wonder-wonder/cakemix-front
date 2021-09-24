@@ -7,7 +7,12 @@
       :is-valid="passwordValidator(password)"
       @text="password = $event"
     />
-    <b-button :loading="isLoading" @click="request" v-text="'Reset'" />
+    <b-button
+      :loading="isLoading"
+      class="reset-button"
+      @click="request"
+      v-text="'Reset'"
+    />
   </div>
 </template>
 
@@ -94,14 +99,16 @@ export default Vue.extend({
   flex-flow: column nowrap;
   align-items: center;
   padding: 24px 32px;
-  background-color: white;
+  background-color: $sub-main-color;
 
   .field {
     width: 100%;
   }
 
-  button {
+  .reset-button {
     width: 50%;
+    color: $font-color;
+    background-color: $sub-main-color;
   }
 }
 </style>
