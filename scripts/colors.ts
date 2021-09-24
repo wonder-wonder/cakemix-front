@@ -18,9 +18,9 @@ const THEME: { [key: string]: { [key: string]: string } } = {
     '--sub-main-color': '#000000',
     '--contrast-color': '#FFFFFF',
     '--font-color': '#FFFFFF',
+    '--accent-color': '#16A085',
     '--sub-accent-color': '#808080',
-    '--accent-color': '#48C78E',
-    '--dangerous-color': '#FF5353',
+    '--dangerous-color': '#E74C3C',
   },
   light: {
     '--main-color': '#202020',

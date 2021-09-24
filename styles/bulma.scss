@@ -7,8 +7,22 @@
 .dropdown-menu {
   left: initial;
   right: 0;
+
+  .dropdown-content {
+    background-color: $sub-main-color;
+    border: solid 1px $contrast-color;
+  }
   .dropdown-item {
     height: 32px;
+    color: $font-color;
+
+    &:hover {
+      color: $font-color;
+      background-color: $main-color;
+    }
+    .row-title-grid {
+      height: 18px !important;
+    }
   }
 }
 

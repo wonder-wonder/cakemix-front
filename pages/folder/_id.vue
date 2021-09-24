@@ -347,12 +347,12 @@ export default Vue.extend({
 <style lang="scss">
 .folder-container .explore-container .left-container .sort-box .control {
   select {
-    color: white;
-    border-color: gray;
-    background-color: gray;
+    color: $font-color;
+    border-color: $sub-main-color;
+    background-color: $sub-main-color;
   }
   .select::after {
-    border-color: white;
+    border-color: $font-color;
   }
 }
 </style>
@@ -362,14 +362,13 @@ export default Vue.extend({
   display: flex;
   flex-flow: column nowrap;
   width: 100vw;
-  background-color: rgb(32, 32, 32);
 
   .tool-container {
     position: sticky;
     top: 0px;
     z-index: 5;
-    background-color: rgb(32, 32, 32);
-    border-bottom: solid 1px whitesmoke;
+    border-bottom: solid 1px $contrast-color;
+    background-color: $main-color; // for masking scrolled content
 
     .toolbar-box {
       margin: 8px 16px;

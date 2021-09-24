@@ -67,7 +67,7 @@
 
       <b-dropdown-item
         aria-role="listitem"
-        :class="'row-title-grid'"
+        :class="'row-title-grid '"
         :custom="true"
         :focusable="false"
         :paddingless="true"
@@ -485,16 +485,10 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.dropdown-item.row-title-grid {
-  height: 18px !important;
-}
-</style>
-
 <style lang="scss" scoped>
 .icon {
   font-size: 80px;
-  color: black;
+  color: $sub-main-color;
 }
 
 .row-title-grid {
@@ -508,6 +502,7 @@ export default Vue.extend({
     grid-row: 1;
     grid-column: 2 / 4;
     font-size: 12px;
+    color: $contrast-color;
   }
 }
 
@@ -521,12 +516,14 @@ export default Vue.extend({
     grid-row: 1;
     grid-column: 2 / 3;
     font-size: 16px;
+    color: $contrast-color;
   }
   .title {
     grid-row: 1;
     grid-column: 3 / 4;
     font-size: 14px;
     margin: 0;
+    color: $contrast-color;
   }
   .switch {
     grid-row: 1;
@@ -535,6 +532,6 @@ export default Vue.extend({
 }
 
 .delete-color {
-  color: crimson;
+  color: $dangerous-color !important;
 }
 </style>

@@ -8,14 +8,14 @@
       @input="$emit('search', $event)"
     />
     <b-button
-      type="is-success"
+      class="folder-button"
       icon-left="folder"
       @click="$emit('create-folder')"
     >
       Create
     </b-button>
     <b-button
-      type="is-success"
+      class="doc-button"
       icon-left="file-document"
       @click="$emit('create-doc')"
     >
@@ -50,11 +50,25 @@ export default Vue.extend({
     max-width: 400px;
     width: 100%;
     margin: 4px;
+
+    ::v-deep input {
+      color: $font-color;
+      background-color: $sub-main-color;
+    }
   }
-  button {
+  .folder-button {
     width: auto;
     font-weight: bold;
     margin: 4px;
+    color: $font-color;
+    background-color: $sub-accent-color;
+  }
+  .doc-button {
+    width: auto;
+    font-weight: bold;
+    margin: 4px;
+    color: $font-color;
+    background-color: $sub-accent-color;
   }
 }
 </style>

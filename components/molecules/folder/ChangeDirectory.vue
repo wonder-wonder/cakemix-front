@@ -3,7 +3,7 @@
     <Breadcrumb
       class="breadcrumb-box"
       :breadcrumb="breadcrumb"
-      :dark="true"
+      :dark="false"
       @click="getFolder"
     />
     <div class="folder-cell-container">
@@ -156,7 +156,7 @@ export default Vue.extend({
   width: 700px;
   max-width: 100vw;
   padding: 12px;
-  background-color: white;
+  background-color: $sub-main-color;
   border-radius: 16px;
 
   .breadcrumb-box {
@@ -170,6 +170,8 @@ export default Vue.extend({
   .change-directory-button {
     width: 250px;
     margin: 8px auto 4px auto;
+    background-color: $accent-color;
+    font-weight: bold;
   }
 }
 </style>

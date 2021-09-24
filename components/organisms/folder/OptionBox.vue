@@ -121,7 +121,7 @@ export default Vue.extend({
   flex-flow: column nowrap;
   align-items: center;
   padding: 16px;
-  background-color: whitesmoke;
+  background-color: $sub-main-color;
   border-radius: 4px;
   height: auto;
   width: 400px;
@@ -130,7 +130,7 @@ export default Vue.extend({
   .icon {
     height: 60px;
     font-size: 60px;
-    color: black;
+    color: $contrast-color;
   }
   .detail-items {
     position: relative;
