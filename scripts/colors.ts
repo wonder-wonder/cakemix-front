@@ -11,6 +11,7 @@ export const setTheme = (id: string) => {
   root.style.setProperty('--accent-color', THEME[id]['--accent-color'])
   root.style.setProperty('--dangerous-color', THEME[id]['--dangerous-color'])
 }
+export const THEMELIST = ['Dark', 'Light']
 
 const THEME: { [key: string]: { [key: string]: string } } = {
   dark: {

@@ -7,11 +7,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { debounce } from 'lodash'
-import { setTheme } from '@/scripts/colors'
+import { setTheme, THEMELIST } from '@/scripts/colors'
 
 export default Vue.extend({
   created() {
-    setTheme('light')
+    const theme = this.$store.getters['device/theme']
+    setTheme(THEMELIST[theme].toLowerCase())
   },
   mounted() {
     this.updateDisplayWidth()

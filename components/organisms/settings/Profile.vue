@@ -20,6 +20,14 @@
         :current="languageFullName"
         @input="current = getAbbreviation($event)"
       />
+      <Select
+        class="maximum-width"
+        :label-name="'Theme'"
+        :select-items="themeList"
+        :placeholder="'Select a theme'"
+        :current="currentTheme"
+        @input="updateTheme($event)"
+      />
       <TextArea :label-name="'Biography'" :value="bio" @text="bio = $event" />
       <b-button
         class="update-button"
@@ -40,6 +48,7 @@ import TextArea from '@/components/atoms/input/TextArea.vue'
 import Select from '@/components/atoms/input/Select.vue'
 import { successToast, failureToast } from '@/scripts/utils/toast'
 import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
+import { setTheme, THEMELIST } from '@/scripts/colors'
 import {
   getLanguageList,
   getFullName,
@@ -91,6 +100,13 @@ export default Vue.extend({
     languageList(): string[] {
       return getLanguageList()
     },
+    themeList(): string[] {
+      return THEMELIST
+    },
+    currentTheme(): string {
+      const theme = this.$store.getters['device/theme']
+      return THEMELIST[theme]
+    },
   },
   created() {
     new ProfileApi(this.$store.getters['auth/config'])
@@ -108,7 +124,14 @@ export default Vue.extend({
     getLanguageList,
     getFullName,
     getAbbreviation,
-
+    setTheme,
+    updateTheme(theme: string) {
+      const themeNum = THEMELIST.indexOf(theme) ?? -1
+      this.$store.commit('device/theme', themeNum)
+      if (themeNum !== -1) {
+        this.setTheme(theme.toLowerCase())
+      }
+    },
     request() {
       const profile = {
         uuid: this.$store.getters['auth/uuid'],
