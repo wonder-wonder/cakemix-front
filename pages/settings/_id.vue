@@ -107,8 +107,13 @@ export default Vue.extend({
 
     .settings-left-container {
       min-width: 220px;
+
       @media only screen and (max-width: 700px) {
         display: none;
+      }
+
+      ::v-deep .menu-label {
+        color: $font-color;
       }
     }
     .settings-right-container {

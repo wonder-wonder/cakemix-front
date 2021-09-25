@@ -143,7 +143,7 @@ export default Vue.extend({
         margin: 4px;
         padding: 0 4px;
         border-radius: 4px;
-        color: $font-color;
+        color: white;
         background-color: $sub-accent-color;
       }
     }

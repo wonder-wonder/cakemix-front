@@ -126,7 +126,7 @@ export default Vue.extend({
       width: 144px;
       margin-top: 16px;
       font-weight: bold;
-      color: $font-color;
+      color: white;
       background-color: $accent-color;
     }
   }

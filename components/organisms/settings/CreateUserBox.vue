@@ -103,7 +103,7 @@ export default Vue.extend({
       width: 120px;
       margin: 4px;
       font-weight: bold;
-      color: $font-color;
+      color: white;
       background-color: $dangerous-color;
     }
 
@@ -111,7 +111,7 @@ export default Vue.extend({
       width: 120px;
       margin: 4px;
       font-weight: bold;
-      color: $font-color;
+      color: white;
       background-color: $accent-color;
     }
   }

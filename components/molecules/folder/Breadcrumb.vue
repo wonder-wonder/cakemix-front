@@ -6,7 +6,6 @@
       class="breadcrumb-cell"
       :title="getTitle(item.title)"
       :folder-id="item.folder_id"
-      :dark="dark"
       @click="$emit('click', $event)"
     />
   </div>
@@ -25,10 +24,6 @@ export default Vue.extend({
     breadcrumb: {
       type: Array as PropType<BreadcrumbModel[]>,
       default: [] as BreadcrumbModel[],
-    },
-    dark: {
-      type: Boolean,
-      default: false,
     },
   },
   methods: {

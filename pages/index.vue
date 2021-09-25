@@ -79,7 +79,7 @@ export default Vue.extend({
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: $contrast-color;
+    background-color: white;
     border-radius: 182px;
     height: 80vw;
     max-height: 300px;
@@ -93,7 +93,7 @@ export default Vue.extend({
     flex-flow: column wrap;
     align-items: center;
     font-size: 24px;
-    color: white;
+    color: $font-color;
 
     .service-name {
       font-size: 60px;

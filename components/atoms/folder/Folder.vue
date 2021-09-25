@@ -123,7 +123,7 @@ export default Vue.extend({
     padding: 0 4px;
     border-top-left-radius: 8px;
     color: $font-color;
-    background-color: rgb(50, 50, 50);
+    background-color: $main-color;
 
     .desc1-title {
       display: flex;
@@ -147,7 +147,7 @@ export default Vue.extend({
     font-size: 12px;
     padding: 0 4px;
     color: $font-color;
-    background-color: rgb(50, 50, 50);
+    background-color: $main-color;
 
     .desc2-title {
       display: flex;
@@ -169,7 +169,7 @@ export default Vue.extend({
     justify-content: center;
     grid-row: 3 / 5;
     grid-column: 3 / 4;
-    background-color: rgb(50, 50, 50);
+    background-color: $main-color;
     font-size: 16px;
     border-bottom-right-radius: 4px;
 

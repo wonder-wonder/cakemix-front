@@ -94,7 +94,7 @@ export default Vue.extend({
     .cancel-button {
       width: 120px;
       margin: 4px;
-      color: $font-color;
+      color: white;
       background-color: $dangerous-color;
       font-weight: bold;
     }
@@ -102,7 +102,7 @@ export default Vue.extend({
     .rename-button {
       width: 120px;
       margin: 4px;
-      color: $font-color;
+      color: white;
       background-color: $accent-color;
       font-weight: bold;
     }

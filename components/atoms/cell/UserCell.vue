@@ -131,6 +131,7 @@ export default Vue.extend({
     align-items: center;
     justify-content: center;
     font-size: 40px;
+    color: $contrast-color;
   }
 
   .detail-box {
@@ -142,6 +143,7 @@ export default Vue.extend({
       font-size: 15px;
       font-weight: bold;
       word-wrap: break-word;
+      color: $font-color;
     }
     .detail {
       max-height: 100px;
@@ -151,6 +153,7 @@ export default Vue.extend({
       word-wrap: break-word;
       overflow: hidden;
       font-weight: bold;
+      color: $font-color;
     }
     .language {
       width: 218px;

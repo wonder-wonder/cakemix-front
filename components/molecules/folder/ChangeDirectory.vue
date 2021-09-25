@@ -3,7 +3,6 @@
     <Breadcrumb
       class="breadcrumb-box"
       :breadcrumb="breadcrumb"
-      :dark="false"
       @click="getFolder"
     />
     <div class="folder-cell-container">

@@ -11,7 +11,7 @@ import { setTheme } from '@/scripts/colors'
 
 export default Vue.extend({
   created() {
-    setTheme('dark')
+    setTheme('light')
   },
   mounted() {
     this.updateDisplayWidth()

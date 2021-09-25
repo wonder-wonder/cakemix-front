@@ -34,7 +34,7 @@ export default Vue.extend({
     width: 42px;
     border-radius: 50%;
     padding: 8px;
-    background-color: $contrast-color;
+    background-color: white;
   }
 
   .service-name {

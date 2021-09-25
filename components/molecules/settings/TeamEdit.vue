@@ -444,7 +444,8 @@ export default Vue.extend({
 
   .delete-team-button {
     width: 250px;
-    color: $font-color;
+    font-weight: bold;
+    color: white;
     background-color: $dangerous-color;
   }
 }

@@ -257,7 +257,7 @@ export default Vue.extend({
   .invitationlink-button {
     margin: 0 8px 16px auto;
     font-weight: bold;
-    color: $font-color;
+    color: white;
     background-color: $accent-color;
   }
 

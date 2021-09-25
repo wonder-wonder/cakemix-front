@@ -313,7 +313,7 @@ export default Vue.extend({
   }
   .change-owner-button {
     width: 250px;
-    color: $font-color;
+    color: white;
     background-color: $dangerous-color;
     font-weight: bold;
   }

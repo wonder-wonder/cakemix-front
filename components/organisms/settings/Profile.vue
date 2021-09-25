@@ -159,12 +159,6 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.setting-profile-container .profile-item-box .label {
-  color: white;
-}
-</style>
-
 <style lang="scss" scoped>
 .setting-profile-container {
   display: flex;
@@ -174,8 +168,8 @@ export default Vue.extend({
   max-width: 798px;
   padding: 0px 16px;
   margin-bottom: 32px;
-  color: white;
-  background-color: rgb(32, 32, 32);
+  color: $font-color;
+  background-color: $main-color;
   font-size: 14px;
   font-weight: bold;
 
@@ -194,7 +188,7 @@ export default Vue.extend({
       width: 144px;
       margin: 16px 0;
       font-weight: bold;
-      color: $font-color;
+      color: white;
       background-color: $accent-color;
     }
   }

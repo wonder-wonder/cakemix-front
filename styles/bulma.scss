@@ -32,6 +32,19 @@
   background-color: white;
 }
 
+// Sidebar
+
+.sidebar-container {
+  .menu {
+    .menu-list .icon-text {
+      color: $font-color;
+      &:hover {
+        background-color: $sub-main-color;
+      }
+    }
+  }
+}
+
 // Select
 
 select {
@@ -53,7 +66,7 @@ select[disabled] {
 
 .field {
   label {
-    color: $contrast-color;
+    color: $font-color !important;
   }
   .input, input, textarea, select {
     color: $font-color;

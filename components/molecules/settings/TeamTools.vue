@@ -38,7 +38,7 @@ export default Vue.extend({
     font-weight: bold;
     margin: 4px 0;
     margin-left: auto;
-    color: $font-color;
+    color: white;
     background-color: $accent-color;
   }
 }
