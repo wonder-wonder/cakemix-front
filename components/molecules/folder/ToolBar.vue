@@ -61,14 +61,14 @@ export default Vue.extend({
     font-weight: bold;
     margin: 4px;
     color: $font-color;
-    background-color: $sub-accent-color;
+    background-color: $sub-main-color;
   }
   .doc-button {
     width: auto;
     font-weight: bold;
     margin: 4px;
     color: $font-color;
-    background-color: $sub-accent-color;
+    background-color: $sub-main-color;
   }
 }
 </style>

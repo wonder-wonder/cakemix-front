@@ -19,7 +19,7 @@ const THEME: { [key: string]: { [key: string]: string } } = {
     '--contrast-color': '#FFFFFF',
     '--font-color': '#FFFFFF',
     '--accent-color': '#16A085',
-    '--sub-accent-color': '#808080',
+    '--sub-accent-color': '#CC8D2E',
     '--dangerous-color': '#E74C3C',
   },
   light: {
@@ -27,7 +27,7 @@ const THEME: { [key: string]: { [key: string]: string } } = {
     '--sub-main-color': '#000000',
     '--contrast-color': '#FFFFFF',
     '--font-color': '#FFFFFF',
-    '--sub-accent-color': '#808080',
+    '--sub-accent-color': '#cc8d2e',
     '--accent-color': '#48C78E',
     '--dangerous-color': '#FF5353',
   },

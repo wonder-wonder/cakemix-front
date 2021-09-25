@@ -6,7 +6,6 @@
     <b-field label="Add new member">
       <b-autocomplete
         :data="searchPaging.data"
-        placeholder="UserName"
         field="Users"
         :loading="searchPaging.isFetching"
         :check-infinite-scroll="true"
@@ -410,6 +409,7 @@ export default Vue.extend({
       margin: auto 0 12px 12px;
     }
   }
+
   .field {
     width: 100%;
   }

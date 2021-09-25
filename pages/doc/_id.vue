@@ -207,7 +207,7 @@ export default Vue.extend({
   .document-preview-editor-container {
     height: calc(100vh - 56px);
     display: grid;
-    background-color: white;
+    background-color: white; // same all theme
 
     &.split {
       grid-template-columns: repeat(2, 50%);

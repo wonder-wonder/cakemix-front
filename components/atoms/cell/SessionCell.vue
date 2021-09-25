@@ -132,7 +132,7 @@ export default Vue.extend({
         align-items: center;
         font-size: 14px;
         margin: 4px;
-        color: $accent-color;
+        color: $sub-accent-color;
       }
       .session-hightlight-detail-item {
         display: flex;
@@ -144,7 +144,7 @@ export default Vue.extend({
         padding: 0 4px;
         border-radius: 4px;
         color: $font-color;
-        background-color: #cc8d2e;
+        background-color: $sub-accent-color;
       }
     }
     .separator-item {

@@ -181,7 +181,7 @@ export default Vue.extend({
       color: $font-color;
     }
     .log-highlight-detail-info1-item {
-      color: $accent-color;
+      color: $sub-accent-color;
       @extend .log-detail-info1-item;
     }
     .log-detail-info2-item {
@@ -200,6 +200,7 @@ export default Vue.extend({
       width: 100%;
       margin: 4px;
       font-size: 16px;
+      color: $sub-accent-color;
     }
   }
 }
