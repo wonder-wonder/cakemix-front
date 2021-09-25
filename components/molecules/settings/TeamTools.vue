@@ -1,7 +1,7 @@
 <template>
   <div class="team-tools-container">
     <b-button
-      type="is-success"
+      class="create-button"
       icon-left="account-group"
       @click="$emit('create-team')"
     >
@@ -33,11 +33,13 @@ export default Vue.extend({
   width: 100%;
   padding: 0 8px;
 
-  button {
+  .create-button {
     width: auto;
     font-weight: bold;
     margin: 4px 0;
     margin-left: auto;
+    color: $font-color;
+    background-color: $accent-color;
   }
 }
 </style>

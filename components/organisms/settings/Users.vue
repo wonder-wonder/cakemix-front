@@ -4,7 +4,6 @@
       <BorderTitle :title="'Users'" />
       <b-button
         class="invitationlink-button"
-        type="is-success"
         icon-left="plus"
         @click="openCreateUserBox"
       >
@@ -243,12 +242,6 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.setting-users-container .users-tool-container label {
-  color: white;
-}
-</style>
-
 <style lang="scss" scoped>
 .setting-users-container {
   display: flex;
@@ -257,13 +250,15 @@ export default Vue.extend({
   padding: 0px 8px;
   margin-bottom: 32px;
   color: white;
-  background-color: rgb(32, 32, 32);
+  background-color: $main-color;
   font-size: 14px;
   font-weight: bold;
 
   .invitationlink-button {
     margin: 0 8px 16px auto;
     font-weight: bold;
+    color: $font-color;
+    background-color: $accent-color;
   }
 
   .users-tool-container {
@@ -273,15 +268,10 @@ export default Vue.extend({
     margin: 0 8px;
     padding: 32px;
     margin-bottom: 16px;
-    background-color: #333333;
-    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.4);
+    background-color: $sub-main-color;
 
     @media only screen and (max-width: 600px) {
       padding: 32px 16px;
-    }
-
-    label {
-      color: white;
     }
 
     .search-input {
@@ -297,7 +287,7 @@ export default Vue.extend({
         margin: 0;
         margin-right: 8px;
         width: auto;
-        color: white;
+        color: $font-color;
       }
     }
   }
@@ -336,7 +326,7 @@ export default Vue.extend({
     .pagination {
       margin: 16px;
       .pagination-link {
-        color: white;
+        color: $font-color;
       }
     }
   }

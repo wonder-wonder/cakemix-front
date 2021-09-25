@@ -10,7 +10,7 @@
           class="user-icon-item"
           :src="userIcon"
           alt="user_profile_icon"
-        >
+        />
         <span class="user-name-item" v-text="userName" />
       </div>
       <span class="separator-item" v-text="'−'" />
@@ -118,8 +118,9 @@ export default Vue.extend({
   height: auto;
   width: 100%;
   padding: 8px;
-  background-color: #333333;
-  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.4);
+  background-color: $sub-main-color;
+  margin-bottom: 8px;
+
   .log-type-container {
     display: flex;
     justify-content: center;
@@ -164,7 +165,7 @@ export default Vue.extend({
       content: '';
       width: 2px;
       height: 20px;
-      background-color: white;
+      background-color: $contrast-color;
       left: 100%;
     }
     .log-detail-info1-item {
@@ -177,10 +178,10 @@ export default Vue.extend({
       margin: 4px;
       padding: 0 4px;
       border-radius: 4px;
-      color: white;
+      color: $font-color;
     }
     .log-highlight-detail-info1-item {
-      color: #eeb155;
+      color: $accent-color;
       @extend .log-detail-info1-item;
     }
     .log-detail-info2-item {
@@ -192,8 +193,8 @@ export default Vue.extend({
       margin: 4px;
       padding: 0 4px;
       border-radius: 4px;
-      color: whitesmoke;
-      background-color: #4b4b4b;
+      color: $font-color;
+      background-color: $main-color;
     }
     .log-desciption-item {
       width: 100%;

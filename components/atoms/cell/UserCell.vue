@@ -16,11 +16,11 @@
         </div>
         <div class="info-box">
           <div class="team">
-            <fa-icon icon="users" />
+            <fa-icon icon="users" class="info-box-icon" />
             <span v-text="teamDesc" />
           </div>
           <div v-if="isAdmin" class="admin">
-            <fa-icon icon="user" />
+            <fa-icon icon="user" class="info-box-icon" />
             <span v-text="'Admin on this workspace'" />
           </div>
         </div>
@@ -41,7 +41,7 @@
         <span
           class="lock-user-item"
           @click="$emit(user.is_lock ? 'unlock' : 'lock', user.uuid)"
-          v-text="user.is_lock ? 'UNLOCK THIS USER' : 'LOCK THIS USER'"
+          v-text="user.is_lock ? 'UNLOCK' : 'LOCK'"
         />
       </div>
     </div>
@@ -100,26 +100,27 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.tooltip-content {
+<style lang="scss" scoped>
+::v-deep .tooltip-content {
   padding: 0px !important;
   white-space: normal !important;
 }
-.tooltip-container img {
+::v-deep .tooltip-container img {
   border-radius: 50%;
 }
-.user-cell-container img {
+::v-deep .user-cell-container img {
   border-radius: 4px;
 }
-</style>
 
-<style lang="scss" scoped>
 .tooltip-container {
   display: grid;
   width: 300px;
   padding: 8px;
   grid-template-rows: 25px 25px auto 8px auto;
   grid-template-columns: 50px 16px 218px;
+  border: solid 1px $contrast-color;
+  border-radius: 4px;
+  background-color: $sub-main-color;
 
   .icon-box {
     grid-row: 1 / 2;
@@ -149,12 +150,12 @@ export default Vue.extend({
       padding: 2px 0;
       word-wrap: break-word;
       overflow: hidden;
+      font-weight: bold;
     }
     .language {
       width: 218px;
       font-size: 12px;
-      font-weight: bold;
-      color: gray;
+      color: $font-color;
       word-wrap: break-word;
     }
   }
@@ -163,18 +164,18 @@ export default Vue.extend({
     grid-row: 5 / 6;
     grid-column: 1 / 4;
     font-size: 12px;
-    font-weight: bold;
-    color: gray;
+    color: $font-color;
 
     .user,
     .admin,
     .info {
       word-wrap: break-word;
-    }
-    i {
-      width: 16px;
-      font-size: 14px;
-      margin-right: 2px;
+
+      .info-box-icon {
+        width: 14px;
+        font-size: 14px;
+        margin-right: 2px;
+      }
     }
   }
 }
@@ -183,15 +184,14 @@ export default Vue.extend({
   min-width: 250px;
   grid-template-rows: 40px 24px;
   grid-template-columns: 64px 16px 160px;
-  border: solid 1px white;
   padding: 4px;
   border-radius: 5px;
-  color: white;
-  background-color: black;
+  color: $font-color;
+  background-color: $sub-main-color;
   transition: all 100ms;
 
   &:hover {
-    background-color: rgb(100, 100, 100);
+    opacity: 0.9;
   }
 
   .icon-box {
@@ -235,21 +235,21 @@ export default Vue.extend({
 
     .lock-user-item {
       font-size: 10px;
-      background-color: whitesmoke;
-      color: black;
+      background-color: $contrast-color;
+      color: $sub-main-color;
       padding: 1px 6px;
       border-radius: 4px;
       transition: all 200ms;
 
       &:hover {
-        background-color: salmon;
-        color: white;
+        background-color: $dangerous-color;
+        color: $font-color;
       }
     }
   }
 }
 .locked-color {
-  background-color: rgb(85, 85, 85);
+  opacity: 0.4;
 }
 .user-lockable {
   grid-template-rows: 40px 24px 24px;

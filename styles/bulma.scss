@@ -26,6 +26,29 @@
   }
 }
 
+// Pagenation
+
+.pagination-link {
+  background-color: white;
+}
+
+// Select
+
+select {
+  color: $font-color;
+  border-color: $sub-main-color;
+  background-color: $sub-main-color;
+}
+
+select[disabled] {
+  border-color: $sub-main-color !important;
+  background-color: $sub-main-color !important;
+}
+
+.select::after {
+  border-color: $font-color !important;
+}
+
 // Field
 
 .field {

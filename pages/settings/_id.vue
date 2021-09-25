@@ -98,7 +98,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .settings-container {
-  background-color: rgb(32, 32, 32);
+  background-color: $main-color;
 
   .settings-menu-container {
     display: flex;
@@ -129,7 +129,7 @@ export default Vue.extend({
           border-top-right-radius: 20px;
           border-bottom-right-radius: 20px;
           border: 0;
-          background-color: whitesmoke;
+          background-color: $font-color;
           .icon {
             margin-right: 4px;
             font-size: 28px;
@@ -141,7 +141,7 @@ export default Vue.extend({
         flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
-        background-color: rgb(32, 32, 32);
+        background-color: $main-color;
       }
     }
   }

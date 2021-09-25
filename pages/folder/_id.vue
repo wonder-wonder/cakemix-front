@@ -345,16 +345,17 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.folder-container .explore-container .left-container .sort-box .control {
-  select {
-    color: $font-color;
-    border-color: $sub-main-color;
-    background-color: $sub-main-color;
-  }
-  .select::after {
-    border-color: $font-color;
-  }
-}
+// .folder-container .explore-container .left-container .sort-box .control {
+//   select {
+//     color: $font-color;
+//     border-color: $sub-main-color;
+//     background-color: $sub-main-color;
+//   }
+//   .select::after {
+//     border-color: $font-color;
+//   }
+// }
+//
 </style>
 
 <style lang="scss" scoped>

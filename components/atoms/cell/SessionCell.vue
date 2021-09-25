@@ -104,8 +104,9 @@ export default Vue.extend({
   height: auto;
   width: 100%;
   padding: 8px;
-  background-color: #333333;
-  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.4);
+  background-color: $sub-main-color;
+  margin-bottom: 8px;
+
   .session-type-container {
     display: flex;
     justify-content: center;
@@ -131,7 +132,7 @@ export default Vue.extend({
         align-items: center;
         font-size: 14px;
         margin: 4px;
-        color: #eeb155;
+        color: $accent-color;
       }
       .session-hightlight-detail-item {
         display: flex;
@@ -142,7 +143,7 @@ export default Vue.extend({
         margin: 4px;
         padding: 0 4px;
         border-radius: 4px;
-        color: white;
+        color: $font-color;
         background-color: #cc8d2e;
       }
     }
@@ -154,7 +155,7 @@ export default Vue.extend({
       margin: 4px;
       content: '';
       width: 2px;
-      background-color: white;
+      background-color: $contrast-color;
       left: 100%;
     }
     .session-detail-info1-item {
@@ -164,11 +165,7 @@ export default Vue.extend({
       font-size: 14px;
       margin: 4px;
       border-radius: 4px;
-      color: white;
-    }
-    .session-highlight-detail-info1-item {
-      color: #eeb155;
-      @extend .session-detail-info1-item;
+      color: $font-color;
     }
     .session-detail-info2-item {
       display: flex;
@@ -179,8 +176,8 @@ export default Vue.extend({
       margin: 4px;
       padding: 0 4px;
       border-radius: 4px;
-      color: whitesmoke;
-      background-color: #4b4b4b;
+      color: $font-color;
+      background-color: $main-color;
     }
     .session-desciption-item {
       width: 100%;
@@ -199,13 +196,13 @@ export default Vue.extend({
     top: 8px;
     right: 8px;
     border-radius: 16px;
-    background-color: rgba(245, 245, 245, 0.1);
+    background-color: $main-color;
     .session-revoke {
       font-size: 20px;
       opacity: 0.5;
     }
     &:hover {
-      background-color: rgb(230, 90, 40);
+      background-color: $dangerous-color;
       .session-revoke {
         opacity: 1;
       }

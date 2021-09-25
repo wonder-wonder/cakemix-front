@@ -40,11 +40,7 @@
       aria-current-label="Current page"
       @change="getMembers"
     />
-    <b-button
-      type="is-danger"
-      class="delete-team-button"
-      @click="deleteTeamConfirm"
-    >
+    <b-button class="delete-team-button" @click="deleteTeamConfirm">
       Delete Team
     </b-button>
   </div>
@@ -400,7 +396,7 @@ export default Vue.extend({
   width: 958px;
   max-width: 100vw;
   padding: 16px;
-  background-color: white;
+  background-color: $sub-main-color;
   border-radius: 16px;
 
   .team-item-tool-box {
@@ -448,6 +444,8 @@ export default Vue.extend({
 
   .delete-team-button {
     width: 250px;
+    color: $font-color;
+    background-color: $dangerous-color;
   }
 }
 </style>

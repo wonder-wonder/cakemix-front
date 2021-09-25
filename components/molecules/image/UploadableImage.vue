@@ -1,6 +1,6 @@
 <template>
   <div class="uploadable-image-container">
-    <b-field :label="labelName">
+    <b-field :label="labelName" class="image-container">
       <b-image
         class="image-box"
         :src="src"
@@ -9,13 +9,10 @@
         :rounded="rounded"
         :placeholder="placeholder"
       />
-      <b-upload class="file-label" @input="$emit('upload', $event)">
-        <span class="file-cta">
-          <b-icon class="file-icon" icon="upload" />
-        </span>
+      <b-upload class="image-upload-overlay" @input="$emit('upload', $event)">
+        <fa-icon class="upload-icon" icon="arrow-up" />
       </b-upload>
     </b-field>
-    <b-field class="file is-primary file-button-box" />
   </div>
 </template>
 
@@ -56,21 +53,42 @@ export default Vue.extend({
   align-items: stretch;
   height: auto;
   width: auto;
+  margin-bottom: 12px;
 
-  .image-box {
-    width: 192px;
-    height: 192px;
+  .image-container {
+    .image-box {
+      width: 192px;
+      height: 192px;
+    }
+    .image-upload-overlay {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      width: 192px;
+      height: 192px;
+      border-radius: 8px;
+      transition: all 200ms;
+
+      &:hover {
+        background-color: $sub-main-color;
+        opacity: 0.7;
+
+        .upload-icon {
+          color: $contrast-color;
+          opacity: 1;
+        }
+      }
+
+      .upload-icon {
+        color: $contrast-color;
+        opacity: 0;
+        font-size: 48px;
+      }
+    }
   }
   .b-image-wrapper ::v-deep img {
     border-radius: 8px;
-  }
-  .file-label .file-cta {
-    width: 48px !important;
-    height: 192px !important;
-    color: white;
-    border-width: 0;
-    background-color: #48c774;
-    margin: 0 8px;
   }
 }
 </style>

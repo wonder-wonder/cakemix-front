@@ -22,7 +22,7 @@
       />
       <TextArea :label-name="'Biography'" :value="bio" @text="bio = $event" />
       <b-button
-        class="update-button is-success"
+        class="update-button"
         :loading="isLoading"
         @click="request"
         v-text="'Update'"
@@ -194,6 +194,8 @@ export default Vue.extend({
       width: 144px;
       margin: 16px 0;
       font-weight: bold;
+      color: $font-color;
+      background-color: $accent-color;
     }
   }
 
