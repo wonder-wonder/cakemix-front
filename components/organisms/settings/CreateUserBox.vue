@@ -82,6 +82,7 @@ export default Vue.extend({
   align-items: center;
   padding: 16px;
   background-color: $sub-main-color;
+  border: solid 1px white;
   border-radius: 16px;
   height: auto;
   width: 400px;

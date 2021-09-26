@@ -77,6 +77,7 @@ export default Vue.extend({
   height: auto;
   width: 400px;
   max-width: 100vw;
+  border: solid 1px white;
 
   .field-input {
     width: 100%;

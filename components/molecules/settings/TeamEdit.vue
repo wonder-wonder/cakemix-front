@@ -398,6 +398,7 @@ export default Vue.extend({
   max-width: 100vw;
   padding: 16px;
   background-color: $sub-main-color;
+  border: solid 1px white;
   border-radius: 16px;
 
   .team-item-tool-box {

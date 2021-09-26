@@ -268,6 +268,7 @@ export default Vue.extend({
   min-height: 300px;
   padding: 16px;
   background-color: $sub-main-color;
+  border: solid 1px white;
   border-radius: 16px;
 
   .b-tabs:not(:last-child) {

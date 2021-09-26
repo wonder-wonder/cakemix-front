@@ -156,6 +156,7 @@ export default Vue.extend({
   max-width: 100vw;
   padding: 12px;
   background-color: $sub-main-color;
+  border: solid 1px white;
   border-radius: 16px;
 
   .breadcrumb-box {

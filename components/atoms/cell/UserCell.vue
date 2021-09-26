@@ -104,6 +104,9 @@ export default Vue.extend({
 ::v-deep .tooltip-content {
   padding: 0px !important;
   white-space: normal !important;
+  &::before {
+    display: none;
+  }
 }
 ::v-deep .tooltip-container img {
   border-radius: 50%;
