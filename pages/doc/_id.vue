@@ -32,6 +32,7 @@
       />
       <DocPreview
         v-show="displayType !== 1"
+        :enable-divide-line="displayType == 2"
         :open-print-view="openPrintViewEmit"
         :p-markdown="markdown"
         :current-pos="previewPosition"

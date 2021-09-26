@@ -1,5 +1,9 @@
 <template>
-  <div :ref="`previewerc`" class="preview-container">
+  <div
+    :ref="`previewerc`"
+    class="preview-container"
+    :class="enableDivideLine ? 'left-border' : ''"
+  >
     <div :ref="`previewer`" class="previewer" />
   </div>
 </template>
@@ -35,6 +39,10 @@ export default Vue.extend({
       type: Number,
       default: 0,
     },
+    enableDivideLine: {
+      type: Boolean,
+      default: false,
+    },
   },
   data(): DataType {
     return {
@@ -67,6 +75,7 @@ export default Vue.extend({
   },
   mounted() {
     this.baseDom = this.$refs.previewer as HTMLElement
+    // TODO: implement bi scroll sync
     // this.scrollDom = this.$refs.previewerc as HTMLElement
     // this.scrollDom.addEventListener('scroll', this.scrolled)
     this.updater = window.setInterval(this.autoUpdatePoint, 10000)
@@ -93,6 +102,7 @@ export default Vue.extend({
       const preview: HTMLElement = this.$refs.previewerc as HTMLElement
       print.createView(this.title, preview)
     },
+    // TODO: implement bi scroll sync
     // scrolled() {
     //   if (!this.scrollDom) {
     //     return
@@ -106,12 +116,15 @@ export default Vue.extend({
 <style lang="scss">
 @import '../../../styles/markdown.scss';
 
+.left-border {
+  border-left: solid 1px white;
+}
+
 .preview-container {
   display: flex;
   justify-content: center;
   overflow: scroll;
   max-height: calc(100vh - 56px);
-  border-left: solid 1px white;
 
   .invisible {
     display: none;

@@ -60,7 +60,7 @@ export default Vue.extend({
   display: inline-flex;
   flex-flow: row nowrap;
   border-radius: 8px;
-  color: white;
-  background-color: gray;
+  color: black;
+  background-color: white;
 }
 </style>
