@@ -120,6 +120,7 @@ export default Vue.extend({
   padding: 8px;
   background-color: $sub-main-color;
   margin-bottom: 8px;
+  border-radius: 4px;
 
   .log-type-container {
     display: flex;

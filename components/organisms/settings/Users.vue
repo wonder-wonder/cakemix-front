@@ -269,6 +269,7 @@ export default Vue.extend({
     padding: 32px;
     margin-bottom: 16px;
     background-color: $sub-main-color;
+    border-radius: 4px;
 
     @media only screen and (max-width: 600px) {
       padding: 32px 16px;

@@ -3,7 +3,6 @@
     <b-sidebar
       class="sidebar"
       :open="open"
-      type="is-light"
       :overlay="true"
       :fullheight="true"
       @close="$emit('update:open')"
@@ -94,40 +93,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss">
-.b-sidebar .sidebar-content {
-  max-width: 85vw;
-  width: 300px;
-  background-color: #4a4a4a !important;
-}
-
-.sidebar-container {
-  margin: 16px 0;
-  padding: 0 !important;
-
-  .menu-label {
-    padding: 0 16px;
-    font-size: 20px;
-    color: white;
-  }
-  .menu-list {
-    font-size: 20px;
-    a {
-      padding: 8px 24px;
-      color: white;
-      &:hover {
-        color: black;
-        background-color: whitesmoke;
-      }
-      &.is-active {
-        color: white;
-        background-color: #202020;
-      }
-    }
-    .icon {
-      margin-right: 8px;
-    }
-  }
-}
-</style>

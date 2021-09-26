@@ -123,6 +123,8 @@ export default Vue.extend({
 
       .settings-menu {
         display: none;
+        color: $sub-main-color;
+        background-color: $contrast-color;
         @media only screen and (max-width: 700px) {
           display: flex;
           flex-flow: row nowrap;

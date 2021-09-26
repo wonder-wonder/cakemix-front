@@ -34,16 +34,44 @@
 
 // Sidebar
 
+/// for mobile
+.sidebar-content {
+  background-color: $main-color !important;
+}
+
 .sidebar-container {
+  max-width: 85vw;
+  width: 300px;
+  margin: 16px 0;
+  padding: 0 !important;
+  background-color: $main-color !important;
   .menu {
-    .menu-list .icon-text {
+    .menu-label {
+      padding: 0 16px;
+      font-size: 20px;
       color: $font-color;
-      &:hover {
-        background-color: $sub-main-color;
+    }
+    .menu-list {
+      font-size: 20px;
+      a {
+        padding: 8px 24px;
+      }
+      .icon {
+        margin-right: 8px;
+      }
+      .icon-text {
+        color: $font-color;
+        &:hover {
+          background-color: $sub-main-color;
+        }
+        &.is-active {
+          background-color: $sub-main-color;
+        }
       }
     }
   }
 }
+
 
 // Select
 

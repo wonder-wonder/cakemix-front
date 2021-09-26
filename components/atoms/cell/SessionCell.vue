@@ -106,6 +106,7 @@ export default Vue.extend({
   padding: 8px;
   background-color: $sub-main-color;
   margin-bottom: 8px;
+  border-radius: 4px;
 
   .session-type-container {
     display: flex;
@@ -204,6 +205,7 @@ export default Vue.extend({
     &:hover {
       background-color: $dangerous-color;
       .session-revoke {
+        color: white;
         opacity: 1;
       }
     }

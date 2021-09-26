@@ -50,7 +50,7 @@
       </div>
     </div>
     <b-button
-      class="floating-option-button is-light"
+      class="floating-option-button"
       :rounded="true"
       @click="openOptionView"
     >
@@ -420,6 +420,8 @@ export default Vue.extend({
     border-radius: 50%;
     outline: none;
     text-decoration: none;
+    color: $sub-main-color;
+    background-color: $contrast-color;
 
     @media only screen and (max-width: 800px) {
       display: inline;
