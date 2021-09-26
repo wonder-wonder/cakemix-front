@@ -11,11 +11,15 @@
     />
     <div class="button-container">
       <b-button
-        type="is-danger is-light"
+        class="close-button"
         @click="$emit('close')"
         v-text="'Cancel'"
       />
-      <b-button type="is-success" :native-type="'submit'" v-text="'Create'" />
+      <b-button
+        class="submit-button"
+        :native-type="'submit'"
+        v-text="'Create'"
+      />
     </div>
   </form>
 </template>
@@ -85,7 +89,8 @@ export default Vue.extend({
   flex-flow: column nowrap;
   align-items: center;
   padding: 16px;
-  background-color: whitesmoke;
+  background-color: $sub-main-color;
+  border: solid 1px white;
   border-radius: 16px;
   height: auto;
   width: 400px;
@@ -98,18 +103,25 @@ export default Vue.extend({
   .icon {
     height: 80px;
     font-size: 80px;
-    color: black;
-  }
-  label {
-    color: black;
+    color: $contrast-color;
   }
   .button-container {
     display: flex;
     flex-flow: row wrap;
 
-    button {
+    .close-button {
       width: 120px;
       margin: 4px;
+      font-weight: bold;
+      color: $font-color;
+      background-color: $danger-color;
+    }
+    .submit-button {
+      width: 120px;
+      margin: 4px;
+      font-weight: bold;
+      color: $font-color;
+      background-color: $accent-color;
     }
   }
 }

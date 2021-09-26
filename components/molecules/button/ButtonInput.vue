@@ -1,7 +1,7 @@
 <template>
   <b-field :label="labelName" class="button-input-container">
     <button
-      class="button link-button is-success"
+      class="button link-button is-accent"
       @click="$emit('click')"
       v-text="buttonName"
     />

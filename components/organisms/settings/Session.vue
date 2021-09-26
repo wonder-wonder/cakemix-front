@@ -76,6 +76,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.DELETE_SESSION_CONFIRM),
+        type: 'is-danger',
         onConfirm: () => this.delete(sessionID),
         onCancel: () => {},
       })
@@ -114,8 +115,8 @@ export default Vue.extend({
   max-width: 798px;
   padding: 0px 16px;
   margin-bottom: 32px;
-  color: white;
-  background-color: rgb(32, 32, 32);
+  color: $font-color;
+  background-color: $main-color;
   font-size: 14px;
   font-weight: bold;
 

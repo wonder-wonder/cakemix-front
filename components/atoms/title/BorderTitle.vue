@@ -23,7 +23,7 @@ export default Vue.extend({
   width: 100%;
   margin: 0 auto;
   border-radius: 8px;
-  color: white;
+  color: $font-color;
   font-size: 24px;
   font-weight: bold;
 
@@ -31,8 +31,8 @@ export default Vue.extend({
   &:after {
     content: '';
     flex-grow: 1;
-    height: 1px;
-    background: grey;
+    height: 4px;
+    background-color: $sub-main-color;
     display: block;
   }
   &:before {

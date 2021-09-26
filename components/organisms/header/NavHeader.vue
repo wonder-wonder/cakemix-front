@@ -36,7 +36,7 @@ export default Vue.extend({
   align-items: center;
   height: 56px;
   padding: 0 16px;
-  background-color: black;
+  background-color: $sub-main-color;
   z-index: 999;
 
   .dropdown-box {

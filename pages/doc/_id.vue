@@ -32,6 +32,7 @@
       />
       <DocPreview
         v-show="displayType !== 1"
+        :enable-divide-line="displayType == 2"
         :open-print-view="openPrintViewEmit"
         :p-markdown="markdown"
         :current-pos="previewPosition"
@@ -207,7 +208,7 @@ export default Vue.extend({
   .document-preview-editor-container {
     height: calc(100vh - 56px);
     display: grid;
-    background-color: white;
+    background-color: white; // same all theme
 
     &.split {
       grid-template-columns: repeat(2, 50%);

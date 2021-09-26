@@ -12,6 +12,13 @@ const getters: GetterTree<DeviceState, RootState> = {
   windowWidth(state: DeviceState): number {
     return state.windowWidth
   },
+  theme(state: DeviceState): number {
+    if (state.theme === -1) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0
+    } else {
+      return state.theme
+    }
+  },
 }
 
 export default getters

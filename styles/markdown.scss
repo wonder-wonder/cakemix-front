@@ -3,7 +3,7 @@
 @mixin base {
   margin: 10px 0;
   padding: 10px 10px;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .success {
@@ -55,7 +55,7 @@
 .preview-container h4 .octicon-link,
 .preview-container h5 .octicon-link,
 .preview-container h6 .octicon-link {
-  color: #1b1f23;
+  color: $preview-style1;
   vertical-align: middle;
   visibility: hidden;
 }
@@ -84,10 +84,12 @@
   -webkit-text-size-adjust: 100%;
   line-height: 1.5;
   word-wrap: break-word;
+  color: $preview-style-font;
+  background-color: $preview-style-background;
 }
 
 .preview-container .pl-c {
-  color: #6a737d;
+  color: $preview-style2;
 }
 
 .preview-container .pl-c1,
@@ -280,7 +282,7 @@
 }
 
 .preview-container a {
-  color: #0366d6;
+  color: $preview-style3;
   text-decoration: none;
 }
 
@@ -470,7 +472,7 @@
 }
 
 .preview-container .text-gray-light {
-  color: #6a737d !important;
+  color: $preview-style2 !important;
 }
 
 .preview-container .mb-0 {
@@ -582,7 +584,7 @@
 
 .preview-container blockquote {
   border-left: 0.25em solid #dfe2e5;
-  color: #6a737d;
+  color: $preview-style2;
   padding: 0 1em;
 }
 
@@ -647,8 +649,12 @@
 }
 
 .preview-container h6 {
-  color: #6a737d;
+  color: $preview-style2;
   font-size: 0.85em;
+}
+
+.preview-container strong {
+  color: $preview-style2;
 }
 
 .preview-container ol,
@@ -697,6 +703,8 @@
   display: block;
   overflow: auto;
   width: 100%;
+  color: black;
+  border-radius: 4px;
 }
 
 .preview-container table th {
@@ -721,6 +729,7 @@
 .preview-container img {
   background-color: #fff;
   box-sizing: content-box;
+  border-radius: 4px;
 }
 
 .preview-container img[align='right'] {
@@ -732,7 +741,7 @@
 }
 
 .preview-container code {
-  background-color: rgba(27, 31, 35, 0.05);
+  background-color: #F4F6F5;
   border-radius: 3px;
   font-size: 85%;
   margin: 0;
@@ -770,7 +779,7 @@
   line-height: 1.45;
   overflow: auto;
   padding: 15px;
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
 .preview-container pre code {
@@ -891,7 +900,7 @@
 }
 
 .preview-container :checked + .radio-label {
-  border-color: #0366d6;
+  border-color: $preview-style3;
   position: relative;
 }
 
@@ -1160,6 +1169,7 @@ summary {
   padding: 10px 10px 10px 16px;
   cursor: pointer;
   font-weight: bold;
+  color: black;
   background-color: #f6f8fa;
   border-radius: 8px;
 }

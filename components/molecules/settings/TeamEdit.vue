@@ -6,7 +6,6 @@
     <b-field label="Add new member">
       <b-autocomplete
         :data="searchPaging.data"
-        placeholder="UserName"
         field="Users"
         :loading="searchPaging.isFetching"
         :check-infinite-scroll="true"
@@ -40,11 +39,7 @@
       aria-current-label="Current page"
       @change="getMembers"
     />
-    <b-button
-      type="is-danger"
-      class="delete-team-button"
-      @click="deleteTeamConfirm"
-    >
+    <b-button class="delete-team-button" @click="deleteTeamConfirm">
       Delete Team
     </b-button>
   </div>
@@ -318,6 +313,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.OWNER_TRANSFER),
+        type: 'is-danger',
         onConfirm: () => this.changedPerm(user, newPerm),
         onCancel: () => {
           this.getMembers()
@@ -382,6 +378,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.DELETE_TEAM),
+        type: 'is-danger',
         onConfirm: () => this.deleteTeam(),
         onCancel: () => {
           this.getMembers()
@@ -400,7 +397,8 @@ export default Vue.extend({
   width: 958px;
   max-width: 100vw;
   padding: 16px;
-  background-color: white;
+  background-color: $sub-main-color;
+  border: solid 1px white;
   border-radius: 16px;
 
   .team-item-tool-box {
@@ -414,6 +412,7 @@ export default Vue.extend({
       margin: auto 0 12px 12px;
     }
   }
+
   .field {
     width: 100%;
   }
@@ -448,6 +447,9 @@ export default Vue.extend({
 
   .delete-team-button {
     width: 250px;
+    font-weight: bold;
+    color: white;
+    background-color: $danger-color;
   }
 }
 </style>

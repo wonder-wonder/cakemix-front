@@ -50,13 +50,11 @@ export default {
       },
       {
         rel: 'stylesheet',
-        href:
-          'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
+        href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
       },
       {
         rel: 'stylesheet',
-        href:
-          'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css',
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css',
       },
       { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
       {
@@ -289,7 +287,11 @@ export default {
             : './config/.env.prod',
       },
     ],
+    '@nuxtjs/style-resources',
   ],
+  styleResources: {
+    scss: ['./styles/foundation.scss'],
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options

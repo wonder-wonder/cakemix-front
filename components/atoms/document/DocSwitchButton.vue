@@ -31,8 +31,8 @@ export default Vue.extend({
   border-radius: 8px;
 
   &.active {
-    background-color: white;
-    color: black;
+    background-color: $sub-accent-color;
+    color: white;
   }
 }
 </style>

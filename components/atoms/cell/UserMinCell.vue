@@ -54,7 +54,7 @@ export default Vue.extend({
   width: 100px;
   padding: 4px;
   border-radius: 5px;
-  color: black;
+  color: $font-color;
 
   .icon-box {
     display: flex;
@@ -64,7 +64,6 @@ export default Vue.extend({
     width: 92px;
     font-size: 40px;
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.1);
 
     img {
       border-radius: 4px;
@@ -81,7 +80,7 @@ export default Vue.extend({
       height: 13px;
       width: 13px;
       padding: 2px;
-      background-color: whitesmoke;
+      background-color: black;
       border-radius: 6.5px;
     }
 

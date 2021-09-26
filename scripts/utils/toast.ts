@@ -4,7 +4,7 @@ export const successToast = (buefy: any, msg: string) => {
     queue: false,
     message: msg,
     position: 'is-bottom-right',
-    type: 'is-success',
+    type: 'is-accent',
   })
 }
 

@@ -12,7 +12,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 100px;
-  color: whitesmoke;
+  color: $contrast-color;
   .icon {
     height: 100px;
     font-size: 100px;

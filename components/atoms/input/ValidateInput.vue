@@ -1,7 +1,7 @@
 <template>
   <b-field
     :label="labelName"
-    :type="isValid ? 'is-success' : 'is-danger'"
+    :type="isValid ? 'is-accent' : 'is-danger'"
     :message="isValid ? message[0] : message[1]"
   >
     <b-input
