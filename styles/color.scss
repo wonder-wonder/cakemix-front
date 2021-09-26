@@ -1,3 +1,5 @@
+// site theme
+
 $main-color: var(--main-color);
 $sub-main-color: var(--sub-main-color);
 $contrast-color: var(--contrast-color);
@@ -5,3 +7,11 @@ $font-color: var(--font-color);
 $sub-accent-color: var(--sub-accent-color);
 $accent-color: var(--accent-color);
 $danger-color: var(--danger-color);
+
+// markdown preview theme
+
+$preview-style-background: var(--preview-style-background);
+$preview-style-font: var(--preview-style-font);
+$preview-style1: var(--preview-style1);
+$preview-style2: var(--preview-style2);
+$preview-style3: var(--preview-style3);

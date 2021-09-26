@@ -111,6 +111,7 @@ export default Vue.extend({
   justify-content: center;
   overflow: scroll;
   max-height: calc(100vh - 56px);
+  border-left: solid 1px white;
 
   .invisible {
     display: none;
