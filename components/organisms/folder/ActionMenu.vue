@@ -67,7 +67,7 @@
 
       <b-dropdown-item
         aria-role="listitem"
-        :class="'row-title-grid '"
+        :class="'row-title-grid'"
         :custom="true"
         :focusable="false"
         :paddingless="true"
