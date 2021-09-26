@@ -1,4 +1,34 @@
 @import '~bulma/sass/utilities/_all';
+@import "~bulma/sass/utilities/initial-variables";
+@import "~bulma/sass/utilities/functions";
+
+// Color
+
+$accent: #16A085;
+$accent-light: findLightColor($accent);
+$accent-dark: findDarkColor($accent);
+$accent-invert: findColorInvert($accent);
+
+$danger: #E74C3C;
+$danger-light: findLightColor($danger);
+$danger-dark: findDarkColor($danger);
+$danger-invert: findColorInvert($danger);
+
+$colors: (
+  "accent": (
+    $accent,
+    $accent-invert,
+    $accent-light,
+    $accent-dark,
+  ),
+  "danger": (
+    $danger,
+    $danger-invert,
+    $danger-light,
+    $danger-dark,
+  ),
+);
+
 @import '~bulma';
 @import '~buefy/src/scss/buefy';
 
@@ -71,7 +101,6 @@
     }
   }
 }
-
 
 // Select
 
