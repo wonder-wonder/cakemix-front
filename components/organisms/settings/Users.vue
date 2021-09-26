@@ -131,6 +131,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.LOCK_USER_CONFIRM),
+        type: 'is-danger',
         onConfirm: () => this.lockUser(uuid),
         onCancel: () => {},
       })
@@ -139,6 +140,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.UNLOCK_USER_CONFIRM),
+        type: 'is-danger',
         onConfirm: () => this.unlockUser(uuid),
         onCancel: () => {},
       })

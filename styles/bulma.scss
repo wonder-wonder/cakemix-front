@@ -32,6 +32,25 @@ $colors: (
 @import '~bulma';
 @import '~buefy/src/scss/buefy';
 
+// Modal
+
+.modal-card {
+  border: solid 1px white;
+  border-radius: 6px;
+
+  .modal-card-body {
+    color: $font-color;
+    background-color: $sub-main-color;
+  }
+  .modal-card-foot {
+    background-color: $main-color;
+
+    button {
+      border: solid 1px white;
+    }
+  }
+}
+
 // Dropdown
 
 .dropdown-menu {

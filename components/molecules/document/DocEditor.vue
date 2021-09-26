@@ -164,6 +164,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.CLOSE_DOCUMENT_SESSION),
+        type: 'is-danger',
         onConfirm: () => this.makeConnection(),
         onCancel: () => this.$emit('toParentFolder'),
       })

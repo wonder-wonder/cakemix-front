@@ -169,6 +169,7 @@ export default Vue.extend({
   .change-directory-button {
     width: 250px;
     margin: 8px auto 4px auto;
+    color: white;
     background-color: $accent-color;
     font-weight: bold;
   }

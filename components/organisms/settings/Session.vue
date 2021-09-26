@@ -76,6 +76,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.DELETE_SESSION_CONFIRM),
+        type: 'is-danger',
         onConfirm: () => this.delete(sessionID),
         onCancel: () => {},
       })

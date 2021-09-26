@@ -313,6 +313,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.OWNER_TRANSFER),
+        type: 'is-danger',
         onConfirm: () => this.changedPerm(user, newPerm),
         onCancel: () => {
           this.getMembers()
@@ -377,6 +378,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.DELETE_TEAM),
+        type: 'is-danger',
         onConfirm: () => this.deleteTeam(),
         onCancel: () => {
           this.getMembers()
