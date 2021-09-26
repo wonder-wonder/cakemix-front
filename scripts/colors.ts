@@ -9,7 +9,7 @@ export const setTheme = (id: string) => {
   root.style.setProperty('--font-color', THEME[id]['--font-color'])
   root.style.setProperty('--sub-accent-color', THEME[id]['--sub-accent-color'])
   root.style.setProperty('--accent-color', THEME[id]['--accent-color'])
-  root.style.setProperty('--dangerous-color', THEME[id]['--dangerous-color'])
+  root.style.setProperty('--danger-color', THEME[id]['--danger-color'])
 }
 export const THEMELIST = ['Dark', 'Light']
 
@@ -21,7 +21,7 @@ const THEME: { [key: string]: { [key: string]: string } } = {
     '--font-color': '#FFFFFF',
     '--accent-color': '#16A085',
     '--sub-accent-color': '#CC8D2E',
-    '--dangerous-color': '#E74C3C',
+    '--danger-color': '#E74C3C',
   },
   light: {
     '--main-color': '#EEEEEE',
@@ -30,6 +30,6 @@ const THEME: { [key: string]: { [key: string]: string } } = {
     '--font-color': '#000000',
     '--accent-color': '#16A085',
     '--sub-accent-color': '#CC8D2E',
-    '--dangerous-color': '#E74C3C',
+    '--danger-color': '#E74C3C',
   },
 }

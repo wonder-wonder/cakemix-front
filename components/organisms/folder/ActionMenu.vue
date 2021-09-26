@@ -532,6 +532,6 @@ export default Vue.extend({
 }
 
 .delete-color {
-  color: $dangerous-color !important;
+  color: $danger-color !important;
 }
 </style>

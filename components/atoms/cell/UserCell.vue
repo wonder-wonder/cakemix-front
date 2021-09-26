@@ -245,7 +245,7 @@ export default Vue.extend({
       transition: all 200ms;
 
       &:hover {
-        background-color: $dangerous-color;
+        background-color: $danger-color;
         color: $font-color;
       }
     }

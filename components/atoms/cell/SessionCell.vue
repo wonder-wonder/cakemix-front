@@ -203,7 +203,7 @@ export default Vue.extend({
       opacity: 0.5;
     }
     &:hover {
-      background-color: $dangerous-color;
+      background-color: $danger-color;
       .session-revoke {
         color: white;
         opacity: 1;

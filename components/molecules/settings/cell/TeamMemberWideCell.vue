@@ -188,7 +188,7 @@ export default Vue.extend({
       width: 40px;
       margin: 0 4px;
       color: white;
-      background-color: $dangerous-color;
+      background-color: $danger-color;
     }
   }
 }

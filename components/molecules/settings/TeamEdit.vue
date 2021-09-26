@@ -446,7 +446,7 @@ export default Vue.extend({
     width: 250px;
     font-weight: bold;
     color: white;
-    background-color: $dangerous-color;
+    background-color: $danger-color;
   }
 }
 </style>

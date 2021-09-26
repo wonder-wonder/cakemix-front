@@ -95,7 +95,7 @@ export default Vue.extend({
       width: 120px;
       margin: 4px;
       color: white;
-      background-color: $dangerous-color;
+      background-color: $danger-color;
       font-weight: bold;
     }
 

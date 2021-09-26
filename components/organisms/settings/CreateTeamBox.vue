@@ -113,7 +113,7 @@ export default Vue.extend({
       margin: 4px;
       font-weight: bold;
       color: $font-color;
-      background-color: $dangerous-color;
+      background-color: $danger-color;
     }
     .submit-button {
       width: 120px;
