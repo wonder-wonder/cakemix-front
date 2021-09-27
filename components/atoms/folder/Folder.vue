@@ -70,21 +70,17 @@ export default Vue.extend({
   grid-template-rows: 48px 4px 16px 16px;
   grid-template-columns: 36px 1fr 32px;
   border-radius: 5px;
+  border: solid 1px #808080;
   color: $font-color;
-  border: solid 1px $sub-main-color;
   background-color: $sub-main-color;
   user-select: none;
 
   &:hover {
     opacity: 0.8;
-    filter: alpha(opacity=80);
-    zoom: 1;
   }
 
   &.selected {
     opacity: 1;
-    filter: alpha(opacity=100);
-    zoom: 1;
     border: solid 1px $contrast-color;
   }
 
