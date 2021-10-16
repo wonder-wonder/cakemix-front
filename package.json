@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@iktakahiro/markdown-it-katex": "^4.0.1",
     "@mdi/font": "^6.1.95",
     "@nuxt/typescript-runtime": "^2.1.0",
     "@nuxtjs/axios": "^5.13.6",
@@ -32,6 +31,7 @@
     "highlight.js": "^11.2.0",
     "html-to-vdom": "^0.7.0",
     "jwt-decode": "^3.1.2",
+    "katex": "^0.13.18",
     "markdown-it": "^12.2.0",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-container": "^3.0.0",
@@ -43,6 +43,7 @@
     "markdown-it-sanitizer": "github:wonder-wonder/markdown-it-sanitizer",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-task-checkbox": "github:wonder-wonder/markdown-it-task-checkbox",
+    "markdown-it-texmath": "^0.9.1",
     "markdown-it-video": "^0.6.3",
     "mermaid": "^8.12.1",
     "nuxt": "^2.15.8",

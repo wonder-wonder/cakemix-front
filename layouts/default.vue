@@ -28,5 +28,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss" src="../styles/foundation.scss"></style>

@@ -31,9 +31,10 @@ parser.use(require('markdown-it-video'))
 parser.use(require('markdown-it-pdf'), {
   showUrl: true,
 })
-parser.use(require('@iktakahiro/markdown-it-katex'), {
-  throwOnError: false,
-  errorColor: ' #cc0000',
+parser.use(require('markdown-it-texmath'), {
+  engine: require('katex'),
+  delimiters: 'dollars',
+  katexOptions: { macros: { '\\RR': '\\mathbb{R}' } },
 })
 parser.use(container, 'info')
 parser.use(container, 'success')
