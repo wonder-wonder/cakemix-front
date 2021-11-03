@@ -114,7 +114,7 @@ export default Vue.extend({
 .user-wide-cell-container {
   display: grid;
   grid-template-rows: 20px 20px;
-  grid-template-columns: 40px 16px auto 216px;
+  grid-template-columns: 40px 16px auto 168px;
   align-items: center;
   height: 56px;
   width: 100%;
@@ -154,19 +154,21 @@ export default Vue.extend({
 
   .title-item {
     grid-row: 1 / 2;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     font-size: 16px;
-    margin-left: 16px;
     font-weight: bold;
     color: $font-color;
+    overflow: scroll;
+    white-space: nowrap;
   }
 
   .detail-item {
     grid-row: 2 / 3;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     font-size: 12px;
-    margin-left: 16px;
     color: $font-color;
+    overflow: scroll;
+    white-space: nowrap;
   }
 
   .action-container {
