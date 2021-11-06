@@ -8,6 +8,9 @@ const mutations: MutationTree<DeviceState> = {
   windowWidth(state: DeviceState, width: number) {
     state.windowWidth = width
   },
+  theme(state: DeviceState, theme: number) {
+    state.theme = theme
+  },
 }
 
 export default mutations

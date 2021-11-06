@@ -11,11 +11,15 @@
     />
     <div class="button-container">
       <b-button
-        type="is-danger is-light"
+        class="cancel-button"
         @click="$emit('close')"
         v-text="'Cancel'"
       />
-      <b-button type="is-success" :native-type="'submit'" v-text="'Rename'" />
+      <b-button
+        class="rename-button"
+        :native-type="'submit'"
+        v-text="'Rename'"
+      />
     </div>
   </form>
 </template>
@@ -68,11 +72,12 @@ export default Vue.extend({
   flex-flow: column nowrap;
   align-items: center;
   padding: 16px;
-  background-color: whitesmoke;
+  background-color: $sub-main-color;
   border-radius: 16px;
   height: auto;
   width: 400px;
   max-width: 100vw;
+  border: solid 1px white;
 
   .field-input {
     width: 100%;
@@ -81,15 +86,26 @@ export default Vue.extend({
   .icon {
     height: 80px;
     font-size: 80px;
-    color: black;
+    color: $contrast-color;
   }
   .button-container {
     display: flex;
     flex-flow: row wrap;
 
-    button {
+    .cancel-button {
       width: 120px;
       margin: 4px;
+      color: white;
+      background-color: $danger-color;
+      font-weight: bold;
+    }
+
+    .rename-button {
+      width: 120px;
+      margin: 4px;
+      color: white;
+      background-color: $accent-color;
+      font-weight: bold;
     }
   }
 }

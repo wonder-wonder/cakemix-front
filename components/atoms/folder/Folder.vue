@@ -69,18 +69,19 @@ export default Vue.extend({
   min-width: 288px;
   grid-template-rows: 48px 4px 16px 16px;
   grid-template-columns: 36px 1fr 32px;
-  border: solid 1px white;
   border-radius: 5px;
-  color: white;
-  background-color: black;
+  border: solid 1px #808080;
+  color: $font-color;
+  background-color: $sub-main-color;
   user-select: none;
 
   &:hover {
-    background-color: rgb(50, 50, 50);
+    opacity: 0.8;
   }
 
   &.selected {
-    background-color: rgb(120, 120, 120);
+    opacity: 1;
+    border: solid 1px $contrast-color;
   }
 
   .title-box {
@@ -117,8 +118,8 @@ export default Vue.extend({
     font-size: 12px;
     padding: 0 4px;
     border-top-left-radius: 8px;
-    color: white;
-    background-color: rgb(50, 50, 50);
+    color: $font-color;
+    background-color: $main-color;
 
     .desc1-title {
       display: flex;
@@ -141,8 +142,8 @@ export default Vue.extend({
     grid-column: 2 / 3;
     font-size: 12px;
     padding: 0 4px;
-    color: white;
-    background-color: rgb(50, 50, 50);
+    color: $font-color;
+    background-color: $main-color;
 
     .desc2-title {
       display: flex;
@@ -164,7 +165,7 @@ export default Vue.extend({
     justify-content: center;
     grid-row: 3 / 5;
     grid-column: 3 / 4;
-    background-color: rgb(50, 50, 50);
+    background-color: $main-color;
     font-size: 16px;
     border-bottom-right-radius: 4px;
 

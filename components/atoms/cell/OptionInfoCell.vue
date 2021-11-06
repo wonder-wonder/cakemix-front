@@ -41,19 +41,20 @@ export default Vue.extend({
   justify-content: left;
   height: 20px;
   width: 100%;
-  color: black;
-  font-size: 12px;
+  color: $font-color;
+  font-weight: bold;
 
   .option-info-title {
     width: 120px;
-    font-weight: bold;
     white-space: nowrap;
     overflow-x: scroll;
+    font-size: 13px;
   }
   .option-info-detail {
     width: 100%;
     white-space: nowrap;
     overflow-x: scroll;
+    font-size: 12px;
   }
 }
 </style>

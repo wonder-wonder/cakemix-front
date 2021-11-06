@@ -1,7 +1,7 @@
 <template>
   <div class="index-container">
     <div class="image-box">
-      <img ref="icon" src="@/assets/icon.png" alt="cakemix_icon">
+      <img ref="icon" src="@/assets/icon.png" alt="cakemix_icon" />
     </div>
     <div class="description">
       <div class="service-name" v-text="'Cakemix'" />
@@ -9,8 +9,7 @@
       <span v-text="'Real-time edit with multiple users'" />
       <span v-text="'Open source'" />
     </div>
-    <b-button rounded @click="gotoLogin"> Login
-</b-button>
+    <b-button rounded class="login-button" @click="gotoLogin"> Login </b-button>
   </div>
 </template>
 
@@ -74,12 +73,13 @@ export default Vue.extend({
   width: 100vw;
   padding: 0 16px;
   font-family: 'Righteous';
+  background-color: $main-color;
 
   .image-box {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: whitesmoke;
+    background-color: white;
     border-radius: 182px;
     height: 80vw;
     max-height: 300px;
@@ -93,14 +93,14 @@ export default Vue.extend({
     flex-flow: column wrap;
     align-items: center;
     font-size: 24px;
-    color: white;
+    color: $font-color;
 
     .service-name {
       font-size: 60px;
     }
   }
 
-  button {
+  .login-button {
     display: flex;
     flex-flow: row wrap;
     align-content: center;
@@ -111,6 +111,15 @@ export default Vue.extend({
     font-family: 'Righteous';
     font-size: 24px;
     border-width: 5px;
+    border-color: $contrast-color;
+    color: $font-color;
+    background-color: $sub-main-color;
+    outline: none;
+
+    &:hover {
+      color: $sub-main-color;
+      background-color: $contrast-color;
+    }
   }
 }
 </style>

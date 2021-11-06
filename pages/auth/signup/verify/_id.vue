@@ -70,7 +70,7 @@ export default Vue.extend({
 
   .signup-verify-box {
     position: absolute;
-    background-color: whitesmoke;
+    background-color: $sub-main-color;
     top: 45%;
     left: 50%;
     transform: translateY(-50%) translateX(-50%);

@@ -50,7 +50,7 @@
       </div>
     </div>
     <b-button
-      class="floating-option-button is-light"
+      class="floating-option-button"
       :rounded="true"
       @click="openOptionView"
     >
@@ -344,32 +344,18 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.folder-container .explore-container .left-container .sort-box .control {
-  select {
-    color: white;
-    border-color: gray;
-    background-color: gray;
-  }
-  .select::after {
-    border-color: white;
-  }
-}
-</style>
-
 <style lang="scss" scoped>
 .folder-container {
   display: flex;
   flex-flow: column nowrap;
   width: 100vw;
-  background-color: rgb(32, 32, 32);
 
   .tool-container {
     position: sticky;
     top: 0px;
     z-index: 5;
-    background-color: rgb(32, 32, 32);
-    border-bottom: solid 1px whitesmoke;
+    border-bottom: solid 1px $contrast-color;
+    background-color: $main-color; // for masking scrolled content
 
     .toolbar-box {
       margin: 8px 16px;
@@ -420,6 +406,8 @@ export default Vue.extend({
     border-radius: 50%;
     outline: none;
     text-decoration: none;
+    color: $sub-main-color;
+    background-color: $contrast-color;
 
     @media only screen and (max-width: 800px) {
       display: inline;

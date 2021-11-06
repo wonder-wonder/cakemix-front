@@ -35,7 +35,6 @@
     </div>
     <b-button
       v-if="isUserSelected"
-      type="is-danger"
       class="change-owner-button"
       @click="changeOwner"
     >
@@ -47,9 +46,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { debounce } from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 import UserMinCell from '@/components/atoms/cell/UserMinCell.vue'
 import UserSearchWideCell from '@/components/atoms/cell/UserSearchWideCell.vue'
-import { v4 as uuidv4 } from 'uuid'
 import { failureToast } from '@/scripts/utils/toast'
 import { TOAST_TYPE, getToastDesc } from '@/scripts/model/toast'
 import {
@@ -268,7 +267,8 @@ export default Vue.extend({
   max-width: 100vw;
   min-height: 300px;
   padding: 16px;
-  background-color: white;
+  background-color: $sub-main-color;
+  border: solid 1px white;
   border-radius: 16px;
 
   .b-tabs:not(:last-child) {
@@ -292,7 +292,7 @@ export default Vue.extend({
     .icon-box {
       height: 20px;
       margin-right: 16px;
-      color: black;
+      color: $contrast-color;
     }
   }
 
@@ -314,6 +314,9 @@ export default Vue.extend({
   }
   .change-owner-button {
     width: 250px;
+    color: white;
+    background-color: $danger-color;
+    font-weight: bold;
   }
 }
 </style>

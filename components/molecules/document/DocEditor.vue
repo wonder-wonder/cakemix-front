@@ -164,6 +164,7 @@ export default Vue.extend({
       // @ts-ignore
       this.$buefy.dialog.confirm({
         message: getModalDesc(MODAL_TYPE.CLOSE_DOCUMENT_SESSION),
+        type: 'is-danger',
         onConfirm: () => this.makeConnection(),
         onCancel: () => this.$emit('toParentFolder'),
       })
@@ -176,6 +177,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import '../../../styles/codemirror.scss';
+
 .CodeMirror {
   font-family: 'Source Code Pro', Consolas, monaco, monospace;
   font-size: 16px;

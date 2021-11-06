@@ -17,7 +17,6 @@
       />
       <b-button
         v-if="deleteable"
-        type="is-danger"
         class="delete-button"
         @click="$emit('remove', user.member.uuid)"
       >
@@ -115,16 +114,16 @@ export default Vue.extend({
 .user-wide-cell-container {
   display: grid;
   grid-template-rows: 20px 20px;
-  grid-template-columns: 40px 16px auto 216px;
+  grid-template-columns: 40px 16px auto 168px;
   align-items: center;
   height: 56px;
   width: 100%;
   padding: 8px 4px 8px 8px;
   transition: all 100ms;
-  color: black;
+  color: $sub-main-color;
 
   &:hover {
-    background-color: rgb(245, 245, 245);
+    background-color: $main-color;
   }
 
   .icon-box {
@@ -134,12 +133,11 @@ export default Vue.extend({
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: $contrast-color;
     height: 40px;
     width: 40px;
     font-size: 32px;
     border-radius: 4px;
-    background-color: black;
 
     .lock-icon {
       position: absolute;
@@ -148,25 +146,29 @@ export default Vue.extend({
       height: 20px;
       width: 20px;
       padding: 4px;
-      color: black;
-      background-color: white;
+      color: $sub-main-color;
+      background-color: $contrast-color;
       border-radius: 10px;
     }
   }
 
   .title-item {
     grid-row: 1 / 2;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     font-size: 16px;
-    margin-left: 16px;
+    font-weight: bold;
+    color: $font-color;
+    overflow: scroll;
+    white-space: nowrap;
   }
 
   .detail-item {
     grid-row: 2 / 3;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     font-size: 12px;
-    margin-left: 16px;
-    color: gray;
+    color: $font-color;
+    overflow: scroll;
+    white-space: nowrap;
   }
 
   .action-container {
@@ -178,7 +180,7 @@ export default Vue.extend({
     grid-row: 1 / 3;
     grid-column: 4 / 5;
     font-size: 12px;
-    color: gray;
+    color: $font-color;
 
     .selection-item {
       width: 100px;
@@ -187,6 +189,8 @@ export default Vue.extend({
     .delete-button {
       width: 40px;
       margin: 0 4px;
+      color: white;
+      background-color: $danger-color;
     }
   }
 }

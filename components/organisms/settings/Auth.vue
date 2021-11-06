@@ -17,7 +17,7 @@
         @text="newPassword = $event"
       />
       <b-button
-        class="update-button is-success"
+        class="update-button"
         :loading="isLoading"
         @click="request"
         v-text="'Change'"
@@ -126,6 +126,8 @@ export default Vue.extend({
       width: 144px;
       margin-top: 16px;
       font-weight: bold;
+      color: white;
+      background-color: $accent-color;
     }
   }
 }

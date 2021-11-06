@@ -60,7 +60,7 @@ export default Vue.extend({
     height: 20px;
     width: 20px;
     margin-right: 16px;
-    color: black;
+    color: $font-color;
     border-radius: 2px;
 
     .lock-icon {
@@ -70,9 +70,12 @@ export default Vue.extend({
       height: 12px;
       width: 12px;
       padding: 2px;
-      background-color: whitesmoke;
+      background-color: $sub-main-color;
       border-radius: 6px;
     }
+  }
+  .name {
+    color: $font-color;
   }
 }
 </style>

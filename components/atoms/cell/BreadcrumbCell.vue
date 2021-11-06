@@ -1,14 +1,7 @@
 <template>
   <div class="breadcrumb-cell-container">
-    <div
-      :class="dark ? 'black-title' : 'white-title'"
-      @click="$emit('click', folderId)"
-      v-text="title"
-    />
-    <fa-icon
-      icon="chevron-right"
-      :class="dark ? 'white-triangle' : 'black-triangle'"
-    />
+    <div class="cell-title" @click="$emit('click', folderId)" v-text="title" />
+    <fa-icon icon="chevron-right" class="triangle" />
   </div>
 </template>
 
@@ -26,10 +19,6 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    dark: {
-      type: Boolean,
-      default: false,
-    },
   },
 })
 </script>
@@ -44,7 +33,7 @@ export default Vue.extend({
   width: auto;
   user-select: none;
 
-  .title {
+  .cell-title {
     height: 30px;
     line-height: 28px;
     width: auto;
@@ -55,36 +44,15 @@ export default Vue.extend({
     font-size: 16px;
     font-weight: bold;
     overflow: hidden;
-  }
-  .white-title {
-    @extend .title;
-    color: whitesmoke;
+    color: $font-color;
     &:hover {
-      color: black;
-      background-color: whitesmoke;
-    }
-  }
-  .black-title {
-    @extend .title;
-    color: black;
-    &:hover {
-      color: whitesmoke;
-      background-color: black;
+      background-color: $sub-accent-color;
     }
   }
 
   .triangle {
     font-size: 24px;
-  }
-
-  .black-triangle {
-    @extend .triangle;
-    color: white;
-  }
-
-  .white-triangle {
-    @extend .triangle;
-    color: black;
+    color: $font-color;
   }
 }
 </style>

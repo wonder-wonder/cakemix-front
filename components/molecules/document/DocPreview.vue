@@ -1,13 +1,17 @@
 <template>
-  <div :ref="`previewerc`" class="preview-container">
+  <div
+    :ref="`previewerc`"
+    class="preview-container"
+    :class="enableDivideLine ? 'left-border' : ''"
+  >
     <div :ref="`previewer`" class="previewer" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import print from '@/scripts/utils/print'
 import { debounce } from 'lodash'
+import print from '@/scripts/utils/print'
 import vdom from '@/scripts/markdown/vdom'
 const ss = require('@/scripts/editor/scrollsyncer.ts')
 
@@ -34,6 +38,10 @@ export default Vue.extend({
     currentPos: {
       type: Number,
       default: 0,
+    },
+    enableDivideLine: {
+      type: Boolean,
+      default: false,
     },
   },
   data(): DataType {
@@ -67,6 +75,7 @@ export default Vue.extend({
   },
   mounted() {
     this.baseDom = this.$refs.previewer as HTMLElement
+    // TODO: implement bi scroll sync
     // this.scrollDom = this.$refs.previewerc as HTMLElement
     // this.scrollDom.addEventListener('scroll', this.scrolled)
     this.updater = window.setInterval(this.autoUpdatePoint, 10000)
@@ -93,6 +102,7 @@ export default Vue.extend({
       const preview: HTMLElement = this.$refs.previewerc as HTMLElement
       print.createView(this.title, preview)
     },
+    // TODO: implement bi scroll sync
     // scrolled() {
     //   if (!this.scrollDom) {
     //     return
@@ -103,7 +113,13 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import '../../../styles/markdown.scss';
+
+.left-border {
+  border-left: solid 1px white;
+}
+
 .preview-container {
   display: flex;
   justify-content: center;

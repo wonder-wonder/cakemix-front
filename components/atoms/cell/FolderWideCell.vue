@@ -32,10 +32,10 @@ export default Vue.extend({
   width: 100%;
   padding: 8px;
   transition: all 100ms;
-  color: black;
+  color: $font-color;
 
   &:hover {
-    background-color: rgb(245, 245, 245);
+    background-color: $main-color;
   }
 
   .icon-box {
@@ -44,19 +44,20 @@ export default Vue.extend({
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: $sub-main-color;
     height: 40px;
     width: 40px;
     font-size: 32px;
     border-radius: 8px;
-    background-color: black;
+    background-color: $contrast-color;
   }
 
   .title-item {
     grid-row: 1 / 2;
     grid-column: 2;
-    font-size: 16px;
+    font-size: 17px;
     margin-left: 16px;
+    font-weight: bold;
   }
 
   .detail-item {
@@ -64,7 +65,7 @@ export default Vue.extend({
     grid-column: 2;
     font-size: 12px;
     margin-left: 16px;
-    color: gray;
+    color: $font-color;
   }
 }
 </style>

@@ -45,4 +45,8 @@ export default Vue.extend({
 .title-icon {
   margin-right: 8px;
 }
+.button {
+  color: $font-color;
+  background-color: $sub-main-color;
+}
 </style>

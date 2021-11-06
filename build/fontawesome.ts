@@ -1,5 +1,6 @@
 const solid = [
   'faArrowRight',
+  'faArrowUp',
   'faBars',
   'faCat',
   'faCog',

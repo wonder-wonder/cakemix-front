@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: get new tag
       run: echo "newtag=${GITHUB_HEAD_REF#release/}" >> $GITHUB_ENV
     - name: add tag
@@ -23,7 +25,7 @@ jobs:
     - name: setup node
       uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '16.x'
     - name: use cache
       uses: actions/cache@v2
       with:
@@ -34,7 +36,7 @@ jobs:
     - name: install dependencies
       run: npm ci
     - name: prepare config
-      run: mv config.example config && sed 's/wss/ws/g;s/https/http/g' -i config/.env.prod
+      run: mkdir config && cp config.example/.env.docker config/.env.prod
     - name: build and archive front
       run: npm run generate && cd dist && tar cvzf ../www.tar.gz ./ && cd ..
     - name: create release
@@ -92,7 +94,7 @@ jobs:
     - name: setup node
       uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '16.x'
     - name: use cache
       uses: actions/cache@v2
       with:
@@ -103,7 +105,7 @@ jobs:
     - name: install dependencies
       run: npm ci
     - name: prepare config
-      run: mv config.example config && sed 's/wss/ws/g;s/https/http/g' -i config/.env.prod
+      run: mkdir config && cp config.example/.env.docker config/.env.prod
     - name: build and archive front
       run: npm run generate && cd dist && tar cvzf ../www.tar.gz ./ && cd ..
     - name: create release

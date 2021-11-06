@@ -159,8 +159,8 @@ export default Vue.extend({
   width: 100%;
   padding: 0px 8px;
   margin-bottom: 32px;
-  color: white;
-  background-color: rgb(32, 32, 32);
+  color: $font-color;
+  background-color: $main-color;
   font-size: 14px;
   font-weight: bold;
 
@@ -199,7 +199,7 @@ export default Vue.extend({
     .pagination {
       margin: 32px;
       .pagination-link {
-        color: white;
+        color: $font-color;
       }
     }
   }
